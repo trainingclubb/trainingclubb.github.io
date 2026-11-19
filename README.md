@@ -1,9 +1,6 @@
 # Training Club
 
-La app de tu gimnasio. Una marca de AdForge.
+Tu rutina, tus cuotas y tus asistencias del gimnasio en el celular. Una marca de AdForge.
 
 - Página: https://trainingclubb.github.io
-- App del socio (Android, se instala desde Chrome): https://trainingclubb.github.io/app/
-- Panel del gimnasio para Windows: en [Releases](https://github.com/trainingclubb/trainingclubb.github.io/releases/latest)
-
-Prototipo con datos de ejemplo.
+- App (Android e iPhone, se instala desde el navegador): https://trainingclubb.github.io/app/

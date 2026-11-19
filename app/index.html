@@ -165,6 +165,15 @@ label.btn{cursor:pointer}
 .who{display:flex;align-items:center;gap:10px}
 .who .avatar{background:var(--future)!important;color:var(--ink)!important}
 .who .avatar:has(img){background:none!important}
+.login{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding-top:26px}
+.lmark{width:96px;height:auto}
+.wm.big b{font-size:40px} .wm.big span{font-size:12px}
+.ltitle{font-family:var(--display);font-weight:800;font-size:30px;text-transform:uppercase;margin:14px 0 0;line-height:1}
+.lsub{margin:0;color:var(--muted);font-size:14px;max-width:30ch}
+.lform{width:100%;display:flex;flex-direction:column;gap:12px;text-align:left;margin-top:6px}
+.lform .inp{font-size:17px;padding:14px}
+.lerr{margin:0;color:var(--bad);font-size:13px;font-weight:600}
+.logout{margin-top:4px}
 .foot{max-width:1000px;margin:22px auto 0;text-align:center;font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 .screen{flex:1;padding:22px 18px 18px;display:flex;flex-direction:column;gap:16px}
 .hi{display:flex;justify-content:space-between;align-items:center}
@@ -306,6 +315,10 @@ const S={
 };
 S.name='Martina López'; S.photo=null;
 try{const p=JSON.parse(localStorage.getItem('tc-perfil')||'null'); if(p){if(p.name)S.name=p.name; if(p.photo)S.photo=p.photo}}catch(e){}
+/* Sesión con DNI: se registra una vez y queda guardada en el dispositivo */
+S.user=null;
+try{const u=JSON.parse(localStorage.getItem('tc-sesion')||'null'); if(u&&u.dni){S.user=u; S.name=u.name||S.name}}catch(e){}
+const fmtDNI=d=>String(d).replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 const paidNow=()=>S.paid[10]!==undefined;
 
 const RUTINA=[
@@ -385,11 +398,13 @@ function screenPerfil(){
   </div>
   <div class="field"><label for="nombre">Nombre y apellido</label><input class="inp" id="nombre" value="${S.name.replace(/"/g,'&quot;')}" autocomplete="name"></div>
   <div class="list">
+    ${S.user?`<div><span>DNI</span><span class="num">${fmtDNI(S.user.dni)}</span></div>`:''}
     <div><span>Plan</span><span>Mensual · ${fmt(PRICE)}</span></div>
     <div><span>Socia desde</span><span class="num">03/2025</span></div>
     <div><span>Profe</span><span>Camila R.</span></div>
     <div><span>Cuota</span><span class="pill ${paidNow()?'ok':'bad'}">${paidNow()?'Al día':'Vencida'}</span></div>
-  </div>`;
+  </div>
+  <button class="btn ghost logout" id="logout">Cerrar sesión</button>`;
 }
 
 function loadPhoto(file){
@@ -553,7 +568,29 @@ function screenAsist(){
   <p style="margin:0;font-size:13px;color:var(--muted)">Los días marcados son los que viniste al gym.</p>`;
 }
 
+function screenLogin(logo){
+  return `<div class="login">
+    <img class="lmark" src="${logo}" alt="Training Club">
+    <div class="wm big"><b>Training</b><span>CLUB</span></div>
+    <h1 class="ltitle">Registrate con tu DNI</h1>
+    <p class="lsub">Lo hacés una sola vez. Después la app abre directo, sin volver a pedírtelo.</p>
+    <form id="loginf" class="lform" novalidate>
+      <div class="field"><label for="dni">DNI</label><input class="inp num" id="dni" inputmode="numeric" autocomplete="off" placeholder="Ej: 38.456.789" maxlength="10"></div>
+      <div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" placeholder="Como figura en el gimnasio"></div>
+      <p class="lerr" id="lerr" role="alert" hidden></p>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+    <p class="hint">Tu gimnasio usa el DNI para encontrar tu ficha, tus cuotas y tu rutina.</p>
+  </div>`;
+}
+
 function renderSocio(){
+  if(!S.user){
+    const logo=document.querySelector('.brand img').src;
+    $('#app').innerHTML=`<div class="phone"><div class="sbar" aria-hidden="true"><span class="num">9:41</span><span class="sicons"><i></i><i></i><i></i><b></b></span></div>
+      <div class="screen enter" id="scr-login">${screenLogin(logo)}</div></div>`;
+    return;
+  }
   const tabs=[['inicio','Inicio'],['rutina','Rutina'],['cuotas','Cuotas'],['asist','Asistencias']];
   const body={inicio:screenInicio,rutina:screenRutina,cuotas:screenCuotas,asist:screenAsist,perfil:screenPerfil}[S.tab]();
   const prev=document.querySelector('#app .screen'); const same=prev&&prev.id==='scr-'+S.tab; const keep=same?prev.scrollTop:0;
@@ -612,6 +649,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.tab){S.tab=b.dataset.tab;return render()}
   if(b.id==='pay') return pagar();
   if(b.id==='quitar'){S.photo=null;savePerfil();toast('Foto quitada');return render()}
+  if(b.id==='logout'){try{localStorage.removeItem('tc-sesion')}catch(e){} S.user=null;S.tab='inicio';return render()}
   if(b.id==='checkin'){
     if(!paidNow()) return toast('Entrada bloqueada: la cuota está vencida');
     const a=S.att['2026-10']; if(a.includes(18)) return toast('Ya registraste tu entrada de hoy');
@@ -637,6 +675,18 @@ document.addEventListener('click',e=>{
   if(b.dataset.pay){const s=SOCIOS[+b.dataset.pay];
     if(s.i===0){S.paid[10]='18/11';S.medio[10]='Efectivo'} else {s.paidNow=true;s.v2='18/12'}
     toast('Pago registrado: '+s.n); return render();}
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='dni'){const v=fmtDNI(e.target.value.slice(0,10)); if(v!==e.target.value) e.target.value=v}
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='loginf') return; e.preventDefault();
+  const dni=$('#dni').value.replace(/\D/g,''), name=$('#lname').value.trim().replace(/\s+/g,' '), err=$('#lerr');
+  if(dni.length<7||dni.length>8){err.textContent='Revisá el DNI: tiene que tener 7 u 8 números.';err.hidden=false;return $('#dni').focus()}
+  if(name.length<3||!name.includes(' ')){err.textContent='Escribí tu nombre y tu apellido.';err.hidden=false;return $('#lname').focus()}
+  S.user={dni,name}; S.name=name; S.tab='inicio';
+  try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(e){}
+  savePerfil(); toast('¡Listo, '+name.split(' ')[0]+'! Ya estás adentro'); render();
 });
 document.addEventListener('change',e=>{
   if(e.target.id==='foto'&&e.target.files[0]) loadPhoto(e.target.files[0]);
