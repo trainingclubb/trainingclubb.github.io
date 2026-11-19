@@ -527,6 +527,8 @@ body{position:fixed;inset:0;padding:0!important;margin:0}
 <p class="foot">Training Club · una marca de AdForge</p>
 <div class="toast" id="toast" hidden></div>
 
+<script src="supabase.js"></script>
+<script>window.TC_CFG={"url": "https://wjcjpfetbxkdbmxucswn.supabase.co", "key": "sb_publishable_2bytww-z49Qb23QKgM3oZg_7Cik2NiH"}</script>
 <script>
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -793,47 +795,53 @@ const dOf=f=>new Date(f+'T00:00');
 const f1=v=>(v>0?'+':v<0?'−':'')+fmtKg(Math.abs(v));
 function screenProgreso(){
   const s=me(); const t=S.ptab==='cuerpo'?1:0; const prev=S.ptPrev==null?t:S.ptPrev; S.ptPrev=t;
-  return `<div class="rhead"><div><h2>Progreso</h2><p class="h2sub2">${t?'Tu porcentaje graso, semana a semana':'Tus cargas, semana a semana'}</p></div></div>
-  <div class="seg2" role="group" aria-label="Qué medir" style="--m:${prev}" data-to="${t}"><button data-ptab="cargas" aria-pressed="${!t}">Cargas</button><button data-ptab="cuerpo" aria-pressed="${!!t}">% graso</button></div>
+  return `<div class="rhead"><div><h2>Progreso</h2><p class="h2sub2">${t?'Tu peso (y tu % graso si lo medís), semana a semana':'Tus cargas, semana a semana'}</p></div></div>
+  <div class="seg2" role="group" aria-label="Qué medir" style="--m:${prev}" data-to="${t}"><button data-ptab="cargas" aria-pressed="${!t}">Cargas</button><button data-ptab="cuerpo" aria-pressed="${!!t}">Peso</button></div>
   ${t?screenCuerpo(s):screenCargas()}`;
 }
 /* agrupa por semana (lunes) o por mes y compara cada período con el anterior */
-function grupos(L,modo){
-  const g={};
-  for(const x of L){ if(x.grasa==null) continue; const d=dOf(x.fecha); let k,lab;
+function grupos(L,modo,key){
+  key=key||'peso'; const g={};
+  for(const x of L){ if(x[key]==null) continue; const d=dOf(x.fecha); let k,lab;
     if(modo==='mes'){k=d.getFullYear()+'-'+p2(d.getMonth()+1); lab=MES[d.getMonth()].slice(0,3)+' '+String(d.getFullYear()).slice(2)}
     else{const l=new Date(d); l.setDate(d.getDate()-((d.getDay()+6)%7)); k=iso(l); lab='Sem. '+ddmm(iso(l))}
-    (g[k]=g[k]||{k,lab,v:[]}).v.push(+x.grasa) }
+    (g[k]=g[k]||{k,lab,v:[]}).v.push(+x[key]) }
   return Object.values(g).sort((a,b)=>a.k<b.k?-1:1).map(o=>({k:o.k,lab:o.lab,avg:o.v.reduce((a,b)=>a+b,0)/o.v.length,n:o.v.length}));
 }
 function screenCuerpo(s){
-  const L=(s.medidas||[]).slice().sort(byF); const last=L[L.length-1];
-  const refDias=n=>{ if(!last) return null; const lim=dOf(last.fecha); lim.setDate(lim.getDate()-n); const c=L.filter(x=>x!==last&&dOf(x.fecha)<=lim); return c[c.length-1]||null };
-  const w=refDias(6)||L[L.length-2]||null, m=refDias(27);
-  const chip=(lab,o,k,u)=>{ if(!o||last[k]==null||o[k]==null) return `<span class="cmp">${lab}: —</span>`; const d=+last[k]-(+o[k]);
+  const L=(s.medidas||[]).slice().sort(byF);
+  const P=L.filter(x=>x.peso!=null), Gr=L.filter(x=>x.grasa!=null);
+  const lp=P[P.length-1], lg=Gr[Gr.length-1];
+  const ref=(A,n)=>{const last=A[A.length-1]; if(!last) return null; const lim=dOf(last.fecha); lim.setDate(lim.getDate()-n); const c=A.filter(x=>x!==last&&dOf(x.fecha)<=lim); return c[c.length-1]||null};
+  const chip=(lab,A,o,k,u)=>{const last=A[A.length-1]; if(!o||!last) return `<span class="cmp">${lab}: —</span>`; const d=Math.round((+last[k]-(+o[k]))*10)/10;
     return `<span class="cmp ${d<0?'good':d>0?'badc':''}">${lab} ${d<0?'▼':d>0?'▲':'='} ${f1(d)}${u}</span>` };
   const form=`<form class="logf" id="medf">
-    <div class="lrow"><div class="field"><label for="mgr">% graso</label><input class="inp num" id="mgr" inputmode="decimal" placeholder="${last?fmtKg(last.grasa):'18,5'}" required></div>
-    <div class="field"><label for="mpe">Peso (kg)</label><input class="inp num" id="mpe" inputmode="decimal" placeholder="${last&&last.peso?fmtKg(last.peso):'opcional'}"></div>
+    <div class="lrow"><div class="field"><label for="mpe">Peso (kg)</label><input class="inp num" id="mpe" inputmode="decimal" placeholder="${lp?fmtKg(lp.peso):'72,5'}" required></div>
+    <div class="field"><label for="mgr">% graso</label><input class="inp num" id="mgr" inputmode="decimal" placeholder="${lg?fmtKg(lg.grasa):'opcional'}"></div>
     <div class="field"><label for="mfe">Fecha</label><input class="inp num" id="mfe" type="date" value="${iso(TODAY)}" max="${iso(TODAY)}"></div></div>
     <button class="btn" type="submit">Guardar medición</button></form>`;
-  if(!L.length) return `${empty('<b style="font-size:24px">%</b>','Anotá tu porcentaje graso','Cada semana o cada mes cargá tu medición (y tu peso si querés). Acá vas a ver cuánto vas bajando.','')}${form}`;
-  const pesos=L.filter(x=>x.peso!=null), lp=pesos[pesos.length-1];
-  const mp=lp?(()=>{const lim=dOf(lp.fecha);lim.setDate(lim.getDate()-27);const c=pesos.filter(x=>x!==lp&&dOf(x.fecha)<=lim);return c[c.length-1]||pesos[pesos.length-2]})():null;
-  const G=grupos(L,S.pgrp==='mes'?'mes':'sem');
-  return `<section class="pcard">
+  if(!L.length) return `${empty('<b style="font-size:20px">kg</b>','Anotá tu peso','Cada semana o cada mes cargá tu peso (y tu % graso si lo medís). Acá vas a ver cómo vas cambiando.','')}${form}`;
+  const wP=ref(P,6)||P[P.length-2]||null, mP=ref(P,27);
+  const wG=ref(Gr,6)||Gr[Gr.length-2]||null, mG=ref(Gr,27);
+  const G=grupos(L,S.pgrp==='mes'?'mes':'sem','peso');
+  const cardP=lp?`<section class="pcard">
+    <div class="phead"><div class="bico" aria-hidden="true">kg</div>
+      <div class="pnow"><span class="lab">Peso corporal</span><span class="kg num" data-count="${lp.peso}" data-dec="1" data-ck="peso">${fmtKg(lp.peso)}<small> kg</small></span>
+      <span class="rowd">${chip('Semana',P,wP,'peso',' kg')}${chip('Mes',P,mP,'peso',' kg')}</span></div></div>
+    ${P.length>1?chart(P,'peso','kg','Evolución del peso'):''}
+  </section>`:'';
+  const kgGrasa=lp&&lg?fmtKg(Math.round(lp.peso*lg.grasa/10)/10):null;
+  const cardG=lg?`<section class="pcard">
     <div class="phead"><div class="bico" aria-hidden="true">%</div>
-      <div class="pnow"><span class="lab">Porcentaje graso</span><span class="kg num" data-count="${last.grasa}" data-dec="1" data-ck="grasa">${fmtKg(last.grasa)}<small> %</small></span>
-      <span class="rowd">${chip('Semana',w,'grasa','%')}${chip('Mes',m,'grasa','%')}</span></div></div>
-    ${L.length>1?chart(L,'grasa','%','Evolución del porcentaje graso'):''}
-  </section>
-  ${lp?`<div class="row2"><div class="tile"><div class="k">Peso corporal</div><div class="v num" data-count="${lp.peso}" data-dec="1" data-ck="peso">${fmtKg(lp.peso)}<span class="of"> kg</span></div><div class="s">${mp?`${f1(lp.peso-mp.peso)} kg desde ${ddmm(mp.fecha)}`:'Primera medición'}</div></div>
-    <div class="tile"><div class="k">Grasa en kg</div><div class="v num">${fmtKg(lp.peso*(lp.grasa??last.grasa)/100)}<span class="of"> kg</span></div><div class="s">según tu última medición</div></div></div>`:''}
-  ${form}
-  <section class="cmpbox"><div class="ttl"><b>Comparación</b><div class="chips" role="group" aria-label="Agrupar"><button data-pgrp="sem" aria-pressed="${S.pgrp!=='mes'}">Por semana</button><button data-pgrp="mes" aria-pressed="${S.pgrp==='mes'}">Por mes</button></div></div>
+      <div class="pnow"><span class="lab">Porcentaje graso</span><span class="kg num" data-count="${lg.grasa}" data-dec="1" data-ck="grasa">${fmtKg(lg.grasa)}<small> %</small></span>
+      <span class="rowd">${chip('Semana',Gr,wG,'grasa','%')}${chip('Mes',Gr,mG,'grasa','%')}${kgGrasa?`<span class="cmp">≈ ${kgGrasa} kg de grasa</span>`:''}</span></div></div>
+    ${Gr.length>1?chart(Gr,'grasa','%','Evolución del porcentaje graso'):''}
+  </section>`:'';
+  const cmp=G.length?`<section class="cmpbox"><div class="ttl"><b>Comparación de peso</b><div class="chips" role="group" aria-label="Agrupar"><button data-pgrp="sem" aria-pressed="${S.pgrp!=='mes'}">Por semana</button><button data-pgrp="mes" aria-pressed="${S.pgrp==='mes'}">Por mes</button></div></div>
     <div class="cmplist">${G.slice().reverse().map((g,i,a)=>{const p=a[i+1]; const d=p?g.avg-p.avg:null; const mx=Math.max(...G.map(x=>x.avg)), mn=Math.min(...G.map(x=>x.avg));
-      return `<div class="crow" style="animation-delay:${i*40}ms"><span class="cl">${g.lab}</span><span class="cbar"><i style="--w:${mx===mn?100:30+70*(g.avg-mn)/(mx-mn)}%"></i></span><b class="num">${fmtKg(Math.round(g.avg*10)/10)}%</b>${d==null?'<i class="cd"></i>':`<i class="cd ${d<0?'good':d>0?'badc':''}">${f1(Math.round(d*10)/10)}</i>`}</div>`}).join('')}</div></section>
-  <div class="hist">${L.slice().reverse().map(x=>`<div class="hrow"><span class="hd num">${ddmm(x.fecha)}</span><span class="hm num">${x.peso!=null?fmtKg(x.peso)+' kg':''}</span><b class="num">${fmtKg(x.grasa)} %</b><i></i><button class="del" data-mdel="${esc(x.id)}" aria-label="Borrar medición">×</button></div>`).join('')}</div>`;
+      return `<div class="crow" style="animation-delay:${i*40}ms"><span class="cl">${g.lab}</span><span class="cbar"><i style="--w:${mx===mn?100:30+70*(g.avg-mn)/(mx-mn)}%"></i></span><b class="num">${fmtKg(Math.round(g.avg*10)/10)} kg</b>${d==null?'<i class="cd"></i>':`<i class="cd ${d<0?'good':d>0?'badc':''}">${f1(Math.round(d*10)/10)}</i>`}</div>`}).join('')}</div></section>`:'';
+  return `${cardP}${cardG}${form}${cmp}
+  <div class="hist">${L.slice().reverse().map(x=>`<div class="hrow"><span class="hd num">${ddmm(x.fecha)}</span><span class="hm num">${x.grasa!=null?fmtKg(x.grasa)+' %':''}</span><b class="num">${x.peso!=null?fmtKg(x.peso)+' kg':'—'}</b><i></i><button class="del" data-mdel="${esc(x.id)}" aria-label="Borrar medición">×</button></div>`).join('')}</div>`;
 }
 function screenCargas(){
   const s=me(); s.prog=s.prog||{}; const names=Object.keys(s.prog);
@@ -1200,8 +1208,8 @@ function renderFicha(s){
         <div class="pchips">${l.map(x=>`<span class="pchip num">${ddmm(x.fecha)} · <b>${fmtKg(x.kg)} kg</b>${x.series&&x.reps?' · '+x.series+'×'+x.reps:''}<button class="del" data-pdel="${esc(n)}|${esc(x.id)}" aria-label="Borrar">×</button></span>`).join('')||'<span class="muted">Sin marcas</span>'}</div></div>`}).join('')
     :'<p class="muted" style="margin:0">Todavía no hay pesos cargados.</p>'}
     <div class="pex"><div class="pexh"><b>Porcentaje graso</b></div>
-      <div class="pchips">${(s.medidas||[]).slice().sort(byF).map(x=>`<span class="pchip num">${ddmm(x.fecha)} · <b>${fmtKg(x.grasa)}%</b>${x.peso!=null?' · '+fmtKg(x.peso)+' kg':''}<button class="del" data-mdel2="${esc(x.id)}" aria-label="Borrar">×</button></span>`).join('')||'<span class="muted">Sin mediciones</span>'}</div>
-      <form class="medf2" id="medf2"><input class="inp num" id="mgr2" placeholder="% graso" inputmode="decimal" aria-label="Porcentaje graso"><input class="inp num" id="mpe2" placeholder="Peso kg" inputmode="decimal" aria-label="Peso"><input class="inp num" id="mfe2" type="date" value="${iso(TODAY)}" aria-label="Fecha"><button class="btn sm" type="submit">Agregar medición</button></form></div>
+      <div class="pchips">${(s.medidas||[]).slice().sort(byF).map(x=>`<span class="pchip num">${ddmm(x.fecha)} · <b>${x.peso!=null?fmtKg(x.peso)+' kg':'—'}</b>${x.grasa!=null?' · '+fmtKg(x.grasa)+'%':''}<button class="del" data-mdel2="${esc(x.id)}" aria-label="Borrar">×</button></span>`).join('')||'<span class="muted">Sin mediciones</span>'}</div>
+      <form class="medf2" id="medf2"><input class="inp num" id="mpe2" placeholder="Peso kg" inputmode="decimal" aria-label="Peso (obligatorio)" required><input class="inp num" id="mgr2" placeholder="% graso (opc.)" inputmode="decimal" aria-label="Porcentaje graso (opcional)"><input class="inp num" id="mfe2" type="date" value="${iso(TODAY)}" aria-label="Fecha"><button class="btn sm" type="submit">Agregar medición</button></form></div>
     <form class="progf" id="progf"><input class="inp" id="pgex" list="exl2" placeholder="Ejercicio" aria-label="Ejercicio"><input class="inp num" id="pgkg" placeholder="Kg" inputmode="decimal" aria-label="Kilos">
       <input class="inp num" id="pgrep" placeholder="Reps" inputmode="numeric" aria-label="Repeticiones"><input class="inp num" id="pgser" placeholder="Series" inputmode="numeric" aria-label="Series">
       <input class="inp num" id="pgfec" type="date" value="${iso(TODAY)}" aria-label="Fecha"><button class="btn sm" type="submit">Agregar</button></form>
@@ -1227,7 +1235,7 @@ function norm(db){
     o.socios[s.id]={id:s.id,dni:s.dni,nombre:s.name,alta:s.alta,plan:s.plan,precio:s.precio||0,vence:s.vence||10,desde:s.desde||null,desde_dia:s.desdeDia||null,rutina:s.rutina||null,foto:s.photo||null};
     for(const [k,p] of Object.entries(s.pagos||{})) o.pagos[s.id+'|'+k]={socio_id:s.id,periodo:k,fecha:p.fecha,medio:p.medio,monto:p.monto||0};
     for(const [k,ds] of Object.entries(s.att||{})) for(const d of ds){const f=dISO(k,d);o.asis[s.id+'|'+f]={socio_id:s.id,fecha:f}}
-    for(const x of (s.medidas||[])) o.med[x.id]={id:x.id,socio_id:s.id,fecha:x.fecha,grasa:+x.grasa,peso:x.peso==null?null:+x.peso};
+    for(const x of (s.medidas||[])) o.med[x.id]={id:x.id,socio_id:s.id,fecha:x.fecha,grasa:x.grasa==null?null:+x.grasa,peso:x.peso==null?null:+x.peso};
     for(const [n,arr] of Object.entries(s.prog||{})) for(const x of arr) o.prog[x.id]={id:x.id,socio_id:s.id,ejercicio:n,fecha:x.fecha,kg:+x.kg,reps:x.reps||null,series:x.series||null};
   }
   return o;
@@ -1237,7 +1245,7 @@ function buildDB(rows){
   for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,rutina:r.rutina,photo:r.foto,pagos:{},att:{},prog:{},medidas:[]};db.socios[r.dni]=s;byId[r.id]=s}
   for(const p of rows.pagos){const s=byId[p.socio_id]; if(s) s.pagos[p.periodo]={fecha:p.fecha,medio:p.medio,monto:p.monto}}
   for(const a of rows.asis){const s=byId[a.socio_id]; if(!s) continue; const [y,m,d]=a.fecha.split('-').map(Number); const k=mk(y,m-1); (s.att[k]=s.att[k]||[]).push(d)}
-  for(const x of rows.med||[]){const s=byId[x.socio_id]; if(s) s.medidas.push({id:x.id,fecha:x.fecha,grasa:+x.grasa,peso:x.peso==null?null:+x.peso})}
+  for(const x of rows.med||[]){const s=byId[x.socio_id]; if(s) s.medidas.push({id:x.id,fecha:x.fecha,grasa:x.grasa==null?null:+x.grasa,peso:x.peso==null?null:+x.peso})}
   for(const x of rows.prog){const s=byId[x.socio_id]; if(!s) continue; (s.prog[x.ejercicio]=s.prog[x.ejercicio]||[]).push({id:x.id,fecha:x.fecha,kg:+x.kg,reps:x.reps,series:x.series})}
   return db;
 }
@@ -1295,10 +1303,17 @@ async function bootCloud(){
     if(S.view==='duenio'){ S.hayProfe=await q(sb.rpc('hay_profe')); const p=await q(sb.rpc('profe_yo')); PRO=p; S.pro=!!p }
     else if(S.user){ await checkDevice() }
     if(S.user&&!S.pendiente||S.pro) await loadAll();
-    sb.channel('tc').on('postgres_changes',{event:'*',schema:'public'},async(pl)=>{
-      if(pl.table==='dispositivos'&&S.user&&S.pendiente){await checkDevice(); if(!S.pendiente){await loadAll(); toast('¡Ezequiel aprobó tu celular!')} return render()}
+    /* el tiempo real tiene que ir con la sesión del usuario (si no, la base lo trata como anónimo y no le manda nada) */
+    {const {data:{session:ss}}=await sb.auth.getSession(); if(ss) sb.realtime.setAuth(ss.access_token)}
+    sb.auth.onAuthStateChange((_e,ss)=>{ if(ss) sb.realtime.setAuth(ss.access_token) });
+    const onChange=async(pl)=>{
+      if(S.user&&S.pendiente){await checkDevice(); if(!S.pendiente){await loadAll(); toast('¡Ezequiel aprobó tu celular!')} return render()}
       if(S.user&&!S.pendiente||S.pro) reload();
-    }).subscribe();
+    };
+    sb.channel('tc').on('postgres_changes',{event:'*',schema:'public'},onChange).subscribe();
+    /* respaldo: si el tiempo real se corta, igual se actualiza cada 30 s y al volver a la app */
+    setInterval(()=>{ if(document.visibilityState==='visible') onChange({}) },30000);
+    document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') onChange({}) });
     S.ready=true; render(); lanzarAviso();
   }catch(e){
     $('#app').innerHTML=`<div class="phone"><div class="screen"><div class="empty"><b>No se pudo conectar</b><p>${esc(errTxt(e))}</p><button class="btn" onclick="location.reload()">Reintentar</button></div></div></div>`;
@@ -1427,11 +1442,13 @@ document.addEventListener('submit',e=>{
     s.prog[k]=s.prog[k]||[]; S.pex=k; saveDB(); render(); const kg=$('#lkg'); if(kg) kg.focus(); return}
   if(f.id==='medf'||f.id==='medf2'){const two=f.id==='medf2'; const s=two?DB.socios[S.sel]:me();
     const g=parseFloat(($(two?'#mgr2':'#mgr').value||'').replace(',','.')), pe=parseFloat(($(two?'#mpe2':'#mpe').value||'').replace(',','.'));
-    if(!(g>0&&g<75)){toast('Poné el porcentaje graso (ej: 18,5)');return $(two?'#mgr2':'#mgr').focus()}
+    if(!(pe>20&&pe<400)){toast('Poné tu peso en kg (ej: 72,5)');return $(two?'#mpe2':'#mpe').focus()}
+    if(!isNaN(g)&&!(g>0&&g<75)){toast('El % graso va entre 1 y 74 (o dejalo vacío)');return $(two?'#mgr2':'#mgr').focus()}
     const fecha=$(two?'#mfe2':'#mfe').value||iso(TODAY); s.medidas=s.medidas||[];
     const prevL=s.medidas.slice().sort(byF); const pv=prevL[prevL.length-1];
-    s.medidas.push({id:Date.now().toString(36),fecha,grasa:Math.round(g*10)/10,peso:pe>0?Math.round(pe*10)/10:null}); saveDB();
-    toast(!two&&pv&&g<pv.grasa?`¡Bajaste ${fmtKg(Math.round((pv.grasa-g)*10)/10)}% de grasa! 🔥`:'Medición guardada'); return render()}
+    const pvP=prevL.filter(x=>x.peso!=null).pop(), pvG=prevL.filter(x=>x.grasa!=null).pop(); const gg=g>0?Math.round(g*10)/10:null, pp=Math.round(pe*10)/10;
+    s.medidas.push({id:Date.now().toString(36),fecha,grasa:gg,peso:pp}); saveDB();
+    toast(!two&&gg!=null&&pvG&&gg<pvG.grasa?`¡Bajaste ${fmtKg(Math.round((pvG.grasa-gg)*10)/10)}% de grasa! 🔥`:!two&&pvP&&pp<pvP.peso?`¡Bajaste ${fmtKg(Math.round((pvP.peso-pp)*10)/10)} kg! 🔥`:'Medición guardada'); return render()}
   if(f.id==='logf'){const kg=parseFloat($('#lkg').value.replace(',','.'));
     if(!(kg>=0)||kg>1000){toast('Poné los kilos (ej: 75 o 77,5)');return $('#lkg').focus()}
     const s=me(); const fecha=$('#lfec').value||iso(TODAY);
