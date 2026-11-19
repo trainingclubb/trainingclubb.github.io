@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Training Club</title>
+<meta name="description" content="Training Club: la app de tu gimnasio. Rutina con cronómetro, cuotas mes a mes y asistencias en el celular, y el panel del gimnasio en la PC. Una marca de AdForge.">
+<meta name="theme-color" content="#070807">
+<meta property="og:title" content="Training Club">
+<meta property="og:description" content="Tu rutina, tus cuotas y tus asistencias en el celular. El panel del gimnasio en la PC.">
+<meta property="og:image" content="https://trainingclubb.github.io/icon-512.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Landing de una sola columna: héroe con teléfono, dos apps (socio / dueño), funciones, descargas */
+:root{
+  --bg:#070807; --surface:#121412; --sunk:#0C0E0C; --ink:#F3F5F0; --muted:#98A099; --line:#232723;
+  --yellow:#FCE024; --lime:#DDDC34; --teal:#24C9A7; --on:#05110E;
+  --grad:linear-gradient(120deg,var(--yellow) 0%,var(--lime) 40%,var(--teal) 100%);
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --wide:Archivo,Inter,system-ui,sans-serif;
+  --body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+
+/* barra */
+.bar{position:sticky;top:0;z-index:10;background:rgba(7,8,7,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{width:40px}
+.wm{display:flex;flex-direction:column;align-items:center;line-height:1}
+.wm b{font-family:var(--display);font-weight:900;font-size:26px;text-transform:uppercase;transform:skewX(-12deg);display:block}
+.wm span{font-family:var(--wide);font-weight:800;font-size:9px;letter-spacing:.55em;margin-right:-.55em;padding-top:2px}
+.nav{display:flex;gap:22px;font-size:14px;font-weight:600;color:var(--muted)}
+.nav a{text-decoration:none} .nav a:hover{color:var(--ink)}
+@media (max-width:760px){.nav{display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:10px;justify-content:center;border-radius:14px;padding:14px 22px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid var(--line);background:var(--surface);transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.main{background:var(--grad);color:var(--on);border:0}
+.btn svg{width:20px;height:20px;flex:none}
+.btn.sm{padding:9px 14px;font-size:14px;border-radius:12px}
+
+/* héroe */
+.hero{position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-30% -10% auto auto;width:680px;height:680px;border-radius:50%;background:radial-gradient(closest-side,rgba(36,201,167,.22),transparent);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:auto auto -35% -15%;width:600px;height:600px;border-radius:50%;background:radial-gradient(closest-side,rgba(252,224,36,.13),transparent);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-block:64px 72px}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-block:40px 56px}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(36,201,167,.35);border-radius:999px;padding:6px 12px}
+h1{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(52px,9vw,104px);line-height:.9;margin:18px 0 18px;letter-spacing:.005em;text-wrap:balance}
+h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;transform:skewX(-10deg)}
+.lead{font-size:19px;color:var(--muted);max-width:34em;margin:0 0 28px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.fine{font-size:13px;color:var(--muted);margin-top:14px}
+.phones{position:relative;display:flex;justify-content:center;min-height:520px}
+.ph{width:250px;border-radius:30px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px -30px rgba(36,201,167,.35);background:var(--surface)}
+.ph.back{position:absolute;transform:translate(-42%,40px) rotate(-7deg) scale(.9);opacity:.55;filter:saturate(.8)}
+.ph.front{position:relative;transform:translateX(18%)}
+@media (max-width:520px){.phones{min-height:430px}.ph{width:210px}}
+
+/* secciones */
+section.s{padding-block:72px;border-top:1px solid var(--line)}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h2{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(38px,6vw,64px);line-height:.95;margin:8px 0 14px;text-wrap:balance}
+.sub{color:var(--muted);max-width:40em;margin:0 0 36px;font-size:17px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.who{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.who::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--grad)}
+.who .plat{display:flex;align-items:center;gap:10px;font-weight:700}
+.who .plat svg{width:26px;height:26px}
+.who h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:34px;line-height:1;margin:0}
+.who ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;color:var(--muted)}
+.who li{display:flex;gap:10px} .who li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--grad);margin-top:9px}
+.who .ctas{margin-top:auto;padding-top:6px}
+
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media (max-width:980px){.feats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.feats{grid-template-columns:1fr}}
+.feat{background:var(--sunk);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+.feat .shot{aspect-ratio:390/520;overflow:hidden;border-bottom:1px solid var(--line);background:var(--surface)}
+.feat .shot img{width:100%;height:auto}
+.feat .txt{padding:16px 18px 20px}
+.feat h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:24px;margin:0 0 6px;line-height:1}
+.feat p{margin:0;color:var(--muted);font-size:14px}
+
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:24px}
+.box h3{margin:0 0 12px;font-size:18px;display:flex;align-items:center;gap:10px}
+.box h3 svg{width:22px;height:22px}
+.box ol{margin:0;padding-left:20px;color:var(--muted);display:flex;flex-direction:column;gap:8px}
+.box ol b{color:var(--ink)}
+.box .ctas{margin-top:18px}
+.note{font-size:13px;color:var(--muted);margin-top:14px}
+
+footer{border-top:1px solid var(--line);padding-block:30px;color:var(--muted);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="bar"><div class="wrap">
+  <a class="logo" href="#" aria-label="Training Club, inicio"><img src="logo-mark.png" alt=""><span class="wm"><b>Training</b><span>CLUB</span></span></a>
+  <nav class="nav" aria-label="Secciones"><a href="#apps">Las apps</a><a href="#funciones">Funciones</a><a href="#descargar">Descargar</a></nav>
+  <a class="btn main sm" href="#descargar">Descargar</a>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div>
+    <span class="eyebrow">Una marca de AdForge</span>
+    <h1>Tu gym, <em>en tu bolsillo</em></h1>
+    <p class="lead">Tus socios ven su rutina con cronómetro, qué meses pagaron y cuántas veces vinieron, desde el celular. Vos manejás cuotas, morosos y asistencias desde la PC.</p>
+    <div class="ctas">
+      <a class="btn main" href="app/"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 0 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>App para Android</a>
+      <a class="btn" href="https://github.com/trainingclubb/trainingclubb.github.io/releases/latest/download/TrainingClub-Setup.exe"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.1l7.4-1v7.2H3zm0 13.8l7.4 1v-7.1H3zm8.3 1.1L21 21.3v-8.5h-9.7zm0-15.9v7.3H21V2.7z"/></svg>Panel para Windows</a>
+    </div>
+    <p class="fine">Prototipo con datos de ejemplo. Gratis, sin cuentas ni registro.</p>
+  </div>
+  <div class="phones" aria-hidden="true">
+    <img class="ph back" src="img/cuotas.webp" alt="" width="390" height="860">
+    <img class="ph front" src="img/inicio.webp" alt="" width="390" height="860">
+  </div>
+</div></section>
+
+<section class="s" id="apps"><div class="wrap">
+  <span class="kicker">Dos apps, un mismo gym</span>
+  <h2>Socios en el celu, el gym en la PC</h2>
+  <p class="sub">Cada uno usa lo que necesita. Cuando un socio paga, el panel lo ve al instante.</p>
+  <div class="two">
+    <article class="who">
+      <div class="plat"><svg viewBox="0 0 24 24" fill="var(--teal)" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 0 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>Android · para socios</div>
+      <h3>App del socio</h3>
+      <ul>
+        <li>Rutina del día con cronómetro y descanso</li>
+        <li>Un esqueleto animado que muestra cada ejercicio</li>
+        <li>Grilla de cuotas: qué meses pagaste y cuáles debés</li>
+        <li>Calendario de asistencias y perfil con tu foto</li>
+      </ul>
+      <div class="ctas"><a class="btn main sm" href="app/">Abrir e instalar</a></div>
+    </article>
+    <article class="who">
+      <div class="plat"><svg viewBox="0 0 24 24" fill="var(--yellow)" aria-hidden="true"><path d="M3 5.1l7.4-1v7.2H3zm0 13.8l7.4 1v-7.1H3zm8.3 1.1L21 21.3v-8.5h-9.7zm0-15.9v7.3H21V2.7z"/></svg>Windows · para el dueño</div>
+      <h3>Panel del gimnasio</h3>
+      <ul>
+        <li>Socios activos, cobrado del mes y cuotas vencidas</li>
+        <li>Lista de socios con filtros y meses pagados de cada uno</li>
+        <li>Registrar pagos en efectivo, transferencia o Mercado Pago</li>
+        <li>Asistencias de los últimos 14 días y quién vence esta semana</li>
+      </ul>
+      <div class="ctas"><a class="btn sm" href="https://github.com/trainingclubb/trainingclubb.github.io/releases/latest/download/TrainingClub-Setup.exe">Descargar para Windows</a></div>
+    </article>
+  </div>
+</div></section>
+
+<section class="s" id="funciones"><div class="wrap">
+  <span class="kicker">Lo que ve tu socio</span>
+  <h2>Todo lo del gym, en cuatro pantallas</h2>
+  <p class="sub">Simple de usar entre serie y serie.</p>
+  <div class="feats">
+    <article class="feat"><div class="shot"><img src="img/inicio.webp" alt="Pantalla de inicio con la cuota del mes y la semana de entrenamientos" loading="lazy" width="390" height="860"></div>
+      <div class="txt"><h3>Inicio</h3><p>La cuota del mes, el botón para pagarla y los días que entrenaste esta semana.</p></div></article>
+    <article class="feat"><div class="shot"><img src="img/rutina.webp" alt="Rutina con cronómetro y ejercicios animados" loading="lazy" width="390" height="860"></div>
+      <div class="txt"><h3>Rutina</h3><p>Cronómetro, descanso con cuenta regresiva y cada ejercicio con su animación.</p></div></article>
+    <article class="feat"><div class="shot"><img src="img/cuotas.webp" alt="Grilla de cuotas del año" loading="lazy" width="390" height="860"></div>
+      <div class="txt"><h3>Cuotas</h3><p>Los doce meses del año: pagados en verde, adeudados en rojo, con fecha y medio de pago.</p></div></article>
+    <article class="feat"><div class="shot"><img src="img/asist.webp" alt="Calendario de asistencias" loading="lazy" width="390" height="860"></div>
+      <div class="txt"><h3>Asistencias</h3><p>Calendario con los días que viniste, total del mes y promedio por semana.</p></div></article>
+  </div>
+</div></section>
+
+<section class="s" id="descargar"><div class="wrap">
+  <span class="kicker">Descargar</span>
+  <h2>Instalalo en un minuto</h2>
+  <div class="steps">
+    <div class="box">
+      <h3><svg viewBox="0 0 24 24" fill="var(--teal)" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 0 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>Android (socios)</h3>
+      <ol>
+        <li>Abrí <b>trainingclubb.github.io/app</b> en <b>Chrome</b>.</li>
+        <li>Tocá el menú <b>⋮</b> y elegí <b>Instalar app</b> (o <b>Agregar a la pantalla principal</b>).</li>
+        <li>Training Club queda con su ícono, como cualquier app.</li>
+      </ol>
+      <div class="ctas"><a class="btn main sm" href="app/">Abrir la app</a></div>
+    </div>
+    <div class="box">
+      <h3><svg viewBox="0 0 24 24" fill="var(--yellow)" aria-hidden="true"><path d="M3 5.1l7.4-1v7.2H3zm0 13.8l7.4 1v-7.1H3zm8.3 1.1L21 21.3v-8.5h-9.7zm0-15.9v7.3H21V2.7z"/></svg>Windows (dueño del gym)</h3>
+      <ol>
+        <li>Descargá <b>TrainingClub-Setup.exe</b> (82 MB).</li>
+        <li>Abrilo y seguí el instalador. Crea un acceso directo en el escritorio.</li>
+        <li>Si Windows muestra “Windows protegió su PC”, tocá <b>Más información</b> y <b>Ejecutar de todas formas</b>.</li>
+      </ol>
+      <div class="ctas"><a class="btn sm" href="https://github.com/trainingclubb/trainingclubb.github.io/releases/latest/download/TrainingClub-Setup.exe">Descargar para Windows</a></div>
+      <p class="note">Windows 10 u 11 de 64 bits.</p>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <span>Training Club · una marca de AdForge</span>
+  <span>Prototipo · noviembre 2026</span>
+</div></footer>
+</body>
+</html>
