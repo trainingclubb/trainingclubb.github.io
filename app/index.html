@@ -428,7 +428,29 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradi
 .authbox{max-width:420px;margin:24px auto;background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;position:relative;overflow:hidden}
 .authbox::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--grad)}
 .lrow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.probar{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}.probar b{color:var(--ink)}
+.probar{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);flex-wrap:wrap}.probar b{color:var(--ink)}
+.probar .pwho{display:flex;align-items:center;gap:10px}
+.pnav{min-width:240px}
+.pnav button{border:0;padding:10px 18px;font-weight:700;font-size:13.5px;color:var(--muted);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:color .25s}
+.pnav button[aria-pressed="true"]{color:var(--ink)}
+.pnav .cnt{font-size:11px;line-height:1;padding:3px 7px;border-radius:999px;background:var(--warn);color:#070807;animation:cntpop .5s var(--spring)}
+@keyframes cntpop{from{transform:scale(0)}}
+.profgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-top:4px}
+.profc{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--sunk);animation:lstepIn .5s var(--spring) both;transition:transform .25s var(--spring),border-color .25s}
+.profc:hover{transform:translateY(-2px);border-color:#2f3a33}
+.profc .pn{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.profc .pn strong{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profc .pn small{color:var(--muted);font-size:12px}
+.profc.pend{border-style:dashed;border-color:var(--warn)}
+.profc.pend{flex-wrap:wrap}.profc.pend .pn{flex:1 1 140px}.profc.pend .acts{width:100%;justify-content:flex-end}
+.profc .acts{display:flex;gap:6px;flex-shrink:0}
+.lstep{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;animation:lstepIn .45s var(--spring) both}
+@keyframes lstepIn{from{opacity:0;transform:translateY(12px) scale(.98)}}
+.ldni{width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);font-size:13px;color:var(--muted);text-align:left}
+.ldni b{color:var(--ink)}
+.ldni.info{border-color:var(--warn);color:var(--ink);line-height:1.4}
+.linkb{border:0;background:none;color:#24C9A7;font-weight:700;font-size:13px;cursor:pointer;padding:4px;font-family:inherit}
+.linkb:hover{text-decoration:underline}
 .col{display:flex;flex-direction:column;gap:16px;min-width:0}
 .datosf{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}.datosf .field:first-child{grid-column:1/-1}.datosf .btn{grid-column:1/-1}
 .mrow.na,.mrow.future{opacity:.7}.mrow.na:hover,.mrow.future:hover,.mrow.na:focus-within,.mrow.future:focus-within{opacity:1}
@@ -521,7 +543,7 @@ body{position:fixed;inset:0;padding:0!important;margin:0}
     <button id="v-duenio" aria-pressed="false">Panel del dueño</button>
   </div>
 </header>
-<p class="note">Arranca vacío, como el primer día. Registrate con un DNI en "App del socio". Después entrá al "Panel del dueño" (el profe crea su cuenta la primera vez) y asignale la cuota y la rutina.</p>
+<p class="note">Arranca vacío, como el primer día. Creá tu cuenta con DNI y contraseña en "App del socio". Después entrá al "Panel del dueño" (el primer profe entra directo; los siguientes los aprueba un profe en la sección Profes) y asignale la cuota y la rutina.</p>
 
 <main id="app"></main>
 <p class="foot">Training Club · una marca de AdForge</p>
@@ -556,7 +578,11 @@ function ensureSocio(dni,name){
 const PLANES=['Mensual','Trimestral','Anual'];
 const PROFE='Ezequiel Heinz';          /* el profe que ven todos los socios */
 const RECARGO=.10;                      /* recargo por pagar después del vencimiento */
-let PRO=null; try{PRO=JSON.parse(localStorage.getItem('tc-profe')||'null')}catch(e){}
+function profesLS(){let L=null;try{L=JSON.parse(localStorage.getItem('tc-profes')||'null')}catch(e){}
+  if(!L){L=[];try{const o=JSON.parse(localStorage.getItem('tc-profe')||'null');if(o&&o.dni)L.push(Object.assign({},o,{aprobado:true,creado:new Date().toISOString()}))}catch(e){}}
+  return L}
+function saveProfesLS(L){try{localStorage.setItem('tc-profes',JSON.stringify(L))}catch(e){}}
+let PRO=null; try{ if(!(window.TC_CFG&&window.TC_CFG.url)){const dn=sessionStorage.getItem('tc-pro-dni'); if(dn) PRO=profesLS().find(p=>p.dni===dn&&p.aprobado)||null} }catch(e){}
 async function hashPw(dni,pw){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('tc|'+dni+'|'+pw));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 
 const S={view:'socio',tab:'inicio',day:0,done:new Set(),selMonth:M,calY:Y,calM:M,filter:'todos',pex:null,sel:null,edit:null,eday:0};
@@ -930,19 +956,51 @@ function screenAsist(){
 }
 
 function screenLogin(logo){
+  const m=S.lmode||'dni', d=S.ldni||'', P=PROFE.split(' ')[0];
+  const T={dni:['Entrá con tu DNI','Con tu DNI encontramos tu ficha, tus cuotas y tu rutina.'],
+    crear:['Creá tu cuenta','Lo hacés una sola vez. Si cambiás de celular o reinstalás la app, entrás con tu DNI y esta contraseña.'],
+    clave:['Creá tu contraseña',P+' ya te anotó en el gimnasio. Elegí una contraseña para tu cuenta.'],
+    login:['Iniciá sesión','Ya tenés cuenta. Entrá con tu contraseña.']}[m];
+  const pw=(id,lab,ac)=>`<div class="field"><label for="${id}">${lab}</label><input class="inp" id="${id}" type="password" autocomplete="${ac}"></div>`;
+  const dniBox=m==='dni'?'':`<input type="text" autocomplete="username" value="${d}" hidden><div class="ldni"><span>DNI <b class="num">${fmtDNI(d)}</b></span><button type="button" class="linkb" id="lcambiar">Cambiar</button></div>`;
+  const body=m==='dni'?`<div class="field"><label for="dni">DNI</label><input class="inp num" id="dni" inputmode="numeric" autocomplete="username" placeholder="Ej: 38.456.789" maxlength="10" value="${d?fmtDNI(d):''}"></div>`
+    :m==='crear'?`${dniBox}<div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" placeholder="Como figura en el gimnasio"></div>${pw('lpw','Contraseña (mínimo 6)','new-password')}${pw('lpw2','Repetí la contraseña','new-password')}`
+    :m==='clave'?`${dniBox}${pw('lpw','Contraseña (mínimo 6)','new-password')}${pw('lpw2','Repetí la contraseña','new-password')}`
+    :`${dniBox}${pw('lpw','Contraseña','current-password')}`;
+  const btn={dni:'Continuar',crear:'Crear cuenta',clave:'Guardar y entrar',login:'Entrar'}[m];
+  const pie=m==='login'?`¿Te olvidaste la contraseña? Pedile a ${P} que te la reinicie desde el panel.`:m==='dni'?'La primera vez creás tu cuenta. Después, si reinstalás la app, solo iniciás sesión.':'';
   return `<div class="login">
     <img class="lmark" src="${logo}" alt="Training Club">
     <div class="wm big"><b>Training</b><span>CLUB</span></div>
-    <h1 class="ltitle">Registrate con tu DNI</h1>
-    <p class="lsub">Lo hacés una sola vez. Después la app abre directo, sin volver a pedírtelo.</p>
-    <form id="loginf" class="lform" novalidate>
-      <div class="field"><label for="dni">DNI</label><input class="inp num" id="dni" inputmode="numeric" autocomplete="off" placeholder="Ej: 38.456.789" maxlength="10"></div>
-      <div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" placeholder="Como figura en el gimnasio"></div>
-      <p class="lerr" id="lerr" role="alert" hidden></p>
-      <button class="btn" type="submit">Entrar</button>
-    </form>
-    <p class="hint">Tu gimnasio usa el DNI para encontrar tu ficha, tus cuotas y tu rutina.</p>
+    <div class="lstep" data-m="${m}">
+      <h1 class="ltitle">${T[0]}</h1>
+      <p class="lsub">${T[1]}</p>
+      <form id="loginf" class="lform" novalidate>${body}
+        <p class="lerr" id="lerr" role="alert" hidden></p>
+        <button class="btn" type="submit">${btn}</button>
+      </form>
+      ${pie?`<p class="hint">${pie}</p>`:''}
+    </div>
   </div>`;
+}
+async function socioEstado(dni){
+  if(CLOUD) return await q(sb.rpc('socio_estado',{p_dni:dni}));
+  const s=DB.socios[dni]; return !s?'nuevo':s.pw?'registrado':'sin_clave';
+}
+async function socioCrear(dni,name,pw){
+  if(CLOUD) return await q(sb.rpc('crear_cuenta',{p_dni:dni,p_nombre:name,p_pw:pw}));
+  const ex=DB.socios[dni]; if(ex&&ex.pw) throw new Error('Ya tenés cuenta con ese DNI. Iniciá sesión.');
+  const s=ensureSocio(dni,ex?null:name); s.pw=await hashPw(dni,pw); saveDB(); return {nombre:s.name};
+}
+async function socioLogin(dni,pw){
+  if(CLOUD) return await q(sb.rpc('iniciar_sesion',{p_dni:dni,p_pw:pw}));
+  const s=DB.socios[dni]; if(!s||!s.pw||s.pw!==await hashPw(dni,pw)) return null; return {nombre:s.name};
+}
+async function entrarSocio(dni,name,nuevo){
+  S.user={dni,name}; S.name=name; S.tab='inicio'; S.lastTab=null; S.pendiente=false; S.lmode=null; S.ldni=null;
+  try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){}
+  if(CLOUD) await loadAll(); else { const s=DB.socios[dni]; if(s&&s.photo) S.photo=s.photo; savePerfil() }
+  toast((nuevo?'¡Cuenta creada! ':'')+'Hola, '+name.split(' ')[0]+' 👋'); render(); lanzarAviso(); if(CLOUD) activarPush();
 }
 
 function renderSocio(){
@@ -1103,13 +1161,43 @@ const PLANTILLA=[
 const clone=x=>JSON.parse(JSON.stringify(x));
 const dotsOf=s=>`<span class="dots" aria-label="Cuotas ${Y}">${MES.map((_,i)=>{const c=mesEstado(s,i);return `<i class="${c==='paid'?'p':c==='owed'?'o':''}" title="${MES[i]}"></i>`}).join('')}</span>`;
 
-function proBar(){return `<div class="probar"><span>Panel de <b>${esc(PRO.nombre+' '+PRO.apellido)}</b></span><button class="mini" id="prologout">Cerrar sesión</button></div>`}
+function proBar(){const n=(S.profes||[]).filter(p=>!p.aprobado).length; const t=S.ptabP==='profes'?1:0; const prev=S.pnPrev==null?t:S.pnPrev; S.pnPrev=t;
+  return `<div class="probar"><div class="seg2 pnav" role="group" aria-label="Secciones del panel" style="--m:${prev}" data-to="${t}"><button data-pnav="socios" aria-pressed="${!t}">Socios</button><button data-pnav="profes" aria-pressed="${!!t}">Profes${n?` <span class="cnt">${n}</span>`:''}</button></div>
+  <div class="pwho"><span>Panel de <b>${esc(PRO.nombre+' '+PRO.apellido)}</b></span><button class="mini" id="prologout">Cerrar sesión</button></div></div>`}
+async function cargarProfes(){
+  if(CLOUD){ if(sb&&S.pro){ try{S.profes=(await q(sb.rpc('profes_lista')))||[]}catch(e){} } return }
+  S.profes=profesLS().map(p=>Object.assign({},p,{yo:!!PRO&&p.dni===PRO.dni})).sort((a,b)=>(b.aprobado-a.aprobado)||(a.nombre+a.apellido).localeCompare(b.nombre+b.apellido,'es'));
+}
+async function profeAccion(acc,dni){
+  try{
+    if(CLOUD) await q(sb.rpc(acc==='aprobar'?'profe_aprobar':'profe_quitar',{p_dni:dni}));
+    else{ let L=profesLS(); if(acc==='aprobar') L.forEach(p=>{if(p.dni===dni)p.aprobado=true}); else L=L.filter(p=>p.dni!==dni); saveProfesLS(L) }
+    await cargarProfes(); toast(acc==='aprobar'?'Profe aprobado: ya puede entrar al panel':'Listo, se quitó del equipo'); render();
+  }catch(e){ toast(errTxt(e)) }
+}
+function renderProfes(){
+  const L=S.profes||[]; const ok=L.filter(p=>p.aprobado), pend=L.filter(p=>!p.aprobado);
+  const fd=c=>{try{return new Date(c).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'})}catch(e){return ''}};
+  const card=(p,i)=>{const nom=p.nombre+' '+p.apellido;
+    return `<div class="profc ${p.aprobado?'':'pend'}" style="animation-delay:${i*50}ms">${avatar('md',null,nom)}
+    <div class="pn"><strong>${esc(nom)}</strong><small>${p.aprobado?'Profe desde el '+fd(p.creado):'Pidió entrar el '+fd(p.creado)}</small></div>
+    <div class="acts">${p.aprobado?(p.yo?'<span class="pill ok">Vos</span>':`<button class="mini danger" data-pquitar="${esc(p.dni)}" data-pn="${esc(nom)}">Quitar</button>`)
+      :`<button class="mini pay" data-paprob="${esc(p.dni)}">Aprobar</button><button class="mini danger" data-pquitar="${esc(p.dni)}" data-pn="${esc(nom)}">Rechazar</button>`}</div></div>`};
+  $('#app').innerHTML=`<div class="owner enter">${proBar()}
+  ${pend.length?`<section class="panel pendp"><h2>Esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Se registraron desde el panel. Aprobalos solo si son profes del gimnasio: van a poder ver y editar a todos los socios.</p><div class="profgrid">${pend.map(card).join('')}</div></section>`:''}
+  <section class="panel"><div class="panelhead"><h2>Profes</h2><span class="muted num">${ok.length} en el equipo</span></div>
+    <div class="profgrid">${ok.map((p,i)=>card(p,i+pend.length)).join('')||'<p class="muted">Cargando…</p>'}</div>
+    <p class="hint" style="max-width:none;margin-top:8px">Los profes nuevos se registran en el panel con su nombre, apellido, DNI y contraseña. Después un profe del equipo los aprueba acá.</p></section></div>`;
+}
 function renderProAuth(){
-  const logo=document.querySelector('.brand img').src; const reg=CLOUD?!S.hayProfe:!PRO;
+  const logo=document.querySelector('.brand img').src; const hay=CLOUD?S.hayProfe:profesLS().some(p=>p.aprobado);
+  const reg=S.preg!=null?S.preg:!hay;
   $('#app').innerHTML=`<div class="owner enter"><div class="authbox">
     <img class="lmark" src="${logo}" alt="Training Club"><div class="wm big"><b>Training</b><span>CLUB</span></div>
+    <div class="lstep" data-r="${reg}">
     <h1 class="ltitle">${reg?'Registro del profe':'Panel del gimnasio'}</h1>
-    <p class="lsub">${reg?'Creá tu cuenta para manejar socios, cuotas y rutinas. Lo hacés una sola vez.':'Entrá con tu DNI y tu contraseña.'}</p>
+    <p class="lsub">${reg?(hay?'Completá tus datos. Después un profe del gimnasio aprueba tu cuenta desde la sección Profes.':'Sos el primer profe: creá tu cuenta para manejar socios, cuotas y rutinas.'):'Entrá con tu DNI y tu contraseña.'}</p>
+    ${S.pmsg&&!reg?`<div class="ldni info">⏳ ${esc(S.pmsg)}</div>`:''}
     <form id="${reg?'proreg':'prologin'}" class="lform" novalidate>
       ${reg?`<div class="lrow2"><div class="field"><label for="pnom">Nombre</label><input class="inp" id="pnom" autocomplete="given-name"></div>
       <div class="field"><label for="pape">Apellido</label><input class="inp" id="pape" autocomplete="family-name"></div></div>`:''}
@@ -1117,13 +1205,16 @@ function renderProAuth(){
       <div class="field"><label for="ppw">Contraseña</label><input class="inp" id="ppw" type="password" autocomplete="${reg?'new-password':'current-password'}"></div>
       ${reg?'<div class="field"><label for="ppw2">Repetí la contraseña</label><input class="inp" id="ppw2" type="password" autocomplete="new-password"></div>':''}
       <p class="lerr" id="perr" role="alert" hidden></p>
-      <button class="btn" type="submit">${reg?'Crear cuenta y entrar':'Entrar'}</button>
+      <button class="btn" type="submit">${reg?(hay?'Pedir acceso':'Crear cuenta y entrar'):'Entrar'}</button>
     </form>
-    ${reg?'':`<p class="hint">${CLOUD?'Tu cuenta sirve en cualquier computadora con el panel.':'La contraseña queda guardada solo en este equipo.'}</p>`}
+    <p class="hint">${reg?(hay?'¿Ya tenés cuenta? ':'')+(hay?'<button type="button" class="linkb" id="prtoggle">Entrar</button>':''):'¿Sos profe nuevo? <button type="button" class="linkb" id="prtoggle">Registrate</button>'}</p>
+    </div>
   </div></div>`;
 }
 function renderDuenio(){
   if(!PRO||!S.pro) return renderProAuth();
+  if(!CLOUD) cargarProfes();
+  if(S.ptabP==='profes') return renderProfes();
   if(S.sel&&DB.socios[S.sel]) return renderFicha(DB.socios[S.sel]);
   S.sel=null;
   const all=Object.values(DB.socios).sort((a,b)=>a.name.localeCompare(b.name,'es'));
@@ -1235,7 +1326,7 @@ function renderFicha(s){
   $('#app').innerHTML=`<div class="owner enter ficha">${proBar()}
     <div class="fhead"><button class="back" id="fback" aria-label="Volver a socios">‹</button>${avatar('md',s.photo,s.name)}
       <div><h2>${esc(s.name)}</h2><span class="muted num">DNI ${fmtDNI(s.dni)}</span></div><span class="pill ${e.c}" style="margin-left:auto">${e.t}</span>
-      <button class="mini danger" id="delsocio">Dar de baja</button></div>
+      <button class="mini" id="resetpw" title="Si se olvidó la contraseña">Reiniciar contraseña</button><button class="mini danger" id="delsocio">Dar de baja</button></div>
     ${rut}
     <div class="grid2 even">${datos}${asis}</div>${cuota}${prog}</div>`;
 }
@@ -1271,7 +1362,7 @@ async function loadAll(){
   const [so,pa,as,pr,me_]=await Promise.all([q(sb.from('socios').select('*')),q(sb.from('pagos').select('*')),q(sb.from('asistencias').select('*')),q(sb.from('progreso').select('*')),q(sb.from('medidas').select('*'))]);
   DB=buildDB({socios:so,pagos:pa,asis:as,prog:pr,med:me_}); SNAP=norm(DB);
   if(S.view==='duenio'&&S.pro){const d=await q(sb.from('dispositivos').select('uid,socio_id,aprobado,creado').eq('aprobado',false)); const byId={}; Object.values(DB.socios).forEach(s=>byId[s.id]=s);
-    S.disp=d.map(x=>({uid:x.uid,s:byId[x.socio_id],creado:x.creado})).filter(x=>x.s)}
+    S.disp=d.map(x=>({uid:x.uid,s:byId[x.socio_id],creado:x.creado})).filter(x=>x.s); await cargarProfes()}
   if(S.user){const s=DB.socios[S.user.dni]; if(s){S.name=s.name; if(s.photo!==undefined) S.photo=s.photo}}
 }
 function errTxt(e){const m=String(e&&e.message||e); return /fetch|network|Failed/i.test(m)?'Sin conexión. Revisá internet y probá de nuevo.':m}
@@ -1347,6 +1438,7 @@ function screenPendiente(logo){
 
 function render(){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   S.view==='socio'?renderSocio():renderDuenio();
+  const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
   $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio')}
 
 function pagar(i){const s=me(); if(!s||!s.plan) return;
@@ -1362,7 +1454,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.tab){ if(S.tab===b.dataset.tab&&b.closest('.nav')){const sc=$('#app .screen');if(sc)sc.scrollTo({top:0,behavior:'smooth'});return} return goTab(b.dataset.tab)}
   if(b.id==='pay') return pagar(b.dataset.mes!=null?+b.dataset.mes:M);
   if(b.id==='quitar'){S.photo=null;savePerfil();toast('Foto quitada');return render()}
-  if(b.id==='logout'){if(CLOUD) desactivarPush(); try{localStorage.removeItem('tc-sesion')}catch(e){} S.pendiente=false; if(CLOUD) DB={socios:{}}; S.user=null;S.tab='inicio';S.lastTab=null;return render()}
+  if(b.id==='logout'){if(CLOUD) desactivarPush(); S.ldni=S.user&&S.user.dni; S.lmode=null; try{localStorage.removeItem('tc-sesion')}catch(e){} S.pendiente=false; if(CLOUD) DB={socios:{}}; S.user=null;S.tab='inicio';S.lastTab=null;return render()}
   if(b.id==='checkin'){const s=me();
     if(estado(s).c==='bad') return toast('Entrada bloqueada: la cuota está vencida');
     const a=s.att[mk(Y,M)]=s.att[mk(Y,M)]||[]; if(a.includes(D)) return toast('Ya registraste tu entrada de hoy');
@@ -1414,7 +1506,19 @@ document.addEventListener('click',e=>{
     const had=!!s.pagos[mk(Y,i)]; s.pagos[mk(Y,i)]={fecha,medio,monto};saveDB();toast((had?'Pago de ':'Pago registrado: ')+MES[i].toLowerCase()+(had?' actualizado':''));return render()}
   if(b.dataset.dok){sb.from('dispositivos').update({aprobado:true}).eq('uid',b.dataset.dok).then(({error})=>{if(error)return toast(errTxt(error));toast('Celular aprobado');reload(true)});return}
   if(b.dataset.dno){sb.from('dispositivos').delete().eq('uid',b.dataset.dno).then(({error})=>{if(error)return toast(errTxt(error));toast('Rechazado');reload(true)});return}
-  if(b.id==='prologout'){try{sessionStorage.removeItem('tc-pro')}catch(x){} if(CLOUD){sb.rpc('profe_salir');PRO=null;DB={socios:{}}} S.pro=false;S.sel=null;return render()}
+  if(b.dataset.pnav){ if(b.dataset.pnav===S.ptabP||(!S.ptabP&&b.dataset.pnav==='socios')) {if(S.sel&&b.dataset.pnav==='socios'){if(S.dirty&&!confirm('Hay cambios en la rutina sin guardar. ¿Salir igual?'))return;S.sel=null;S.edit=null;return render()} return}
+    if(S.dirty&&!confirm('Hay cambios en la rutina sin guardar. ¿Salir igual?'))return;
+    S.ptabP=b.dataset.pnav; S.sel=null; S.edit=null; S.dirty=false;
+    if(S.ptabP==='profes') cargarProfes().then(()=>{ if(S.ptabP==='profes') render() });
+    return render() }
+  if(b.dataset.paprob){profeAccion('aprobar',b.dataset.paprob);return}
+  if(b.dataset.pquitar){const n=b.dataset.pn||'este profe'; if(!confirm('¿Quitar a '+n+' de los profes? No va a poder entrar más al panel.'))return; profeAccion('quitar',b.dataset.pquitar);return}
+  if(b.id==='prtoggle'){const hay=CLOUD?S.hayProfe:profesLS().some(p=>p.aprobado); const reg=S.preg!=null?S.preg:!hay; S.preg=!reg; S.pmsg=null; return render()}
+  if(b.id==='lcambiar'){S.lmode='dni';return render()}
+  if(b.id==='resetpw'){const s=DB.socios[S.sel]; if(!s) return; if(!confirm('¿Reiniciar la contraseña de '+s.name+'? La próxima vez que entre a la app va a crear una nueva.'))return;
+    if(CLOUD) sb.rpc('socio_reiniciar_clave',{p_socio:s.id}).then(({error})=>toast(error?errTxt(error):'Listo: '+s.name.split(' ')[0]+' crea una contraseña nueva al entrar'));
+    else{delete s.pw;saveDB();toast('Listo: '+s.name.split(' ')[0]+' crea una contraseña nueva al entrar')} return}
+  if(b.id==='prologout'){try{sessionStorage.removeItem('tc-pro');sessionStorage.removeItem('tc-pro-dni')}catch(x){} if(CLOUD){sb.rpc('profe_salir');DB={socios:{}}} PRO=null;S.pro=false;S.sel=null;S.ptabP='socios';S.profes=[];return render()}
   if(b.id==='avisox'){const a=aviso(me()); try{localStorage.setItem('tc-avx-'+a.k,'1')}catch(x){} return render()}
   if(b.id==='avisos'){ if(!notifOK()) return toast('Instalá la app en tu pantalla de inicio para recibir avisos');
     Notification.requestPermission().then(p=>{ if(p==='granted'){toast(CLOUD?'Listo: te avisamos aunque tengas la app cerrada':'Listo: te avisamos los días 1, 3, 6, 9 y 10');
@@ -1439,20 +1543,25 @@ document.addEventListener('input',e=>{
 document.addEventListener('submit',e=>{
   const f=e.target; e.preventDefault();
   if(f.id==='loginf'){
-    const dni=$('#dni').value.replace(/\D/g,''), name=$('#lname').value.trim().replace(/\s+/g,' '), err=$('#lerr');
-    if(dni.length<7||dni.length>8){err.textContent='Revisá el DNI: tiene que tener 7 u 8 números.';err.hidden=false;return $('#dni').focus()}
-    if(name.length<3||!name.includes(' ')){err.textContent='Escribí tu nombre y tu apellido.';err.hidden=false;return $('#lname').focus()}
-    if(CLOUD){ const bt=f.querySelector('button'); bt.disabled=true; bt.textContent='Entrando…';
-      sb.rpc('registrar_socio',{p_dni:dni,p_nombre:name}).then(async({data,error})=>{
-        if(error){bt.disabled=false;bt.textContent='Entrar';err.textContent=errTxt(error);err.hidden=false;return}
-        S.user={dni,name}; S.name=name; S.tab='inicio'; S.lastTab=null; S.pendiente=data==='pendiente';
-        try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){}
-        if(!S.pendiente){await loadAll(); toast('¡Listo, '+S.name.split(' ')[0]+'! Ya estás adentro'); lanzarAviso(); activarPush()}
-        render(); }); return; }
-    const ex=DB.socios[dni]; const s=ensureSocio(dni,ex?null:name);
-    S.user={dni,name:s.name}; S.name=s.name; S.photo=s.photo||S.photo; S.tab='inicio'; S.lastTab=null;
-    try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(e){}
-    savePerfil(); toast('¡Listo, '+s.name.split(' ')[0]+'! Ya estás adentro'); return render();
+    const err=$('#lerr'), bt=f.querySelector('button[type=submit]'), m=S.lmode||'dni';
+    const bad=(t,el)=>{err.textContent=t;err.hidden=false;if(el)el.focus()};
+    const busy=(on,t)=>{bt.disabled=on;bt.textContent=t};
+    if(m==='dni'){ const dni=$('#dni').value.replace(/\D/g,'');
+      if(dni.length<7||dni.length>8) return bad('Revisá el DNI: tiene que tener 7 u 8 números.',$('#dni'));
+      busy(true,'Buscando…');
+      socioEstado(dni).then(st=>{S.ldni=dni;S.lmode=st==='registrado'?'login':st==='sin_clave'?'clave':'crear';render();const i=$('#lname')||$('#lpw');if(i)i.focus()})
+        .catch(e=>{busy(false,'Continuar');bad(errTxt(e))}); return }
+    const dni=S.ldni, pw=$('#lpw').value;
+    if(m==='login'){ if(!pw) return bad('Escribí tu contraseña.',$('#lpw')); busy(true,'Entrando…');
+      socioLogin(dni,pw).then(r=>{ if(!r){busy(false,'Entrar');$('#lpw').value='';return bad('Contraseña incorrecta.',$('#lpw'))} return entrarSocio(dni,r.nombre) })
+        .catch(e=>{busy(false,'Entrar');bad(errTxt(e))}); return }
+    let name='';
+    if(m==='crear'){ name=$('#lname').value.trim().replace(/\s+/g,' '); if(name.length<3||!name.includes(' ')) return bad('Escribí tu nombre y tu apellido.',$('#lname')) }
+    if(pw.length<6) return bad('La contraseña tiene que tener al menos 6 caracteres.',$('#lpw'));
+    if(pw!==$('#lpw2').value) return bad('Las contraseñas no coinciden.',$('#lpw2'));
+    busy(true,'Creando tu cuenta…');
+    socioCrear(dni,name,pw).then(r=>entrarSocio(dni,r.nombre,true))
+      .catch(e=>{busy(false,m==='crear'?'Crear cuenta':'Guardar y entrar');const t=errTxt(e);bad(t);if(/Iniciá sesión/.test(t)){S.lmode='login';setTimeout(render,1400)}}); return
   }
   if(f.id==='addex'||f.id==='addex2'){const n=$('#exname').value.trim().replace(/\s+/g,' '); if(!n) return $('#exname').focus();
     const s=me(); const k=Object.keys(s.prog).find(x=>x.toLowerCase()===n.toLowerCase())||n.charAt(0).toUpperCase()+n.slice(1);
@@ -1482,15 +1591,25 @@ document.addEventListener('submit',e=>{
     if(nom.length<2) return bad('Escribí tu nombre.'); if(ape.length<2) return bad('Escribí tu apellido.');
     if(dni.length<7||dni.length>8) return bad('El DNI tiene que tener 7 u 8 números.');
     if(pw.length<6) return bad('La contraseña tiene que tener al menos 6 caracteres.'); if(pw!==pw2) return bad('Las contraseñas no coinciden.');
-    if(CLOUD){ sb.rpc('profe_registrar',{p_dni:dni,p_nombre:nom,p_apellido:ape,p_pw:pw}).then(async({data,error})=>{
-        if(error) return bad(errTxt(error)); PRO=data; S.pro=true; S.hayProfe=true; await loadAll(); toast('¡Bienvenido, '+nom+'!'); render() }); return }
-    hashPw(dni,pw).then(h=>{PRO={nombre:nom,apellido:ape,dni,hash:h};try{localStorage.setItem('tc-profe',JSON.stringify(PRO));sessionStorage.setItem('tc-pro','1')}catch(x){} S.pro=true;toast('¡Bienvenido, '+nom+'!');render()}); return}
+    const pend=()=>{S.preg=false;S.pmsg='Listo, '+nom+'. Tu cuenta quedó pendiente: un profe del gimnasio la tiene que aprobar en la sección Profes. Después entrás acá con tu DNI y contraseña.';render()};
+    const bt=f.querySelector('button[type=submit]'); bt.disabled=true;
+    if(CLOUD){ sb.rpc('profe_registrar',{p_dni:dni,p_nombre:nom,p_apellido:ape,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
+        if(error) return bad(errTxt(error)); if(data&&data.pendiente) return pend();
+        PRO=data; S.pro=true; S.hayProfe=true; S.preg=null; S.pmsg=null; await loadAll(); toast('¡Bienvenido, '+nom+'!'); render() }); return }
+    const L=profesLS(); if(L.some(p=>p.dni===dni)){bt.disabled=false;return bad('Ya hay un profe con ese DNI. Iniciá sesión.')}
+    hashPw(dni,pw).then(hh=>{const primero=!L.some(p=>p.aprobado); const P={nombre:nom,apellido:ape,dni,hash:hh,aprobado:primero,creado:new Date().toISOString()}; L.push(P); saveProfesLS(L);
+      if(!primero) return pend();
+      PRO=P; try{sessionStorage.setItem('tc-pro','1');sessionStorage.setItem('tc-pro-dni',dni)}catch(x){} S.pro=true; S.preg=null; S.pmsg=null; toast('¡Bienvenido, '+nom+'!'); render()}); return}
   if(f.id==='prologin'){const dni=$('#pdni').value.replace(/\D/g,''),pw=$('#ppw').value,err=$('#perr');
-    if(CLOUD){ const bt=f.querySelector('button'); bt.disabled=true; sb.rpc('profe_login',{p_dni:dni,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
-        if(error){err.textContent=errTxt(error);err.hidden=false;return} if(!data){err.textContent='DNI o contraseña incorrectos.';err.hidden=false;$('#ppw').value='';return $('#ppw').focus()}
-        PRO=data; S.pro=true; await loadAll(); toast('Hola, '+PRO.nombre); render() }); return }
-    hashPw(dni,pw).then(h=>{ if(dni!==PRO.dni||h!==PRO.hash){err.textContent='DNI o contraseña incorrectos.';err.hidden=false;$('#ppw').value='';return $('#ppw').focus()}
-      try{sessionStorage.setItem('tc-pro','1')}catch(x){} S.pro=true;toast('Hola, '+PRO.nombre);render()}); return}
+    const mal=()=>{err.textContent='DNI o contraseña incorrectos.';err.hidden=false;$('#ppw').value='';$('#ppw').focus()};
+    const espera=()=>{err.textContent='Tu cuenta todavía no fue aprobada. Pedile a un profe del gimnasio que te apruebe en la sección Profes.';err.hidden=false};
+    const bt=f.querySelector('button[type=submit]'); bt.disabled=true;
+    if(CLOUD){ sb.rpc('profe_login',{p_dni:dni,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
+        if(error){err.textContent=errTxt(error);err.hidden=false;return} if(!data) return mal(); if(data.pendiente) return espera();
+        PRO=data; S.pro=true; S.pmsg=null; await loadAll(); toast('Hola, '+PRO.nombre); render() }); return }
+    const P=profesLS().find(p=>p.dni===dni);
+    hashPw(dni,pw).then(hh=>{ bt.disabled=false; if(!P||hh!==P.hash) return mal(); if(!P.aprobado) return espera();
+      PRO=P; try{sessionStorage.setItem('tc-pro','1');sessionStorage.setItem('tc-pro-dni',dni)}catch(x){} S.pro=true; S.pmsg=null; toast('Hola, '+PRO.nombre); render()}); return}
   if(f.id==='datosf'){const s=DB.socios[S.sel]; const name=$('#fname').value.trim().replace(/\s+/g,' '), dni=$('#fdni').value.replace(/\D/g,''), alta=$('#falta').value||s.alta;
     if(name.length<3) return toast('Escribí el nombre del socio');
     if(dni.length<7||dni.length>8) return toast('El DNI tiene que tener 7 u 8 números');
