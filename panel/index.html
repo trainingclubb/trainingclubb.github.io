@@ -1225,6 +1225,10 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 @media (max-width:700px){.probar .pnav [data-pnav="socios"]::before{content:"";--c2ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3.5'/%3E%3Cpath d='M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5'/%3E%3Cpath d='M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.6c1.8.7 3 2.5 3.5 5.4'/%3E%3C/svg%3E")}.probar .pnav [data-pnav="mensajes"]::before{content:"";--c2ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 3.8V16A2.5 2.5 0 0 1 4 13.5z'/%3E%3C/svg%3E")}.probar .pnav [data-pnav="cuotas"]::before{content:"";--c2ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.5' y='5' width='19' height='14' rx='2.5'/%3E%3Cpath d='M2.5 10h19M6.5 15h4'/%3E%3C/svg%3E")}.probar .pnav [data-pnav="profes"]::before{content:"";--c2ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='7.5' r='3.5'/%3E%3Cpath d='M5 20.5c.9-4 3.6-6 7-6s6.1 2 7 6'/%3E%3Cpath d='M12 15l-1.3 2.3L12 20l1.3-2.7z'/%3E%3C/svg%3E")}.probar .pnav [data-pnav="novedades"]::before{content:"";--c2ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 10v4h3l6 4V6l-6 4z'/%3E%3Cpath d='M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11'/%3E%3C/svg%3E")}}
 /* lote 38: barra del panel en el celu sin íconos duplicados */
 @media (max-width:700px){.probar .pnav.gnpnav button::before{display:none!important}.probar .pnav.gnpnav .gnpi{width:22px;height:22px;opacity:.8}.probar .pnav.gnpnav button[aria-pressed="true"] .gnpi{opacity:1}}
+/* jerarquía */
+.c1xadm.c1xdevt,.c1xchip.c1xdevc{background:linear-gradient(90deg,#8b5cf6,#24C9A7);color:#fff}
+.c1xprot{font-size:12px;color:var(--muted);border:1px dashed var(--line);background:none}
+#bnvx .bnvrol.bnvdev::before{background:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.25)}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -3348,6 +3352,9 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.25',t:'Rangos: desarrollador, dueño y profe',items:[
+    ['⚡','Ahora hay <b>tres rangos</b>: el <b>desarrollador</b> (acceso total), el <b>dueño</b> (todo lo del gimnasio) y los <b>profes</b> con los permisos que les des.'],
+    ['🔒','El dueño maneja a los profes, pero no puede cambiar ni quitar al desarrollador ni a otros dueños: aparecen como “Protegido”.']]},
   {v:'1.1.24',t:'Profes, novedades y mucho más',items:[
     ['👥','En <b>Profes</b> el administrador crea perfiles por DNI y elige qué puede hacer cada uno (rutinas, chat, plata, novedades…). Cada profe chatea solo con sus alumnos y el socio ve “Prof. Nombre te escribió”.'],
     ['📣','Pestaña <b>Novedades</b>: publicá avisos con foto y fecha (días cerrados, el asado de fin de año, cambios de horario). Los socios los ven en Inicio.'],
@@ -3429,6 +3436,12 @@ document.addEventListener('click',e=>{ if(e.target.closest('#psx')){ e.preventDe
    Claves de permiso: rutinas, asignar, chat, dinero, novedades, aprobar, gyminfo */
 const PERMISOS=[['rutinas','Crear y editar rutinas'],['asignar','Asignar rutinas a sus alumnos'],['chat','Chatear con sus alumnos'],['dinero','Ver pagos, ingresos y deudas'],['novedades','Publicar novedades'],['aprobar','Aprobar socios nuevos'],['gyminfo','Editar la info del gimnasio']];
 const esAdmin=()=>!PRO||PRO.admin!==false;
+/* desarrollador: puede todo, incluso con los dueños. En la demo local el primer profe hace de desarrollador. */
+const esDev=()=>!PRO||!!PRO.dev||(!CLOUD&&PRO.admin!==false&&!PRO.dueno);
+const rolDe=p=>p&&p.dev?'dev':(CLOUD?!!(p&&p.admin):!!p&&p.admin!==false)?'dueno':'profe';
+const ROL_TXT={dev:'Desarrollador',dueno:'Dueño',profe:'Profesor'};
+/* ¿el que está logueado puede administrar a este profe? (la base lo controla igual) */
+const puedeTocar=p=>!p.yo&&(esDev()||(esAdmin()&&rolDe(p)==='profe'));
 const puedeP=k=>esAdmin()||!!((PRO&&PRO.permisos)||{})[k];
 /* ---------- Novedades del gimnasio (lote 38 · A). Distinto del popup NOVEDADES de versiones del panel ---------- */
 let GNOV=[];
@@ -3577,10 +3590,10 @@ function bnvLanzar(nombre,rol,clave){ nombre=gTxt(nombre); if(!nombre) return;
   const go=()=>{ if(document.getElementById('intro')&&performance.now()-t0<8000) return setTimeout(go,150);
     const v=document.getElementById('bnvx'); if(v) v.remove();
     const w=document.createElement('div'); w.id='bnvx'; w.setAttribute('role','status'); w.setAttribute('aria-live','polite');
-    w.innerHTML=`<div class="bnvglow"></div><div class="bnvcard"><span class="bnvhi">¡Bienvenido,</span><b class="bnvnm">${esc(nombre)}!</b><span class="bnvrol ${rol==='Administrador'?'adm':''}">${esc(rol)}</span><i class="bnvbar"></i></div>`;
+    w.innerHTML=`<div class="bnvglow"></div><div class="bnvcard"><span class="bnvhi">¡Bienvenido,</span><b class="bnvnm">${esc(nombre)}!</b><span class="bnvrol ${rol==='Desarrollador'?'adm bnvdev':rol==='Dueño'?'adm':''}">${esc(rol)}</span><i class="bnvbar"></i></div>`;
     document.body.appendChild(w); setTimeout(()=>w.remove(),reduceMotion?1300:1750) };
   setTimeout(go,80) }
-const bnvProfe=()=>{ if(PRO) bnvLanzar(String(PRO.nombre||'').split(' ')[0],esAdmin()?'Administrador':'Profesor','p'+(PRO.dni||'')) };
+const bnvProfe=()=>{ if(PRO) bnvLanzar(String(PRO.nombre||'').split(' ')[0],ROL_TXT[PRO.dev?'dev':esAdmin()?'dueno':'profe'],'p'+(PRO.dni||'')) };
 /* ---------- lote 38b: Rutina del socio — Progresos (RM/PR), cronómetro y estado que sobreviven al bloqueo ---------- */
 /* Todo se guarda por socio: tc-crono-<dni> (cronómetro + descanso, con marcas de tiempo) y tc-rutdia-<dni> (lo de HOY: día, tildados, sesión, pestaña, borradores, scroll). */
 const TCB={dni:null,boot:true,scroll:0,scrollPend:false,sesT0:0,drafts:{},sig:'',avisar:0};
@@ -3800,20 +3813,23 @@ function c1xRutina(app){ const d=app.querySelector('#dirty'), sec=d&&d.closest('
 
 /* ---------- pestaña Profes: el admin crea perfiles por DNI y elige permisos con interruptores ---------- */
 const c1xSw=(k,l,chk,attr,dis,vis)=>`<label class="c1xsw ${(vis==null?chk:vis)?'on':''} ${dis?'dis':''}"><input type="checkbox" ${attr} ${chk?'checked':''} ${dis?'disabled':''}><i aria-hidden="true"></i><span>${C1X_ICO[k]||''} ${esc(l)}</span></label>`;
-function c1xChips(p){ if(c1xAdm(p)) return '<span class="c1xchip adm">★ Administrador · puede todo</span>';
+function c1xChips(p){ if(p.dev) return '<span class="c1xchip adm c1xdevc">⚡ Desarrollador · acceso total</span>';
+  if(c1xAdm(p)) return '<span class="c1xchip adm">★ Dueño · puede todo en el gimnasio</span>';
   const on=PERMISOS.filter(([k])=>(p.permisos||{})[k]);
   return on.length?on.map(([k,l],i)=>`<span class="c1xchip" style="--i:${i}">${C1X_ICO[k]} ${esc(l)}</span>`).join(''):'<span class="c1xchip off">Sin permisos todavía</span>' }
 function c1xEditor(p){ const a=c1xAdm(p), P=p.permisos||{};
   return `<div class="c1xedbox" role="group" aria-label="Permisos de ${esc(c1xNom(p))}"><p class="c1xedt">Elegí qué puede hacer. Se guarda solo, al tocar.</p>
     <div class="c1xsws">${PERMISOS.map(([k,l])=>c1xSw(k,l,!!P[k],`data-c1xpp="${k}"`,a,a||!!P[k])).join('')}</div>
-    <label class="c1xsw c1xswadm ${a?'on':''}"><input type="checkbox" data-c1xadm ${a?'checked':''}><i aria-hidden="true"></i><span>★ Administrador<small>Puede todo: crear profes, cambiar permisos y ver la plata</small></span></label></div>` }
-function c1xCard(p,i,adm){ const nom=c1xNom(p), ed=adm&&S.c1xEd===p.dni&&!p.yo&&p.aprobado, cl=c1xClave(p), d=esc(p.dni);
+    ${esDev()?`<label class="c1xsw c1xswadm ${a?'on':''}"><input type="checkbox" data-c1xadm ${a?'checked':''}><i aria-hidden="true"></i><span>★ Dueño<small>Puede todo en el gimnasio: crear profes, cambiar permisos y ver la plata. Solo vos (desarrollador) lo das o lo sacás.</small></span></label>`:''}</div>` }
+const c1xRolTag=p=>p.dev?' <span class="c1xadm c1xdevt">Desarrollador</span>':c1xAdm(p)?' <span class="c1xadm">Dueño</span>':'';
+function c1xCard(p,i,adm){ const nom=c1xNom(p), toca=adm&&puedeTocar(p), ed=toca&&S.c1xEd===p.dni&&p.aprobado, cl=c1xClave(p), d=esc(p.dni);
   const acts=!adm?(p.yo?`<label class="mini" for="pfoto">${p.foto?'Cambiar foto':'Subir foto'}</label>`:'')
     :p.aprobado?(p.yo?`<label class="mini" for="pfoto">${p.foto?'Cambiar foto':'Subir foto'}</label><span class="pill ok">Vos</span>`
+      :!toca?`<span class="pill c1xprot" title="Solo el desarrollador puede cambiar a ${rolDe(p)==='dev'?'el desarrollador':'un dueño'}">🔒 Protegido</span>`
       :`<button class="mini ${ed?'c1xon':''}" data-c1xed="${d}" aria-expanded="${ed}">${ed?'Listo':'⚙ Permisos'}</button>${cl?`<button class="mini" data-preclave="${d}" data-pn="${esc(nom)}">Reiniciar contraseña</button>`:''}<button class="mini danger" data-pquitar="${d}" data-pn="${esc(nom)}">Quitar</button>`)
     :`<button class="mini pay" data-paprob="${d}">Aprobar</button><button class="mini danger" data-pquitar="${d}" data-pn="${esc(nom)}">Rechazar</button>`;
   return `<div class="profc c1xpc ${p.aprobado?'':'pend'} ${ed?'c1xed':''} ${S.c1xNuevo===p.dni?'c1xnew':''}" data-c1xp="${d}" style="animation-delay:${i*50}ms">${avatar('md',p.foto||null,nom)}
-    <div class="pn"><strong>${esc(nom)}${c1xAdm(p)&&p.aprobado?' <span class="c1xadm">Admin</span>':''}</strong><small class="num">DNI ${fmtDNI(p.dni)}${p.creado?' · '+(p.aprobado?'desde el ':'pidió entrar el ')+c1xFecha(p.creado):''}</small>
+    <div class="pn"><strong>${esc(nom)}${p.aprobado?c1xRolTag(p):''}</strong><small class="num">DNI ${fmtDNI(p.dni)}${p.creado?' · '+(p.aprobado?'desde el ':'pidió entrar el ')+c1xFecha(p.creado):''}</small>
       ${p.aprobado&&!p.yo&&cl!==undefined?`<span class="c1xcl ${cl?'ok':'no'}">${cl?'✓ Ya creó su contraseña':'⏳ Falta que entre al panel con «Crear cuenta» y cree su contraseña'}</span>`:''}</div>
     ${p.aprobado?`<div class="c1xchips">${c1xChips(p)}</div>`:''}
     ${acts?`<div class="acts">${acts}</div>`:''}${ed?c1xEditor(p):''}</div>` }
@@ -3849,12 +3865,12 @@ document.addEventListener('change',async e=>{ const t=e.target; if(S.view!=='due
   if(t.dataset.c1xnp!=null){ S.c1xNp=Object.assign({},S.c1xNp||C1X_DEF,{[t.dataset.c1xnp]:t.checked}); t.closest('.c1xsw').classList.toggle('on',t.checked); return }
   if(t.dataset.c1xpp==null&&!t.hasAttribute('data-c1xadm')) return;
   const card=t.closest('[data-c1xp]'), box=card&&card.querySelector('.c1xedbox'), p=card&&(S.profes||[]).find(x=>x.dni===card.dataset.c1xp); if(!p||!box||!esAdmin()) return;
-  const adm=box.querySelector('[data-c1xadm]').checked, perms={};
+  const _ad=box.querySelector('[data-c1xadm]'), adm=_ad?_ad.checked:c1xAdm(p), perms={};
   box.querySelectorAll('[data-c1xpp]').forEach(i=>{ perms[i.dataset.c1xpp]=i.checked; i.disabled=adm; const l=i.closest('.c1xsw'); l.classList.toggle('on',adm||i.checked); l.classList.toggle('dis',adm) });
-  box.querySelector('.c1xswadm').classList.toggle('on',adm);
+  if(_ad) box.querySelector('.c1xswadm').classList.toggle('on',adm);
   const antes={permisos:p.permisos,admin:p.admin}; p.permisos=perms; p.admin=adm;
   const ch=card.querySelector('.c1xchips'); if(ch) ch.innerHTML=c1xChips(p);
-  const st=card.querySelector('.pn strong'); if(st) st.innerHTML=esc(c1xNom(p))+(adm?' <span class="c1xadm">Admin</span>':'');
+  const st=card.querySelector('.pn strong'); if(st) st.innerHTML=esc(c1xNom(p))+c1xRolTag(p);
   try{ await c1xGuardarPerm(p.dni,perms,adm); clearTimeout(c1xGuardarPerm._t); c1xGuardarPerm._t=setTimeout(()=>toast('✓ Permisos de '+(p.nombre||'el profe')+' guardados'),450) }
   catch(err){ Object.assign(p,antes); toast(errTxt(err)); await cargarProfes(); render(true) } });
 document.addEventListener('submit',async e=>{ if(e.target.id!=='c1xpf') return; e.preventDefault(); if(!esAdmin()) return;
