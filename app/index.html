@@ -797,6 +797,30 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .mrkt{display:none}
 .mrkpod.mcarg i{width:22px;border-radius:5px;background:var(--sunk);animation:rkDot 1s ease-in-out infinite}.mrkpod.mcarg i:nth-child(1){height:24px}.mrkpod.mcarg i:nth-child(2){height:34px;animation-delay:.15s}.mrkpod.mcarg i:nth-child(3){height:18px;animation-delay:.3s}
 @media (prefers-reduced-motion:reduce){.mrkf{transition:opacity .2s}}
+/* buscador de socios */
+.psearch{position:relative;display:flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--sunk);width:260px;max-width:100%;cursor:text;transition:width .35s var(--spring),border-color .2s,box-shadow .2s,background .2s;margin-left:auto}
+.psearch:focus-within,.psearch.con{width:340px;border-color:var(--accent);box-shadow:0 0 0 4px rgba(36,201,167,.15);background:var(--surface)}
+.pslupa{display:grid;place-items:center;color:var(--muted);transition:color .2s,transform .35s var(--spring)}
+.pslupa svg{width:18px;height:18px}
+.psearch:focus-within .pslupa{color:var(--accent);transform:rotate(-12deg) scale(1.12)}
+.psearch input{flex:1;min-width:0;border:0;background:none;outline:none;color:var(--ink);font:inherit;font-size:14px;padding:0}
+.psearch input::-webkit-search-cancel-button{display:none}
+.psearch kbd{font:700 10.5px var(--body,inherit);color:var(--muted);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:2px 6px;white-space:nowrap;background:var(--surface)}
+.psearch.con kbd,.psearch:focus-within kbd{display:none}
+.psx{display:none;width:24px;height:24px;border-radius:50%;border:0;background:var(--line);color:var(--ink);font-size:16px;line-height:1;cursor:pointer;flex:none}
+.psearch.con .psx{display:grid;place-items:center;animation:bmIn .2s var(--spring)}
+.psearch.pulso{animation:psPulso .5s var(--spring)}
+@keyframes psPulso{40%{transform:scale(1.04)}}
+.pscnt{font-size:12.5px;font-weight:700;white-space:nowrap;min-width:0}
+.panelhead:has(.psearch){flex-wrap:wrap;gap:10px}
+.panelhead:has(.psearch) .chips{flex-basis:100%;justify-content:flex-start}
+tr.rowlink.psin{animation:psIn .35s var(--spring) both;animation-delay:calc(var(--k,0)*25ms)}
+@keyframes psIn{from{opacity:0;transform:translateY(6px)}}
+.psn mark{background:linear-gradient(90deg,rgba(252,224,36,.55),rgba(36,201,167,.45));color:inherit;border-radius:4px;padding:0 1px}
+tr.psnone td{text-align:center;padding:28px 10px!important;color:var(--muted)}
+tr.psnone b{display:block;color:var(--ink);margin:4px 0 6px}
+.psnico{font-size:28px;display:inline-block;animation:famBob 2.4s ease-in-out infinite}
+@media (max-width:700px){.psearch,.psearch:focus-within,.psearch.con{width:100%;margin-left:0}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2657,13 +2681,14 @@ function renderDuenio(){
   ${S.disp&&S.disp.length?`<section class="panel pendp"><h2>Celulares esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Alguien se registró con un DNI que ya tenía celular. Aprobalo solo si es esa persona (por ejemplo, cambió de teléfono).</p>
     <div class="duelist">${S.disp.map(x=>`<div><span><strong>${esc(x.s.name)}</strong> <span class="muted num">DNI ${fmtDNI(x.s.dni)}</span></span><span><button class="mini pay" data-dok="${x.uid}">Aprobar</button> <button class="mini danger" data-dno="${x.uid}">Rechazar</button></span></div>`).join('')}</div></section>`:''}
   <section class="panel">
-    <div class="panelhead"><h2>Socios</h2>${all.length?`<div class="chips" role="group" aria-label="Filtrar">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div>`:''}</div>
+    <div class="panelhead"><h2>Socios</h2>${all.length?`<label class="psearch ${S.q?'con':''}" title="Buscar socio (Ctrl+F)"><span class="pslupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg></span><input id="psq" type="search" autocomplete="off" spellcheck="false" placeholder="Buscar por nombre o DNI" aria-label="Buscar socio por nombre o DNI" value="${esc(S.q||'')}"><kbd aria-hidden="true">Ctrl F</kbd><button type="button" class="psx" id="psx" aria-label="Borrar búsqueda">×</button></label><span class="pscnt muted" id="pscnt" aria-live="polite"></span>`:''}${all.length?`<div class="chips" role="group" aria-label="Filtrar">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div>`:''}</div>
     ${addForm}
     ${all.length?`<div class="tablewrap"><table><thead><tr><th>Socio</th><th>Plan</th><th>Vence</th><th>Estado</th><th>Cuotas ${Y}</th><th>Rutina</th><th></th></tr></thead><tbody>
-    ${list.map(({s,e})=>`<tr class="rowlink" data-open="${s.dni}"><td><span class="who">${avatar('sm',s.photo,s.name)}<span><strong>${esc(s.name)}${ultSens(s)}</strong><small class="num">DNI ${fmtDNI(s.dni)}</small></span></span></td>
+    ${list.map(({s,e})=>`<tr class="rowlink" data-open="${s.dni}" data-q="${esc(psNorm(s.name)+' '+s.dni)}"><td><span class="who">${avatar('sm',s.photo,s.name)}<span><strong><span class="psn" data-n="${esc(s.name)}">${esc(s.name)}</span>${ultSens(s)}</strong><small class="num">DNI ${fmtDNI(s.dni)}</small></span></span></td>
       <td>${s.plan?esc(s.plan):'<span class="muted">—</span>'}</td><td class="num">${e.v}</td><td><span class="pill ${e.c}">${e.t}</span></td><td>${dotsOf(s)}</td>
       <td>${s.rutina?`<span class="pill ok">${s.rutina.length} día${s.rutina.length===1?'':'s'}</span>`:'<span class="pill">Sin rutina</span>'}</td>
       <td style="text-align:right"><button class="mini" data-open="${s.dni}">Abrir ficha</button></td></tr>`).join('')||`<tr><td colspan="7" class="muted">Nadie en este filtro.</td></tr>`}
+    <tr class="psnone" id="psnone" hidden><td colspan="7"><span class="psnico" aria-hidden="true">🔍</span><b id="psnotx"></b>${S.filter!=='todos'?'<button type="button" class="linkb" id="pstodos">Buscar en todos los socios</button>':''}</td></tr>
     </tbody></table></div>`
     :empty(ICONS.asist,'Todavía no hay socios','Se suman solos cuando se registran con su DNI en la app. También podés agregarlos acá arriba y después asignarles la cuota y la rutina.')}
   </section></div>`;
@@ -2925,6 +2950,9 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.23',t:'Buscador de socios',items:[
+    ['🔍','En <b>Socios</b> hay una <b>lupita</b> para buscar por nombre o DNI mientras escribís (no importan los acentos).'],
+    ['⌨️','Atajo: <b>Ctrl + F</b> (o la tecla <b>/</b>) va directo al buscador. <b>Enter</b> abre la ficha del primero y <b>Esc</b> borra.']]},
   {v:'1.1.22',t:'Ranking mensual y anual',items:[
     ['🏆','Los socios ven el ranking <b>del mes y del año</b>: en Inicio va cambiando solo entre Mes y Año, y en Asistencia eligen Mensual o Anual.']]},
   {v:'1.1.21',t:'Chat más cómodo',items:[
@@ -2965,11 +2993,37 @@ function novedadesMostrar(L,ver){ if(document.getElementById('tcnov')) return;
   document.getElementById('tcnovok').addEventListener('click',cerrar);
   document.getElementById('tcnov').addEventListener('click',e=>{ if(e.target.id==='tcnov') cerrar() });
   setTimeout(()=>{const b=document.getElementById('tcnovok'); if(b) b.focus()},400) }
+/* ---------- buscador de socios del panel ---------- */
+const psNorm=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function psBuscar(){ const inp=document.getElementById('psq'); if(!inp) return; const q=psNorm(inp.value.trim()), qd=q.replace(/[.\s]/g,''), partes=q.split(/\s+/).filter(Boolean);
+  inp.closest('.psearch').classList.toggle('con',!!q);
+  let n=0; const rows=document.querySelectorAll('tr.rowlink[data-q]');
+  rows.forEach((r,i)=>{ const d=r.dataset.q, ok=!q||partes.every(p=>d.includes(p))||(qd&&/^\d+$/.test(qd)&&d.includes(qd));
+    if(ok!==!r.hidden){ r.hidden=!ok; if(ok){ r.classList.remove('psin'); void r.offsetWidth; r.classList.add('psin'); r.style.setProperty('--k',Math.min(n,8)) } }
+    if(ok) n++;
+    const nm=r.querySelector('.psn'); if(nm){ const orig=nm.dataset.n; if(!q||!ok||/^\d+$/.test(qd)) nm.textContent=orig; else nm.innerHTML=psMarcar(orig,partes) } });
+  const none=document.getElementById('psnone'); if(none){ none.hidden=!(q&&!n); const t=document.getElementById('psnotx'); if(t) t.textContent='No encontramos a “'+inp.value.trim()+'”'+(S.filter!=='todos'?' en este filtro.':'.') }
+  const c=document.getElementById('pscnt'); if(c) c.textContent=q?(n+' de '+rows.length):'' }
+function psMarcar(nombre,partes){ const base=psNorm(nombre); const marcas=new Array(nombre.length).fill(false);
+  partes.forEach(p=>{ let i=base.indexOf(p); while(p&&i>=0){ for(let k=i;k<i+p.length;k++) marcas[k]=true; i=base.indexOf(p,i+p.length) } });
+  let out='', abierto=false; for(let k=0;k<nombre.length;k++){ if(marcas[k]&&!abierto){out+='<mark>';abierto=true} if(!marcas[k]&&abierto){out+='</mark>';abierto=false} out+=esc(nombre[k]) } if(abierto) out+='</mark>'; return out }
+document.addEventListener('input',e=>{ if(e.target.id!=='psq') return; S.q=e.target.value; psBuscar() });
+document.addEventListener('keydown',e=>{ if(S.view!=='duenio'||!S.pro) return; const t=e.target, enCampo=t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName)&&t.id!=='psq';
+  if(((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='f')||(e.key==='/'&&!enCampo)){ if(enCampo&&e.key==='/') return;
+    let i=document.getElementById('psq');
+    if(!i&&!S.sel&&S.ptabP==='socios') return;
+    if(!i){ if(S.dirty) return; S.ptabP='socios'; S.sel=null; S.edit=null; render(); i=document.getElementById('psq') }
+    if(i){ e.preventDefault(); i.focus(); i.select(); const l=i.closest('.psearch'); l.classList.remove('pulso'); void l.offsetWidth; l.classList.add('pulso') } return }
+  if(t&&t.id==='psq'){
+    if(e.key==='Escape'){ e.preventDefault(); if(t.value){ t.value=''; S.q=''; psBuscar() } else t.blur() }
+    if(e.key==='Enter'){ e.preventDefault(); const r=[...document.querySelectorAll('tr.rowlink[data-q]')].find(x=>!x.hidden); if(r) r.click() } } });
+document.addEventListener('click',e=>{ if(e.target.closest('#psx')){ e.preventDefault(); const i=document.getElementById('psq'); if(i){ i.value=''; S.q=''; psBuscar(); i.focus() } return }
+  if(e.target.closest('#pstodos')){ S.filter='todos'; render(true); const i=document.getElementById('psq'); if(i){ i.focus(); const L=i.value.length; i.setSelectionRange(L,L) } } });
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
-  if(S.view==='duenio'&&S.pro) novedadesCheck();
-  if(fid==='chatin'||fid==='chatpin'){ const t=document.getElementById(fid); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(fsel,fsel)}catch(x){} } }
+  if(S.view==='duenio'&&S.pro){ novedadesCheck(); psBuscar() }
+  if(fid==='chatin'||fid==='chatpin'||fid==='psq'){ const t=document.getElementById(fid); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(fsel,fsel)}catch(x){} } }
   /* cambio que llegó de otro lado (tiempo real): se actualiza en el lugar, sin animaciones de entrada ni saltos */
   if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
