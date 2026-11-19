@@ -495,6 +495,7 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .link.danger,.mini.danger{color:var(--bad)}
 .link.danger{font-size:13px;font-weight:600;align-self:center}
 /* dueño */
+#app .sinanim{animation:none}
 .owner.enter>*{animation:rise .45s var(--ease) both}.owner.enter>*:nth-child(2){animation-delay:.05s}.owner.enter>*:nth-child(3){animation-delay:.1s}
 .kpi{transition:transform .25s var(--spring),border-color .2s}.kpi:hover{transform:translateY(-2px);border-color:#2f352f}
 .who small{display:block;font-size:12px;color:var(--muted);font-weight:500}
@@ -1846,9 +1847,11 @@ document.addEventListener('click',e=>{
   if(b.dataset.pnav){ if(b.dataset.pnav===S.ptabP||(!S.ptabP&&b.dataset.pnav==='socios')) {if(S.sel&&b.dataset.pnav==='socios'){if(S.dirty&&!confirm('Hay cambios en la rutina sin guardar. ¿Salir igual?'))return;S.sel=null;S.edit=null;return render()} return}
     if(S.dirty&&!confirm('Hay cambios en la rutina sin guardar. ¿Salir igual?'))return;
     S.ptabP=b.dataset.pnav; S.sel=null; S.edit=null; S.dirty=false;
-    if(S.ptabP==='profes'){ const antes=JSON.stringify(S.profes||null);
-      cargarProfes().then(()=>{ if(S.ptabP==='profes'&&JSON.stringify(S.profes||null)!==antes) render(antes!=='null') }) }
-    return render() }
+    if(S.ptabP==='profes'){ const antes=JSON.stringify(S.profes||null), t0=Date.now();
+      /* refresco en segundo plano: solo redibuja si cambió algo, y nunca en medio de la animación de entrada */
+      cargarProfes().then(()=>{ if(S.ptabP!=='profes'||JSON.stringify(S.profes||null)===antes) return;
+        setTimeout(()=>{ if(S.ptabP==='profes') render(true) }, Math.max(0,650-(Date.now()-t0))) }) }
+    render(); $('#app').querySelectorAll('.probar,.profc').forEach(e=>e.classList.add('sinanim')); return }
   if(b.dataset.eye){const i=document.getElementById(b.dataset.eye); if(!i)return; const ver=i.type==='password'; i.type=ver?'text':'password'; b.classList.toggle('on',ver);
     b.setAttribute('aria-pressed',ver); b.setAttribute('aria-label',ver?'Ocultar contraseña':'Mostrar contraseña'); const n=i.value.length; i.focus(); try{i.setSelectionRange(n,n)}catch(x){} return}
   if(b.dataset.preclave){if(!confirm('¿Reiniciar la contraseña de '+b.dataset.pn+'? Va a tener que volver a registrarse con su mismo DNI para elegir una nueva.'))return; profeAccion('reset',b.dataset.preclave);return}
