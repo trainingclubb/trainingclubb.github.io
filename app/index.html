@@ -15,7 +15,9 @@
 <style>body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Training Club</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&display=swap"></noscript>
 <script>(function(){var t='oscuro';try{t=localStorage.getItem('tc-tema')||'oscuro'}catch(e){}
 var d=t==='auto'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):(t==='claro'?'light':'dark');
 document.documentElement.setAttribute('data-theme',d);document.documentElement.setAttribute('data-tema',t)})()</script>
@@ -570,14 +572,35 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .edays button:last-child{border-style:dashed;color:var(--teal)}
 .dayf{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.dayf .field{width:160px}.dayf .grow{flex:1;min-width:180px}
 .extable{display:flex;flex-direction:column;gap:6px}
-.exh,.exr{display:grid;grid-template-columns:minmax(160px,2fr) 1fr 1fr 1fr 32px;gap:6px;align-items:center}
+.exh,.exr{display:grid;grid-template-columns:minmax(160px,2fr) .7fr .9fr .6fr .9fr 32px;gap:6px;align-items:center}
+.exh span[title]{cursor:help;text-decoration:underline dotted;text-underline-offset:3px}
 .exh span{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .exr .inp{padding:9px 10px;font-size:14px}.exr{animation:rise .3s var(--ease) both}
 .extable>.mini{align-self:flex-start}
-@media (max-width:640px){.exh{display:none}.exr{grid-template-columns:1fr 1fr 32px}.exr .inp:first-child{grid-column:1/-1}}
+@media (max-width:640px){.exh,.exr{grid-template-columns:repeat(4,minmax(0,1fr)) 32px}.exh span:first-child{display:none}.exr .inp:first-child{grid-column:1/-1}.exr{padding-top:6px;border-top:1px solid var(--line)}}
 .factions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center}
 .panel .factions{justify-content:flex-start}
-.cuotaf{display:grid;grid-template-columns:1.6fr 1fr auto .55fr auto;gap:8px;align-items:end}
+.cuotaf{display:grid;grid-template-columns:1.6fr 1fr auto .55fr;gap:8px;align-items:end}
+.mrow.editing .mini.danger{margin-left:auto}
+.rnote{margin:0;font-size:12.5px;color:var(--muted)}
+/* guardado general de la ficha */
+.gsbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;width:max-content;max-width:calc(100% - 32px);transform:translate(-50%,calc(100% + 40px)) scale(.96);opacity:0;pointer-events:none;transition:transform .5s var(--spring),opacity .25s var(--ease)}
+.gsbar.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.gsin{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 10px 10px 16px;border-radius:18px;background:var(--surface);border:1px solid rgba(36,201,167,.5);box-shadow:0 18px 40px -12px rgba(0,0,0,.55),0 0 0 4px rgba(36,201,167,.08)}
+.gsin b{font-size:14px;margin-right:4px}.gsin b small{display:block;font-size:12px;font-weight:600;color:var(--muted)}
+.gsin b.bump{animation:okPop .4s var(--spring)}
+.gsdot{width:9px;height:9px;border-radius:50%;background:var(--warn);flex:none;box-shadow:0 0 0 0 rgba(252,224,36,.55);animation:gsPulse 1.8s var(--ease) infinite}
+@keyframes gsPulse{0%{box-shadow:0 0 0 0 rgba(252,224,36,.55)}70%,100%{box-shadow:0 0 0 9px rgba(252,224,36,0)}}
+.gsbar.ok .gsdot{background:var(--ok);animation:none}.gsbar.ok .gsin{border-color:var(--ok)}
+.gsbar.ok .gsin .mini,.gsbar.ok .gsin .btn{display:none}
+body.gson .owner{padding-bottom:84px}
+.gsm{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.gsm.on{opacity:1;pointer-events:auto}
+.gsmc{width:min(420px,100%);padding:20px;border-radius:20px;background:var(--surface);border:1px solid var(--line);box-shadow:0 24px 60px -16px rgba(0,0,0,.6);transform:translateY(14px) scale(.96);transition:transform .45s var(--spring)}
+.gsm.on .gsmc{transform:none}
+.gsmc b{display:block;font-size:18px}.gsmc p{margin:6px 0 16px;color:var(--muted);font-size:14px}
+.gsma{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.gsma .mini:last-child{margin-left:auto}
+@media (prefers-reduced-motion:reduce){.gsbar,.gsmc{transition:opacity .2s}.gsdot{animation:none}}
 .cuni{display:flex;align-items:center;gap:8px;height:46px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:var(--sunk);font-size:13px;cursor:pointer;white-space:nowrap;transition:border-color .2s}
 .cuni:has(input:checked){border-color:#24C9A7}.cuni input{accent-color:#24C9A7;width:16px;height:16px}
 .inp.flash{animation:flash .6s var(--ease)}@keyframes flash{0%{box-shadow:0 0 0 0 rgba(36,201,167,.6)}100%{box-shadow:0 0 0 10px rgba(36,201,167,0)}}
@@ -639,6 +662,12 @@ label.mini{display:inline-flex;align-items:center;cursor:pointer}
 .profc .acts{display:flex;gap:6px;flex-shrink:0;align-items:center}
 .lstep{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;animation:lstepIn .45s var(--spring) both}
 @keyframes lstepIn{from{opacity:0;transform:translateY(12px) scale(.98)}}
+.lstep.sale{animation:lstepOut .26s var(--ease) both}
+@keyframes lstepOut{to{opacity:0;transform:translateY(-10px) scale(.98)}}
+.btn.cargando{position:relative;opacity:.85}
+.btn.cargando::after{content:'';display:inline-block;width:1em;text-align:left;animation:lpuntos 1s steps(4) infinite}
+@keyframes lpuntos{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+@media (prefers-reduced-motion:reduce){.lstep.sale{animation:none}.btn.cargando::after{animation:none}}
 .ldni{width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);font-size:13px;color:var(--muted);text-align:left}
 .ldni b{color:var(--ink)}
 .ldni.info{border-color:var(--warn);color:var(--ink);line-height:1.4}
@@ -788,9 +817,42 @@ body{position:fixed;inset:0;padding:0!important;margin:0}
     <button id="v-duenio" aria-pressed="false">Panel del dueño</button>
   </div>
 </header>
-<p class="note">Arranca vacío, como el primer día. Creá tu cuenta con DNI y contraseña en "App del socio". Después entrá al "Panel del dueño" (el primer profe entra directo; los siguientes los aprueba un profe en la sección Profes) y asignale la cuota y la rutina.</p>
+<p class="note">Arranca vacío, como el primer día. Entrá con tu DNI y tu nombre en "App del socio". Después entrá al "Panel del dueño" (el primer profe entra directo; los siguientes los aprueba un profe en la sección Profes) y asignale la cuota y la rutina.</p>
 
 <main id="app"></main>
+<script>
+/* rellenos para navegadores viejos (Android con Chrome/WebView sin actualizar) */
+(function(){
+  if(!Object.fromEntries) Object.fromEntries=function(it){var o={};Array.from(it,function(kv){o[kv[0]]=kv[1]});return o};
+  if(!Array.prototype.flat) Object.defineProperty(Array.prototype,'flat',{configurable:true,writable:true,value:function(d){d=d===undefined?1:Math.floor(d);var r=[];(function f(a,n){for(var i=0;i<a.length;i++){if(Array.isArray(a[i])&&n>0)f(a[i],n-1);else if(i in a)r.push(a[i])}})(this,d);return r}});
+  if(!Array.prototype.flatMap) Object.defineProperty(Array.prototype,'flatMap',{configurable:true,writable:true,value:function(fn,t){return Array.prototype.map.call(this,fn,t).flat(1)}});
+  if(!String.prototype.replaceAll) Object.defineProperty(String.prototype,'replaceAll',{configurable:true,writable:true,value:function(a,b){return a instanceof RegExp?this.replace(a,b):this.split(a).join(b)}});
+  if(!Array.prototype.at) Object.defineProperty(Array.prototype,'at',{configurable:true,writable:true,value:function(i){i=Math.trunc(i)||0;if(i<0)i+=this.length;return this[i]}});
+  if(!Promise.allSettled) Promise.allSettled=function(ps){return Promise.all(Array.from(ps,function(p){return Promise.resolve(p).then(function(v){return{status:'fulfilled',value:v}},function(e){return{status:'rejected',reason:e}})}))};
+  if(typeof globalThis==='undefined') window.globalThis=window;
+  try{ if(window.MediaQueryList&&!MediaQueryList.prototype.addEventListener){MediaQueryList.prototype.addEventListener=function(t,f){this.addListener(f)};MediaQueryList.prototype.removeEventListener=function(t,f){this.removeListener(f)}} }catch(e){}
+})();
+/* red de seguridad del arranque: nunca quedarse en la pantalla de inicio */
+(function(){
+  var T0=Date.now(), mostrado=false;
+  function arrancando(){var i=document.getElementById('intro');return !!(i&&!i.getAttribute('data-cerrando'))}
+  function falla(titulo,txt,forzar){
+    if(mostrado||(!forzar&&!arrancando())) return; mostrado=true;
+    var i=document.getElementById('intro'); if(i&&i.parentNode) i.parentNode.removeChild(i);
+    var a=document.getElementById('app'); if(!a) return;
+    a.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:#070807;color:#F3F5F0;font:15px/1.45 system-ui,sans-serif;text-align:center"><div style="max-width:340px"><b style="display:block;font-size:20px;margin-bottom:8px">'+titulo+'</b><p style="margin:0 0 18px;color:#98A099">'+txt+'</p><button type="button" id="tcretry" style="border:0;border-radius:14px;padding:13px 22px;font:700 15px system-ui,sans-serif;background:#24C9A7;color:#05110E">Reintentar</button></div></div>';
+    var b=document.getElementById('tcretry'); if(b) b.onclick=function(e){e.stopPropagation();location.reload()};
+  }
+  window.tcFalla=falla;
+  window.addEventListener('error',function(e){ if(e&&e.target&&e.target!==window&&e.target.tagName) return; /* imagen o fuente que no cargó: no frena */
+    try{console.error('[arranque]',e&&e.message)}catch(x){}
+    if(Date.now()-T0<60000) falla('No se pudo abrir la app','Hubo un problema al cargar. Revisá tu conexión y tocá Reintentar. Si sigue igual, actualizá Chrome desde Play Store.') });
+  /* si la conexión no responde, a los 20 s se ofrece reintentar (si después termina de cargar, la app aparece sola) */
+  setTimeout(function(){ falla('Está tardando en conectar','Parece que la conexión está lenta o sin señal. Tocá Reintentar.') },20000);
+  /* la app en la nube sin el cliente de Supabase no puede funcionar: mejor avisar que abrir vacía */
+  document.addEventListener('DOMContentLoaded',function(){ if(window.TC_CFG&&window.TC_CFG.url&&!window.supabase) falla('No se pudo abrir la app','No se pudo descargar una parte de la app. Revisá tu conexión y tocá Reintentar.',true) });
+})();
+</script>
 <div id="intro" role="status" aria-label="Abriendo Training Club">
   <div class="ibg"><i></i><i></i><i></i><i></i></div>
   <div class="icore">
@@ -1059,7 +1121,7 @@ function screenInicio(){
   ${horariosHtml()}
   ${r?`<section class="card">
     <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
-    <div>${r.ex.slice(0,3).map(x=>`<div class="mini-ex"><span>${esc(x[0])}</span><span class="num">${esc(x[1])}${x[2]?' · '+esc(x[2]):''}</span></div>`).join('')}</div>
+    <div>${r.ex.slice(0,3).map(x=>`<div class="mini-ex"><span>${esc(x[0])}</span><span class="num">${exMeta(x)}</span></div>`).join('')}</div>
     <button class="link" data-tab="rutina">Ver rutina completa →</button></section>`
   :`<section class="card soft"><div class="ttl"><b>Tu rutina</b></div><p class="muted">Todavía no tenés rutina. ${PROFE} te la arma y te aparece acá.</p></section>`}
   <div class="row2">
@@ -1174,7 +1236,7 @@ function screenRutina(){
   <div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k);
     return `<div class="ex ${on?'done':''}">
       <div class="anim" data-anim="${esc(animKey(e[0]))}" aria-label="Animación: ${esc(e[0])}"><svg viewBox="0 0 100 100" role="img"></svg></div>
-      <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${esc(e[1])}${e[2]?` · <b>${esc(e[2])}</b>`:''}</span>
+      <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${exMeta(e)}</span>
         ${e[3]?`<button class="restbtn" data-rest="${restSecs(e[3])}">⏱ Descanso ${esc(e[3])}</button>`:''}</div>
       <button class="chk" data-ex="${k}" aria-pressed="${on}" aria-label="Marcar ${esc(e[0])} como hecho">✓</button></div>`}).join('')}</div>
   ${n&&d===n?'<button class="btn" id="fin">Terminar entrenamiento</button>':''}`;
@@ -1335,19 +1397,14 @@ function screenAsist(){
 }
 
 function screenLogin(logo){
-  const m=S.lmode||'dni', d=S.ldni||'', P=PROFE.split(' ')[0];
+  const m=S.lmode==='crear'?'crear':'dni', d=S.ldni||'';
   const T={dni:['Entrá con tu DNI','Con tu DNI encontramos tu ficha, tus cuotas y tu rutina.'],
-    crear:['Creá tu cuenta','Lo hacés una sola vez. Si cambiás de celular o reinstalás la app, entrás con tu DNI y esta contraseña.'],
-    clave:['Creá tu contraseña',P+' ya te anotó en el gimnasio. Elegí una contraseña para tu cuenta.'],
-    login:['Iniciá sesión','Ya tenés cuenta. Entrá con tu contraseña.']}[m];
-  const pw=(id,lab,ac)=>`<div class="field"><label for="${id}">${lab}</label>${pwIn(id,ac)}</div>`;
+    crear:['Creá tu cuenta','Es la primera vez que entrás con este DNI. Decinos cómo te llamás y listo.']}[m];
   const dniBox=m==='dni'?'':`<input type="text" autocomplete="username" value="${d}" hidden><div class="ldni"><span>DNI <b class="num">${fmtDNI(d)}</b></span><button type="button" class="linkb" id="lcambiar">Cambiar</button></div>`;
   const body=m==='dni'?`<div class="field"><label for="dni">DNI</label><input class="inp num" id="dni" inputmode="numeric" autocomplete="username" placeholder="Ej: 38.456.789" maxlength="10" value="${d?fmtDNI(d):''}"></div>`
-    :m==='crear'?`${dniBox}<div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" placeholder="Como figura en el gimnasio"></div>${pw('lpw','Contraseña (mínimo 6)','new-password')}${pw('lpw2','Repetí la contraseña','new-password')}`
-    :m==='clave'?`${dniBox}${pw('lpw','Contraseña (mínimo 6)','new-password')}${pw('lpw2','Repetí la contraseña','new-password')}`
-    :`${dniBox}${pw('lpw','Contraseña','current-password')}`;
-  const btn={dni:'Continuar',crear:'Crear cuenta',clave:'Guardar y entrar',login:'Entrar'}[m];
-  const pie=m==='login'?`¿Te olvidaste la contraseña? Pedile a ${P} que te la reinicie desde el panel.`:m==='dni'?'La primera vez creás tu cuenta. Después, si reinstalás la app, solo iniciás sesión.':'';
+    :`${dniBox}<div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" autocapitalize="words" placeholder="Ej: Juan Pérez"></div>`;
+  const btn={dni:'Entrar',crear:'Crear cuenta'}[m];
+  const pie=m==='dni'?'¿Es tu primera vez? Poné tu DNI y te pedimos el nombre para crear tu cuenta.':'';
   return `<div class="login">
     <img class="lmark" src="${logo}" alt="Training Club">
     <div class="wm big"><b>Training</b><span>CLUB</span></div>
@@ -1362,18 +1419,12 @@ function screenLogin(logo){
     </div>
   </div>`;
 }
-async function socioEstado(dni){
-  if(CLOUD) return await q(sb.rpc('socio_estado',{p_dni:dni}));
-  const s=DB.socios[dni]; return !s?'nuevo':s.pw?'registrado':'sin_clave';
-}
-async function socioCrear(dni,name,pw){
-  if(CLOUD) return await q(sb.rpc('crear_cuenta',{p_dni:dni,p_nombre:name,p_pw:pw}));
-  const ex=DB.socios[dni]; if(ex&&ex.pw) throw new Error('Ya tenés cuenta con ese DNI. Iniciá sesión.');
-  const s=ensureSocio(dni,ex?null:name); s.pw=await hashPw(dni,pw); saveDB(); return {nombre:s.name};
-}
-async function socioLogin(dni,pw){
-  if(CLOUD) return await q(sb.rpc('iniciar_sesion',{p_dni:dni,p_pw:pw}));
-  const s=DB.socios[dni]; if(!s||!s.pw||s.pw!==await hashPw(dni,pw)) return null; return {nombre:s.name};
+// Entra con el DNI. Si no existe y no hay nombre → {nuevo:true} (hay que pedir el nombre). Con nombre → crea la cuenta.
+async function socioEntrar(dni,name){
+  if(CLOUD) return await q(sb.rpc('entrar_socio',{p_dni:dni,p_nombre:name||null}));
+  const ex=DB.socios[dni]; if(ex) return {nombre:ex.name};
+  if(!name) return {nuevo:true};
+  const s=ensureSocio(dni,name); return {nombre:s.name,creado:true};
 }
 async function entrarSocio(dni,name,nuevo){
   S.user={dni,name}; S.name=name; S.tab='inicio'; S.lastTab=null; S.pendiente=false; S.lmode=null; S.ldni=null;
@@ -1614,11 +1665,21 @@ setInterval(()=>{
 
 /* ---------- Panel del dueño / profe ---------- */
 const PLANTILLA=[
-  {d:'Día A',t:'Tren superior',ex:[['Press banca','4 × 8','60 kg','2 min'],['Remo con barra','4 × 8','55 kg','2 min'],['Press militar','3 × 10','35 kg','90 s'],['Jalón al pecho','3 × 12','45 kg','90 s'],['Curl bíceps','3 × 12','14 kg','60 s']]},
-  {d:'Día B',t:'Tren inferior',ex:[['Sentadilla','4 × 6','80 kg','3 min'],['Peso muerto rumano','3 × 10','60 kg','2 min'],['Prensa','3 × 12','140 kg','2 min'],['Estocadas','3 × 10 c/p','12 kg','90 s'],['Gemelos','4 × 15','40 kg','60 s']]},
-  {d:'Día C',t:'Full body + core',ex:[['Hip thrust','4 × 10','70 kg','2 min'],['Dominadas asistidas','3 × 8','−20 kg','2 min'],['Fondos','3 × 10','corporal','90 s'],['Plancha','3 × 45 s','','45 s'],['Rueda abdominal','3 × 10','','60 s']]}
+  {d:'Día A',t:'Tren superior',ex:[['Press banca','4 × 8','RIR 2','2 min'],['Remo con barra','4 × 8','RIR 2','2 min'],['Press militar','3 × 10','RIR 2','90 s'],['Jalón al pecho','3 × 12','RIR 1','90 s'],['Curl bíceps','3 × 12','RIR 1','60 s']]},
+  {d:'Día B',t:'Tren inferior',ex:[['Sentadilla','4 × 6','RIR 3','3 min'],['Peso muerto rumano','3 × 10','RIR 2','2 min'],['Prensa','3 × 12','RIR 2','2 min'],['Estocadas','3 × 10 c/p','RIR 2','90 s'],['Gemelos','4 × 15','RIR 1','60 s']]},
+  {d:'Día C',t:'Full body + core',ex:[['Hip thrust','4 × 10','RIR 2','2 min'],['Dominadas asistidas','3 × 8','RIR 2','2 min'],['Fondos','3 × 10','RIR 1','90 s'],['Plancha','3 × 45 s','','45 s'],['Rueda abdominal','3 × 10','RIR 2','60 s']]}
 ];
 const clone=x=>JSON.parse(JSON.stringify(x));
+/* rutina guardada: [ejercicio, "series × reps", "RIR n", descanso]. Las rutinas viejas traían la carga ("60 kg") en el 3er campo:
+   no se muestra en ningún lado y se borra cuando el profe vuelve a guardar la rutina */
+const rirDe=v=>{const m=String(v||'').match(/^\s*RIR\s*:?\s*(.+)$/i); return m?m[1].trim():''};
+const exSR=v=>{const t=String(v||'').trim(), m=t.match(/^(\d+)\s*(?:[x×X*]|series? de)\s*(.*)$/i); return m?[m[1],m[2].trim()]:['',t]};
+const exSRtxt=(se,re)=>se&&re?se+' × '+re:se?se+(se==='1'?' serie':' series'):re;
+const exMeta=e=>{const r=rirDe(e[2]); return esc(e[1])+(r?`${e[1]?' · ':''}<b title="Repeticiones en reserva">RIR ${esc(r)}</b>`:'')};
+/* en el editor cada ejercicio es [ejercicio, series, reps, rir, descanso] */
+const rutEd=R=>(R||[]).map(d=>({d:d.d||'',t:d.t||'',ex:(d.ex||[]).map(x=>{const [se,re]=exSR(x[1]); return [x[0]||'',se,re,rirDe(x[2]),x[3]||'']})}));
+const rutDe=ED=>ED.map(d=>({d:(d.d||'').trim()||'Día',t:(d.t||'').trim(),ex:d.ex.map(x=>x.map(v=>String(v==null?'':v).trim())).filter(x=>x[0])
+  .map(x=>[x[0],exSRtxt(x[1],x[2]),x[3]?'RIR '+x[3].replace(/^RIR\s*/i,''):'',x[4]])})).filter(d=>d.ex.length);
 const dotsOf=s=>`<span class="dots" aria-label="Cuotas ${Y}">${MES.map((_,i)=>{const c=mesEstado(s,i);return `<i class="${c==='paid'?'p':c==='owed'?'o':''}" title="${MES[i]}"></i>`}).join('')}</span>`;
 
 function proBar(){const n=(S.profes||[]).filter(p=>!p.aprobado).length; const t=S.ptabP==='profes'?1:0; const prev=S.pnPrev==null?t:S.pnPrev; S.pnPrev=t;
@@ -1685,7 +1746,7 @@ function renderDuenio(){
   if(!CLOUD&&!S.profes) cargarProfes();
   if(S.ptabP==='profes') return renderProfes();
   if(S.sel&&DB.socios[S.sel]) return renderFicha(DB.socios[S.sel]);
-  S.sel=null;
+  if(S.sel){S.edit=null;S.dirty=false;S.msel=null} S.sel=null;
   const all=Object.values(DB.socios).sort((a,b)=>a.name.localeCompare(b.name,'es'));
   const est=all.map(s=>({s,e:estado(s)}));
   const venc=est.filter(x=>x.e.c==='bad'), por=est.filter(x=>x.e.c==='warn'&&x.e.days<=7);
@@ -1743,7 +1804,7 @@ function renderDuenio(){
 
 function renderFicha(s){
   const e=estado(s);
-  if(!S.edit||S.edit.dni!==s.dni){S.edit={dni:s.dni,days:clone(s.rutina||[])};S.eday=0;S.dirty=false}
+  if(!S.edit||S.edit.dni!==s.dni){S.edit={dni:s.dni,days:rutEd(s.rutina)};S.eday=0;S.dirty=false}
   const ED=S.edit.days; if(S.eday>=ED.length) S.eday=Math.max(0,ED.length-1);
   const day=ED[S.eday];
   const rut=`<section class="panel">
@@ -1752,16 +1813,17 @@ function renderFicha(s){
     <div class="dayf"><div class="field"><label>Nombre del día</label><input class="inp" data-rf="d" value="${esc(day.d)}"></div>
       <div class="field grow"><label>Foco</label><input class="inp" data-rf="t" value="${esc(day.t)}" placeholder="Ej: Tren superior"></div>
       <button class="mini" id="delday">Borrar día</button></div>
-    <div class="extable"><div class="exh"><span>Ejercicio</span><span>Series × reps</span><span>Carga</span><span>Descanso</span><span></span></div>
+    <div class="extable"><div class="exh"><span>Ejercicio</span><span>Series</span><span>Reps</span><span title="Repeticiones en reserva: cuántas le quedan antes del fallo">RIR</span><span>Descanso</span><span></span></div>
       ${day.ex.map((x,j)=>`<div class="exr"><input class="inp" list="exl" data-ri="${j}" data-rc="0" value="${esc(x[0])}" placeholder="Ejercicio" aria-label="Ejercicio">
-        <input class="inp num" data-ri="${j}" data-rc="1" value="${esc(x[1])}" placeholder="4 × 8" aria-label="Series y repeticiones">
-        <input class="inp num" data-ri="${j}" data-rc="2" value="${esc(x[2])}" placeholder="60 kg" aria-label="Carga">
-        <input class="inp num" data-ri="${j}" data-rc="3" value="${esc(x[3])}" placeholder="90 s" aria-label="Descanso">
+        <input class="inp num" data-ri="${j}" data-rc="1" value="${esc(x[1])}" placeholder="4" inputmode="numeric" maxlength="3" aria-label="Series">
+        <input class="inp num" data-ri="${j}" data-rc="2" value="${esc(x[2])}" placeholder="10" aria-label="Repeticiones">
+        <input class="inp num" data-ri="${j}" data-rc="3" value="${esc(x[3])}" placeholder="2" inputmode="numeric" maxlength="5" aria-label="RIR (repeticiones en reserva)">
+        <input class="inp num" data-ri="${j}" data-rc="4" value="${esc(x[4])}" placeholder="90 s" aria-label="Descanso">
         <button class="del" data-rdel="${j}" aria-label="Quitar ejercicio">×</button></div>`).join('')}
       <datalist id="exl">${Object.keys(ANIM).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
       <button class="mini" id="addrow">＋ Ejercicio</button></div>
-    <div class="factions"><button class="btn sm" id="saverut">Guardar y enviar al socio</button>${s.rutina?'<button class="mini danger" id="delrut">Quitar rutina</button>':''}</div>`
-    :`${empty(ICONS.rutina,'Sin rutina asignada',`Armale la rutina a ${esc(s.name.split(' ')[0])}: días, ejercicios, series, carga y descanso. La ve al instante en su app.`,
+    <div class="factions"><p class="rnote">Le llega al socio cuando tocás «Guardar todo».</p>${s.rutina?'<button class="mini danger" id="delrut">Quitar rutina</button>':''}</div>`
+    :`${empty(ICONS.rutina,'Sin rutina asignada',`Armale la rutina a ${esc(s.name.split(' ')[0])}: días, ejercicios, series, repeticiones, RIR y descanso. La ve al instante en su app.`,
       '<div class="factions"><button class="btn sm" id="addday">Armar rutina</button><button class="mini" id="tpl">Usar plantilla de 3 días</button></div>')}`}
   </section>`;
   const MEDIOS=['Efectivo','Transferencia','Mercado Pago'];
@@ -1770,7 +1832,7 @@ function renderFicha(s){
   const pagable=i=>!s.pagos[mk(Y,i)];
   const adeuda=MES.map((_,i)=>i).filter(i=>['owed','due'].includes(mesEstado(s,i)));
   const meses=s.plan?MES.map((m,i)=>{const c=mesEstado(s,i); const p=s.pagos[mk(Y,i)];
-    if(p&&MS.edit!==i) return `<div class="mrow paid fin"><i class="mchk ph" aria-hidden="true"></i><span class="mname">${m}</span><span class="pill ok">Pagado</span>
+    if(p&&MS.edit!==i&&!gsPago(i)) return `<div class="mrow paid fin"><i class="mchk ph" aria-hidden="true"></i><span class="mname">${m}</span><span class="pill ok">Pagado</span>
       <span class="pinfo num"><b>${fmt(p.monto)}</b> · ${esc(p.medio||'')} · ${esc(p.fecha||'')}</span>
       <button class="mini" data-pedit="${i}" aria-label="Editar pago de ${m}">Editar</button></div>`;
     const sel=MS.set.includes(i);
@@ -1779,7 +1841,7 @@ function renderFicha(s){
       <select class="inp sm" id="medio${i}" aria-label="Medio de pago de ${m}">${MEDIOS.map(x=>`<option ${p&&p.medio===x?'selected':''}>${x}</option>`).join('')}</select>
       <input class="inp sm num" id="monto${i}" value="${p?p.monto:(c==='na'||c==='future'?s.precio:montoMes(s,i))}" inputmode="numeric" aria-label="Monto de ${m}" style="width:86px">
       <input class="inp sm num" id="fecha${i}" value="${p?p.fecha:ddmm(iso(TODAY))}" aria-label="Fecha de pago de ${m}" style="width:62px" maxlength="5">
-      <button class="mini pay" data-pay="${i}">${p?'Guardar':'Registrar pago'}</button>${p?`<button class="mini danger" data-unpay="${i}">Anular</button><button class="mini" data-pcancel="${i}">Cancelar</button>`:''}</div>`}).join(''):'';
+      ${p?'':`<button class="mini pay" data-pay="${i}">Registrar pago</button>`}${p?`<button class="mini danger" data-unpay="${i}">Anular</button><button class="mini" data-pcancel="${i}">Cancelar</button>`:''}</div>`}).join(''):'';
   const mtot=MS.set.reduce((n,i)=>n+montoMes(s,i),0);
   const mbar=`<div class="mtools">${adeuda.length?`<button class="mini" id="mseladeu">Seleccionar adeudados (${adeuda.length})</button>`:''}<span class="muted">Tildá varios meses para registrarlos juntos.</span></div>
     <div class="mbar ${MS.set.length?'on':''}" id="mbar" aria-live="polite"><div class="mbin">
@@ -1794,7 +1856,7 @@ function renderFicha(s){
       <div class="field"><label for="falta">Socio desde</label><input class="inp num" id="falta" type="date" value="${s.alta}"></div>
       <div class="field"><label for="fnac">Nacimiento <span class="opc">opcional</span></label><input class="inp num" id="fnac" type="date" value="${s.nac||''}" min="1920-01-02" max="${iso(TODAY)}"></div>
       <div class="dchips"><span class="dchip"><small>Edad</small><b class="num">${edadDe(s.nac)!=null?edadDe(s.nac)+' años':'—'}</b></span><span class="dchip"><small>Peso actual</small><b class="num">${pesoActual(s)?fmtKg(pesoActual(s).peso)+' kg':'—'}</b>${pesoActual(s)?`<em class="num">${ddmm(pesoActual(s).fecha)}</em>`:''}</span></div>
-      <button class="btn sm" type="submit">Guardar datos</button></form>
+      </form>
     ${s.photo?'<button class="mini" id="fquitafoto">Quitar foto de perfil</button>':''}
   </section>`;
   const cuota=`<section class="panel"><h2>Cuota y pagos</h2>
@@ -1803,7 +1865,7 @@ function renderFicha(s){
       <div class="field"><label for="cprecio">Precio</label><input class="inp num" id="cprecio" inputmode="numeric" value="${s.precio||''}" placeholder="42000"></div>
       <label class="cuni"><input type="checkbox" id="cuni" ${esUni(s)?'checked':''}><span>🎓 Universitario <b>−10%</b></span></label>
       <div class="field"><label for="cvence">Vence el día</label><input class="inp num" id="cvence" inputmode="numeric" value="${s.vence}" maxlength="2"></div>
-      <button class="btn sm" type="submit">${s.plan?'Guardar cuota':'Asignar cuota'}</button></form>
+      </form>
     ${s.plan?`<p class="muted" style="margin:0;font-size:13px">Pasado el vencimiento se suma un 10% de recargo. Podés cambiar el monto, el medio y la fecha de cualquier mes.</p>${mbar}<div class="mlist">${meses}</div>`:'<p class="muted" style="margin:0">Asignale un plan para empezar a registrarle los pagos mes a mes.</p>'}
   </section>`;
   const fy=S.fc.y, fm=S.fc.m, fdays=attMonth(s,fy,fm), fn=new Date(fy,fm+1,0).getDate(), flead=(new Date(fy,fm,1).getDay()+6)%7;
@@ -1836,9 +1898,10 @@ function renderFicha(s){
   $('#app').innerHTML=`<div class="owner enter ficha">${proBar()}
     <div class="fhead"><button class="back" id="fback" aria-label="Volver a socios">‹</button>${avatar('md',s.photo,s.name)}
       <div><h2>${esc(s.name)}</h2><span class="muted num">DNI ${fmtDNI(s.dni)}</span></div><span class="pill ${e.c}" style="margin-left:auto">${e.t}</span>
-      <button class="mini" id="resetpw" title="Si se olvidó la contraseña">Reiniciar contraseña</button><button class="mini danger" id="delsocio">Dar de baja</button></div>
+      <button class="mini danger" id="delsocio">Dar de baja</button></div>
     ${rut}
     <div class="grid2 even">${datos}${asis}</div>${sensP}${cuota}${prog}</div>`;
+  gsApply();
 }
 
 /* ---------- Nube (Supabase): solo en las apps publicadas. El prototipo sigue funcionando local ---------- */
@@ -1966,7 +2029,7 @@ function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return
   /* cambio que llegó de otro lado (tiempo real): se actualiza en el lugar, sin animaciones de entrada ni saltos */
   if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
-  $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio');
+  $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio'); gsUpd();
   cerrarIntro()}
 
 async function elegirPlan(n){
@@ -1980,6 +2043,32 @@ function pagar(i){const s=me(); if(!s||!s.plan) return;
   if(CLOUD) return toast('Pagale a '+PROFE.split(' ')[0]+' (efectivo o transferencia) y él lo registra. El pago con Mercado Pago llega pronto.'); if(i==null) i=M; if(s.pagos[mk(Y,i)]) return;
   s.pagos[mk(Y,i)]={fecha:ddmm(iso(TODAY)),medio:'Mercado Pago',monto:montoMes(s,i)}; saveDB(); S.selMonth=i; toast('Pago de '+MES[i].toLowerCase()+' acreditado (simulado)'); render()}
 
+/* confirmar sin el cuadro nativo del navegador (en el panel de Windows deja la ventana sin teclado) */
+let ULTB=null, CONFOK=null;
+document.addEventListener('click',e=>{ULTB=e.target&&e.target.closest?e.target.closest('button'):null},true);
+function preguntar(msg,el){
+  const v=document.getElementById('tcask'); if(v) v.remove();
+  if(!document.getElementById('tcask-css')){const st=document.createElement('style');st.id='tcask-css';
+    st.textContent='#tcask{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.6)}#tcask .ab{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:20px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5)}#tcask p{margin:0 0 18px;line-height:1.45;font-size:15px}#tcask .ar{display:flex;gap:10px}#tcask .ar .btn{flex:1}';
+    document.head.appendChild(st)}
+  const back=el&&el.isConnected?el:null;
+  const sig=el?el.outerHTML.replace(/>[\s\S]*$/,'>'):'', bid=el&&el.id;
+  const w=document.createElement('div'); w.id='tcask'; w.setAttribute('role','alertdialog'); w.setAttribute('aria-modal','true');
+  w.innerHTML='<div class="ab"><p></p><div class="ar"><button type="button" class="btn ghost" data-ask="0">Cancelar</button><button type="button" class="btn" data-ask="1">Sí, seguir</button></div></div>';
+  w.querySelector('p').textContent=msg;
+  const fin=ok=>{ document.removeEventListener('keydown',tec,true); w.remove();
+    if(!ok){ if(back&&back.isConnected) try{back.focus()}catch(x){} return }
+    let t=el&&el.isConnected?el:null;
+    if(!t&&bid) t=document.getElementById(bid);
+    if(!t&&sig) t=[...document.querySelectorAll('button')].find(x=>x.outerHTML.replace(/>[\s\S]*$/,'>')===sig)||null;
+    if(!t) return toast('No se pudo completar. Probá de nuevo.');
+    CONFOK=msg; try{ t.click() }finally{ CONFOK=null } };
+  const tec=e=>{ if(e.key==='Escape'){e.preventDefault();e.stopPropagation();fin(false)} };
+  w.addEventListener('click',e=>{ e.stopPropagation(); const k=e.target.closest('[data-ask]'); if(k) fin(k.dataset.ask==='1'); else if(e.target===w) fin(false) });
+  document.addEventListener('keydown',tec,true);
+  document.body.appendChild(w); try{ w.querySelector('[data-ask="1"]').focus() }catch(x){}
+}
+window.confirm=function(msg){ msg=String(msg); if(CONFOK===msg){ CONFOK=null; return true } preguntar(msg,ULTB); return false };
 document.addEventListener('click',e=>{
   const tr=e.target.closest('tr[data-open]'); const b=e.target.closest('button');
   if(!b&&tr){S.sel=tr.dataset.open;S.edit=null;S.fc={y:Y,m:M};return render()}
@@ -2034,21 +2123,21 @@ document.addEventListener('click',e=>{
   /* dueño */
   if(b.dataset.f){S.filter=b.dataset.f;return render()}
   if(b.dataset.open){S.sel=b.dataset.open;S.edit=null;S.fc={y:Y,m:M};return render()}
-  if(b.id==='fback'){if(S.dirty&&!confirm('Hay cambios en la rutina sin guardar. ¿Salir igual?'))return;S.sel=null;S.edit=null;return render()}
-  if(b.id==='delsocio'){const s=DB.socios[S.sel];if(!confirm('¿Dar de baja a '+s.name+'? Se borran sus cuotas, rutina y progreso.'))return;delete DB.socios[S.sel];saveDB();S.sel=null;toast('Socio dado de baja');return render()}
+  if(b.id==='fback') return gsLeave(()=>{S.sel=null;S.edit=null;S.fd=null;render()});
+  if(b.id==='delsocio'){const s=DB.socios[S.sel];if(!confirm('¿Dar de baja a '+s.name+'? Se borran sus cuotas, rutina y progreso.'))return;delete DB.socios[S.sel];saveDB();S.sel=null;S.edit=null;S.dirty=false;S.msel=null;toast('Socio dado de baja');return render()}
   if(b.dataset.eday){S.eday=+b.dataset.eday;return render()}
-  if(b.id==='addday'){const ED=S.edit.days;ED.push({d:'Día '+String.fromCharCode(65+ED.length),t:'',ex:[['','','','']]});S.eday=ED.length-1;S.dirty=true;return render()}
-  if(b.id==='tpl'){S.edit.days=clone(PLANTILLA);S.eday=0;S.dirty=true;return render()}
+  if(b.id==='addday'){const ED=S.edit.days;ED.push({d:'Día '+String.fromCharCode(65+ED.length),t:'',ex:[['','','','','']]});S.eday=ED.length-1;S.dirty=true;return render()}
+  if(b.id==='tpl'){S.edit.days=rutEd(PLANTILLA);S.eday=0;S.dirty=true;return render()}
   if(b.id==='delday'){S.edit.days.splice(S.eday,1);S.eday=Math.max(0,S.eday-1);S.dirty=true;return render()}
-  if(b.id==='addrow'){S.edit.days[S.eday].ex.push(['','','','']);S.dirty=true;render();const r=document.querySelectorAll('.exr input[data-rc="0"]');r[r.length-1].focus();return}
+  if(b.id==='addrow'){S.edit.days[S.eday].ex.push(['','','','','']);S.dirty=true;render();const r=document.querySelectorAll('.exr input[data-rc="0"]');r[r.length-1].focus();return}
   if(b.dataset.rdel){S.edit.days[S.eday].ex.splice(+b.dataset.rdel,1);S.dirty=true;return render()}
   if(b.id==='saverut'){const s=DB.socios[S.sel];
-    const days=S.edit.days.map(d=>({d:(d.d||'').trim()||'Día',t:(d.t||'').trim(),ex:d.ex.filter(x=>(x[0]||'').trim()).map(x=>x.map(v=>(v||'').trim()))})).filter(d=>d.ex.length);
+    const days=rutDe(S.edit.days);
     if(!days.length) return toast('Agregá al menos un ejercicio');
     s.rutina=days;saveDB();S.edit=null;S.dirty=false;toast('Rutina enviada a '+s.name.split(' ')[0]);return render()}
   if(b.id==='delrut'){const s=DB.socios[S.sel];if(!confirm('¿Quitarle la rutina a '+s.name+'?'))return;s.rutina=null;saveDB();S.edit=null;toast('Rutina quitada');return render()}
   if(b.dataset.pedit){S.msel.edit=+b.dataset.pedit; render(true); const m=$('#monto'+b.dataset.pedit); if(m){m.focus(); m.select()} return}
-  if(b.dataset.pcancel){S.msel.edit=null; return render(true)}
+  if(b.dataset.pcancel){gsDrop(['medio','monto','fecha'].map(k=>k+b.dataset.pcancel));S.msel.edit=null; return render(true)}
   if(b.id==='mseladeu'){const s=DB.socios[S.sel]; S.msel.set=MES.map((_,i)=>i).filter(i=>['owed','due'].includes(mesEstado(s,i))); return mbarUpd()}
   if(b.id==='mbclr'){S.msel.set=[]; return mbarUpd()}
   if(b.id==='mbgo'){const s=DB.socios[S.sel]; const set=S.msel.set.slice().sort((a,c)=>a-c); if(!set.length) return;
@@ -2062,8 +2151,8 @@ document.addEventListener('click',e=>{
     const had=!!s.pagos[mk(Y,i)]; s.pagos[mk(Y,i)]={fecha,medio,monto};S.msel.set=S.msel.set.filter(x=>x!==i);S.msel.edit=null;saveDB();toast((had?'Pago de ':'Pago registrado: ')+MES[i].toLowerCase()+(had?' actualizado':''));render(true);flashMes(i,0);return}
   if(b.dataset.dok){sb.from('dispositivos').update({aprobado:true}).eq('uid',b.dataset.dok).then(({error})=>{if(error)return toast(errTxt(error));toast('Celular aprobado');reload(true)});return}
   if(b.dataset.dno){sb.from('dispositivos').delete().eq('uid',b.dataset.dno).then(({error})=>{if(error)return toast(errTxt(error));toast('Rechazado');reload(true)});return}
-  if(b.dataset.pnav){ if(b.dataset.pnav===S.ptabP||(!S.ptabP&&b.dataset.pnav==='socios')) {if(S.sel&&b.dataset.pnav==='socios'){if(S.dirty&&!confirm('Hay cambios en la rutina sin guardar. ¿Salir igual?'))return;S.sel=null;S.edit=null;return render()} return}
-    if(S.dirty&&!confirm('Hay cambios en la rutina sin guardar. ¿Salir igual?'))return;
+  if(b.dataset.pnav){ if(b.dataset.pnav===S.ptabP||(!S.ptabP&&b.dataset.pnav==='socios')) {if(S.sel&&b.dataset.pnav==='socios') return gsLeave(()=>{S.sel=null;S.edit=null;S.fd=null;render()}); return}
+    if(gsDirty()){const nv=b.dataset.pnav; return gsLeave(()=>{const x=document.querySelector('#app [data-pnav="'+nv+'"]'); if(x) x.click()})}
     S.ptabP=b.dataset.pnav; S.sel=null; S.edit=null; S.dirty=false;
     if(S.ptabP==='profes'){ const antes=JSON.stringify(S.profes||null), t0=Date.now();
       /* refresco en segundo plano: solo redibuja si cambió algo, y nunca en medio de la animación de entrada */
@@ -2077,10 +2166,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.pquitar){const n=b.dataset.pn||'este profe'; if(!confirm('¿Quitar a '+n+' de los profes? No va a poder entrar más al panel.'))return; profeAccion('quitar',b.dataset.pquitar);return}
   if(b.id==='prtoggle'){const hay=CLOUD?S.hayProfe:profesLS().some(p=>p.aprobado); const reg=S.preg!=null?S.preg:!hay; S.preg=!reg; S.pmsg=null; return render()}
   if(b.id==='lcambiar'){S.lmode='dni';return render()}
-  if(b.id==='resetpw'){const s=DB.socios[S.sel]; if(!s) return; if(!confirm('¿Reiniciar la contraseña de '+s.name+'? La próxima vez que entre a la app va a crear una nueva.'))return;
-    if(CLOUD) sb.rpc('socio_reiniciar_clave',{p_socio:s.id}).then(({error})=>toast(error?errTxt(error):'Listo: '+s.name.split(' ')[0]+' crea una contraseña nueva al entrar'));
-    else{delete s.pw;saveDB();toast('Listo: '+s.name.split(' ')[0]+' crea una contraseña nueva al entrar')} return}
-  if(b.id==='prologout'){try{sessionStorage.removeItem('tc-pro');sessionStorage.removeItem('tc-pro-dni')}catch(x){} if(CLOUD){sb.rpc('profe_salir');DB={socios:{}}} PRO=null;S.pro=false;S.sel=null;S.ptabP='socios';S.profes=[];return render()}
+  if(b.id==='prologout'){ if(gsDirty()) return gsLeave(()=>{const x=$('#prologout'); if(x) x.click()});try{sessionStorage.removeItem('tc-pro');sessionStorage.removeItem('tc-pro-dni')}catch(x){} if(CLOUD){sb.rpc('profe_salir');DB={socios:{}}} PRO=null;S.pro=false;S.sel=null;S.ptabP='socios';S.profes=[];return render()}
   if(b.id==='avisox'){const a=aviso(me()); try{localStorage.setItem('tc-avx-'+a.k,'1')}catch(x){} return render()}
   if(b.id==='avisos'){ if(!notifOK()) return toast('Instalá la app en tu pantalla de inicio para recibir avisos');
     Notification.requestPermission().then(p=>{ if(p==='granted'){toast(CLOUD?'Listo: te avisamos aunque tengas la app cerrada':'Listo: te avisamos los días 1, 3, 6, 9 y 10');
@@ -2094,7 +2180,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.pexdel){const s=DB.socios[S.sel];if(!confirm('¿Quitar '+b.dataset.pexdel+' y sus marcas?'))return;delete s.prog[b.dataset.pexdel];saveDB();return render()}
   if(b.id==='fquitafoto'){const s=DB.socios[S.sel];s.photo=null;saveDB();if(S.user&&S.user.dni===s.dni){S.photo=null;try{localStorage.setItem('tc-perfil',JSON.stringify({photo:null,name:S.name}))}catch(x){}}toast('Foto quitada');return render()}
   if(b.dataset.a14!=null){S.a14=+b.dataset.a14;return a14sel()}
-  if(b.dataset.unpay){const s=DB.socios[S.sel];if(!confirm('¿Anular el pago de '+MES[+b.dataset.unpay].toLowerCase()+'?'))return;delete s.pagos[mk(Y,+b.dataset.unpay)];S.msel.edit=null;saveDB();toast('Pago anulado');return render(true)}
+  if(b.dataset.unpay){const s=DB.socios[S.sel];if(!confirm('¿Anular el pago de '+MES[+b.dataset.unpay].toLowerCase()+'?'))return;delete s.pagos[mk(Y,+b.dataset.unpay)];gsDrop(['medio','monto','fecha'].map(k=>k+b.dataset.unpay));S.msel.edit=null;saveDB();toast('Pago anulado');return render(true)}
 });
 document.addEventListener('mouseover',e=>{const b=e.target.closest&&e.target.closest('.a14d:not(:disabled)');
   if(b&&matchMedia('(hover:hover)').matches&&+b.dataset.a14!==S.a14){S.a14=+b.dataset.a14;a14sel()}});
@@ -2110,6 +2196,7 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('submit',e=>{
   const f=e.target; e.preventDefault();
+  if(f.id==='datosf'||f.id==='cuotaf'){gsSave();return}
   if(f.id==='sennotaf'){const s=me(); const k=iso(TODAY); if(!s||!(s.sens||{})[k]) return; s.sens[k].nota=$('#sennota').value.trim().slice(0,200)||null; saveDB(); $('#sennota').blur();
     const ok=$('#senok'); if(ok){ok.textContent='✓ Enviado a tu profe'; ok.classList.remove('flashok'); void ok.offsetWidth; ok.classList.add('flashok')} return}
   if(f.id==='pesof'){const s=me(); const v=parseFloat(($('#ppeso').value||'').replace(',','.')); if(!(v>=20&&v<=300)){toast('Poné tu peso en kg, ej: 72,5');return $('#ppeso').focus()}
@@ -2120,22 +2207,20 @@ document.addEventListener('submit',e=>{
     const err=$('#lerr'), bt=f.querySelector('button[type=submit]'), m=S.lmode||'dni';
     const bad=(t,el)=>{err.textContent=t;err.hidden=false;if(el)el.focus()};
     const busy=(on,t)=>{bt.disabled=on;bt.textContent=t};
-    if(m==='dni'){ const dni=$('#dni').value.replace(/\D/g,'');
+    const busyL=(on,t)=>{busy(on,t);bt.classList.toggle('cargando',on)};
+    const salir=(dni,r)=>{const st=f.closest('.lstep'); if(st&&!reduceMotion) st.classList.add('sale'); setTimeout(()=>entrarSocio(dni,r.nombre,!!r.creado),reduceMotion?0:240)};
+    let dni, name=null;
+    if(m==='dni'){ dni=$('#dni').value.replace(/\D/g,'');
       if(dni.length<7||dni.length>8) return bad('Revisá el DNI: tiene que tener 7 u 8 números.',$('#dni'));
-      busy(true,'Buscando…');
-      socioEstado(dni).then(st=>{S.ldni=dni;S.lmode=st==='registrado'?'login':st==='sin_clave'?'clave':'crear';render();const i=$('#lname')||$('#lpw');if(i)i.focus()})
-        .catch(e=>{busy(false,'Continuar');bad(errTxt(e))}); return }
-    const dni=S.ldni, pw=$('#lpw').value;
-    if(m==='login'){ if(!pw) return bad('Escribí tu contraseña.',$('#lpw')); busy(true,'Entrando…');
-      socioLogin(dni,pw).then(r=>{ if(!r){busy(false,'Entrar');$('#lpw').value='';return bad('Contraseña incorrecta.',$('#lpw'))} return entrarSocio(dni,r.nombre) })
-        .catch(e=>{busy(false,'Entrar');bad(errTxt(e))}); return }
-    let name='';
-    if(m==='crear'){ name=$('#lname').value.trim().replace(/\s+/g,' '); if(name.length<3||!name.includes(' ')) return bad('Escribí tu nombre y tu apellido.',$('#lname')) }
-    if(pw.length<6) return bad('La contraseña tiene que tener al menos 6 caracteres.',$('#lpw'));
-    if(pw!==$('#lpw2').value) return bad('Las contraseñas no coinciden.',$('#lpw2'));
-    busy(true,'Creando tu cuenta…');
-    socioCrear(dni,name,pw).then(r=>entrarSocio(dni,r.nombre,true))
-      .catch(e=>{busy(false,m==='crear'?'Crear cuenta':'Guardar y entrar');const t=errTxt(e);bad(t);if(/Iniciá sesión/.test(t)){S.lmode='login';setTimeout(render,1400)}}); return
+      err.hidden=true; busyL(true,'Entrando'); }
+    else { dni=S.ldni; name=$('#lname').value.trim().replace(/\s+/g,' ');
+      if(name.length<3||!name.includes(' ')) return bad('Escribí tu nombre y tu apellido.',$('#lname'));
+      err.hidden=true; busyL(true,'Creando tu cuenta'); }
+    socioEntrar(dni,name).then(r=>{
+      if(r&&r.nuevo&&!r.nombre){S.ldni=dni;S.lmode='crear';render();const i=$('#lname');if(i)i.focus();return}
+      if(!r||!r.nombre) throw new Error('No pudimos entrar. Probá de nuevo.');
+      busy(true,r.creado?'¡Listo! Entrando…':'Entrando…'); bt.classList.remove('cargando'); salir(dni,r) })
+      .catch(e=>{busyL(false,m==='crear'?'Crear cuenta':'Entrar');bad(errTxt(e))}); return
   }
   if(f.id==='addex'||f.id==='addex2'){const n=$('#exname').value.trim().replace(/\s+/g,' '); if(!n) return $('#exname').focus();
     const s=me(); const k=Object.keys(s.prog).find(x=>x.toLowerCase()===n.toLowerCase())||n.charAt(0).toUpperCase()+n.slice(1);
@@ -2217,6 +2302,96 @@ document.addEventListener('change',e=>{
   if(e.target.id==='nombre'){const v=e.target.value.trim(); if(v){S.name=v;S.user.name=v;try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){} savePerfil();toast('Nombre guardado')}}
 });
 /* si el panel y la app están abiertos en dos ventanas del mismo equipo, se actualizan entre sí */
+/* ---------- Guardado general de la ficha: datos, cuota, pagos editados y rutina se guardan juntos con «Guardar todo» ---------- */
+const GS_IDS=/^(fname|fdni|falta|fnac|cplan|cprecio|cuni|cvence)$/, GS_PAGO=/^(medio|monto|fecha)(\d+)$/;
+function gsEl(t){ if(!t||!t.id||S.view!=='duenio'||!S.sel) return false;
+  if(GS_IDS.test(t.id)) return !!t.closest('#datosf,#cuotaf'); return GS_PAGO.test(t.id)&&!!t.closest('.mrow.editing') }
+const gsVal=t=>t.type==='checkbox'?(t.checked?'1':''):t.value;
+const gsV=()=>S.fd&&S.fd.dni===S.sel?S.fd.v:{};
+const gsPago=i=>['medio','monto','fecha'].some(k=>(k+i) in gsV());
+function gsDrop(ids){const v=gsV(); ids.forEach(k=>delete v[k]); gsUpd()}
+function gsTrack(t){ if(!gsEl(t)) return; if(!S.fd||S.fd.dni!==S.sel) S.fd={dni:S.sel,v:{}};
+  const v=gsVal(t); if(v===t.dataset.o) delete S.fd.v[t.id]; else S.fd.v[t.id]=v; gsUpd() }
+function gsApply(){ const v=gsV();
+  document.querySelectorAll('#datosf [id],#cuotaf [id],.mrow.editing [id]').forEach(el=>{ if(!gsEl(el)) return; el.dataset.o=gsVal(el);
+    if(el.id in v){ if(el.type==='checkbox') el.checked=v[el.id]==='1'; else el.value=v[el.id] } }) }
+function gsQue(){ const k=Object.keys(gsV()), q=[];
+  if(k.some(x=>/^(fname|fdni|falta|fnac)$/.test(x))) q.push('datos'); if(k.some(x=>/^(cplan|cprecio|cuni|cvence)$/.test(x))) q.push('cuota');
+  if(k.some(x=>GS_PAGO.test(x))) q.push('pagos'); if(S.dirty&&S.edit&&S.edit.dni===S.sel) q.push('rutina'); return q }
+const gsDirty=()=>S.view==='duenio'&&!!S.sel&&gsQue().length>0;
+const gsLista=q=>q.length>1?q.slice(0,-1).join(', ')+' y '+q[q.length-1]:q[0]||'';
+function gsUpd(){ let b=$('#gsbar');
+  if(!b){ b=document.createElement('div'); b.id='gsbar'; b.className='gsbar'; b.setAttribute('role','status'); b.inert=true;
+    b.innerHTML='<div class="gsin"><span class="gsdot" aria-hidden="true"></span><b id="gstxt"></b><button class="mini" id="gsdesc" type="button">Descartar</button><button class="btn sm" id="gsgo" type="button">Guardar todo</button></div>';
+    document.body.appendChild(b) }
+  if(b.classList.contains('ok')) return;
+  const q=gsDirty()&&!!S.pro?gsQue():[], on=q.length>0, tx=$('#gstxt');
+  const html=on?`Tenés cambios sin guardar<small>En ${gsLista(q)}</small>`:'';
+  if(on&&tx.innerHTML!==html){ const era=tx.innerHTML; tx.innerHTML=html; if(era&&b.classList.contains('on')){tx.classList.remove('bump'); void tx.offsetWidth; tx.classList.add('bump')} }
+  if(b.classList.contains('on')!==on){ b.classList.toggle('on',on); b.inert=!on }
+  document.body.classList.toggle('gson',on) }
+function gsSave(){ const s=DB.socios[S.sel]; if(!s) return false;
+  const v=gsV(), q=gsQue(); if(!q.length) return true;
+  const g=(id,def)=>id in v?v[id]:def;
+  const bad=(t,el)=>{toast(t); if(typeof el==='string') el=document.getElementById(el); if(el){el.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'}); el.focus({preventScroll:true})} return false};
+  let DD=null, CC=null, RR=null; const PP=[];
+  if(q.includes('datos')){ const name=String(g('fname',s.name)).trim().replace(/\s+/g,' '), dni=String(g('fdni',s.dni)).replace(/\D/g,''), alta=g('falta',s.alta)||s.alta, nac=g('fnac',s.nac||'')||null;
+    if(nac&&(nac>=iso(TODAY)||nac<='1920-01-01')) return bad('Revisá la fecha de nacimiento','fnac');
+    if(name.length<3) return bad('Escribí el nombre del socio','fname');
+    if(dni.length<7||dni.length>8) return bad('El DNI tiene que tener 7 u 8 números','fdni');
+    if(dni!==s.dni&&DB.socios[dni]) return bad('Ya hay un socio con ese DNI','fdni');
+    DD={name,dni,alta,nac} }
+  if(q.includes('cuota')){ const plan=g('cplan',s.plan||'')||null, precio=parseInt(String(g('cprecio',s.precio||'')).replace(/\D/g,''))||0, ve=Math.min(28,Math.max(1,parseInt(g('cvence',s.vence))||10));
+    if(plan&&!precio) return bad('Poné el precio de la cuota','cprecio'); CC={plan,precio,ve} }
+  if(q.includes('pagos')) for(const i of [...new Set(Object.keys(v).map(k=>k.match(GS_PAGO)).filter(Boolean).map(m=>+m[2]))].sort((a,c)=>a-c)){
+    const p=s.pagos[mk(Y,i)]; if(!p) continue;
+    let fecha=String(g('fecha'+i,p.fecha)).trim(); if(!/^\d{1,2}\/\d{1,2}$/.test(fecha)) return bad('Fecha como dd/mm, ej: 05/11','fecha'+i);
+    fecha=fecha.split('/').map(x=>x.padStart(2,'0')).join('/');
+    PP.push([i,{fecha,medio:g('medio'+i,p.medio),monto:parseInt(String(g('monto'+i,p.monto)).replace(/\D/g,''))||0}]) }
+  if(q.includes('rutina')){ RR=rutDe(S.edit.days);
+    if(!RR.length&&s.rutina){ const r=document.querySelector('.exr input[data-rc="0"]'); return bad('La rutina quedó sin ejercicios: agregá uno o tocá «Quitar rutina»',r) }
+    if(!RR.length||JSON.stringify(RR)===JSON.stringify(s.rutina)) RR=null }
+  /* todo validado: se aplica junto */
+  if(DD){ if(DD.dni!==s.dni){ const old=s.dni; delete DB.socios[old]; s.dni=DD.dni; DB.socios[DD.dni]=s; S.sel=DD.dni; if(S.msel) S.msel.dni=DD.dni;
+      if(S.user&&S.user.dni===old){S.user.dni=DD.dni;try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){}} }
+    s.name=DD.name; s.alta=DD.alta; s.nac=DD.nac;
+    if(S.user&&S.user.dni===s.dni){S.user.name=DD.name;S.name=DD.name;try{localStorage.setItem('tc-sesion',JSON.stringify(S.user));localStorage.setItem('tc-perfil',JSON.stringify({photo:S.photo,name:DD.name}))}catch(x){}} }
+  if(CC){ if(CC.plan&&!s.plan){s.desde=mk(Y,M);s.desdeDia=D} if(!CC.plan){s.desde=null;s.desdeDia=null} s.plan=CC.plan; s.precio=CC.plan?CC.precio:0; s.vence=CC.ve }
+  PP.forEach(([i,p])=>s.pagos[mk(Y,i)]=p);
+  if(RR) s.rutina=RR;
+  const ed=S.eday; S.fd=null; S.dirty=false; S.edit={dni:s.dni,days:rutEd(s.rutina)}; S.eday=ed; if(S.msel) S.msel.edit=null;
+  saveDB();
+  const nom=s.name.split(' ')[0];
+  const qq=q.filter(x=>x!=='rutina'||RR);
+  toast(!qq.length?'La rutina no tenía cambios':RR&&qq.length===1?'Rutina enviada a '+nom:'Listo, se guardó: '+gsLista(qq.map(x=>x==='rutina'?'rutina (ya le llega a '+nom+')':x)));
+  render(true); PP.forEach(([i],k)=>flashMes(i,k));
+  const b=$('#gsbar'); if(b&&b.classList.contains('on')&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; b.classList.add('ok'); document.body.classList.remove('gson');
+    clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{b.classList.remove('ok'); gsUpd()},950) } else gsUpd();
+  return true }
+function gsDescartar(){ S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
+/* salir con cambios sin guardar: guardar y salir / salir sin guardar / seguir editando */
+function gsLeave(go){ if(!gsDirty()) return go();
+  let m=$('#gsm');
+  if(!m){ m=document.createElement('div'); m.id='gsm'; m.className='gsm'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true'); m.setAttribute('aria-labelledby','gsmt'); m.inert=true;
+    m.innerHTML='<div class="gsmc"><b id="gsmt">Tenés cambios sin guardar</b><p id="gsmp"></p><div class="gsma"><button class="btn sm" id="gsmsave" type="button">Guardar y salir</button><button class="mini danger" id="gsmdrop" type="button">Salir sin guardar</button><button class="mini" id="gsmstay" type="button">Seguir editando</button></div></div>';
+    document.body.appendChild(m) }
+  const s=DB.socios[S.sel]; $('#gsmp').textContent='En la ficha de '+(s?s.name:'este socio')+': '+gsLista(gsQue())+'.';
+  gsLeave.go=go; m.inert=false; m.classList.add('on'); setTimeout(()=>{const x=$('#gsmsave'); if(x) x.focus()},30) }
+function gsCerrar(){const m=$('#gsm'); if(m){m.classList.remove('on'); m.inert=true} gsLeave.go=null}
+document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('button');
+  if(e.target.id==='gsm') return gsCerrar();
+  if(!b) return;
+  if(b.id==='gsgo'){ gsSave(); return }
+  if(b.id==='gsdesc'){ if(!confirm('¿Descartar los cambios sin guardar?')) return; gsDescartar(); render(true); toast('Cambios descartados'); return }
+  if(b.id==='gsmstay') return gsCerrar();
+  if(b.id==='gsmsave'||b.id==='gsmdrop'){ const go=gsLeave.go; gsCerrar();
+    if(b.id==='gsmsave'){ if(!gsSave()) return } else gsDescartar();
+    if(go) go(); else render() }
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&$('#gsm.on')) gsCerrar() });
+document.addEventListener('input',e=>{ gsTrack(e.target); if(S.edit&&e.target.dataset&&(e.target.dataset.rc||e.target.dataset.rf)) gsUpd() });
+document.addEventListener('change',e=>{ const t=e.target; gsTrack(t); if(t.id==='cplan'||t.id==='cuni') gsTrack($('#cprecio')) });
+addEventListener('beforeunload',e=>{ if(gsDirty()){ e.preventDefault(); e.returnValue='' } });
 addEventListener('storage',e=>{if(!CLOUD&&e.key===DBK){try{DB=JSON.parse(e.newValue)||{socios:{}}}catch(x){} if(!document.activeElement||!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) render()}});S.view='socio';document.querySelector('.seg').hidden=true;document.querySelector('.note').hidden=true;
 
 render();
@@ -2224,6 +2399,6 @@ if(CLOUD) bootCloud(); else setTimeout(()=>{if(S.view==='socio'&&S.user)lanzarAv
 if(reduceMotion) setInterval(()=>animLoop(0),500); else requestAnimationFrame(animLoop);
 </script>
 
-<script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js')</script>
+<script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(function(){})</script>
 </body>
 </html>
