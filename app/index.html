@@ -1275,6 +1275,10 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .pgwrap{flex-wrap:wrap;overflow:visible!important}
 .pgseg{margin-bottom:12px}
 @media (prefers-reduced-motion:reduce){.days button.rdnew,.rdtic,.rdfin,.rdfico,.rsem,.rsd,.ccwrap,.fnck i{animation:none!important}}
+/* v41: que nada se mueva al cambiar un estado: la celda Rutina tiene lugar fijo y las etiquetas no se parten */
+.c2rc{display:inline-flex;align-items:center;gap:5px;flex-wrap:nowrap;min-width:116px;white-space:nowrap}
+.c2rc .pill,.fnck,.fncell .mini{white-space:nowrap}
+.c2fmini{padding-left:7px!important;padding-right:7px!important;animation:bmIn .3s var(--spring)}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -3992,7 +3996,7 @@ async function c2Aprobar(dni,ok){ const s=DB.socios[dni]; if(!s||s.aprobado!==fa
     a.onfinish=fin } else fin() }
 /* rutina / funcional en la lista */
 function c2RutCell(s){ const r=s.rutina&&s.rutina.length, f=!!s.funcional;
-  return `<span class="c2rc">${r?`<span class="pill ok">${r} día${r===1?'':'s'}</span>`:''}${f?`<span class="pill c2fpill" title="Hace Entrenamiento funcional">${r?'Funcional':'Solo funcional'}</span>`:''}${!r&&!f?'<span class="pill" title="Musculación sin rutina">Sin rutina</span>':''}</span>` }
+  return `<span class="c2rc">${r?`<span class="pill ok">${r} día${r===1?'':'s'}</span>`:''}${f?(r?`<span class="pill c2fpill c2fmini" title="También hace Entrenamiento funcional" aria-label="También hace funcional">⚡</span>`:`<span class="pill c2fpill" title="Hace Entrenamiento funcional">Solo funcional</span>`):''}${!r&&!f?'<span class="pill" title="Musculación sin rutina">Sin rutina</span>':''}</span>` }
 function c2FunDias(){ let L=[]; try{ const g=gymInfo(); L=Array.isArray(g.servicios)?g.servicios:[] }catch(e){}
   const f=L.find(x=>x&&/funcional/i.test(x.n||'')); const d=f&&Array.isArray(f.dias)?f.dias.map(Number).filter(n=>n>=0&&n<7):[];
   return d.length?d:[1,3,5] }
