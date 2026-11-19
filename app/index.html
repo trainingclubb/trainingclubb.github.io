@@ -163,7 +163,14 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @keyframes senPop{0%{transform:scale(.8)}60%{transform:scale(1.35) translateY(-3px)}100%{transform:scale(1.22) translateY(-2px)}}
 .sennota{display:flex;gap:6px;margin-top:10px;animation:rise .35s var(--ease) both}.sennota .inp{flex:1;min-width:0;padding:10px 12px;font-size:14px}
 #senok{transition:color .2s}#senok.flashok{color:#24C9A7;animation:okPop .5s var(--spring)}@keyframes okPop{0%{transform:scale(.85)}60%{transform:scale(1.08)}100%{transform:none}}
-.pfopc{display:grid;gap:12px}.opc{font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0;font-size:11px;margin-left:4px}
+.pfopc{display:grid;gap:12px}
+.motsw{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--sunk);border:1px solid var(--line);cursor:pointer}
+.motsw span{flex:1;display:flex;flex-direction:column;gap:2px}.motsw b{font-size:14px}.motsw small{font-size:12px;color:var(--muted)}
+.motsw input{position:absolute;opacity:0;pointer-events:none}
+.motsw i{position:relative;flex:none;width:46px;height:28px;border-radius:99px;background:var(--line);transition:background .3s}
+.motsw i::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.35);transition:transform .35s var(--spring)}
+.motsw input:checked+i{background:linear-gradient(90deg,#24C9A7,#E8E33A)}.motsw input:checked+i::after{transform:translateX(18px)}
+.motsw input:focus-visible+i{outline:2px solid #24C9A7;outline-offset:2px}.opc{font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0;font-size:11px;margin-left:4px}
 .pesorow{display:flex;gap:8px;align-items:center}.pesorow .inp{flex:1;min-width:0}.pesorow span{color:var(--muted);font-weight:700;font-size:13px}
 .done-msg{margin:0;font-size:13px;color:var(--teal);font-weight:600}
 .closed-msg{margin:0;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);font-weight:600;padding:10px 12px;border-radius:12px;background:var(--sunk);border:1px dashed var(--line)}
@@ -770,7 +777,7 @@ let DB; if(!ENNUBE){try{DB=JSON.parse(localStorage.getItem(DBK)||'null')}catch(e
 function saveDB(){ if(ENNUBE){ if(sb) cloudSave(); return } try{localStorage.setItem(DBK,JSON.stringify(DB))}catch(e){}}
 function ensureSocio(dni,name){
   let s=DB.socios[dni];
-  if(!s) s=DB.socios[dni]={id:(crypto.randomUUID?crypto.randomUUID():null),dni,name,alta:iso(TODAY),plan:null,precio:0,vence:10,desde:null,rutina:null,pagos:{},att:{},prog:{},medidas:[],photo:null,sens:{},nac:null};
+  if(!s) s=DB.socios[dni]={id:(crypto.randomUUID?crypto.randomUUID():null),dni,name,alta:iso(TODAY),plan:null,precio:0,vence:10,desde:null,rutina:null,pagos:{},att:{},prog:{},medidas:[],photo:null,sens:{},nac:null,motiv:true};
   else if(name) s.name=name;
   saveDB(); return s;
 }
@@ -865,10 +872,23 @@ async function desactivarPush(){
   try{ if(!pushOK()) return; const reg=await navigator.serviceWorker.ready; const sub=await reg.pushManager.getSubscription(); if(!sub) return;
     if(sb) await sb.rpc('borrar_push',{p_endpoint:sub.endpoint}); await sub.unsubscribe() }catch(e){}
 }
+/* sonido de Training Club: campanitas con Web Audio. motivación = arpegio que sube; cuota/pagos = dos notas suaves; rutina = acorde brillante */
+let ACX=null;
+const acx=()=>{try{ACX=ACX||new (window.AudioContext||window.webkitAudioContext)(); if(ACX.state==='suspended') ACX.resume()}catch(e){} return ACX};
+['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev,()=>acx(),{once:true,passive:true}));
+function campana(tipo){const c=acx(); if(!c) return; const t0=c.currentTime+.02;
+  const N={motivacion:[[659.25,0],[830.61,.11],[987.77,.22],[1318.5,.36]], rutina:[[783.99,0],[987.77,0],[1174.7,.12]], cuota:[[880,0],[659.25,.16]], descanso:[[1046.5,0],[1318.5,.14],[1046.5,.28]]}[tipo]||[[880,0],[1318.5,.13]];
+  const out=c.createGain(); out.gain.value=.22; out.connect(c.destination);
+  N.forEach(([f,d])=>{ for(const [m,g] of [[1,1],[2.01,.28],[3.02,.1]]){   /* parciales tipo campana */
+    const o=c.createOscillator(), e=c.createGain(); o.type='sine'; o.frequency.value=f*m;
+    e.gain.setValueAtTime(0,t0+d); e.gain.linearRampToValueAtTime(g,t0+d+.012); e.gain.exponentialRampToValueAtTime(.0001,t0+d+(m===1?1.1:.5));
+    o.connect(e); e.connect(out); o.start(t0+d); o.stop(t0+d+1.2) } });
+  try{navigator.vibrate&&navigator.vibrate(tipo==='motivacion'?[60,40,60,40,140]:[90,60,90])}catch(e){}}
+if(navigator.serviceWorker) navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{}; if(d.tc!=='push') return; campana(d.tag); if(document.visibilityState==='visible'&&d.title) toast(d.title)});
 function lanzarAviso(){
   const s=me(); const a=aviso(s); if(!a||!notifOK()||Notification.permission!=='granted') return;
   const key='tc-avn-'+a.k; try{if(localStorage.getItem(key))return;localStorage.setItem(key,'1')}catch(e){}
-  const opt={body:a.b,icon:'icon-192.png',badge:'icon-192.png',tag:'cuota'};
+  const opt={body:a.b,icon:'icon-192.png',badge:'icon-192.png',tag:'cuota',vibrate:[90,60,90]}; campana('cuota');
   if(navigator.serviceWorker&&navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(r=>r.showNotification(a.t,opt)).catch(()=>{});
   else try{new Notification(a.t,opt)}catch(e){}
 }
@@ -961,6 +981,7 @@ function screenPerfil(){
   </div>
   <div class="field"><label for="nombre">Nombre y apellido</label><input class="inp" id="nombre" value="${esc(S.name)}" autocomplete="name"></div>
   <div class="pfopc">
+    <label class="motsw"><span><b>Mensajes de motivación</b><small>2 por día, a cualquier hora entre las 7 y las 20 💪</small></span><input type="checkbox" id="pmotiv" role="switch" ${s.motiv!==false?'checked':''}><i aria-hidden="true"></i></label>
     <div class="field"><label for="pnac">Fecha de nacimiento <span class="opc">opcional</span></label><input class="inp" type="date" id="pnac" value="${s.nac||''}" min="1920-01-02" max="${iso(TODAY)}"><small class="hint" id="pedad">${edadDe(s.nac)!=null?'Tenés '+edadDe(s.nac)+' años':'Así tu profe sabe tu edad.'}</small></div>
     <form class="field" id="pesof" novalidate><label for="ppeso">Peso <span class="opc">opcional</span></label><div class="pesorow"><input class="inp num" id="ppeso" inputmode="decimal" placeholder="${pesoActual(s)?fmtKg(pesoActual(s).peso):'Ej: 72,5'}"><span>kg</span><button class="btn sm" type="submit">Guardar</button></div><small class="hint">${pesoActual(s)?'Último: '+fmtKg(pesoActual(s).peso)+' kg el '+ddmm(pesoActual(s).fecha):'Se suma a tu progreso y lo ve tu profe.'}</small></form>
   </div>
@@ -1397,7 +1418,7 @@ setInterval(()=>{
   if(reduceMotion){setRoll(document.getElementById('swtime'),fmtSW(swNow())); if(S.rest.run) setRoll(document.getElementById('resttime'),fmtR(restNow()))}
   if(S.rest.run){const r=restNow();
     if(r<=0){S.rest.run=false;S.rest.left=S.rest.total;try{navigator.vibrate&&navigator.vibrate([180,90,180])}catch(e){}
-      toast('¡Terminó el descanso! A la próxima serie');if(S.view==='socio')render()}}
+      toast('¡Terminó el descanso! A la próxima serie');campana('descanso');if(S.view==='socio')render()}}
   const hp=document.getElementById('hpill');
   if(hp){const on=S.sw.run||S.rest.run; hp.hidden=!on||S.tab==='rutina';
     if(on) hp.textContent=S.rest.run?'Descanso '+fmtR(restNow()):'⏱ '+fmtSW(swNow()).slice(0,5)}
@@ -1641,7 +1662,7 @@ const dISO=(k,d)=>{const [y,m]=k.split('-').map(Number);return y+'-'+p2(m+1)+'-'
 function norm(db){
   const o={socios:{},pagos:{},asis:{},prog:{},med:{},sens:{}};
   for(const s of Object.values(db.socios)){ if(!s.id) continue;
-    o.socios[s.id]={id:s.id,dni:s.dni,nombre:s.name,alta:s.alta,plan:s.plan,precio:s.precio||0,vence:s.vence||10,desde:s.desde||null,desde_dia:s.desdeDia||null,rutina:s.rutina||null,foto:s.photo||null,nacimiento:s.nac||null};
+    o.socios[s.id]={id:s.id,dni:s.dni,nombre:s.name,alta:s.alta,plan:s.plan,precio:s.precio||0,vence:s.vence||10,desde:s.desde||null,desde_dia:s.desdeDia||null,rutina:s.rutina||null,foto:s.photo||null,nacimiento:s.nac||null,motivacion:s.motiv!==false};
     for(const [k,p] of Object.entries(s.pagos||{})) o.pagos[s.id+'|'+k]={socio_id:s.id,periodo:k,fecha:p.fecha,medio:p.medio,monto:p.monto||0};
     for(const [k,ds] of Object.entries(s.att||{})) for(const d of ds){const f=dISO(k,d);o.asis[s.id+'|'+f]={socio_id:s.id,fecha:f}}
     for(const x of (s.medidas||[])) o.med[x.id]={id:x.id,socio_id:s.id,fecha:x.fecha,grasa:x.grasa==null?null:+x.grasa,peso:x.peso==null?null:+x.peso};
@@ -1652,7 +1673,7 @@ function norm(db){
 }
 function buildDB(rows){
   const db={socios:{}}, byId={};
-  for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,rutina:r.rutina,photo:r.foto,nac:r.nacimiento||null,pagos:{},att:{},prog:{},medidas:[],sens:{}};db.socios[r.dni]=s;byId[r.id]=s}
+  for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,rutina:r.rutina,photo:r.foto,nac:r.nacimiento||null,motiv:r.motivacion!==false,pagos:{},att:{},prog:{},medidas:[],sens:{}};db.socios[r.dni]=s;byId[r.id]=s}
   for(const p of rows.pagos){const s=byId[p.socio_id]; if(s) s.pagos[p.periodo]={fecha:p.fecha,medio:p.medio,monto:p.monto}}
   for(const a of rows.asis){const s=byId[a.socio_id]; if(!s) continue; const [y,m,d]=a.fecha.split('-').map(Number); const k=mk(y,m-1); (s.att[k]=s.att[k]||[]).push(d)}
   for(const x of rows.sens||[]){const s=byId[x.socio_id]; if(s) s.sens[x.fecha]={n:x.nivel,nota:x.nota}}
@@ -1683,7 +1704,8 @@ async function push(){
   const T={pagos:'pagos',asis:'asistencias',prog:'progreso',med:'medidas',sens:'sensaciones'};
   if(!(S.view==='duenio'&&S.pro)){            /* socio: solo su perfil, su entrada de hoy y su progreso */
     const r=X.socios.up[0]; if(r){ await q(sb.rpc('actualizar_perfil',{p_nombre:r.nombre,p_foto:r.foto}));
-      if(((old.socios||{})[r.id]||{}).nacimiento!==r.nacimiento) await q(sb.rpc('socio_nacimiento',{p_fecha:r.nacimiento})) }
+      if(((old.socios||{})[r.id]||{}).nacimiento!==r.nacimiento) await q(sb.rpc('socio_nacimiento',{p_fecha:r.nacimiento}));
+      if(((old.socios||{})[r.id]||{}).motivacion!==r.motivacion) await q(sb.rpc('socio_motivacion',{p_on:r.motivacion})) }
     if(X.asis.up.length) await q(sb.from('asistencias').insert(X.asis.up));
     await Promise.all(X.prog.del.map(r=>q(delOf.prog(r))));
     if(X.prog.up.length) await q(sb.from('progreso').upsert(X.prog.up));
@@ -1992,6 +2014,7 @@ document.addEventListener('submit',e=>{
 document.addEventListener('change',e=>{
   if(e.target.dataset&&e.target.dataset.msel!=null&&S.msel){const i=+e.target.dataset.msel, st=S.msel.set; if(e.target.checked){if(!st.includes(i)) st.push(i)} else S.msel.set=st.filter(x=>x!==i); return mbarUpd()}
   if(e.target.id==='foto'&&e.target.files[0]) loadPhoto(e.target.files[0]);
+  if(e.target.id==='pmotiv'){const s=me(); if(s){s.motiv=e.target.checked; saveDB(); toast(s.motiv?'Te vamos a mandar 2 mensajes de motivación por día':'Listo, no te mandamos más mensajes de motivación'); if(s.motiv) campana('motivacion')} return}
   if(e.target.id==='pnac'){const s=me(); if(s){const v=e.target.value||null; if(v&&(v>=iso(TODAY)||v<='1920-01-01')) return toast('Revisá la fecha de nacimiento'); s.nac=v; saveDB(); const h=$('#pedad'); if(h) h.textContent=edadDe(v)!=null?'Tenés '+edadDe(v)+' años':'Así tu profe sabe tu edad.'; toast(v?'Fecha de nacimiento guardada':'Fecha de nacimiento borrada')}}
   if(e.target.id==='pfoto'&&e.target.files[0]){ fotoCuadrada(e.target.files[0],fotoProfe); e.target.value='' }
   if(e.target.id==='cplan'||e.target.id==='cuni'){const p=planDe($('#cplan').value), c=$('#cprecio'); if(p&&c){c.value=$('#cuni').checked?conUni(p.p):p.p; c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash')}}
