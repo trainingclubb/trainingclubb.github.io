@@ -441,6 +441,60 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradi
 .pchip .del{font-size:15px;padding:0 4px}
 .progf{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1.4fr auto;gap:6px}.progf .inp{padding:9px 10px;font-size:14px}
 @media (max-width:900px){.progf{grid-template-columns:1fr 1fr 1fr}.progf .inp:first-child{grid-column:1/-1}}
+.boot{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:60vh;color:var(--muted);font-weight:600}
+.boot img{width:84px;animation:float 1.6s ease-in-out infinite}
+.pendp{border-color:rgba(252,224,36,.4)}
+/* reloj fluido */
+.roll{display:flex;justify-content:center;align-items:baseline}
+.roll .dg{position:relative;display:inline-block;width:.6em;height:1.02em;overflow:hidden}
+.roll .dg i{position:absolute;left:0;right:0;top:0;text-align:center;font-style:normal}
+.roll .dg i.in{animation:dgin .38s var(--spring) both}.roll .dg i.out{animation:dgout .32s cubic-bezier(.5,0,.75,0) both}
+.roll .dg i.in.dn{animation-name:dgind}.roll .dg i.out.dn{animation-name:dgoutd}
+.roll .sep{display:inline-block;width:.28em;text-align:center;opacity:.55}
+.roll .dg[data-fast]{width:.52em;opacity:.7;font-size:.62em;height:1.02em}
+@keyframes dgin{from{transform:translateY(85%);opacity:0;filter:blur(2px)}to{transform:none;opacity:1;filter:none}}
+@keyframes dgout{to{transform:translateY(-85%);opacity:0;filter:blur(2px)}}
+@keyframes dgind{from{transform:translateY(-85%);opacity:0;filter:blur(2px)}to{transform:none;opacity:1;filter:none}}
+@keyframes dgoutd{to{transform:translateY(85%);opacity:0;filter:blur(2px)}}
+.tface{display:flex;flex-direction:column;align-items:center;gap:4px}
+.tsub{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.live{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(36,201,167,.6);animation:live 1.4s infinite}
+@keyframes live{0%{box-shadow:0 0 0 0 rgba(36,201,167,.55)}70%{box-shadow:0 0 0 9px rgba(36,201,167,0)}100%{box-shadow:0 0 0 0 rgba(36,201,167,0)}}
+.timer{transition:box-shadow .5s,border-color .5s}
+.timer.run{border-color:rgba(36,201,167,.45);box-shadow:0 0 0 1px rgba(36,201,167,.15),0 14px 34px -16px rgba(36,201,167,.55)}
+.timer.ending{border-color:rgba(255,93,78,.6);animation:endp .5s ease-in-out infinite alternate}.timer.ending #resttime{color:var(--bad)}
+@keyframes endp{to{box-shadow:0 0 0 4px rgba(255,93,78,.18),0 14px 34px -16px rgba(255,93,78,.6)}}
+.tb.main{position:relative;overflow:hidden}.tb.main.running::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);animation:shine 2.2s ease-in-out infinite}
+.tmodes,.seg2{position:relative}
+.tmodes::before,.seg2::before{content:"";position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:10px;background:var(--future);transform:translateX(calc(var(--m,0)*100%));transition:transform .45s var(--spring);box-shadow:0 2px 8px -2px rgba(0,0,0,.5)}
+.tmodes button,.seg2 button{position:relative;z-index:1;background:none!important}
+.tmodes button[aria-pressed="true"],.seg2 button[aria-pressed="true"]{color:var(--ink)}
+.tbody{display:flex;flex-direction:column;gap:10px}.tbody.fromr>*{animation:fromr .4s var(--ease) both}.tbody.froml>*{animation:froml .4s var(--ease) both}
+.rface{position:relative;width:176px;height:176px;align-self:center}
+.ring{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .rtrack{fill:none;stroke:var(--future);stroke-width:9}
+.ring .rprog{fill:none;stroke:url(#rg);stroke-width:9;stroke-linecap:round;stroke-dasharray:1;filter:drop-shadow(0 0 6px rgba(36,201,167,.45))}
+.rcenter{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.rcenter .tbig{font-size:50px}
+.laps li{display:grid!important;grid-template-columns:1fr auto auto;gap:12px}.laps li span:nth-child(2){color:var(--teal);font-size:12px}
+.laps li.nl{animation:lapin .45s var(--spring) both}@keyframes lapin{from{opacity:0;transform:translateY(-8px);background:var(--accent-soft)}to{opacity:1;transform:none}}
+/* % graso */
+.seg2{display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);border:1px solid var(--line);border-radius:13px;padding:3px}
+.seg2 button{border:0;border-radius:10px;padding:9px;font-size:13px;font-weight:700;color:var(--muted)}
+.bico{width:62px;height:62px;flex:none;border-radius:16px;display:grid;place-items:center;background:var(--grad);color:var(--on-accent);font-family:var(--display);font-weight:900;font-size:34px;animation:pop .6s var(--spring) both}
+.cmp{font-size:12px;font-weight:800;border-radius:999px;padding:3px 9px;background:var(--future);color:var(--muted);animation:pop .5s .25s var(--spring) both}
+.cmp.good{background:var(--ok-bg);color:var(--teal)}.cmp.badc{background:var(--bad-bg);color:var(--bad)}
+.cmpbox{background:var(--sunk);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.cmpbox .ttl{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.cmpbox .ttl b{font-family:var(--display);font-weight:800;font-size:20px;text-transform:uppercase}
+.cmpbox .chips button{padding:5px 10px;font-size:12px}
+.cmplist{display:flex;flex-direction:column;gap:8px}
+.crow{display:grid;grid-template-columns:78px 1fr 54px 46px;gap:8px;align-items:center;font-size:13px;animation:rise .45s var(--ease) both}
+.cl{color:var(--muted)}.cbar{height:8px;border-radius:99px;background:var(--future);overflow:hidden}
+.cbar i{display:block;height:100%;width:var(--w);border-radius:99px;background:var(--grad);transform-origin:left;animation:grow .8s var(--spring) both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.crow b{text-align:right}.cd{font-style:normal;font-size:12px;font-weight:800;text-align:right;color:var(--muted)}.cd.good{color:var(--teal)}.cd.badc{color:var(--bad)}
+.medf2{display:grid;grid-template-columns:1fr 1fr 1.3fr auto;gap:6px;margin-top:6px}.medf2 .inp{padding:9px 10px;font-size:14px}
+@media (max-width:900px){.medf2{grid-template-columns:1fr 1fr}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}
 </style>
 <style>
@@ -488,11 +542,12 @@ const mk=(y,m)=>y+'-'+m;
 
 /* ---------- Datos: arranca vacío. El socio se registra con su DNI; el profe asigna cuota y rutina ---------- */
 const DBK='tc-db';
-let DB; try{DB=JSON.parse(localStorage.getItem(DBK)||'null')}catch(e){} if(!DB||!DB.socios) DB={socios:{}};
-function saveDB(){try{localStorage.setItem(DBK,JSON.stringify(DB))}catch(e){}}
+const ENNUBE=!!(window.TC_CFG&&window.TC_CFG.url);
+let DB; if(!ENNUBE){try{DB=JSON.parse(localStorage.getItem(DBK)||'null')}catch(e){}} if(!DB||!DB.socios) DB={socios:{}};
+function saveDB(){ if(ENNUBE){ if(sb) cloudSave(); return } try{localStorage.setItem(DBK,JSON.stringify(DB))}catch(e){}}
 function ensureSocio(dni,name){
   let s=DB.socios[dni];
-  if(!s) s=DB.socios[dni]={dni,name,alta:iso(TODAY),plan:null,precio:0,vence:10,desde:null,rutina:null,pagos:{},att:{},prog:{},photo:null};
+  if(!s) s=DB.socios[dni]={id:(crypto.randomUUID?crypto.randomUUID():null),dni,name,alta:iso(TODAY),plan:null,precio:0,vence:10,desde:null,rutina:null,pagos:{},att:{},prog:{},medidas:[],photo:null};
   else if(name) s.name=name;
   saveDB(); return s;
 }
@@ -508,7 +563,7 @@ S.pro=(()=>{try{return sessionStorage.getItem('tc-pro')==='1'}catch(e){return fa
 S.fc={y:Y,m:M};
 try{const p=JSON.parse(localStorage.getItem('tc-perfil')||'null'); if(p){if(p.name)S.name=p.name; if(p.photo)S.photo=p.photo}}catch(e){}
 S.user=null;
-try{const u=JSON.parse(localStorage.getItem('tc-sesion')||'null'); if(u&&u.dni){S.user=u; S.name=u.name||S.name; ensureSocio(u.dni,null)}}catch(e){}
+try{const u=JSON.parse(localStorage.getItem('tc-sesion')||'null'); if(u&&u.dni){S.user=u; S.name=u.name||S.name; if(!ENNUBE) ensureSocio(u.dni,null)}}catch(e){}
 const fmtDNI=d=>String(d).replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 const me=()=>S.user?DB.socios[S.user.dni]:null;
 
@@ -658,25 +713,40 @@ S.sw={run:false,t0:0,acc:0,laps:[]};
 S.rest={run:false,end:0,left:90000,total:90000};
 const swNow=()=>S.sw.acc+(S.sw.run?Date.now()-S.sw.t0:0);
 const restNow=()=>S.rest.run?Math.max(0,S.rest.end-Date.now()):S.rest.left;
-const fmtSW=ms=>`${p2(Math.floor(ms/60000))}:${p2(Math.floor(ms/1000)%60)}.${Math.floor(ms/100)%10}`;
+const fmtSW=ms=>`${p2(Math.floor(ms/60000))}:${p2(Math.floor(ms/1000)%60)}.${p2(Math.floor(ms/10)%100)}`;
+/* dígitos que ruedan: cada número sube (o baja, en la cuenta regresiva) cuando cambia */
+function rollHTML(t,fast=0){return [...t].map((c,i)=>/\d/.test(c)?`<span class="dg"${i>=t.length-fast?' data-fast':''}><i>${c}</i></span>`:`<span class="sep">${c}</span>`).join('')}
+function setRoll(el,t){
+  if(!el||el.dataset.v===t) return; const old=el.dataset.v||''; el.dataset.v=t;
+  if(el.children.length!==t.length||old.length!==t.length){el.innerHTML=rollHTML(t,+el.dataset.fast||0);return}
+  const dn=el.dataset.dir==='down';
+  for(let i=0;i<t.length;i++){ if(t[i]===old[i]) continue; const box=el.children[i];
+    if(!box.classList.contains('dg')||box.hasAttribute('data-fast')||reduceMotion){(box.lastElementChild||box).textContent=t[i];continue}
+    while(box.children.length>1) box.firstElementChild.remove();
+    const o=box.firstElementChild, n=document.createElement('i'); n.textContent=t[i]; n.className=dn?'in dn':'in';
+    o.className=dn?'out dn':'out'; box.appendChild(n); setTimeout(()=>{if(o.parentNode)o.remove()},420) }
+}
 const fmtR=ms=>{const s=Math.ceil(ms/1000);return `${Math.floor(s/60)}:${p2(s%60)}`};
 const restSecs=txt=>{const n=parseFloat(txt);return /min/.test(txt)?n*60:n};
 
 function timerCard(){
-  const c=S.tmode==='crono';
-  const sw=`<div class="tbig num" id="swtime">${fmtSW(swNow())}</div>
-    <div class="tbtns"><button class="tb main" id="swgo">${S.sw.run?'Pausar':(swNow()?'Seguir':'Iniciar')}</button>
+  const c=S.tmode==='crono'; const prevM=S.tmPrev==null?(c?0:1):S.tmPrev; S.tmPrev=c?0:1;
+  const sw=`<div class="tface"><div class="tbig num roll" id="swtime" data-fast="2" data-v="${fmtSW(swNow())}">${rollHTML(fmtSW(swNow()),2)}</div>
+      <div class="tsub">${S.sw.run?'<span class="live"></span>En marcha':swNow()?'En pausa':'Listo para arrancar'}</div></div>
+    <div class="tbtns"><button class="tb main ${S.sw.run?'running':''}" id="swgo">${S.sw.run?'Pausar':(swNow()?'Seguir':'Iniciar')}</button>
     <button class="tb" id="swlap" ${S.sw.run?'':'disabled'}>Vuelta</button><button class="tb" id="swreset" ${swNow()?'':'disabled'}>Reiniciar</button></div>
-    ${S.sw.laps.length?`<ol class="laps num">${S.sw.laps.map((l,i)=>`<li><span>Vuelta ${i+1}</span><span>${fmtSW(l)}</span></li>`).reverse().join('')}</ol>`:''}`;
-  const r=restNow();
-  const rs=`<div class="tbig num" id="resttime">${fmtR(r)}</div>
-    <div class="rbar"><i id="restbar" style="width:${r/S.rest.total*100}%"></i></div>
-    <div class="presets" role="group" aria-label="Tiempo de descanso">${[30,60,90,120,180].map(s=>`<button data-preset="${s}" aria-pressed="${S.rest.total===s*1000}">${s<60?s+' s':s%60?'1:30':s/60+' min'}</button>`).join('')}</div>
-    <div class="tbtns"><button class="tb main" id="restgo">${S.rest.run?'Pausar':(r<S.rest.total&&r>0?'Seguir':'Iniciar')}</button>
+    ${S.sw.laps.length?`<ol class="laps num">${S.sw.laps.map((l,i)=>`<li class="${S.newLap&&i===S.sw.laps.length-1?'nl':''}"><span>Vuelta ${i+1}</span><span>${i?'+'+fmtSW(l-S.sw.laps[i-1]):''}</span><span>${fmtSW(l)}</span></li>`).reverse().join('')}</ol>`:''}`;
+  S.newLap=false;
+  const r=restNow(), fr=S.rest.total?r/S.rest.total:0;
+  const rs=`<div class="rface"><svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="rg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FCE024"/><stop offset=".5" stop-color="#DDDC34"/><stop offset="1" stop-color="#24C9A7"/></linearGradient></defs>
+      <circle cx="60" cy="60" r="52" class="rtrack"/><circle cx="60" cy="60" r="52" class="rprog" id="restring" pathLength="1" style="stroke-dashoffset:${(1-fr).toFixed(4)}"/></svg>
+      <div class="rcenter"><div class="tbig num roll" id="resttime" data-dir="down" data-v="${fmtR(r)}">${rollHTML(fmtR(r))}</div><div class="tsub">${S.rest.run?'<span class="live"></span>Descansando':'Descanso'}</div></div></div>
+    <div class="presets" role="group" aria-label="Tiempo de descanso">${[30,60,90,120,180].map(x=>`<button data-preset="${x}" aria-pressed="${S.rest.total===x*1000}">${x<60?x+' s':x%60?'1:30':x/60+' min'}</button>`).join('')}</div>
+    <div class="tbtns"><button class="tb main ${S.rest.run?'running':''}" id="restgo">${S.rest.run?'Pausar':(r<S.rest.total&&r>0?'Seguir':'Iniciar')}</button>
     <button class="tb" id="restplus">+15 s</button><button class="tb" id="restreset">Reiniciar</button></div>`;
-  return `<section class="timer">
-    <div class="tmodes" role="group" aria-label="Modo"><button data-tmode="crono" aria-pressed="${c}">Cronómetro</button><button data-tmode="rest" aria-pressed="${!c}">Descanso</button></div>
-    ${c?sw:rs}</section>`;
+  return `<section class="timer ${S.sw.run&&c||S.rest.run&&!c?'run':''}" id="timer">
+    <div class="tmodes" role="group" aria-label="Modo" style="--m:${prevM}" data-to="${c?0:1}"><button data-tmode="crono" aria-pressed="${c}">Cronómetro</button><button data-tmode="rest" aria-pressed="${!c}">Descanso</button></div>
+    <div class="tbody ${prevM!==(c?0:1)?(c?'froml':'fromr'):''}">${c?sw:rs}</div></section>`;
 }
 
 function screenRutina(){
@@ -686,7 +756,7 @@ function screenRutina(){
   if(S.day>=R.length) S.day=0;
   const r=R[S.day]; const n=r.ex.length; const d=[...S.done].filter(k=>k.startsWith(S.day+'-')).length;
   return `${timerCard()}
-  <div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${PROFE}</p></div><span class="num rcount">${d}/${n}</span></div>
+  <div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${PROFE}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
   ${R.length>1?`<div class="days hscroll" role="group" aria-label="Día">${R.map((x,i)=>`<button data-day="${i}" aria-pressed="${i===S.day}">${esc(x.d)}<small>${esc(x.t||'')}</small></button>`).join('')}</div>`:''}
   <div class="prog"><i style="width:${n?d/n*100:0}%"></i></div>
   <div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k);
@@ -703,40 +773,85 @@ function animKey(n){const k=Object.keys(ANIM);const low=String(n).toLowerCase();
 
 /* ---------- Progreso: cargas por ejercicio ---------- */
 function exOptions(s){const set=new Set(Object.keys(ANIM));(s.rutina||[]).forEach(d=>d.ex.forEach(e=>set.add(e[0])));Object.keys(s.prog||{}).forEach(n=>set.add(n));return [...set]}
-function chart(list){
+function chart(list,key='kg',unit='kg',lbl='Evolución de la carga'){
   const W=320,H=150,P={l:30,r:12,t:16,b:24};
-  const ks=list.map(x=>+x.kg); let lo=Math.min(...ks),hi=Math.max(...ks); if(hi-lo<5){lo-=2.5;hi+=2.5} const pad=(hi-lo)*.15; lo=Math.max(0,lo-pad); hi+=pad;
+  const ks=list.map(x=>+x[key]); let lo=Math.min(...ks),hi=Math.max(...ks); const mn=key==='kg'?5:2; if(hi-lo<mn){lo-=mn/2;hi+=mn/2} const pad=(hi-lo)*.15; lo=Math.max(0,lo-pad); hi+=pad;
   const X=i=>list.length===1?(W+P.l-P.r)/2:P.l+i*(W-P.l-P.r)/(list.length-1), Yp=v=>P.t+(1-(v-lo)/(hi-lo))*(H-P.t-P.b);
-  const pts=list.map((x,i)=>[X(i),Yp(+x.kg)]);
+  const pts=list.map((x,i)=>[X(i),Yp(+x[key])]);
   const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
   const area=line+` L${pts[pts.length-1][0].toFixed(1)} ${H-P.b} L${pts[0][0].toFixed(1)} ${H-P.b} Z`;
   const grid=[0,.5,1].map(f=>{const v=lo+(hi-lo)*f;return `<line x1="${P.l}" x2="${W-P.r}" y1="${Yp(v)}" y2="${Yp(v)}" class="cg"/><text x="${P.l-6}" y="${Yp(v)+3.5}" class="ct" text-anchor="end">${Math.round(v)}</text>`}).join('');
   const lab=list.length>1?`<text x="${pts[0][0]}" y="${H-6}" class="ct" text-anchor="start">${ddmm(list[0].fecha)}</text><text x="${pts[pts.length-1][0]}" y="${H-6}" class="ct" text-anchor="end">${ddmm(list[list.length-1].fecha)}</text>`:'';
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución de la carga">
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${lbl}">
     <defs><linearGradient id="cgr" x1="0" x2="1"><stop offset="0" stop-color="#FCE024"/><stop offset=".45" stop-color="#DDDC34"/><stop offset="1" stop-color="#24C9A7"/></linearGradient>
     <linearGradient id="cga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#24C9A7" stop-opacity=".32"/><stop offset="1" stop-color="#24C9A7" stop-opacity="0"/></linearGradient></defs>
     ${grid}<path d="${area}" fill="url(#cga)" class="carea"/><path d="${line}" class="cline" pathLength="1"/>
     ${pts.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i===pts.length-1?4.5:3}" class="cdot${i===pts.length-1?' last':''}" style="animation-delay:${.25+i*.06}s"/>`).join('')}${lab}</svg>`;
 }
+const byF=(a,b)=>a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0;
+const dOf=f=>new Date(f+'T00:00');
+const f1=v=>(v>0?'+':v<0?'−':'')+fmtKg(Math.abs(v));
 function screenProgreso(){
+  const s=me(); const t=S.ptab==='cuerpo'?1:0; const prev=S.ptPrev==null?t:S.ptPrev; S.ptPrev=t;
+  return `<div class="rhead"><div><h2>Progreso</h2><p class="h2sub2">${t?'Tu porcentaje graso, semana a semana':'Tus cargas, semana a semana'}</p></div></div>
+  <div class="seg2" role="group" aria-label="Qué medir" style="--m:${prev}" data-to="${t}"><button data-ptab="cargas" aria-pressed="${!t}">Cargas</button><button data-ptab="cuerpo" aria-pressed="${!!t}">% graso</button></div>
+  ${t?screenCuerpo(s):screenCargas()}`;
+}
+/* agrupa por semana (lunes) o por mes y compara cada período con el anterior */
+function grupos(L,modo){
+  const g={};
+  for(const x of L){ if(x.grasa==null) continue; const d=dOf(x.fecha); let k,lab;
+    if(modo==='mes'){k=d.getFullYear()+'-'+p2(d.getMonth()+1); lab=MES[d.getMonth()].slice(0,3)+' '+String(d.getFullYear()).slice(2)}
+    else{const l=new Date(d); l.setDate(d.getDate()-((d.getDay()+6)%7)); k=iso(l); lab='Sem. '+ddmm(iso(l))}
+    (g[k]=g[k]||{k,lab,v:[]}).v.push(+x.grasa) }
+  return Object.values(g).sort((a,b)=>a.k<b.k?-1:1).map(o=>({k:o.k,lab:o.lab,avg:o.v.reduce((a,b)=>a+b,0)/o.v.length,n:o.v.length}));
+}
+function screenCuerpo(s){
+  const L=(s.medidas||[]).slice().sort(byF); const last=L[L.length-1];
+  const refDias=n=>{ if(!last) return null; const lim=dOf(last.fecha); lim.setDate(lim.getDate()-n); const c=L.filter(x=>x!==last&&dOf(x.fecha)<=lim); return c[c.length-1]||null };
+  const w=refDias(6)||L[L.length-2]||null, m=refDias(27);
+  const chip=(lab,o,k,u)=>{ if(!o||last[k]==null||o[k]==null) return `<span class="cmp">${lab}: —</span>`; const d=+last[k]-(+o[k]);
+    return `<span class="cmp ${d<0?'good':d>0?'badc':''}">${lab} ${d<0?'▼':d>0?'▲':'='} ${f1(d)}${u}</span>` };
+  const form=`<form class="logf" id="medf">
+    <div class="lrow"><div class="field"><label for="mgr">% graso</label><input class="inp num" id="mgr" inputmode="decimal" placeholder="${last?fmtKg(last.grasa):'18,5'}" required></div>
+    <div class="field"><label for="mpe">Peso (kg)</label><input class="inp num" id="mpe" inputmode="decimal" placeholder="${last&&last.peso?fmtKg(last.peso):'opcional'}"></div>
+    <div class="field"><label for="mfe">Fecha</label><input class="inp num" id="mfe" type="date" value="${iso(TODAY)}" max="${iso(TODAY)}"></div></div>
+    <button class="btn" type="submit">Guardar medición</button></form>`;
+  if(!L.length) return `${empty('<b style="font-size:24px">%</b>','Anotá tu porcentaje graso','Cada semana o cada mes cargá tu medición (y tu peso si querés). Acá vas a ver cuánto vas bajando.','')}${form}`;
+  const pesos=L.filter(x=>x.peso!=null), lp=pesos[pesos.length-1];
+  const mp=lp?(()=>{const lim=dOf(lp.fecha);lim.setDate(lim.getDate()-27);const c=pesos.filter(x=>x!==lp&&dOf(x.fecha)<=lim);return c[c.length-1]||pesos[pesos.length-2]})():null;
+  const G=grupos(L,S.pgrp==='mes'?'mes':'sem');
+  return `<section class="pcard">
+    <div class="phead"><div class="bico" aria-hidden="true">%</div>
+      <div class="pnow"><span class="lab">Porcentaje graso</span><span class="kg num" data-count="${last.grasa}" data-dec="1" data-ck="grasa">${fmtKg(last.grasa)}<small> %</small></span>
+      <span class="rowd">${chip('Semana',w,'grasa','%')}${chip('Mes',m,'grasa','%')}</span></div></div>
+    ${L.length>1?chart(L,'grasa','%','Evolución del porcentaje graso'):''}
+  </section>
+  ${lp?`<div class="row2"><div class="tile"><div class="k">Peso corporal</div><div class="v num" data-count="${lp.peso}" data-dec="1" data-ck="peso">${fmtKg(lp.peso)}<span class="of"> kg</span></div><div class="s">${mp?`${f1(lp.peso-mp.peso)} kg desde ${ddmm(mp.fecha)}`:'Primera medición'}</div></div>
+    <div class="tile"><div class="k">Grasa en kg</div><div class="v num">${fmtKg(lp.peso*(lp.grasa??last.grasa)/100)}<span class="of"> kg</span></div><div class="s">según tu última medición</div></div></div>`:''}
+  ${form}
+  <section class="cmpbox"><div class="ttl"><b>Comparación</b><div class="chips" role="group" aria-label="Agrupar"><button data-pgrp="sem" aria-pressed="${S.pgrp!=='mes'}">Por semana</button><button data-pgrp="mes" aria-pressed="${S.pgrp==='mes'}">Por mes</button></div></div>
+    <div class="cmplist">${G.slice().reverse().map((g,i,a)=>{const p=a[i+1]; const d=p?g.avg-p.avg:null; const mx=Math.max(...G.map(x=>x.avg)), mn=Math.min(...G.map(x=>x.avg));
+      return `<div class="crow" style="animation-delay:${i*40}ms"><span class="cl">${g.lab}</span><span class="cbar"><i style="--w:${mx===mn?100:30+70*(g.avg-mn)/(mx-mn)}%"></i></span><b class="num">${fmtKg(Math.round(g.avg*10)/10)}%</b>${d==null?'<i class="cd"></i>':`<i class="cd ${d<0?'good':d>0?'badc':''}">${f1(Math.round(d*10)/10)}</i>`}</div>`}).join('')}</div></section>
+  <div class="hist">${L.slice().reverse().map(x=>`<div class="hrow"><span class="hd num">${ddmm(x.fecha)}</span><span class="hm num">${x.peso!=null?fmtKg(x.peso)+' kg':''}</span><b class="num">${fmtKg(x.grasa)} %</b><i></i><button class="del" data-mdel="${esc(x.id)}" aria-label="Borrar medición">×</button></div>`).join('')}</div>`;
+}
+function screenCargas(){
   const s=me(); s.prog=s.prog||{}; const names=Object.keys(s.prog);
   if(S.pex&&!s.prog[S.pex]) S.pex=null;
   if(!S.pex&&names.length) S.pex=names[0];
   const dl=`<datalist id="exl">${exOptions(s).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>`;
   const add=`<form class="addex" id="addex"><input class="inp" id="exname" list="exl" placeholder="Ej: Press banca" autocomplete="off" aria-label="Ejercicio"><button class="btn sm" type="submit">Agregar</button></form>${dl}`;
-  if(!names.length) return `<h2>Progreso</h2><p class="h2sub2" style="margin-top:-10px">Anotá cuánto levantás y mirá cómo vas subiendo semana a semana.</p>
-    ${empty(ICONS.progreso,'Elegí tu primer ejercicio','Por ejemplo press banca: esta semana 75 kg, la próxima 80 kg. Acá vas a ver la curva.',add)}`;
+  if(!names.length) return `${empty(ICONS.progreso,'Elegí tu primer ejercicio','Por ejemplo press banca: esta semana 75 kg, la próxima 80 kg. Acá vas a ver la curva.',add)}`;
   const list=s.prog[S.pex].slice().sort((a,b)=>a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0);
   const last=list[list.length-1], prev=list[list.length-2];
   const pr=list.length?Math.max(...list.map(x=>+x.kg)):0;
   const delta=last&&prev?(+last.kg)-(+prev.kg):null;
   const dtxt=delta==null?'':`<span class="delta ${delta>0?'up':delta<0?'down':''}">${delta>0?'▲ +':delta<0?'▼ ':'= '}${fmtKg(Math.abs(delta)*(delta<0?-1:1)).replace('-','−')} kg</span><span class="vs">vs. ${ddmm(prev.fecha)}</span>`;
-  return `<div class="rhead"><div><h2>Progreso</h2><p class="h2sub2">Tus cargas, semana a semana</p></div></div>
-  <div class="chips hscroll pexs" role="group" aria-label="Ejercicio">${names.map(n=>`<button data-pex="${esc(n)}" aria-pressed="${n===S.pex}">${esc(n)}</button>`).join('')}<button class="addchip" id="newex" aria-label="Agregar ejercicio">＋</button></div>
+  return `<div class="chips hscroll pexs" role="group" aria-label="Ejercicio">${names.map(n=>`<button data-pex="${esc(n)}" aria-pressed="${n===S.pex}">${esc(n)}</button>`).join('')}<button class="addchip" id="newex" aria-label="Agregar ejercicio">＋</button></div>
   <div id="addwrap" hidden>${add}</div>
   <section class="pcard">
     <div class="phead"><div class="anim sm" data-anim="${esc(animKey(S.pex))}" aria-hidden="true"><svg viewBox="0 0 100 100"></svg></div>
-      <div class="pnow"><span class="lab">${esc(S.pex)}</span>${last?`<span class="kg num">${fmtKg(last.kg)}<small> kg</small></span><span class="rowd">${dtxt}</span>`:'<span class="kg">—</span><span class="vs">Cargá tu primera marca</span>'}</div>
+      <div class="pnow"><span class="lab">${esc(S.pex)}</span>${last?`<span class="kg num" data-count="${last.kg}" data-dec="1" data-ck="kg-${esc(S.pex)}">${fmtKg(last.kg)}<small> kg</small></span><span class="rowd">${dtxt}</span>`:'<span class="kg">—</span><span class="vs">Cargá tu primera marca</span>'}</div>
       ${pr?`<div class="pr"><small>Récord</small><b class="num">${fmtKg(pr)}</b></div>`:''}</div>
     ${list.length?chart(list):''}
   </section>
@@ -812,6 +927,11 @@ function renderSocio(){
       <div class="screen enter" id="scr-login">${screenLogin(logo)}</div></div>`;
     return;
   }
+  if(CLOUD&&S.pendiente){
+    $('#app').innerHTML=`<div class="phone"><div class="screen enter" id="scr-pend">${screenPendiente(logo)}</div></div>`;
+    return;
+  }
+  if(!me()) { $('#app').innerHTML=splash(); return; }
   const body={inicio:screenInicio,rutina:screenRutina,progreso:screenProgreso,cuotas:screenCuotas,asist:screenAsist,perfil:screenPerfil}[S.tab]();
   const prev=document.querySelector('#app .screen'); const same=prev&&prev.id==='scr-'+S.tab; const keep=same?prev.scrollTop:0;
   const ti=TABKEYS.indexOf(S.tab), pi=TABKEYS.indexOf(S.lastTab||S.tab);
@@ -824,14 +944,21 @@ function renderSocio(){
   <nav class="nav" aria-label="Secciones"><span class="ind" style="--x:${S.indFrom!=null?S.indFrom:(pi<0?ti:pi)};${ti<0?'opacity:0':''}"></span>${TABS.map(([k,l])=>`<button data-tab="${k}" ${S.tab===k?'aria-current="page"':''}>${ICONS[k]}<span>${l}</span></button>`).join('')}</nav></div>`;
   const scr=document.querySelector('#app .screen'); if(S.forceTop){S.forceTop=false;scr.scrollTop=0}else scr.scrollTop=keep;
   const ind=document.querySelector('.nav .ind'); if(ti>=0&&pi!==ti){void ind.offsetWidth; ind.style.setProperty('--x',ti)}
-  if(!same) countUp(scr);
+  const tmm=scr.querySelector('.tmodes'); if(tmm&&tmm.style.getPropertyValue('--m')!==tmm.dataset.to){void tmm.offsetWidth; tmm.style.setProperty('--m',tmm.dataset.to)}
+  const sg=scr.querySelector('.seg2'); if(sg&&sg.style.getPropertyValue('--m')!==sg.dataset.to){void sg.offsetWidth; sg.style.setProperty('--m',sg.dataset.to)}
+  countUp(scr, same);
   S.indFrom=null;
   S.lastTab=S.tab;
 }
-function countUp(root){
-  if(reduceMotion) return;
-  root.querySelectorAll('[data-count]').forEach(el=>{const to=+el.dataset.count; if(!to) return; const t0=performance.now();
-    const step=t=>{const k=Math.min(1,(t-t0)/700);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)});
+S.cnt=S.cnt||{};
+function countUp(root,same){
+  root.querySelectorAll('[data-count]').forEach(el=>{
+    const to=+el.dataset.count, dec=+el.dataset.dec||0, key=el.dataset.ck||'', from=key&&S.cnt[key]!=null?S.cnt[key]:(same?to:0);
+    if(key) S.cnt[key]=to; if(reduceMotion||from===to||!isFinite(to)) return;
+    const suf=el.querySelector('small,.of'), sufH=suf?suf.outerHTML:'', t0=performance.now(), dur=same?520:820;
+    const f=v=>dec?(Math.round(v*10)/10).toFixed(1).replace('.',','):String(Math.round(v));
+    const step=t=>{const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,4); el.innerHTML=f(from+(to-from)*e)+sufH; if(k<1) requestAnimationFrame(step); else el.innerHTML=(dec?fmtKg(to):String(to))+sufH};
+    requestAnimationFrame(step)});
 }
 function goTab(t){if(t===S.tab)return; S.tab=t; S.forceTop=true; render()}
 
@@ -921,6 +1048,10 @@ const ez=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
 const tempo=ph=>ph<.38?ez(ph/.38):ph<.5?1:ph<.92?1-ez((ph-.5)/.42):0;
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function animLoop(ts){
+  setRoll(document.getElementById('swtime'),fmtSW(swNow()));
+  if(S.rest.run){const r=restNow(); setRoll(document.getElementById('resttime'),fmtR(r));
+    const rg=document.getElementById('restring'); if(rg) rg.style.strokeDashoffset=(1-r/S.rest.total).toFixed(4);
+    const tm=document.getElementById('timer'); if(tm) tm.classList.toggle('ending',r<=5000&&r>0)}
   document.querySelectorAll('.anim').forEach(el=>{const a=ANIM[el.dataset.anim]; if(!a) return;
     const dur=a.dur||2300; const ph=(ts%dur)/dur; const t=reduceMotion?1:tempo(ph);
     el.firstElementChild.innerHTML=drawSkel(a,t)});
@@ -929,11 +1060,10 @@ function animLoop(ts){
 
 /* ---------- Ticker del reloj ---------- */
 setInterval(()=>{
-  const sw=document.getElementById('swtime'); if(sw) sw.textContent=fmtSW(swNow());
+  if(reduceMotion){setRoll(document.getElementById('swtime'),fmtSW(swNow())); if(S.rest.run) setRoll(document.getElementById('resttime'),fmtR(restNow()))}
   if(S.rest.run){const r=restNow();
-    const rt=document.getElementById('resttime'); if(rt) rt.textContent=fmtR(r);
-    const rb=document.getElementById('restbar'); if(rb) rb.style.width=(r/S.rest.total*100)+'%';
-    if(r<=0){S.rest.run=false;S.rest.left=S.rest.total;toast('¡Terminó el descanso! A la próxima serie');if(S.view==='socio')render()}}
+    if(r<=0){S.rest.run=false;S.rest.left=S.rest.total;try{navigator.vibrate&&navigator.vibrate([180,90,180])}catch(e){}
+      toast('¡Terminó el descanso! A la próxima serie');if(S.view==='socio')render()}}
   const hp=document.getElementById('hpill');
   if(hp){const on=S.sw.run||S.rest.run; hp.hidden=!on||S.tab==='rutina';
     if(on) hp.textContent=S.rest.run?'Descanso '+fmtR(restNow()):'⏱ '+fmtSW(swNow()).slice(0,5)}
@@ -950,7 +1080,7 @@ const dotsOf=s=>`<span class="dots" aria-label="Cuotas ${Y}">${MES.map((_,i)=>{c
 
 function proBar(){return `<div class="probar"><span>Panel de <b>${esc(PRO.nombre+' '+PRO.apellido)}</b></span><button class="mini" id="prologout">Cerrar sesión</button></div>`}
 function renderProAuth(){
-  const logo=document.querySelector('.brand img').src; const reg=!PRO;
+  const logo=document.querySelector('.brand img').src; const reg=CLOUD?!S.hayProfe:!PRO;
   $('#app').innerHTML=`<div class="owner enter"><div class="authbox">
     <img class="lmark" src="${logo}" alt="Training Club"><div class="wm big"><b>Training</b><span>CLUB</span></div>
     <h1 class="ltitle">${reg?'Registro del profe':'Panel del gimnasio'}</h1>
@@ -964,7 +1094,7 @@ function renderProAuth(){
       <p class="lerr" id="perr" role="alert" hidden></p>
       <button class="btn" type="submit">${reg?'Crear cuenta y entrar':'Entrar'}</button>
     </form>
-    ${reg?'':'<p class="hint">La contraseña queda guardada solo en este equipo.</p>'}
+    ${reg?'':`<p class="hint">${CLOUD?'Tu cuenta sirve en cualquier computadora con el panel.':'La contraseña queda guardada solo en este equipo.'}</p>`}
   </div></div>`;
 }
 function renderDuenio(){
@@ -994,6 +1124,8 @@ function renderDuenio(){
       <div class="barlabels num">${asist.map(a=>`<span>${a.d}</span>`).join('')}</div></section>
     <section class="panel"><h2>Por vencer</h2><div class="duelist">${por.length?por.map(x=>`<div><span>${esc(x.s.name)}</span><span class="num" style="color:var(--warn)">${x.e.days===0?'hoy':'en '+x.e.days+' día'+(x.e.days===1?'':'s')}</span></div>`).join(''):'<div style="color:var(--muted)">Nadie vence esta semana.</div>'}</div></section>
   </div>`:''}
+  ${S.disp&&S.disp.length?`<section class="panel pendp"><h2>Celulares esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Alguien se registró con un DNI que ya tenía celular. Aprobalo solo si es esa persona (por ejemplo, cambió de teléfono).</p>
+    <div class="duelist">${S.disp.map(x=>`<div><span><strong>${esc(x.s.name)}</strong> <span class="muted num">DNI ${fmtDNI(x.s.dni)}</span></span><span><button class="mini pay" data-dok="${x.uid}">Aprobar</button> <button class="mini danger" data-dno="${x.uid}">Rechazar</button></span></div>`).join('')}</div></section>`:''}
   <section class="panel">
     <div class="panelhead"><h2>Socios</h2>${all.length?`<div class="chips" role="group" aria-label="Filtrar">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div>`:''}</div>
     ${addForm}
@@ -1067,6 +1199,9 @@ function renderFicha(s){
       return `<div class="pex"><div class="pexh"><b>${esc(n)}</b><button class="del" data-pexdel="${esc(n)}" aria-label="Quitar ${esc(n)}">×</button></div>
         <div class="pchips">${l.map(x=>`<span class="pchip num">${ddmm(x.fecha)} · <b>${fmtKg(x.kg)} kg</b>${x.series&&x.reps?' · '+x.series+'×'+x.reps:''}<button class="del" data-pdel="${esc(n)}|${esc(x.id)}" aria-label="Borrar">×</button></span>`).join('')||'<span class="muted">Sin marcas</span>'}</div></div>`}).join('')
     :'<p class="muted" style="margin:0">Todavía no hay pesos cargados.</p>'}
+    <div class="pex"><div class="pexh"><b>Porcentaje graso</b></div>
+      <div class="pchips">${(s.medidas||[]).slice().sort(byF).map(x=>`<span class="pchip num">${ddmm(x.fecha)} · <b>${fmtKg(x.grasa)}%</b>${x.peso!=null?' · '+fmtKg(x.peso)+' kg':''}<button class="del" data-mdel2="${esc(x.id)}" aria-label="Borrar">×</button></span>`).join('')||'<span class="muted">Sin mediciones</span>'}</div>
+      <form class="medf2" id="medf2"><input class="inp num" id="mgr2" placeholder="% graso" inputmode="decimal" aria-label="Porcentaje graso"><input class="inp num" id="mpe2" placeholder="Peso kg" inputmode="decimal" aria-label="Peso"><input class="inp num" id="mfe2" type="date" value="${iso(TODAY)}" aria-label="Fecha"><button class="btn sm" type="submit">Agregar medición</button></form></div>
     <form class="progf" id="progf"><input class="inp" id="pgex" list="exl2" placeholder="Ejercicio" aria-label="Ejercicio"><input class="inp num" id="pgkg" placeholder="Kg" inputmode="decimal" aria-label="Kilos">
       <input class="inp num" id="pgrep" placeholder="Reps" inputmode="numeric" aria-label="Repeticiones"><input class="inp num" id="pgser" placeholder="Series" inputmode="numeric" aria-label="Series">
       <input class="inp num" id="pgfec" type="date" value="${iso(TODAY)}" aria-label="Fecha"><button class="btn sm" type="submit">Agregar</button></form>
@@ -1080,10 +1215,110 @@ function renderFicha(s){
     <div class="grid2 even">${datos}${asis}</div>${cuota}${prog}</div>`;
 }
 
-function render(){S.view==='socio'?renderSocio():renderDuenio();
+/* ---------- Nube (Supabase): solo en las apps publicadas. El prototipo sigue funcionando local ---------- */
+var CLOUD=!!(window.TC_CFG&&window.supabase&&window.TC_CFG.url);
+var sb=null, SNAP=null, PUSHQ=Promise.resolve(), pushT=null, pend=0, reloadT=null;
+S.ready=!CLOUD; S.hayProfe=false; S.pendiente=false; S.disp=[];
+const uuid=()=>crypto.randomUUID?crypto.randomUUID():'10000000-1000-4000-8000-100000000000'.replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16));
+const dISO=(k,d)=>{const [y,m]=k.split('-').map(Number);return y+'-'+p2(m+1)+'-'+p2(d)};
+function norm(db){
+  const o={socios:{},pagos:{},asis:{},prog:{},med:{}};
+  for(const s of Object.values(db.socios)){ if(!s.id) continue;
+    o.socios[s.id]={id:s.id,dni:s.dni,nombre:s.name,alta:s.alta,plan:s.plan,precio:s.precio||0,vence:s.vence||10,desde:s.desde||null,desde_dia:s.desdeDia||null,rutina:s.rutina||null,foto:s.photo||null};
+    for(const [k,p] of Object.entries(s.pagos||{})) o.pagos[s.id+'|'+k]={socio_id:s.id,periodo:k,fecha:p.fecha,medio:p.medio,monto:p.monto||0};
+    for(const [k,ds] of Object.entries(s.att||{})) for(const d of ds){const f=dISO(k,d);o.asis[s.id+'|'+f]={socio_id:s.id,fecha:f}}
+    for(const x of (s.medidas||[])) o.med[x.id]={id:x.id,socio_id:s.id,fecha:x.fecha,grasa:+x.grasa,peso:x.peso==null?null:+x.peso};
+    for(const [n,arr] of Object.entries(s.prog||{})) for(const x of arr) o.prog[x.id]={id:x.id,socio_id:s.id,ejercicio:n,fecha:x.fecha,kg:+x.kg,reps:x.reps||null,series:x.series||null};
+  }
+  return o;
+}
+function buildDB(rows){
+  const db={socios:{}}, byId={};
+  for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,rutina:r.rutina,photo:r.foto,pagos:{},att:{},prog:{},medidas:[]};db.socios[r.dni]=s;byId[r.id]=s}
+  for(const p of rows.pagos){const s=byId[p.socio_id]; if(s) s.pagos[p.periodo]={fecha:p.fecha,medio:p.medio,monto:p.monto}}
+  for(const a of rows.asis){const s=byId[a.socio_id]; if(!s) continue; const [y,m,d]=a.fecha.split('-').map(Number); const k=mk(y,m-1); (s.att[k]=s.att[k]||[]).push(d)}
+  for(const x of rows.med||[]){const s=byId[x.socio_id]; if(s) s.medidas.push({id:x.id,fecha:x.fecha,grasa:+x.grasa,peso:x.peso==null?null:+x.peso})}
+  for(const x of rows.prog){const s=byId[x.socio_id]; if(!s) continue; (s.prog[x.ejercicio]=s.prog[x.ejercicio]||[]).push({id:x.id,fecha:x.fecha,kg:+x.kg,reps:x.reps,series:x.series})}
+  return db;
+}
+async function q(p){const {data,error}=await p; if(error) throw error; return data}
+async function loadAll(){
+  const [so,pa,as,pr,me_]=await Promise.all([q(sb.from('socios').select('*')),q(sb.from('pagos').select('*')),q(sb.from('asistencias').select('*')),q(sb.from('progreso').select('*')),q(sb.from('medidas').select('*'))]);
+  DB=buildDB({socios:so,pagos:pa,asis:as,prog:pr,med:me_}); SNAP=norm(DB);
+  if(S.view==='duenio'&&S.pro){const d=await q(sb.from('dispositivos').select('uid,socio_id,aprobado,creado').eq('aprobado',false)); const byId={}; Object.values(DB.socios).forEach(s=>byId[s.id]=s);
+    S.disp=d.map(x=>({uid:x.uid,s:byId[x.socio_id],creado:x.creado})).filter(x=>x.s)}
+  if(S.user){const s=DB.socios[S.user.dni]; if(s){S.name=s.name; if(s.photo!==undefined) S.photo=s.photo}}
+}
+function errTxt(e){const m=String(e&&e.message||e); return /fetch|network|Failed/i.test(m)?'Sin conexión. Revisá internet y probá de nuevo.':m}
+/* guarda solo lo que cambió (lo que la seguridad de la base permite a cada uno) */
+async function push(){
+  const cur=norm(DB), old=SNAP||{socios:{},pagos:{},asis:{},prog:{},med:{}}; SNAP=cur;
+  const df=t=>{const up=[],del=[];for(const [k,r] of Object.entries(cur[t])) if(JSON.stringify(r)!==JSON.stringify(old[t][k])) up.push(r);
+    for(const k of Object.keys(old[t])) if(!cur[t][k]) del.push(old[t][k]); return {up,del}};
+  const X={socios:df('socios'),pagos:df('pagos'),asis:df('asis'),prog:df('prog'),med:df('med')};
+  const delOf={pagos:r=>sb.from('pagos').delete().eq('socio_id',r.socio_id).eq('periodo',r.periodo),
+    asis:r=>sb.from('asistencias').delete().eq('socio_id',r.socio_id).eq('fecha',r.fecha), prog:r=>sb.from('progreso').delete().eq('id',r.id), med:r=>sb.from('medidas').delete().eq('id',r.id)};
+  const T={pagos:'pagos',asis:'asistencias',prog:'progreso',med:'medidas'};
+  if(!(S.view==='duenio'&&S.pro)){            /* socio: solo su perfil, su entrada de hoy y su progreso */
+    const r=X.socios.up[0]; if(r) await q(sb.rpc('actualizar_perfil',{p_nombre:r.nombre,p_foto:r.foto}));
+    if(X.asis.up.length) await q(sb.from('asistencias').insert(X.asis.up));
+    await Promise.all(X.prog.del.map(r=>q(delOf.prog(r))));
+    if(X.prog.up.length) await q(sb.from('progreso').upsert(X.prog.up));
+    await Promise.all(X.med.del.map(r=>q(delOf.med(r))));
+    if(X.med.up.length) await q(sb.from('medidas').upsert(X.med.up));
+    return;
+  }
+  if(X.socios.up.length) await q(sb.from('socios').upsert(X.socios.up));
+  await Promise.all(['pagos','asis','prog','med'].flatMap(t=>X[t].del.map(r=>q(delOf[t](r)))));
+  await Promise.all(['pagos','asis','prog','med'].filter(t=>X[t].up.length).map(t=>q(sb.from(T[t]).upsert(X[t].up))));
+  await Promise.all(X.socios.del.map(r=>q(sb.from('socios').delete().eq('id',r.id))));
+}
+function cloudSave(){
+  clearTimeout(pushT); pend++;
+  pushT=setTimeout(()=>{ PUSHQ=PUSHQ.then(push).catch(e=>{toast('No se pudo guardar: '+errTxt(e)); return reload(true)}).finally(()=>{pend=0}) },250);
+}
+function reload(force){
+  clearTimeout(reloadT);
+  reloadT=setTimeout(async()=>{ if(pend&&!force) return reload();
+    try{ await loadAll(); const a=document.activeElement; if(force||!a||!/INPUT|SELECT|TEXTAREA/.test(a.tagName)) render() }catch(e){} },350);
+}
+async function checkDevice(){
+  const d=await q(sb.from('dispositivos').select('aprobado').eq('uid',(await sb.auth.getUser()).data.user.id).maybeSingle());
+  if(!d){S.user=null;try{localStorage.removeItem('tc-sesion')}catch(e){} return}
+  S.pendiente=!d.aprobado;
+}
+async function bootCloud(){
+  try{
+    sb=window.supabase.createClient(TC_CFG.url,TC_CFG.key,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'tc-auth'}});
+    let {data:{session}}=await sb.auth.getSession();
+    if(!session){const r=await sb.auth.signInAnonymously(); if(r.error) throw r.error}
+    if(S.view==='duenio'){ S.hayProfe=await q(sb.rpc('hay_profe')); const p=await q(sb.rpc('profe_yo')); PRO=p; S.pro=!!p }
+    else if(S.user){ await checkDevice() }
+    if(S.user&&!S.pendiente||S.pro) await loadAll();
+    sb.channel('tc').on('postgres_changes',{event:'*',schema:'public'},async(pl)=>{
+      if(pl.table==='dispositivos'&&S.user&&S.pendiente){await checkDevice(); if(!S.pendiente){await loadAll(); toast('¡Ezequiel aprobó tu celular!')} return render()}
+      if(S.user&&!S.pendiente||S.pro) reload();
+    }).subscribe();
+    S.ready=true; render(); lanzarAviso();
+  }catch(e){
+    $('#app').innerHTML=`<div class="phone"><div class="screen"><div class="empty"><b>No se pudo conectar</b><p>${esc(errTxt(e))}</p><button class="btn" onclick="location.reload()">Reintentar</button></div></div></div>`;
+  }
+}
+const splash=()=>`<div class="${S.view==='socio'?'phone':'owner'}"><div class="boot"><img src="${document.querySelector('.brand img').src}" alt=""><span>Cargando…</span></div></div>`;
+function screenPendiente(logo){
+  return `<div class="login"><img class="lmark" src="${logo}" alt="Training Club"><div class="wm big"><b>Training</b><span>CLUB</span></div>
+    <h1 class="ltitle">Falta un paso</h1>
+    <p class="lsub">Ese DNI ya está registrado en otro celular. Para cuidar tu cuenta, ${PROFE} tiene que aprobar este celular desde el panel del gimnasio.</p>
+    <div class="empty" style="width:100%"><div class="eico">⏳</div><b>Esperando aprobación</b><p>Apenas te apruebe, la app se abre sola.</p></div>
+    <button class="btn ghost" id="logout">Usar otro DNI</button></div>`;
+}
+
+function render(){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
+  S.view==='socio'?renderSocio():renderDuenio();
   $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio')}
 
-function pagar(i){const s=me(); if(!s||!s.plan) return; if(i==null) i=M; if(s.pagos[mk(Y,i)]) return;
+function pagar(i){const s=me(); if(!s||!s.plan) return;
+  if(CLOUD) return toast('Pagale a '+PROFE.split(' ')[0]+' (efectivo o transferencia) y él lo registra. El pago con Mercado Pago llega pronto.'); if(i==null) i=M; if(s.pagos[mk(Y,i)]) return;
   s.pagos[mk(Y,i)]={fecha:ddmm(iso(TODAY)),medio:'Mercado Pago',monto:montoMes(s,i)}; saveDB(); S.selMonth=i; toast('Pago de '+MES[i].toLowerCase()+' acreditado (simulado)'); render()}
 
 document.addEventListener('click',e=>{
@@ -1095,7 +1330,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.tab){ if(S.tab===b.dataset.tab&&b.closest('.nav')){const sc=$('#app .screen');if(sc)sc.scrollTo({top:0,behavior:'smooth'});return} return goTab(b.dataset.tab)}
   if(b.id==='pay') return pagar(b.dataset.mes!=null?+b.dataset.mes:M);
   if(b.id==='quitar'){S.photo=null;savePerfil();toast('Foto quitada');return render()}
-  if(b.id==='logout'){try{localStorage.removeItem('tc-sesion')}catch(e){} S.user=null;S.tab='inicio';S.lastTab=null;return render()}
+  if(b.id==='logout'){try{localStorage.removeItem('tc-sesion')}catch(e){} S.pendiente=false; if(CLOUD) DB={socios:{}}; S.user=null;S.tab='inicio';S.lastTab=null;return render()}
   if(b.id==='checkin'){const s=me();
     if(estado(s).c==='bad') return toast('Entrada bloqueada: la cuota está vencida');
     const a=s.att[mk(Y,M)]=s.att[mk(Y,M)]||[]; if(a.includes(D)) return toast('Ya registraste tu entrada de hoy');
@@ -1105,7 +1340,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.ex){S.done.has(b.dataset.ex)?S.done.delete(b.dataset.ex):S.done.add(b.dataset.ex);return render()}
   if(b.dataset.tmode){S.tmode=b.dataset.tmode;return render()}
   if(b.id==='swgo'){const s=S.sw; if(s.run){s.acc+=Date.now()-s.t0;s.run=false}else{s.t0=Date.now();s.run=true} return render()}
-  if(b.id==='swlap'){S.sw.laps.push(swNow());return render()}
+  if(b.id==='swlap'){S.sw.laps.push(swNow());S.newLap=true;return render()}
   if(b.id==='swreset'){S.sw={run:false,t0:0,acc:0,laps:[]};return render()}
   if(b.dataset.preset){const ms=+b.dataset.preset*1000;S.rest={run:false,end:0,left:ms,total:ms};return render()}
   if(b.id==='restgo'){const r=S.rest; if(r.run){r.left=restNow();r.run=false}else{if(r.left<=0)r.left=r.total;r.end=Date.now()+r.left;r.run=true} return render()}
@@ -1118,6 +1353,10 @@ document.addEventListener('click',e=>{
   if(b.id==='prevM'){S.calM--;if(S.calM<0){S.calM=11;S.calY--}return render()}
   if(b.id==='nextM'){S.calM++;if(S.calM>11){S.calM=0;S.calY++}return render()}
   /* progreso */
+  if(b.dataset.ptab){S.ptab=b.dataset.ptab;return render()}
+  if(b.dataset.pgrp){S.pgrp=b.dataset.pgrp;return render()}
+  if(b.dataset.mdel){const s=me();s.medidas=(s.medidas||[]).filter(x=>x.id!==b.dataset.mdel);saveDB();toast('Medición borrada');return render()}
+  if(b.dataset.mdel2){const s=DB.socios[S.sel];s.medidas=(s.medidas||[]).filter(x=>x.id!==b.dataset.mdel2);saveDB();return render()}
   if(b.dataset.pex){S.pex=b.dataset.pex;return render()}
   if(b.id==='newex'){const w=$('#addwrap');w.hidden=!w.hidden;if(!w.hidden)$('#exname').focus();return}
   if(b.dataset.del){const s=me();s.prog[S.pex]=s.prog[S.pex].filter(x=>x.id!==b.dataset.del);saveDB();toast('Marca borrada');return render()}
@@ -1141,7 +1380,9 @@ document.addEventListener('click',e=>{
   if(b.dataset.pay){const s=DB.socios[S.sel];const i=+b.dataset.pay;const medio=$('#medio'+i).value;const monto=parseInt(($('#monto'+i).value||'').replace(/\D/g,''))||0;let fecha=($('#fecha'+i).value||'').trim();
     if(!/^\d{1,2}\/\d{1,2}$/.test(fecha)){toast('Fecha como dd/mm, ej: 05/11');return $('#fecha'+i).focus()} fecha=fecha.split('/').map(x=>x.padStart(2,'0')).join('/');
     const had=!!s.pagos[mk(Y,i)]; s.pagos[mk(Y,i)]={fecha,medio,monto};saveDB();toast((had?'Pago de ':'Pago registrado: ')+MES[i].toLowerCase()+(had?' actualizado':''));return render()}
-  if(b.id==='prologout'){try{sessionStorage.removeItem('tc-pro')}catch(x){} S.pro=false;S.sel=null;return render()}
+  if(b.dataset.dok){sb.from('dispositivos').update({aprobado:true}).eq('uid',b.dataset.dok).then(({error})=>{if(error)return toast(errTxt(error));toast('Celular aprobado');reload(true)});return}
+  if(b.dataset.dno){sb.from('dispositivos').delete().eq('uid',b.dataset.dno).then(({error})=>{if(error)return toast(errTxt(error));toast('Rechazado');reload(true)});return}
+  if(b.id==='prologout'){try{sessionStorage.removeItem('tc-pro')}catch(x){} if(CLOUD){sb.rpc('profe_salir');PRO=null;DB={socios:{}}} S.pro=false;S.sel=null;return render()}
   if(b.id==='avisox'){const a=aviso(me()); try{localStorage.setItem('tc-avx-'+a.k,'1')}catch(x){} return render()}
   if(b.id==='avisos'){ if(!notifOK()) return toast('Instalá la app en tu pantalla de inicio para recibir avisos');
     Notification.requestPermission().then(p=>{ if(p==='granted'){toast('Listo: te avisamos los días 1, 3, 6, 9 y 10');
@@ -1169,6 +1410,13 @@ document.addEventListener('submit',e=>{
     const dni=$('#dni').value.replace(/\D/g,''), name=$('#lname').value.trim().replace(/\s+/g,' '), err=$('#lerr');
     if(dni.length<7||dni.length>8){err.textContent='Revisá el DNI: tiene que tener 7 u 8 números.';err.hidden=false;return $('#dni').focus()}
     if(name.length<3||!name.includes(' ')){err.textContent='Escribí tu nombre y tu apellido.';err.hidden=false;return $('#lname').focus()}
+    if(CLOUD){ const bt=f.querySelector('button'); bt.disabled=true; bt.textContent='Entrando…';
+      sb.rpc('registrar_socio',{p_dni:dni,p_nombre:name}).then(async({data,error})=>{
+        if(error){bt.disabled=false;bt.textContent='Entrar';err.textContent=errTxt(error);err.hidden=false;return}
+        S.user={dni,name}; S.name=name; S.tab='inicio'; S.lastTab=null; S.pendiente=data==='pendiente';
+        try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){}
+        if(!S.pendiente){await loadAll(); toast('¡Listo, '+S.name.split(' ')[0]+'! Ya estás adentro'); lanzarAviso()}
+        render(); }); return; }
     const ex=DB.socios[dni]; const s=ensureSocio(dni,ex?null:name);
     S.user={dni,name:s.name}; S.name=s.name; S.photo=s.photo||S.photo; S.tab='inicio'; S.lastTab=null;
     try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(e){}
@@ -1177,6 +1425,13 @@ document.addEventListener('submit',e=>{
   if(f.id==='addex'||f.id==='addex2'){const n=$('#exname').value.trim().replace(/\s+/g,' '); if(!n) return $('#exname').focus();
     const s=me(); const k=Object.keys(s.prog).find(x=>x.toLowerCase()===n.toLowerCase())||n.charAt(0).toUpperCase()+n.slice(1);
     s.prog[k]=s.prog[k]||[]; S.pex=k; saveDB(); render(); const kg=$('#lkg'); if(kg) kg.focus(); return}
+  if(f.id==='medf'||f.id==='medf2'){const two=f.id==='medf2'; const s=two?DB.socios[S.sel]:me();
+    const g=parseFloat(($(two?'#mgr2':'#mgr').value||'').replace(',','.')), pe=parseFloat(($(two?'#mpe2':'#mpe').value||'').replace(',','.'));
+    if(!(g>0&&g<75)){toast('Poné el porcentaje graso (ej: 18,5)');return $(two?'#mgr2':'#mgr').focus()}
+    const fecha=$(two?'#mfe2':'#mfe').value||iso(TODAY); s.medidas=s.medidas||[];
+    const prevL=s.medidas.slice().sort(byF); const pv=prevL[prevL.length-1];
+    s.medidas.push({id:Date.now().toString(36),fecha,grasa:Math.round(g*10)/10,peso:pe>0?Math.round(pe*10)/10:null}); saveDB();
+    toast(!two&&pv&&g<pv.grasa?`¡Bajaste ${fmtKg(Math.round((pv.grasa-g)*10)/10)}% de grasa! 🔥`:'Medición guardada'); return render()}
   if(f.id==='logf'){const kg=parseFloat($('#lkg').value.replace(',','.'));
     if(!(kg>=0)||kg>1000){toast('Poné los kilos (ej: 75 o 77,5)');return $('#lkg').focus()}
     const s=me(); const fecha=$('#lfec').value||iso(TODAY);
@@ -1193,8 +1448,13 @@ document.addEventListener('submit',e=>{
     if(nom.length<2) return bad('Escribí tu nombre.'); if(ape.length<2) return bad('Escribí tu apellido.');
     if(dni.length<7||dni.length>8) return bad('El DNI tiene que tener 7 u 8 números.');
     if(pw.length<6) return bad('La contraseña tiene que tener al menos 6 caracteres.'); if(pw!==pw2) return bad('Las contraseñas no coinciden.');
+    if(CLOUD){ sb.rpc('profe_registrar',{p_dni:dni,p_nombre:nom,p_apellido:ape,p_pw:pw}).then(async({data,error})=>{
+        if(error) return bad(errTxt(error)); PRO=data; S.pro=true; S.hayProfe=true; await loadAll(); toast('¡Bienvenido, '+nom+'!'); render() }); return }
     hashPw(dni,pw).then(h=>{PRO={nombre:nom,apellido:ape,dni,hash:h};try{localStorage.setItem('tc-profe',JSON.stringify(PRO));sessionStorage.setItem('tc-pro','1')}catch(x){} S.pro=true;toast('¡Bienvenido, '+nom+'!');render()}); return}
   if(f.id==='prologin'){const dni=$('#pdni').value.replace(/\D/g,''),pw=$('#ppw').value,err=$('#perr');
+    if(CLOUD){ const bt=f.querySelector('button'); bt.disabled=true; sb.rpc('profe_login',{p_dni:dni,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
+        if(error){err.textContent=errTxt(error);err.hidden=false;return} if(!data){err.textContent='DNI o contraseña incorrectos.';err.hidden=false;$('#ppw').value='';return $('#ppw').focus()}
+        PRO=data; S.pro=true; await loadAll(); toast('Hola, '+PRO.nombre); render() }); return }
     hashPw(dni,pw).then(h=>{ if(dni!==PRO.dni||h!==PRO.hash){err.textContent='DNI o contraseña incorrectos.';err.hidden=false;$('#ppw').value='';return $('#ppw').focus()}
       try{sessionStorage.setItem('tc-pro','1')}catch(x){} S.pro=true;toast('Hola, '+PRO.nombre);render()}); return}
   if(f.id==='datosf'){const s=DB.socios[S.sel]; const name=$('#fname').value.trim().replace(/\s+/g,' '), dni=$('#fdni').value.replace(/\D/g,''), alta=$('#falta').value||s.alta;
@@ -1220,10 +1480,10 @@ document.addEventListener('change',e=>{
   if(e.target.id==='nombre'){const v=e.target.value.trim(); if(v){S.name=v;S.user.name=v;try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){} savePerfil();toast('Nombre guardado')}}
 });
 /* si el panel y la app están abiertos en dos ventanas del mismo equipo, se actualizan entre sí */
-addEventListener('storage',e=>{if(e.key===DBK){try{DB=JSON.parse(e.newValue)||{socios:{}}}catch(x){} if(!document.activeElement||!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) render()}});S.view='socio';document.querySelector('.seg').hidden=true;document.querySelector('.note').hidden=true;
+addEventListener('storage',e=>{if(!CLOUD&&e.key===DBK){try{DB=JSON.parse(e.newValue)||{socios:{}}}catch(x){} if(!document.activeElement||!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) render()}});S.view='socio';document.querySelector('.seg').hidden=true;document.querySelector('.note').hidden=true;
 
 render();
-setTimeout(()=>{if(S.view==='socio'&&S.user)lanzarAviso()},1500);
+if(CLOUD) bootCloud(); else setTimeout(()=>{if(S.view==='socio'&&S.user)lanzarAviso()},1500);
 if(reduceMotion) setInterval(()=>animLoop(0),500); else requestAnimationFrame(animLoop);
 </script>
 
