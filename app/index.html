@@ -775,6 +775,28 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   html.kbon .chwrap.sheet .chtop{padding-top:calc(10px + env(safe-area-inset-top,0px))}html.kbon .chgrab{display:none}
 }
 @media (prefers-reduced-motion:reduce){.bmenu,.chedit,.bub.eflash p{animation:none!important}}
+/* ranking mensual / anual */
+.rkper{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0;padding:4px;border-radius:16px;background:var(--sunk);border:1px solid var(--line);margin-bottom:4px}
+.rkper::before{content:'';position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:12px;background:var(--grad);transform:translateX(calc(var(--m,0)*100%));transition:transform .4s var(--spring);box-shadow:0 6px 16px -6px rgba(36,201,167,.5)}
+.rkper button{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:1px;border:0!important;background:none!important;color:var(--muted);padding:8px 6px;border-radius:12px;transform:none!important;transition:color .3s}
+.rkper button b{font-size:14px;font-weight:800}.rkper button small{font-size:11px;font-weight:600;opacity:.8}
+.rkper button[aria-pressed="true"]{color:#06110e}
+.rkcual{text-align:center;color:var(--muted);font-size:12.5px;margin:6px 0 0;animation:drIn .4s var(--spring) both}
+.minirk{display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 7px 6px;cursor:default}
+.minirk:active{transform:none}
+.mrktabs{position:relative;display:flex;gap:0;padding:2px;border-radius:99px;background:var(--sunk);border:1px solid var(--line)}
+.mrktabs::before{content:'';position:absolute;top:2px;bottom:2px;left:2px;width:calc(50% - 2px);border-radius:99px;background:var(--grad);transition:transform .35s var(--spring)}
+.minirk.anio .mrktabs::before{transform:translateX(100%)}
+.mrktabs button{position:relative;z-index:1;border:0;background:none;font:inherit;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;color:var(--muted);cursor:pointer;transition:color .3s}
+.mrktabs button[aria-pressed="true"]{color:#06110e}
+.mrkflip{position:relative;display:grid;border:0;background:none;padding:0;color:inherit;font:inherit;cursor:pointer;perspective:500px;transition:transform .2s var(--spring)}
+.mrkflip:active{transform:scale(.93)}
+.mrkf{grid-area:1/1;display:flex;flex-direction:column;align-items:center;gap:3px;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .6s cubic-bezier(.3,1.3,.5,1),opacity .35s}
+.mrkf.f-anio{transform:rotateY(180deg);opacity:0}
+.minirk.anio .mrkf.f-mes{transform:rotateY(-180deg);opacity:0}.minirk.anio .mrkf.f-anio{transform:none;opacity:1}
+.mrkt{display:none}
+.mrkpod.mcarg i{width:22px;border-radius:5px;background:var(--sunk);animation:rkDot 1s ease-in-out infinite}.mrkpod.mcarg i:nth-child(1){height:24px}.mrkpod.mcarg i:nth-child(2){height:34px;animation-delay:.15s}.mrkpod.mcarg i:nth-child(3){height:18px;animation-delay:.3s}
+@media (prefers-reduced-motion:reduce){.mrkf{transition:opacity .2s}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -1916,18 +1938,29 @@ async function rkCargar(p){ if(S.rkBusy===p) return; S.rkBusy=p; const [a,b]=rkR
       if((S.tab==='asist'&&S.asView==='rank')||S.tab==='inicio'){ const a=document.activeElement; if(!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))) render(true) } } }catch(e){} finally{ S.rkBusy=null } }
 function rkLista(p){ if(!CLOUD) return rkLocal(p); const c=(S.rkC||{})[p]; if(!c||Date.now()-c.t>60000) rkCargar(p); return c?c.list:null }
 /* ranking chiquito en Inicio, debajo del redondel del perfil */
-function miniRank(){ const L=rkLista('mes');
-  if(!L) return '<button class="minirk cargando" data-mrk aria-label="Ver ranking"><span class="mrkpod"><i></i><i></i><i></i></span><small>Ranking</small></button>';
-  if(!L.length) return '<button class="minirk vacio" data-mrk aria-label="Ver ranking"><span class="mrkcopa" aria-hidden="true">🏆</span><small>¡Sé el primero!</small></button>';
-  const sig=JSON.stringify(L.slice(0,3).map(x=>[x.nombre,x.visitas])), anim=S.mrkSig!==sig; S.mrkSig=sig;
+function mrkCara(p){ const L=rkLista(p), et=p==='mes'?'Mes':'Año';
+  if(!L) return `<span class="mrkf f-${p}"><em class="mrkt">${et}</em><span class="mrkpod mcarg"><i></i><i></i><i></i></span><small>Cargando…</small></span>`;
+  if(!L.length) return `<span class="mrkf f-${p}"><em class="mrkt">${et}</em><span class="mrkcopa" aria-hidden="true">🏆</span><small>¡Sé el primero!</small></span>`;
   const top=L.slice(0,3), yo=L.find(x=>x.yo), orden=[1,0,2].filter(i=>top[i]);
-  return `<button class="minirk ${anim?'mrkanim':''}" data-mrk aria-label="Ranking del mes: ${top.map((x,i)=>(i+1)+' '+esc(x.nombre)).join(', ')}. Tocá para ver el top 10">
-    <span class="mrkpod">${orden.map(i=>`<span class="mrp m${i+1} ${top[i].yo?'yo':''}" style="--k:${i}">${i===0?'<em class="mcor" aria-hidden="true">👑</em>':''}${avatar('xs',top[i].foto,top[i].nombre)}<b><span>${i+1}</span></b></span>`).join('')}</span>
-    <small>${yo?(yo.pos<=3?'¡Estás en el podio!':'Vas <b class="num">#'+yo.pos+'</b>'):'Top del mes'} <span aria-hidden="true">›</span></small></button>`}
+  return `<span class="mrkf f-${p}"><em class="mrkt">${et}</em><span class="mrkpod">${orden.map(i=>`<span class="mrp m${i+1} ${top[i].yo?'yo':''}" style="--k:${i}">${i===0?'<em class="mcor" aria-hidden="true">👑</em>':''}${avatar('xs',top[i].foto,top[i].nombre)}<b><span>${i+1}</span></b></span>`).join('')}</span>
+    <small>${yo?(yo.pos<=3?'¡En el podio!':'Vas <b class="num">#'+yo.pos+'</b>'):p==='mes'?'Top del mes':'Top del año'} <span aria-hidden="true">›</span></small></span>`}
+/* ranking chiquito en Inicio: alterna solo entre el del mes y el del año (y se puede tocar el Mes/Año) */
+function miniRank(){ const Lm=rkLista('mes'), La=rkLista('anio'), cara=S.mrkCara||'mes';
+  const sig=JSON.stringify([Lm&&Lm.slice(0,3).map(x=>[x.nombre,x.visitas]),La&&La.slice(0,3).map(x=>[x.nombre,x.visitas])]), anim=S.mrkSig!==sig; S.mrkSig=sig;
+  mrkRotar();
+  return `<div class="minirk ${anim?'mrkanim':''} ${cara==='anio'?'anio':''}" id="minirk">
+    <div class="mrktabs" role="group" aria-label="Ranking"><button type="button" data-mrkc="mes" aria-pressed="${cara==='mes'}">Mes</button><button type="button" data-mrkc="anio" aria-pressed="${cara==='anio'}">Año</button></div>
+    <button class="mrkflip" data-mrk aria-label="Ver el ranking ${cara==='mes'?'del mes':'del año'}">${mrkCara('mes')}${mrkCara('anio')}</button></div>`}
+function mrkPoner(c){ S.mrkCara=c; const w=document.getElementById('minirk'); if(!w) return; w.classList.toggle('anio',c==='anio');
+  w.querySelectorAll('[data-mrkc]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mrkc===c));
+  const f=w.querySelector('.mrkflip'); if(f) f.setAttribute('aria-label','Ver el ranking '+(c==='mes'?'del mes':'del año')) }
+function mrkRotar(){ if(S.mrkT) return; S.mrkT=setInterval(()=>{ if(S.view!=='socio'||S.tab!=='inicio'||document.hidden||S.mrkPausa>Date.now()) return; mrkPoner((S.mrkCara||'mes')==='mes'?'anio':'mes') },5000) }
+document.addEventListener('click',e=>{ const t=e.target.closest('[data-mrkc]'); if(!t) return; e.stopPropagation(); S.mrkPausa=Date.now()+15000; mrkPoner(t.dataset.mrkc) },true);
 const MEDAL=['🥇','🥈','🥉'];
 function rankHtml(){ const p=S.rkP||'mes'; let L=null;
   L=rkLista(p);
-  const per=`<div class="rkper" role="group" aria-label="Período">${[['mes',MES[M]],['anio','Año '+Y]].map(([k,l])=>`<button data-rkp="${k}" aria-pressed="${p===k}">${l}</button>`).join('')}</div>`;
+  const per=`<div class="rkper" role="group" aria-label="Período" style="--m:${p==='anio'?1:0}">${[['mes','Mensual',MES[M]],['anio','Anual',String(Y)]].map(([k,l,sub])=>`<button data-rkp="${k}" aria-pressed="${p===k}"><b>${l}</b><small>${sub}</small></button>`).join('')}</div>
+    <p class="rkcual">${p==='mes'?'🗓️ Los que más vinieron en '+MES[M].toLowerCase():'📅 Los que más vinieron en todo '+Y}</p>`;
   if(!L) return per+'<div class="rkload" aria-label="Cargando"><i></i><i></i><i></i></div>';
   if(!L.length) return per+empty(ICONS.asist,'Nadie vino todavía '+(p==='mes'?'este mes':'este año'),'Marcá «Vine hoy al gym» en Inicio y arrancá primero en el ranking.');
   const sig=p+JSON.stringify(L.map(x=>[x.nombre,x.visitas])), anim=S.rkSig!==sig; S.rkSig=sig;
@@ -2892,6 +2925,8 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.22',t:'Ranking mensual y anual',items:[
+    ['🏆','Los socios ven el ranking <b>del mes y del año</b>: en Inicio va cambiando solo entre Mes y Año, y en Asistencia eligen Mensual o Anual.']]},
   {v:'1.1.21',t:'Chat más cómodo',items:[
     ['✏️','Ahora podés <b>editar tus mensajes</b> como en WhatsApp: tocá el mensaje → Editar (hasta 15 minutos después de mandarlo). Al socio le aparece “editado”.'],
     ['📋','Tocando cualquier mensaje lo podés <b>copiar</b>.'],
@@ -3266,7 +3301,7 @@ document.addEventListener('click',e=>{
     S.forceTop=true;toast('Descanso de '+fmtR(ms)+' en marcha');return render()}
   if(b.id==='fin'){toast('Entrenamiento guardado. ¡Bien ahí!');[...S.done].filter(k=>k.startsWith(S.day+'-')).forEach(k=>S.done.delete(k));return render()}
   if(b.dataset.m){S.selMonth=+b.dataset.m;return render()}
-  if(b.dataset.mrk!=null){ S.asView='rank'; S.rkP='mes'; S.rkSig=null; S.tab='asist'; S.forceTop=true; return render() }
+  if(b.dataset.mrk!=null){ S.asView='rank'; S.rkP=S.mrkCara||'mes'; S.rkSig=null; S.tab='asist'; S.forceTop=true; return render() }
   if(b.dataset.asv){ if((S.asView==='rank')!==(b.dataset.asv==='rank')){ S.asView=b.dataset.asv==='rank'?'rank':'mia'; S.rkSig=null } return render(true) }
   if(b.dataset.rkp){ if(S.rkP!==b.dataset.rkp){ S.rkP=b.dataset.rkp; S.rkSig=null } return render(true) }
   if(b.id==='prevM'){S.calM--;if(S.calM<0){S.calM=11;S.calY--} S.calDir='prev'; return render()}
