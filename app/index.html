@@ -442,13 +442,20 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradi
 .profc .pn strong{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .profc .pn small{color:var(--muted);font-size:12px}
 .profc.pend{border-style:dashed;border-color:var(--warn)}
-.profc.pend{flex-wrap:wrap}.profc.pend .pn{flex:1 1 140px}.profc.pend .acts{width:100%;justify-content:flex-end}
+.profc.pend,.profc:has(.mini){flex-wrap:wrap}.profc.pend .pn,.profc:has(.mini) .pn{flex:1 1 140px}.profc.pend .acts,.profc:has(.mini) .acts{width:100%;justify-content:flex-end}
 .profc .acts{display:flex;gap:6px;flex-shrink:0}
 .lstep{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;animation:lstepIn .45s var(--spring) both}
 @keyframes lstepIn{from{opacity:0;transform:translateY(12px) scale(.98)}}
 .ldni{width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);font-size:13px;color:var(--muted);text-align:left}
 .ldni b{color:var(--ink)}
 .ldni.info{border-color:var(--warn);color:var(--ink);line-height:1.4}
+.pwbox{position:relative}.pwbox .inp{padding-right:48px}
+.pweye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:10px;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:color .2s,background .2s}
+.pweye:hover{color:var(--ink);background:rgba(255,255,255,.06)}.pweye:active svg{transform:scale(.85)}
+.pweye svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;transition:transform .2s var(--ease)}
+.pweye .e3{stroke-dasharray:23;stroke-dashoffset:0;transition:stroke-dashoffset .3s var(--ease)}
+.pweye .e2{transform-origin:12px 12px;transition:transform .3s var(--ease)}
+.pweye.on{color:#24C9A7}.pweye.on .e3{stroke-dashoffset:23}.pweye.on .e2{transform:scale(1.15)}
 .linkb{border:0;background:none;color:#24C9A7;font-weight:700;font-size:13px;cursor:pointer;padding:4px;font-family:inherit}
 .linkb:hover{text-decoration:underline}
 .col{display:flex;flex-direction:column;gap:16px;min-width:0}
@@ -592,6 +599,7 @@ S.fc={y:Y,m:M};
 try{const p=JSON.parse(localStorage.getItem('tc-perfil')||'null'); if(p){if(p.name)S.name=p.name; if(p.photo)S.photo=p.photo}}catch(e){}
 S.user=null;
 try{const u=JSON.parse(localStorage.getItem('tc-sesion')||'null'); if(u&&u.dni){S.user=u; S.name=u.name||S.name; if(!ENNUBE) ensureSocio(u.dni,null)}}catch(e){}
+const pwIn=(id,ac)=>`<div class="pwbox"><input class="inp" id="${id}" type="password" autocomplete="${ac}"><button type="button" class="pweye" data-eye="${id}" aria-label="Mostrar contraseña" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="e1" d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle class="e2" cx="12" cy="12" r="3"/><path class="e3" d="M4 4l16 16"/></svg></button></div>`;
 const fmtDNI=d=>String(d).replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 const me=()=>S.user?DB.socios[S.user.dni]:null;
 
@@ -961,7 +969,7 @@ function screenLogin(logo){
     crear:['Creá tu cuenta','Lo hacés una sola vez. Si cambiás de celular o reinstalás la app, entrás con tu DNI y esta contraseña.'],
     clave:['Creá tu contraseña',P+' ya te anotó en el gimnasio. Elegí una contraseña para tu cuenta.'],
     login:['Iniciá sesión','Ya tenés cuenta. Entrá con tu contraseña.']}[m];
-  const pw=(id,lab,ac)=>`<div class="field"><label for="${id}">${lab}</label><input class="inp" id="${id}" type="password" autocomplete="${ac}"></div>`;
+  const pw=(id,lab,ac)=>`<div class="field"><label for="${id}">${lab}</label>${pwIn(id,ac)}</div>`;
   const dniBox=m==='dni'?'':`<input type="text" autocomplete="username" value="${d}" hidden><div class="ldni"><span>DNI <b class="num">${fmtDNI(d)}</b></span><button type="button" class="linkb" id="lcambiar">Cambiar</button></div>`;
   const body=m==='dni'?`<div class="field"><label for="dni">DNI</label><input class="inp num" id="dni" inputmode="numeric" autocomplete="username" placeholder="Ej: 38.456.789" maxlength="10" value="${d?fmtDNI(d):''}"></div>`
     :m==='crear'?`${dniBox}<div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" placeholder="Como figura en el gimnasio"></div>${pw('lpw','Contraseña (mínimo 6)','new-password')}${pw('lpw2','Repetí la contraseña','new-password')}`
@@ -1170,9 +1178,9 @@ async function cargarProfes(){
 }
 async function profeAccion(acc,dni){
   try{
-    if(CLOUD) await q(sb.rpc(acc==='aprobar'?'profe_aprobar':'profe_quitar',{p_dni:dni}));
-    else{ let L=profesLS(); if(acc==='aprobar') L.forEach(p=>{if(p.dni===dni)p.aprobado=true}); else L=L.filter(p=>p.dni!==dni); saveProfesLS(L) }
-    await cargarProfes(); toast(acc==='aprobar'?'Profe aprobado: ya puede entrar al panel':'Listo, se quitó del equipo'); render();
+    if(CLOUD) await q(sb.rpc({aprobar:'profe_aprobar',quitar:'profe_quitar',reset:'profe_reiniciar_clave'}[acc],{p_dni:dni}));
+    else{ let L=profesLS(); if(acc==='aprobar') L.forEach(p=>{if(p.dni===dni)p.aprobado=true}); else if(acc==='reset') L.forEach(p=>{if(p.dni===dni)p.hash=''}); else L=L.filter(p=>p.dni!==dni); saveProfesLS(L) }
+    await cargarProfes(); toast({aprobar:'Profe aprobado: ya puede entrar al panel',quitar:'Listo, se quitó del equipo',reset:'Contraseña reiniciada: que toque «Registrate» y elija una nueva con su DNI'}[acc]); render();
   }catch(e){ toast(errTxt(e)) }
 }
 function renderProfes(){
@@ -1181,7 +1189,7 @@ function renderProfes(){
   const card=(p,i)=>{const nom=p.nombre+' '+p.apellido;
     return `<div class="profc ${p.aprobado?'':'pend'}" style="animation-delay:${i*50}ms">${avatar('md',null,nom)}
     <div class="pn"><strong>${esc(nom)}</strong><small>${p.aprobado?'Profe desde el '+fd(p.creado):'Pidió entrar el '+fd(p.creado)}</small></div>
-    <div class="acts">${p.aprobado?(p.yo?'<span class="pill ok">Vos</span>':`<button class="mini danger" data-pquitar="${esc(p.dni)}" data-pn="${esc(nom)}">Quitar</button>`)
+    <div class="acts">${p.aprobado?(p.yo?'<span class="pill ok">Vos</span>':`<button class="mini" data-preclave="${esc(p.dni)}" data-pn="${esc(nom)}">Reiniciar contraseña</button><button class="mini danger" data-pquitar="${esc(p.dni)}" data-pn="${esc(nom)}">Quitar</button>`)
       :`<button class="mini pay" data-paprob="${esc(p.dni)}">Aprobar</button><button class="mini danger" data-pquitar="${esc(p.dni)}" data-pn="${esc(nom)}">Rechazar</button>`}</div></div>`};
   $('#app').innerHTML=`<div class="owner enter">${proBar()}
   ${pend.length?`<section class="panel pendp"><h2>Esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Se registraron desde el panel. Aprobalos solo si son profes del gimnasio: van a poder ver y editar a todos los socios.</p><div class="profgrid">${pend.map(card).join('')}</div></section>`:''}
@@ -1202,8 +1210,8 @@ function renderProAuth(){
       ${reg?`<div class="lrow2"><div class="field"><label for="pnom">Nombre</label><input class="inp" id="pnom" autocomplete="given-name"></div>
       <div class="field"><label for="pape">Apellido</label><input class="inp" id="pape" autocomplete="family-name"></div></div>`:''}
       <div class="field"><label for="pdni">DNI</label><input class="inp num" id="pdni" inputmode="numeric" maxlength="10" autocomplete="username"></div>
-      <div class="field"><label for="ppw">Contraseña</label><input class="inp" id="ppw" type="password" autocomplete="${reg?'new-password':'current-password'}"></div>
-      ${reg?'<div class="field"><label for="ppw2">Repetí la contraseña</label><input class="inp" id="ppw2" type="password" autocomplete="new-password"></div>':''}
+      <div class="field"><label for="ppw">Contraseña</label>${pwIn('ppw',reg?'new-password':'current-password')}</div>
+      ${reg?`<div class="field"><label for="ppw2">Repetí la contraseña</label>${pwIn('ppw2','new-password')}</div>`:''}
       <p class="lerr" id="perr" role="alert" hidden></p>
       <button class="btn" type="submit">${reg?(hay?'Pedir acceso':'Crear cuenta y entrar'):'Entrar'}</button>
     </form>
@@ -1511,6 +1519,9 @@ document.addEventListener('click',e=>{
     S.ptabP=b.dataset.pnav; S.sel=null; S.edit=null; S.dirty=false;
     if(S.ptabP==='profes') cargarProfes().then(()=>{ if(S.ptabP==='profes') render() });
     return render() }
+  if(b.dataset.eye){const i=document.getElementById(b.dataset.eye); if(!i)return; const ver=i.type==='password'; i.type=ver?'text':'password'; b.classList.toggle('on',ver);
+    b.setAttribute('aria-pressed',ver); b.setAttribute('aria-label',ver?'Ocultar contraseña':'Mostrar contraseña'); const n=i.value.length; i.focus(); try{i.setSelectionRange(n,n)}catch(x){} return}
+  if(b.dataset.preclave){if(!confirm('¿Reiniciar la contraseña de '+b.dataset.pn+'? Va a tener que volver a registrarse con su mismo DNI para elegir una nueva.'))return; profeAccion('reset',b.dataset.preclave);return}
   if(b.dataset.paprob){profeAccion('aprobar',b.dataset.paprob);return}
   if(b.dataset.pquitar){const n=b.dataset.pn||'este profe'; if(!confirm('¿Quitar a '+n+' de los profes? No va a poder entrar más al panel.'))return; profeAccion('quitar',b.dataset.pquitar);return}
   if(b.id==='prtoggle'){const hay=CLOUD?S.hayProfe:profesLS().some(p=>p.aprobado); const reg=S.preg!=null?S.preg:!hay; S.preg=!reg; S.pmsg=null; return render()}
@@ -1535,7 +1546,9 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('input',e=>{
   const t=e.target;
-  if(t.id==='dni'||t.id==='ndni'){const v=fmtDNI(t.value.slice(0,10)); if(v!==t.value) t.value=v}
+  if(t.id==='dni'||t.id==='ndni'||t.id==='pdni'||t.id==='fdni'){const c=t.selectionStart==null?t.value.length:t.selectionStart, nd=t.value.slice(0,c).replace(/\D/g,'').length;
+    const dg=t.value.replace(/\D/g,'').slice(0,8), v=fmtDNI(dg);
+    if(v!==t.value){t.value=v; let p=0,k=0; while(p<v.length&&k<Math.min(nd,8)){if(/\d/.test(v[p]))k++;p++} try{t.setSelectionRange(p,p)}catch(x){}}}
   if(S.edit&&(t.dataset.rc||t.dataset.rf)){const d=S.edit.days[S.eday]; if(t.dataset.rf) d[t.dataset.rf]=t.value; else d.ex[+t.dataset.ri][+t.dataset.rc]=t.value;
     S.dirty=true; const dt=$('#dirty'); if(dt) dt.hidden=false;
     if(t.dataset.rf==='d'){const c=document.querySelector(`[data-eday="${S.eday}"]`); if(c) c.textContent=t.value||'Día'}}
@@ -1596,19 +1609,23 @@ document.addEventListener('submit',e=>{
     if(CLOUD){ sb.rpc('profe_registrar',{p_dni:dni,p_nombre:nom,p_apellido:ape,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
         if(error) return bad(errTxt(error)); if(data&&data.pendiente) return pend();
         PRO=data; S.pro=true; S.hayProfe=true; S.preg=null; S.pmsg=null; await loadAll(); toast('¡Bienvenido, '+nom+'!'); render() }); return }
-    const L=profesLS(); if(L.some(p=>p.dni===dni)){bt.disabled=false;return bad('Ya hay un profe con ese DNI. Iniciá sesión.')}
+    const L=profesLS(), V=L.find(p=>p.dni===dni);
+    if(V&&V.hash){bt.disabled=false;return bad('Ya hay un profe con ese DNI. Iniciá sesión.')}
+    if(V){ hashPw(dni,pw).then(hh=>{ V.hash=hh; saveProfesLS(L); bt.disabled=false; if(!V.aprobado) return pend();
+      PRO=V; try{sessionStorage.setItem('tc-pro','1');sessionStorage.setItem('tc-pro-dni',dni)}catch(x){} S.pro=true; S.preg=null; S.pmsg=null; toast('Contraseña nueva guardada. ¡Hola, '+V.nombre+'!'); render()}); return }
     hashPw(dni,pw).then(hh=>{const primero=!L.some(p=>p.aprobado); const P={nombre:nom,apellido:ape,dni,hash:hh,aprobado:primero,creado:new Date().toISOString()}; L.push(P); saveProfesLS(L);
       if(!primero) return pend();
       PRO=P; try{sessionStorage.setItem('tc-pro','1');sessionStorage.setItem('tc-pro-dni',dni)}catch(x){} S.pro=true; S.preg=null; S.pmsg=null; toast('¡Bienvenido, '+nom+'!'); render()}); return}
   if(f.id==='prologin'){const dni=$('#pdni').value.replace(/\D/g,''),pw=$('#ppw').value,err=$('#perr');
     const mal=()=>{err.textContent='DNI o contraseña incorrectos.';err.hidden=false;$('#ppw').value='';$('#ppw').focus()};
     const espera=()=>{err.textContent='Tu cuenta todavía no fue aprobada. Pedile a un profe del gimnasio que te apruebe en la sección Profes.';err.hidden=false};
+    const sinclave=()=>{err.textContent='Tu contraseña fue reiniciada. Tocá «Registrate» y completá tus datos con tu mismo DNI para elegir una nueva.';err.hidden=false};
     const bt=f.querySelector('button[type=submit]'); bt.disabled=true;
     if(CLOUD){ sb.rpc('profe_login',{p_dni:dni,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
-        if(error){err.textContent=errTxt(error);err.hidden=false;return} if(!data) return mal(); if(data.pendiente) return espera();
+        if(error){err.textContent=errTxt(error);err.hidden=false;return} if(!data) return mal(); if(data.sinclave) return sinclave(); if(data.pendiente) return espera();
         PRO=data; S.pro=true; S.pmsg=null; await loadAll(); toast('Hola, '+PRO.nombre); render() }); return }
     const P=profesLS().find(p=>p.dni===dni);
-    hashPw(dni,pw).then(hh=>{ bt.disabled=false; if(!P||hh!==P.hash) return mal(); if(!P.aprobado) return espera();
+    hashPw(dni,pw).then(hh=>{ bt.disabled=false; if(P&&!P.hash) return sinclave(); if(!P||hh!==P.hash) return mal(); if(!P.aprobado) return espera();
       PRO=P; try{sessionStorage.setItem('tc-pro','1');sessionStorage.setItem('tc-pro-dni',dni)}catch(x){} S.pro=true; S.pmsg=null; toast('Hola, '+PRO.nombre); render()}); return}
   if(f.id==='datosf'){const s=DB.socios[S.sel]; const name=$('#fname').value.trim().replace(/\s+/g,' '), dni=$('#fdni').value.replace(/\D/g,''), alta=$('#falta').value||s.alta;
     if(name.length<3) return toast('Escribí el nombre del socio');
