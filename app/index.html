@@ -640,24 +640,24 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .minirk:active{transform:scale(.94)}.minirk:hover{border-color:rgba(36,201,167,.5)}
 .minirk small{font-size:10.5px;font-weight:700;color:var(--muted);white-space:nowrap}.minirk small b{color:var(--accent)}
 .mrkpod{display:flex;align-items:flex-end;gap:3px;height:46px}
-.mp{position:relative;display:flex;flex-direction:column;align-items:center;width:26px}
-.mp .avatar{width:22px;height:22px;font-size:8.5px;font-weight:800;box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px var(--c1);z-index:1}
-.mp b{width:100%;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,var(--c2),var(--c1));margin-top:2px;display:flex;justify-content:center;font-size:9px;font-weight:900;color:rgba(0,0,0,.55);transform-origin:bottom}
-.mp.m1{--c1:#F4C430;--c2:#FCE024}.mp.m2{--c1:#C0C7CF;--c2:#E3E8EC}.mp.m3{--c1:#CD7F32;--c2:#E3A35F}
-.mp.m1 b{height:18px}.mp.m2 b{height:12px}.mp.m3 b{height:8px;font-size:0}
-.mp.m1 .avatar{width:25px;height:25px}
-.mp.yo .avatar{box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px var(--accent)}
+.mrp{position:relative;display:flex;flex-direction:column;align-items:center;width:26px}
+.mrp .avatar{width:22px;height:22px;font-size:8.5px;font-weight:800;box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px var(--c1);z-index:1}
+.mrp b{width:100%;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,var(--c2),var(--c1));margin-top:2px;display:flex;justify-content:center;font-size:9px;font-weight:900;color:rgba(0,0,0,.55);transform-origin:bottom}
+.mrp.m1{--c1:#F4C430;--c2:#FCE024}.mrp.m2{--c1:#C0C7CF;--c2:#E3E8EC}.mrp.m3{--c1:#CD7F32;--c2:#E3A35F}
+.mrp.m1 b{height:18px}.mrp.m2 b{height:12px}.mrp.m3 b{height:8px;font-size:0}
+.mrp.m1 .avatar{width:25px;height:25px}
+.mrp.yo .avatar{box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px var(--accent)}
 .mcor{position:absolute;top:-11px;font-size:11px;font-style:normal;z-index:2;animation:mcor 2.4s ease-in-out infinite}
 @keyframes mcor{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg) translateY(-1px)}}
 .minirk.cargando .mrkpod i{width:22px;border-radius:5px;background:var(--sunk);animation:rkDot 1s ease-in-out infinite}.minirk.cargando .mrkpod i:nth-child(1){height:24px}.minirk.cargando .mrkpod i:nth-child(2){height:34px;animation-delay:.15s}.minirk.cargando .mrkpod i:nth-child(3){height:18px;animation-delay:.3s}
 .mrkcopa{font-size:28px;line-height:46px;animation:famBob 2.4s ease-in-out infinite}
 .screen.enter .minirk,.minirk.mrkanim{animation:mrkIn .55s var(--spring) both .15s}
 @keyframes mrkIn{from{opacity:0;transform:translateY(-8px) scale(.85)}}
-.screen.enter .mp b,.minirk.mrkanim .mp b{animation:pGrow .6s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc((2 - var(--k))*110ms + 300ms)}
-.screen.enter .mp .avatar,.minirk.mrkanim .mp .avatar{animation:pDrop .5s var(--spring) both;animation-delay:calc((2 - var(--k))*110ms + 520ms)}
-.minirk .mp.m1 .avatar{animation:mGlow 2.4s ease-in-out infinite 1.4s}
+.screen.enter .mrp b,.minirk.mrkanim .mrp b{animation:pGrow .6s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc((2 - var(--k))*110ms + 300ms)}
+.screen.enter .mrp .avatar,.minirk.mrkanim .mrp .avatar{animation:pDrop .5s var(--spring) both;animation-delay:calc((2 - var(--k))*110ms + 520ms)}
+.minirk .mrp.m1 .avatar{animation:mGlow 2.4s ease-in-out infinite 1.4s}
 @keyframes mGlow{50%{box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px #F4C430,0 0 12px 3px rgba(244,196,48,.55)}}
-@media (max-width:360px){.minirk{padding:6px 6px 5px}.mp{width:23px}}
+@media (max-width:360px){.minirk{padding:6px 6px 5px}.mrp{width:23px}}
 /* ---- burbuja flotante del chat ---- */
 .chfab{position:absolute;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;width:58px;height:58px;border-radius:50%;border:0;background:var(--grad);color:#06110e;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px -6px rgba(36,201,167,.6),0 2px 6px rgba(0,0,0,.35);transition:transform .3s var(--spring);animation:fabIn .6s var(--spring) both .35s}
 .chfab svg{width:27px;height:27px}
@@ -734,7 +734,7 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .chsend:disabled{opacity:.4;filter:grayscale(1);transform:scale(.86);cursor:default}
 .chsend:not(:disabled){animation:sendOn .35s var(--spring)}
 @keyframes sendOn{from{transform:scale(.8) rotate(-20deg)}}
-@media (prefers-reduced-motion:reduce){.chfab,.chfab::before,.chtip,.chsheet,.chback,.minirk,.mp *,.chchips button,.bub,.chon::after,.chola{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.chfab,.chfab::before,.chtip,.chsheet,.chback,.minirk,.mrp *,.chchips button,.bub,.chon::after,.chola{animation:none!important}}
 /* sugerencias */
 .sugc .anon{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:99px;background:var(--sunk);border:1px solid var(--line)}
 .sugp{margin:4px 0 10px;color:var(--muted);font-size:13px}
@@ -1860,7 +1860,7 @@ function miniRank(){ const L=rkLista('mes');
   const sig=JSON.stringify(L.slice(0,3).map(x=>[x.nombre,x.visitas])), anim=S.mrkSig!==sig; S.mrkSig=sig;
   const top=L.slice(0,3), yo=L.find(x=>x.yo), orden=[1,0,2].filter(i=>top[i]);
   return `<button class="minirk ${anim?'mrkanim':''}" data-mrk aria-label="Ranking del mes: ${top.map((x,i)=>(i+1)+' '+esc(x.nombre)).join(', ')}. Tocá para ver el top 10">
-    <span class="mrkpod">${orden.map(i=>`<span class="mp m${i+1} ${top[i].yo?'yo':''}" style="--k:${i}">${i===0?'<em class="mcor" aria-hidden="true">👑</em>':''}${avatar('xs',top[i].foto,top[i].nombre)}<b><span>${i+1}</span></b></span>`).join('')}</span>
+    <span class="mrkpod">${orden.map(i=>`<span class="mrp m${i+1} ${top[i].yo?'yo':''}" style="--k:${i}">${i===0?'<em class="mcor" aria-hidden="true">👑</em>':''}${avatar('xs',top[i].foto,top[i].nombre)}<b><span>${i+1}</span></b></span>`).join('')}</span>
     <small>${yo?(yo.pos<=3?'¡Estás en el podio!':'Vas <b class="num">#'+yo.pos+'</b>'):'Top del mes'} <span aria-hidden="true">›</span></small></button>`}
 const MEDAL=['🥇','🥈','🥉'];
 function rankHtml(){ const p=S.rkP||'mes'; let L=null;
