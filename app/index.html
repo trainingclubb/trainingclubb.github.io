@@ -608,6 +608,23 @@ function aviso(s){
   return A[D]?Object.assign({k:mk(Y,M)+'-'+D},A[D]):null;
 }
 const notifOK=()=>typeof Notification!=='undefined';
+/* Notificaciones con la app cerrada: el celular se suscribe y la base le manda los avisos */
+const pushOK=()=>CLOUD&&notifOK()&&'serviceWorker' in navigator&&'PushManager' in window&&location.protocol.startsWith('http');
+const b64key=k=>Uint8Array.from(atob(k.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((k.length+3)%4)),c=>c.charCodeAt(0));
+async function activarPush(){
+  try{
+    if(!pushOK()||!sb||!S.user||S.pendiente||Notification.permission!=='granted') return false;
+    const reg=await navigator.serviceWorker.ready;
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub){const k=await q(sb.rpc('vapid_publica')); if(!k) return false; sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64key(k)})}
+    const j=sub.toJSON(); await q(sb.rpc('guardar_push',{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth}));
+    return true;
+  }catch(e){ return false }
+}
+async function desactivarPush(){
+  try{ if(!pushOK()) return; const reg=await navigator.serviceWorker.ready; const sub=await reg.pushManager.getSubscription(); if(!sub) return;
+    if(sb) await sb.rpc('borrar_push',{p_endpoint:sub.endpoint}); await sub.unsubscribe() }catch(e){}
+}
 function lanzarAviso(){
   const s=me(); const a=aviso(s); if(!a||!notifOK()||Notification.permission!=='granted') return;
   const key='tc-avn-'+a.k; try{if(localStorage.getItem(key))return;localStorage.setItem(key,'1')}catch(e){}
@@ -639,7 +656,7 @@ function screenInicio(){
   const s=me(); const e=estado(s); const att=attMonth(s,Y,M);
   const av=aviso(s); let avx=false; try{avx=av&&localStorage.getItem('tc-avx-'+av.k)}catch(x){}
   const avHtml=av&&!avx?`<section class="aviso ${D>=venceDia(s,Y,M)-1?'hot':''}" role="status"><span class="bell" aria-hidden="true">🔔</span><div><b>${esc(av.t)}</b><p>${esc(av.b)}</p></div><button class="x" id="avisox" aria-label="Cerrar aviso">×</button></section>`:'';
-  const pedir=s.plan&&notifOK()&&Notification.permission==='default'?`<button class="avon" id="avisos">🔔 Activá los avisos y te recordamos la cuota los días 1, 3, 6, 9 y 10</button>`:'';
+  const pedir=notifOK()&&Notification.permission==='default'?`<button class="avon" id="avisos">🔔 Activá las notificaciones: te avisamos la cuota, tu rutina nueva y tus pagos, aunque tengas la app cerrada</button>`:'';
   const lunes=new Date(TODAY); lunes.setDate(D-((TODAY.getDay()+6)%7));
   let semana=0;
   const wk=['L','M','M','J','V','S','D'].map((l,i)=>{const d=new Date(lunes);d.setDate(lunes.getDate()+i);
@@ -691,7 +708,7 @@ function screenPerfil(){
     <div><span>Socio desde</span><span class="num">${ddmm(s.alta)}/${s.alta.slice(0,4)}</span></div>
     <div><span>Profe</span><span>${PROFE}</span></div>
     <div><span>Cuota</span><span class="pill ${e.c}">${e.t}</span></div>
-    <div><span>Avisos de pago</span>${!notifOK()?'<span class="muted" style="font-size:13px;text-align:right">Instalá la app en tu inicio para recibirlos</span>':Notification.permission==='granted'?'<span class="pill ok">Activados</span>':Notification.permission==='denied'?'<span class="muted" style="font-size:13px">Bloqueados en el celu</span>':'<button class="mini pay" id="avisos">Activar</button>'}</div>
+    <div><span>Notificaciones</span>${!notifOK()?'<span class="muted" style="font-size:13px;text-align:right">Instalá la app en tu inicio para recibirlos</span>':Notification.permission==='granted'?'<span class="pill ok">Activados</span>':Notification.permission==='denied'?'<span class="muted" style="font-size:13px">Bloqueados en el celu</span>':'<button class="mini pay" id="avisos">Activar</button>'}</div>
   </div>
   <button class="btn ghost logout" id="logout">Cerrar sesión</button>`;
 }
@@ -1307,14 +1324,14 @@ async function bootCloud(){
     {const {data:{session:ss}}=await sb.auth.getSession(); if(ss) sb.realtime.setAuth(ss.access_token)}
     sb.auth.onAuthStateChange((_e,ss)=>{ if(ss) sb.realtime.setAuth(ss.access_token) });
     const onChange=async(pl)=>{
-      if(S.user&&S.pendiente){await checkDevice(); if(!S.pendiente){await loadAll(); toast('¡Ezequiel aprobó tu celular!')} return render()}
+      if(S.user&&S.pendiente){await checkDevice(); if(!S.pendiente){await loadAll(); toast('¡Ezequiel aprobó tu celular!'); activarPush()} return render()}
       if(S.user&&!S.pendiente||S.pro) reload();
     };
     sb.channel('tc').on('postgres_changes',{event:'*',schema:'public'},onChange).subscribe();
     /* respaldo: si el tiempo real se corta, igual se actualiza cada 30 s y al volver a la app */
     setInterval(()=>{ if(document.visibilityState==='visible') onChange({}) },30000);
     document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') onChange({}) });
-    S.ready=true; render(); lanzarAviso();
+    S.ready=true; render(); lanzarAviso(); activarPush();
   }catch(e){
     $('#app').innerHTML=`<div class="phone"><div class="screen"><div class="empty"><b>No se pudo conectar</b><p>${esc(errTxt(e))}</p><button class="btn" onclick="location.reload()">Reintentar</button></div></div></div>`;
   }
@@ -1345,7 +1362,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.tab){ if(S.tab===b.dataset.tab&&b.closest('.nav')){const sc=$('#app .screen');if(sc)sc.scrollTo({top:0,behavior:'smooth'});return} return goTab(b.dataset.tab)}
   if(b.id==='pay') return pagar(b.dataset.mes!=null?+b.dataset.mes:M);
   if(b.id==='quitar'){S.photo=null;savePerfil();toast('Foto quitada');return render()}
-  if(b.id==='logout'){try{localStorage.removeItem('tc-sesion')}catch(e){} S.pendiente=false; if(CLOUD) DB={socios:{}}; S.user=null;S.tab='inicio';S.lastTab=null;return render()}
+  if(b.id==='logout'){if(CLOUD) desactivarPush(); try{localStorage.removeItem('tc-sesion')}catch(e){} S.pendiente=false; if(CLOUD) DB={socios:{}}; S.user=null;S.tab='inicio';S.lastTab=null;return render()}
   if(b.id==='checkin'){const s=me();
     if(estado(s).c==='bad') return toast('Entrada bloqueada: la cuota está vencida');
     const a=s.att[mk(Y,M)]=s.att[mk(Y,M)]||[]; if(a.includes(D)) return toast('Ya registraste tu entrada de hoy');
@@ -1400,10 +1417,10 @@ document.addEventListener('click',e=>{
   if(b.id==='prologout'){try{sessionStorage.removeItem('tc-pro')}catch(x){} if(CLOUD){sb.rpc('profe_salir');PRO=null;DB={socios:{}}} S.pro=false;S.sel=null;return render()}
   if(b.id==='avisox'){const a=aviso(me()); try{localStorage.setItem('tc-avx-'+a.k,'1')}catch(x){} return render()}
   if(b.id==='avisos'){ if(!notifOK()) return toast('Instalá la app en tu pantalla de inicio para recibir avisos');
-    Notification.requestPermission().then(p=>{ if(p==='granted'){toast('Listo: te avisamos los días 1, 3, 6, 9 y 10');
+    Notification.requestPermission().then(p=>{ if(p==='granted'){toast(CLOUD?'Listo: te avisamos aunque tengas la app cerrada':'Listo: te avisamos los días 1, 3, 6, 9 y 10');
       const o={body:'Te vamos a recordar la cuota los días 1, 3, 6, 9 y 10 de cada mes.',icon:'icon-192.png',tag:'cuota-ok'};
       if(navigator.serviceWorker&&navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(r=>r.showNotification('Avisos activados',o)); else try{new Notification('Avisos activados',o)}catch(x){}
-      lanzarAviso() } else toast('Sin permiso no podemos avisarte'); render() }); return }
+      lanzarAviso(); activarPush() } else toast('Sin permiso no podemos avisarte'); render() }); return }
   if(b.dataset.att){const s=DB.socios[S.sel];const k=mk(S.fc.y,S.fc.m);const a=s.att[k]=s.att[k]||[];const d=+b.dataset.att;const ix=a.indexOf(d);
     if(ix>=0)a.splice(ix,1);else{a.push(d);a.sort((x,y)=>x-y)} saveDB();return render()}
   if(b.dataset.fcal){S.fc.m+=+b.dataset.fcal;if(S.fc.m<0){S.fc.m=11;S.fc.y--}if(S.fc.m>11){S.fc.m=0;S.fc.y++}return render()}
@@ -1430,7 +1447,7 @@ document.addEventListener('submit',e=>{
         if(error){bt.disabled=false;bt.textContent='Entrar';err.textContent=errTxt(error);err.hidden=false;return}
         S.user={dni,name}; S.name=name; S.tab='inicio'; S.lastTab=null; S.pendiente=data==='pendiente';
         try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){}
-        if(!S.pendiente){await loadAll(); toast('¡Listo, '+S.name.split(' ')[0]+'! Ya estás adentro'); lanzarAviso()}
+        if(!S.pendiente){await loadAll(); toast('¡Listo, '+S.name.split(' ')[0]+'! Ya estás adentro'); lanzarAviso(); activarPush()}
         render(); }); return; }
     const ex=DB.socios[dni]; const s=ensureSocio(dni,ex?null:name);
     S.user={dni,name:s.name}; S.name=s.name; S.photo=s.photo||S.photo; S.tab='inicio'; S.lastTab=null;
