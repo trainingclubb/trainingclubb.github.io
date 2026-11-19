@@ -110,6 +110,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .anim .floor{stroke:var(--line);stroke-width:1.5}
 .anim .gear{stroke:var(--teal);stroke-linecap:round;fill:none}
 .anim .gearf{fill:var(--teal)}
+.anim .gear.dim{opacity:.4}
 .anim .gear-s{stroke:#3a403b;stroke-linecap:round;fill:none}
 .anim .plate{fill:none;stroke:var(--yellow);stroke-width:2.6}
 .anim .cable{stroke:var(--muted);stroke-width:1;stroke-dasharray:2 2}
@@ -1082,7 +1083,18 @@ function screenRutina(){
   ${n&&d===n?'<button class="btn" id="fin">Terminar entrenamiento</button>':''}`;
 }
 /* nombres parecidos usan la misma animación (ej. "press de banca" → Press banca) */
-function animKey(n){const k=Object.keys(ANIM);const low=String(n).toLowerCase();
+const sinTilde=t=>String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
+const ALIAS=[[/apertura|pec ?deck|peck|mariposa/,'Apertura en máquina'],[/press (plano|banca) (con )?manc|plano (con )?manc|press (con )?manc/,'Press con mancuernas'],
+  [/inclinad/,'Press inclinado'],[/frances|rompecraneos|skull/,'Press francés'],[/tras ?nuca|copa|sobre la cabeza|overhead/,'Tríceps tras nuca'],
+  [/tricep|extension.*polea|push ?down/,'Tríceps en polea'],[/vuelo|elevacion(es)? lateral|laterales/,'Vuelos laterales'],[/posterior|face ?pull|pajaro/,'Posteriores en polea'],
+  [/dominada.*asist/,'Dominadas asistidas'],[/dominada|pull ?up|chin ?up/,'Dominadas'],[/jalon.*(unilat|un brazo|1 brazo)/,'Jalón unilateral'],[/jalon.*(cerrad|neutr|v\b|triangulo)/,'Jalón toma cerrada'],[/jalon|polea al pecho|lat ?pull/,'Jalón al pecho'],
+  [/scott|predicador|curl.*banco|banco.*curl/,'Curl en banco Scott'],[/concentrad|\biso\b/,'Curl concentrado'],[/martillo|hammer/,'Curl martillo'],[/curl.*barra|barra.*curl/,'Curl con barra'],[/curl|bicep/,'Curl bíceps'],
+  [/bulgar/,'Estocada búlgara'],[/estocada|zancada|lunge/,'Estocadas'],[/sentadilla|squat/,'Sentadilla'],[/rumano|rdl/,'Peso muerto rumano'],[/peso muerto|deadlift/,'Peso muerto'],
+  [/hip ?t[hr]*[ru]*st|empuje de cadera|puente/,'Hip thrust'],[/remo.*manc|traccion.*banco|serrucho/,'Remo con mancuerna'],[/remo|traccion/,'Remo con barra'],
+  [/paralela|fondo|dips/,'Fondos'],[/press militar|militar|hombro|press arnold/,'Press militar'],[/press (plano|banca)|banca|plano/,'Press banca'],[/prensa/,'Prensa'],[/gemelo|pantorrilla/,'Gemelos'],
+  [/plancha/,'Plancha'],[/rueda/,'Rueda abdominal']];
+function animKey(n){const k=Object.keys(ANIM);const low=String(n).toLowerCase(); const st=sinTilde(n);
+  const ex=k.find(x=>sinTilde(x)===st); if(ex) return ex; const al=ALIAS.find(([r])=>r.test(st)); if(al&&ANIM[al[1]]) return al[1];
   return k.find(x=>x.toLowerCase()===low)||k.find(x=>low.includes(x.toLowerCase().split(' ')[0])&&low.includes((x.toLowerCase().split(' ')[1]||'').slice(0,4)))||k.find(x=>low.startsWith(x.toLowerCase().split(' ')[0]))||'Sentadilla'}
 
 /* ---------- Progreso: cargas por ejercicio ---------- */
@@ -1363,7 +1375,69 @@ const ANIM={
  'Rueda abdominal':{A:{h:[43,45],n:[47,50],s:[50,54],e:[47,68],w:[45,82],p:[62,68],k:[66,89],f:[84,90],t:[86,92]},B:{h:[27,73],n:[31,76],s:[35,78],e:[25,82],w:[16,84],p:[54,80]},eq:[['wheel']]}
 };
 ANIM['Gemelos'].B=up(ANIM['Gemelos'].A,6);
-for(const a of Object.values(ANIM)) if(a) a.B=o(a.A,a.B);
+
+/* poses armadas por ángulos (0° = hacia abajo, 90° = hacia adelante, 180° = arriba), así las proporciones quedan bien */
+const DR=a=>[Math.sin(a*Math.PI/180),Math.cos(a*Math.PI/180)];
+const AD=(p,a,l)=>{const d=DR(a);return [p[0]+d[0]*l,p[1]+d[1]*l]};
+function fk(c){const p=c.p, dt=[Math.sin((c.tor||0)*Math.PI/180),-Math.cos((c.tor||0)*Math.PI/180)];
+  const n=[p[0]+dt[0]*30,p[1]+dt[1]*30], s=[n[0]-dt[0]*4,n[1]-dt[1]*4], h=[n[0]+dt[0]*7,n[1]+dt[1]*7];
+  const e=AD(s,c.ua,13), w=AD(e,c.fa,12), k=AD(p,c.th,17), f=AD(k,c.sh,16), R={h,n,s,p,k,f,e,w,t:AD(f,c.foot==null?90:c.foot,7)};
+  if(c.ua2!=null){R.s2=s;R.e2=AD(s,c.ua2,13);R.w2=AD(R.e2,c.fa2,12)}
+  if(c.th2!=null){R.k2=AD(p,c.th2,17);R.f2=AD(R.k2,c.sh2,16)}
+  return R}
+/* de frente: brazo derecho a la derecha de la pantalla; ángulo 0 = colgando, 90 = hacia el costado */
+function fr(c){const p=c.p||[50,59], n=[p[0],p[1]-30], h=[p[0],p[1]-37], s=[p[0]+7,p[1]-26], s2=[p[0]-7,p[1]-26];
+  const R={h,n,p,s,s2,k:c.k||[p[0]+5,p[1]+17],f:c.f||[p[0]+6,p[1]+33],k2:c.k2||[p[0]-5,p[1]+17],f2:c.f2||[p[0]-6,p[1]+33]};
+  if(c.e){R.e=c.e;R.w=c.w;R.e2=[2*p[0]-c.e[0],c.e[1]];R.w2=[2*p[0]-c.w[0],c.w[1]]}
+  else{const d1=DR(c.ua),d2=DR(c.fa); R.e=[s[0]+d1[0]*13,s[1]+d1[1]*13]; R.w=[R.e[0]+d2[0]*12,R.e[1]+d2[1]*12]; R.e2=[s2[0]-d1[0]*13,s2[1]+d1[1]*13]; R.w2=[R.e2[0]-d2[0]*12,R.e2[1]+d2[1]*12]}
+  return R}
+(()=>{
+  const PB=ANIM['Press banca'], JP=ANIM['Jalón al pecho'];
+  // press inclinado con mancuernas
+  const ia=fk({p:[46,73],tor:-52,ua:62,fa:165,th:84,sh:2}), ib=fk({p:[46,73],tor:-52,ua:142,fa:142,th:84,sh:2});
+  ANIM['Press inclinado']={A:ia,B:ib,eq:[['seat',[[ia.n[0]-6,ia.n[1]+1.5],[ia.p[0]-2,ia.p[1]+4.5],[ia.p[0]+12,ia.p[1]+4.5]]],['legs',[[ia.p[0]-3,ia.p[1]+4.5],[ia.p[0]+9,ia.p[1]+4.5]]],['db']]};
+  // press plano con mancuernas
+  ANIM['Press con mancuernas']={A:PB.A,B:{e:[33,47],w:[33,33]},eq:[['bench',20,66,66],['db']]};
+  // press francés (acostado): el codo queda fijo, se mueve el antebrazo
+  const fs0={h:[24,57],n:[29,60],s:[32,61],p:[60,62],k:[72,54],f:[80,90],t:[86,92]}, fe=AD(fs0.s,172,13);
+  ANIM['Press francés']={A:Object.assign({},fs0,{e:fe,w:AD(fe,-55,12)}),B:{e:fe,w:AD(fe,176,12)},eq:[['bench',20,66,66],['bar']]};
+  // tríceps en polea (de pie, la polea arriba adelante)
+  const te=AD(ST.s,8,13);
+  ANIM['Tríceps en polea']={A:o(ST,{e:te,w:AD(te,150,12)}),B:{w:AD(te,12,12)},eq:[['cable',64,2],['rope']]};
+  // tríceps tras nuca con polea (de espaldas a la polea, brazos arriba)
+  const ta=fk({p:[48,59],tor:14,ua:168,fa:-25,th:12,sh:-4,th2:-18,sh2:-8}), tb=fk({p:[48,59],tor:14,ua:168,fa:172,th:12,sh:-4,th2:-18,sh2:-8});
+  ANIM['Tríceps tras nuca']={A:ta,B:tb,eq:[['cable',14,30],['rope']]};
+  // vuelos laterales (de frente)
+  ANIM['Vuelos laterales']={A:fr({ua:12,fa:8}),B:fr({ua:86,fa:80}),eq:[['db'],['front']]};
+  // posteriores en polea (de frente, brazos cruzados → abiertos)
+  ANIM['Posteriores en polea']={A:fr({e:[52,40],w:[42,40]}),B:fr({ua:88,fa:90}),eq:[['cablex',8,10,92,10],['front']]};
+  // apertura en máquina (sentado, de frente: pec deck)
+  const pd={p:[50,64],k:[56,66],f:[57,92],k2:[44,66],f2:[43,92]};
+  ANIM['Apertura en máquina']={A:fr(Object.assign({},pd,{ua:88,fa:178})),B:fr(Object.assign({},pd,{e:[54,40],w:[53,27]})),eq:[['seat',[[36,68],[64,68]]],['pads'],['front']]};
+  // jalón con toma cerrada y unilateral
+  ANIM['Jalón toma cerrada']={A:JP.A,B:{e:[42,49],w:[49,37]},eq:[['seat',[[34,67],[62,67]]],['cable',50,0],['vbar']]};
+  ANIM['Jalón unilateral']={A:Object.assign({},JP.A,{s2:JP.A.s,e2:[52,46],w2:[60,56]}),B:{e:[42,47],w:[47,35]},eq:[['seat',[[34,67],[62,67]]],['cable',50,0],['grip']]};
+  // curl en banco Scott
+  const sa=fk({p:[44,75],tor:12,ua:48,fa:62,th:88,sh:3}), sb_=fk({p:[44,75],tor:12,ua:48,fa:172,th:88,sh:3});
+  ANIM['Curl en banco Scott']={A:sa,B:sb_,eq:[['seat',[[sa.p[0]-10,sa.p[1]+4],[sa.p[0]+6,sa.p[1]+4]]],['legs',[[sa.p[0]-2,sa.p[1]+4]]],['seat',[[sa.s[0]+1,sa.s[1]+8],[sa.e[0]+3,sa.e[1]+5]]],['legs',[[sa.e[0]+1,sa.e[1]+6]]],['bar']]};
+  // curl concentrado (sentado, codo en el muslo)
+  const ca=fk({p:[40,76],tor:38,ua:4,fa:2,th:90,sh:0}), cb=fk({p:[40,76],tor:38,ua:4,fa:150,th:90,sh:0});
+  ANIM['Curl concentrado']={A:ca,B:cb,eq:[['bench',22,50,80],['db']]};
+  // estocada búlgara (pie de atrás en el banco)
+  ANIM['Estocada búlgara']={A:o(ST,{p:[48,59],k:[54,76],f:[60,92],t:[67,93],k2:[40,73],f2:[29,79],e:[48,46],w:[49,58],h:[49,22],n:[48,29],s:[48,33]}),
+    B:{h:[48,34],n:[48,41],s:[48,45],p:[47,71],k:[62,75],f:[61,92],t:[68,93],k2:[39,87],f2:[29,79],e:[48,58],w:[49,70]},eq:[['bench',16,38,82],['db']]};
+  // remo con mancuerna en banco
+  const ra={h:[72,51],n:[65,53],s:[61.5,54],p:[36,58],k:[33,76],f:[33,92],t:[40,93],k2:[40,68],f2:[24,68],s2:[61.5,54],e2:[63,61],w2:[64,68],e:[61.5,67],w:[62,79]};
+  ANIM['Remo con mancuerna']={A:ra,B:{e:[51,49],w:[56,60]},eq:[['bench',20,70,70],['db']]};
+  // peso muerto (desde el piso)
+  ANIM['Peso muerto']={A:{h:[69,52],n:[63,55],s:[60,57],p:[36,67],k:[52,75],f:[48,92],t:[55,93],e:[60,70],w:[60,82]},B:o(ST,{e:[51,46],w:[52,59]}),eq:[['plate']]};
+  // curl martillo alternado y curl con barra parado
+  ANIM['Curl martillo']={A:o(ST,{e:[50,47],w:[52,59],s2:ST.s,e2:[49,46],w2:[49,58]}),B:{w:[61,39]},eq:[['dbv']]};
+  ANIM['Curl con barra']={A:o(ST,{e:[50,47],w:[52,60]}),B:{w:[60,38]},eq:[['bar']]};
+  // dominadas (sin asistencia)
+  ANIM['Dominadas']=ANIM['Dominadas asistidas'];
+})();
+for(const a of new Set(Object.values(ANIM))) if(a&&!a.__m){a.B=o(a.A,a.B);a.__m=1}
 
 const ln=(a,b,c='bone',w)=>`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" class="${c}"${w?` stroke-width="${w}"`:''}/>`;
 const ci=(p,r,c)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${r}" class="${c}"/>`;
@@ -1375,8 +1449,12 @@ function drawSkel(a,t){
     if(q[0]==='seat') g+=`<polyline points="${q[1].map(p=>p.join(',')).join(' ')}" class="gear-s" stroke-width="5"/>`;
     if(q[0]==='hbar') g+=ln([q[1],q[3]],[q[2],q[3]],'gear',3.5);
     if(q[0]==='cable') g+=ci([q[1],q[2]+3],3,'gear')+ln([q[1],q[2]+3],P.w,'cable');
+    if(q[0]==='cablex') g+=ci([q[1],q[2]],3,'gear')+ci([q[3],q[4]],3,'gear')+ln([q[1],q[2]],P.w,'cable')+ln([q[3],q[4]],P.w2,'cable');
+    if(q[0]==='legs') for(const L of q[1]) g+=ln(L,[L[0],94],'gear-s',2.5);
   }
-  if(P.k2) g+=ln(P.p,P.k2,'bone dim')+ln(P.k2,P.f2,'bone dim');
+  const FR=a.eq.some(q=>q[0]==='front');
+  if(P.k2) g+=ln(P.p,P.k2,FR?'bone':'bone dim')+ln(P.k2,P.f2,FR?'bone':'bone dim');
+  if(P.e2) g+=(FR?ln(P.n,P.s2):'')+ln(P.s2,P.e2,FR?'bone':'bone dim')+ln(P.e2,P.w2,FR?'bone':'bone dim');
   // columna y costillas
   g+=ln(P.n,P.p);
   const dx=P.p[0]-P.n[0],dy=P.p[1]-P.n[1],L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
@@ -1384,11 +1462,18 @@ function drawSkel(a,t){
   g+=ci(P.p,3,'pelvis');
   g+=ln(P.p,P.k)+ln(P.k,P.f); if(P.t) g+=ln(P.f,P.t);
   g+=ln(P.n,P.s)+ln(P.s,P.e)+ln(P.e,P.w);
-  for(const j of ['e','k','w','f']) g+=ci(P[j],1.7,'joint');
-  g+=ci(P.h,5.6,'skull')+ci([P.h[0]+2,P.h[1]-.6],1.2,'eye')+ln([P.h[0]+1,P.h[1]+3.4],[P.h[0]+4,P.h[1]+3.4],'rib');
+  for(const j of ['e','k','w','f','e2','w2','k2','f2']) if(P[j]&&(FR||!/2/.test(j))) g+=ci(P[j],1.7,'joint');
+  g+=ci(P.h,5.6,'skull')+(FR?ci([P.h[0]-2,P.h[1]-.6],1.1,'eye')+ci([P.h[0]+2,P.h[1]-.6],1.1,'eye')+ln([P.h[0]-1.6,P.h[1]+3.2],[P.h[0]+1.6,P.h[1]+3.2],'rib'):ci([P.h[0]+2,P.h[1]-.6],1.2,'eye')+ln([P.h[0]+1,P.h[1]+3.4],[P.h[0]+4,P.h[1]+3.4],'rib'));
   for(const q of a.eq){
     if(q[0]==='plate') g+=ln([P.w[0]-1,P.w[1]],[P.w[0]+1,P.w[1]],'gear',3)+ci(P.w,7,'plate');
-    if(q[0]==='db') g+=ln([P.w[0]-5,P.w[1]],[P.w[0]+5,P.w[1]],'gear',2)+ci([P.w[0]-5,P.w[1]],2.6,'gearf')+ci([P.w[0]+5,P.w[1]],2.6,'gearf');
+    const manos=FR&&P.w2?[P.w,P.w2]:[P.w];
+    if(q[0]==='db') for(const W of manos) g+=ln([W[0]-5,W[1]],[W[0]+5,W[1]],'gear',2)+ci([W[0]-5,W[1]],2.6,'gearf')+ci([W[0]+5,W[1]],2.6,'gearf');
+    if(q[0]==='dbv') g+=ln([P.w[0],P.w[1]-5],[P.w[0],P.w[1]+5],'gear',2)+ci([P.w[0],P.w[1]-5],2.6,'gearf')+ci([P.w[0],P.w[1]+5],2.6,'gearf')+(P.w2?ln([P.w2[0],P.w2[1]-5],[P.w2[0],P.w2[1]+5],'gear dim',2):'');
+    if(q[0]==='bar') g+=ln([P.w[0]-1,P.w[1]],[P.w[0]+1,P.w[1]],'gear',3)+ci(P.w,4.5,'plate');
+    if(q[0]==='rope') g+=ln(P.w,[P.w[0]-2,P.w[1]+5],'gear',2.4)+ln(P.w,[P.w[0]+2,P.w[1]+5],'gear',2.4);
+    if(q[0]==='vbar') g+=`<polyline points="${P.w[0]-4},${P.w[1]+2} ${P.w[0]},${P.w[1]-2} ${P.w[0]+4},${P.w[1]+2}" class="gear" stroke-width="2.4"/>`;
+    if(q[0]==='grip') g+=ci(P.w,2.6,'gearf');
+    if(q[0]==='pads') for(const [E,W] of [[P.e,P.w],[P.e2,P.w2]]) g+=ln(E,W,'gear',4.5);
     if(q[0]==='handle') g+=ln([P.w[0]-9,P.w[1]],[P.w[0]+9,P.w[1]],'gear',3);
     if(q[0]==='wheel') g+=ci([P.w[0],P.w[1]+4],5,'plate')+ci([P.w[0],P.w[1]+4],1.2,'gearf');
     if(q[0]==='sled'){const vx=P.f[0]-P.k[0],vy=P.f[1]-P.k[1],m=Math.hypot(vx,vy)||1;const px=-vy/m*10,py=vx/m*10;
