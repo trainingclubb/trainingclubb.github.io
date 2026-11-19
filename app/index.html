@@ -1088,7 +1088,7 @@ const ALIAS=[[/apertura|pec ?deck|peck|mariposa/,'Apertura en máquina'],[/press
   [/inclinad/,'Press inclinado'],[/frances|rompecraneos|skull/,'Press francés'],[/tras ?nuca|copa|sobre la cabeza|overhead/,'Tríceps tras nuca'],
   [/tricep|extension.*polea|push ?down/,'Tríceps en polea'],[/vuelo|elevacion(es)? lateral|laterales/,'Vuelos laterales'],[/posterior|face ?pull|pajaro/,'Posteriores en polea'],
   [/dominada.*asist/,'Dominadas asistidas'],[/dominada|pull ?up|chin ?up/,'Dominadas'],[/jalon.*(unilat|un brazo|1 brazo)/,'Jalón unilateral'],[/jalon.*(cerrad|neutr|v\b|triangulo)/,'Jalón toma cerrada'],[/jalon|polea al pecho|lat ?pull/,'Jalón al pecho'],
-  [/scott|predicador|curl.*banco|banco.*curl/,'Curl en banco Scott'],[/concentrad|\biso\b/,'Curl concentrado'],[/martillo|hammer/,'Curl martillo'],[/curl.*barra|barra.*curl/,'Curl con barra'],[/curl|bicep/,'Curl bíceps'],
+  [/scott|predicador|curl.*banco|banco.*curl/,'Curl en banco Scott'],[/isometric|\biso\b/,'Curl isométrico'],[/concentrad/,'Curl concentrado'],[/martillo|hammer/,'Curl martillo'],[/curl.*barra|barra.*curl/,'Curl con barra'],[/curl|bicep/,'Curl bíceps'],
   [/bulgar/,'Estocada búlgara'],[/estocada|zancada|lunge/,'Estocadas'],[/sentadilla|squat/,'Sentadilla'],[/rumano|rdl/,'Peso muerto rumano'],[/peso muerto|deadlift/,'Peso muerto'],
   [/hip ?t[hr]*[ru]*st|empuje de cadera|puente/,'Hip thrust'],[/remo.*manc|traccion.*banco|serrucho/,'Remo con mancuerna'],[/remo|traccion/,'Remo con barra'],
   [/paralela|fondo|dips/,'Fondos'],[/press militar|militar|hombro|press arnold/,'Press militar'],[/press (plano|banca)|banca|plano/,'Press banca'],[/prensa/,'Prensa'],[/gemelo|pantorrilla/,'Gemelos'],
@@ -1436,6 +1436,8 @@ function fr(c){const p=c.p||[50,59], n=[p[0],p[1]-30], h=[p[0],p[1]-37], s=[p[0]
   ANIM['Curl con barra']={A:o(ST,{e:[50,47],w:[52,60]}),B:{w:[60,38]},eq:[['bar']]};
   // dominadas (sin asistencia)
   ANIM['Dominadas']=ANIM['Dominadas asistidas'];
+  // curl isométrico: sostiene el codo a 90° con las dos mancuernas; solo un leve temblor de esfuerzo
+  ANIM['Curl isométrico']={A:o(ST,{e:[50,47],w:[62,47],s2:ST.s,e2:[49,46.5],w2:[61,46.5]}),B:{w:[62,46.2],w2:[61,45.7]},eq:[['db'],['hold']],dur:900};
 })();
 for(const a of new Set(Object.values(ANIM))) if(a&&!a.__m){a.B=o(a.A,a.B);a.__m=1}
 
@@ -1467,6 +1469,7 @@ function drawSkel(a,t){
   for(const q of a.eq){
     if(q[0]==='plate') g+=ln([P.w[0]-1,P.w[1]],[P.w[0]+1,P.w[1]],'gear',3)+ci(P.w,7,'plate');
     const manos=FR&&P.w2?[P.w,P.w2]:[P.w];
+    if(q[0]==='hold'&&P.w2) g+=ln([P.w2[0]-5,P.w2[1]],[P.w2[0]+5,P.w2[1]],'gear dim',2);
     if(q[0]==='db') for(const W of manos) g+=ln([W[0]-5,W[1]],[W[0]+5,W[1]],'gear',2)+ci([W[0]-5,W[1]],2.6,'gearf')+ci([W[0]+5,W[1]],2.6,'gearf');
     if(q[0]==='dbv') g+=ln([P.w[0],P.w[1]-5],[P.w[0],P.w[1]+5],'gear',2)+ci([P.w[0],P.w[1]-5],2.6,'gearf')+ci([P.w[0],P.w[1]+5],2.6,'gearf')+(P.w2?ln([P.w2[0],P.w2[1]-5],[P.w2[0],P.w2[1]+5],'gear dim',2):'');
     if(q[0]==='bar') g+=ln([P.w[0]-1,P.w[1]],[P.w[0]+1,P.w[1]],'gear',3)+ci(P.w,4.5,'plate');
