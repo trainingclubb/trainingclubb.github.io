@@ -132,6 +132,18 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .status.ok{border-color:rgba(36,201,167,.25)} .status.bad{border-color:rgba(255,93,78,.3)}
 .status .pill{background:var(--surface)}
 .strow{display:flex;justify-content:space-between;align-items:center}
+.sttog{width:100%;border:0;background:none;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:pointer;gap:10px;-webkit-tap-highlight-color:transparent}
+.sttog .lab{display:flex;flex-direction:column;gap:2px;min-width:0}
+.stres{font-style:normal;font-family:var(--display);font-weight:900;font-size:22px;color:var(--ink);text-transform:none;letter-spacing:0;max-height:0;opacity:0;transform:translateY(-4px);transition:max-height .35s var(--ease),opacity .25s,transform .35s var(--ease)}
+.status.pleg .stres{max-height:30px;opacity:1;transform:none}
+.stder{display:flex;align-items:center;gap:8px;flex:none}
+.chev{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;color:var(--muted);transition:transform .4s var(--spring)}
+.status.pleg .chev{transform:rotate(-90deg)}
+.sttog:active .chev{transform:scale(.85)}.status.pleg .sttog:active .chev{transform:rotate(-90deg) scale(.85)}
+.stbody{display:grid;grid-template-rows:1fr;transition:grid-template-rows .45s var(--ease),opacity .3s var(--ease),margin .45s var(--ease)}
+.stin{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:2px 3px 3px;margin:-2px -3px -3px}
+.status.pleg .stbody{grid-template-rows:0fr;opacity:0;margin-top:-10px}
+.stin>.planes{padding-top:12px;margin-top:0}
 .status .big{font-size:40px}
 .card{background:var(--sunk);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .card .ttl{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -143,6 +155,9 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .week i.on{background:var(--grad);color:var(--on-accent)}
 .week i.today{box-shadow:0 0 0 2px var(--sunk),0 0 0 4px var(--ink)}
 .done-msg{margin:0;font-size:13px;color:var(--teal);font-weight:600}
+.closed-msg{margin:0;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);font-weight:600;padding:10px 12px;border-radius:12px;background:var(--sunk);border:1px dashed var(--line)}
+.week div.cerr{opacity:.45}.week div.cerr i:not(.on){background:repeating-linear-gradient(135deg,var(--future) 0 4px,transparent 4px 8px)}
+.d.cerr{opacity:.35;background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 4px,transparent 4px 8px)!important}
 .mini-ex{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:8px 0;border-bottom:1px solid var(--line)}
 .mini-ex:last-child{border-bottom:0} .mini-ex span:last-child{color:var(--muted);white-space:nowrap}
 .link{border:0;background:none;color:var(--teal);font-weight:700;padding:0;text-align:left;font-size:14px}
@@ -306,11 +321,12 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .screen.enter>*{animation:rise .5s var(--ease) both}
 .screen.enter>*:nth-child(2){animation-delay:.04s}.screen.enter>*:nth-child(3){animation-delay:.08s}.screen.enter>*:nth-child(4){animation-delay:.12s}
 .screen.enter>*:nth-child(5){animation-delay:.16s}.screen.enter>*:nth-child(6){animation-delay:.2s}.screen.enter>*:nth-child(n+7){animation-delay:.24s}
-.screen.enter.fromr>*{animation-name:fromr}.screen.enter.froml>*{animation-name:froml}.screen.enter.up>*{animation-name:upin}
+.screen.enter.fromr>*{animation-name:fromr}.screen.enter.froml>*{animation-name:froml}.screen.enter.navsube>*{animation-name:upin}.screen.enter.navbaja>*{animation-name:bajain}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes fromr{from{opacity:0;transform:translateX(42px)}to{opacity:1;transform:none}}
 @keyframes froml{from{opacity:0;transform:translateX(-42px)}to{opacity:1;transform:none}}
 @keyframes upin{from{opacity:0;transform:translateY(26px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes bajain{from{opacity:0;transform:translateY(-18px) scale(.99)}to{opacity:1;transform:none}}
 .exlist .ex{animation:rise .45s var(--ease) both}
 .screen.enter .exlist .ex:nth-child(1){animation-delay:.12s}.screen.enter .exlist .ex:nth-child(2){animation-delay:.17s}.screen.enter .exlist .ex:nth-child(3){animation-delay:.22s}
 .screen.enter .exlist .ex:nth-child(4){animation-delay:.27s}.screen.enter .exlist .ex:nth-child(5){animation-delay:.32s}.screen.enter .exlist .ex:nth-child(n+6){animation-delay:.37s}
@@ -629,6 +645,7 @@ body{position:fixed;inset:0;padding:0!important;margin:0}
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const TODAY=new Date(); TODAY.setHours(0,0,0,0);
+const cerrado=dt=>dt.getDay()===0||dt.getDay()===6;      /* el gimnasio no abre sábados ni domingos */
 const Y=TODAY.getFullYear(), M=TODAY.getMonth(), D=TODAY.getDate();
 const fmt=n=>'$'+Math.round(n||0).toLocaleString('es-AR');
 const $=s=>document.querySelector(s);
@@ -760,6 +777,11 @@ function avatar(cls='',photo=S.photo,name=S.name){return `<span class="avatar ${
 const first=()=>S.name.split(' ')[0];
 const empty=(icon,title,txt,extra='')=>`<div class="empty"><div class="eico">${icon}</div><b>${title}</b><p>${txt}</p>${extra}</div>`;
 
+/* la tarjeta de la cuota queda como la dejó el socio (plegada o desplegada), también al cerrar y abrir la app */
+function cuotaPlegada(){try{return localStorage.getItem('tc-cuota-plegada')==='1'}catch(e){return false}}
+function plegarCuota(){const sec=document.querySelector('.status'), bt=document.getElementById('sttog'); if(!sec||!bt) return;
+  const p=!sec.classList.contains('pleg'); sec.classList.toggle('pleg',p); bt.setAttribute('aria-expanded',!p);
+  try{localStorage.setItem('tc-cuota-plegada',p?'1':'0')}catch(e){}}
 function screenInicio(){
   const s=me(); const e=estado(s); const att=attMonth(s,Y,M);
   const av=aviso(s); let avx=false; try{avx=av&&localStorage.getItem('tc-avx-'+av.k)}catch(x){}
@@ -769,23 +791,25 @@ function screenInicio(){
   let semana=0;
   const wk=['L','M','M','J','V','S','D'].map((l,i)=>{const d=new Date(lunes);d.setDate(lunes.getDate()+i);
     const on=attMonth(s,d.getFullYear(),d.getMonth()).includes(d.getDate()); if(on) semana++;
-    return `<div>${l}<i class="${on?'on':''} ${d.getTime()===TODAY.getTime()?'today':''} num">${d.getDate()}</i></div>`}).join('');
+    return `<div class="${cerrado(d)?'cerr':''}">${l}<i class="${on?'on':''} ${d.getTime()===TODAY.getTime()?'today':''} num">${d.getDate()}</i></div>`}).join('');
   const r=s.rutina&&s.rutina[S.day]?s.rutina[S.day]:(s.rutina&&s.rutina[0]);
+  const pleg=cuotaPlegada(), resu=e.c==='none'?'Elegí tu cuota':e.c==='ok'?'Vence '+e.v:fmt(e.c==='bad'?montoMes(s,M):s.precio);
+  const head=pill=>`<button class="strow sttog" id="sttog" aria-expanded="${!pleg}" aria-controls="stbody"><span class="lab">Cuota de ${MES[M].toLowerCase()}<em class="stres num">${resu}</em></span><span class="stder">${pill}<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>`;
   const st=e.c==='none'
-    ?`<section class="status none"><div class="strow"><span class="lab">Cuota de ${MES[M].toLowerCase()}</span><span class="pill">Sin asignar</span></div>
-       <span class="big">Elegí tu cuota</span><span class="sub">Tocá la que querés pagar. Después la podés cambiar.</span>${planesHtml(s)}${uniHtml}</section>`
-    :`<section class="status ${e.c==='ok'?'ok':e.c==='bad'?'bad':'warn'}">
-    <div class="strow"><span class="lab">Cuota de ${MES[M].toLowerCase()}</span><span class="pill ${e.c}">${e.c==='ok'?'Pagada':e.t}</span></div>
+    ?`<section class="status none ${pleg?'pleg':''}">${head('<span class="pill">Sin asignar</span>')}<div class="stbody" id="stbody"><div class="stin">
+       <span class="big">Elegí tu cuota</span><span class="sub">Tocá la que querés pagar. Después la podés cambiar.</span>${planesHtml(s)}${uniHtml}</div></div></section>`
+    :`<section class="status ${e.c==='ok'?'ok':e.c==='bad'?'bad':'warn'} ${pleg?'pleg':''}">
+    ${head(`<span class="pill ${e.c}">${e.c==='ok'?'Pagada':e.t}</span>`)}<div class="stbody" id="stbody"><div class="stin">
     <span class="big num">${e.c==='ok'?'Vence '+e.v:fmt(e.c==='bad'?montoMes(s,M):s.precio)}</span>
     <span class="sub num">${e.c==='ok'?`Pagaste el ${e.pago.fecha} con ${e.pago.medio}. Te quedan ${e.days} días.`:e.c==='bad'?`Venció el ${e.v}. Incluye el 10% de recargo.`:`Hasta el ${e.v} sin recargo${e.days===0?', hoy':`, en ${e.days} día${e.days===1?'':'s'}`}.`}</span>
-    ${e.c==='ok'?'':`${planesHtml(s)}<div class="payrow"><button class="btn" id="pay">Pagar con Mercado Pago</button>${uniHtml}</div>`}</section>${pedir}`;
+    ${e.c==='ok'?'':`${planesHtml(s)}<div class="payrow"><button class="btn" id="pay">Pagar con Mercado Pago</button>${uniHtml}</div>`}</div></div></section>${pedir}`;
   const best=Object.entries(s.prog||{}).map(([n,a])=>[n,Math.max(0,...a.map(x=>+x.kg||0))]).sort((a,b)=>b[1]-a[1])[0];
   return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div></div>
   ${st}
   <section class="card">
     <div class="ttl"><b>Esta semana</b><span class="num">${semana} entrenamiento${semana===1?'':'s'}</span></div>
     <div class="week">${wk}</div>
-    ${att.includes(D)?'<p class="done-msg">Ya registraste tu entrada de hoy.</p>':`<button class="btn ghost" id="checkin">Vine hoy al gym</button>`}
+    ${att.includes(D)?'<p class="done-msg">Ya registraste tu entrada de hoy.</p>':cerrado(TODAY)?'<p class="closed-msg"><span aria-hidden="true">🔒</span> Sábados y domingos el gimnasio está cerrado. ¡Nos vemos el lunes!</p>':`<button class="btn ghost" id="checkin">Vine hoy al gym</button>`}
   </section>
   ${r?`<section class="card">
     <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
@@ -1034,7 +1058,7 @@ function screenAsist(){
   const lead=(f.getDay()+6)%7; let cells='';
   for(let i=0;i<lead;i++) cells+='<span class="d e"></span>';
   for(let d=1;d<=n;d++){const dt=new Date(y,m,d);const fut=dt>TODAY;const isT=dt.getTime()===TODAY.getTime();
-    cells+=`<span class="d num ${days.includes(d)?'went':''} ${fut?'fut':''} ${isT?'today':''}" style="--d:${d}">${d}</span>`}
+    cells+=`<span class="d num ${days.includes(d)?'went':''} ${fut?'fut':''} ${isT?'today':''} ${cerrado(dt)&&!days.includes(d)?'cerr':''}" style="--d:${d}">${d}</span>`}
   const alta=new Date(s.alta+'T00:00'); const prevOk=(y*12+m)>(alta.getFullYear()*12+alta.getMonth()), nextOk=(y*12+m)<(Y*12+M);
   const isCur=y===Y&&m===M; const weeks=Math.max(1,(isCur?D:n)/7);
   const total=Object.values(s.att).reduce((a,b)=>a+b.length,0);
@@ -1109,7 +1133,7 @@ function renderSocio(){
   const body={inicio:screenInicio,rutina:screenRutina,progreso:screenProgreso,cuotas:screenCuotas,asist:screenAsist,perfil:screenPerfil}[S.tab]();
   const prev=document.querySelector('#app .screen'); const same=prev&&prev.id==='scr-'+S.tab; const keep=same?prev.scrollTop:0;
   const ti=TABKEYS.indexOf(S.tab), pi=TABKEYS.indexOf(S.lastTab||S.tab);
-  const dir=same?'':S.tab==='perfil'?'up':S.lastTab==='perfil'?'down':ti>pi?'fromr':ti<pi?'froml':'';
+  const dir=same?'':S.tab==='perfil'?'navsube':S.lastTab==='perfil'?'navbaja':ti>pi?'fromr':ti<pi?'froml':'';
   $('#app').innerHTML=`<div class="phone"><div class="sbar" aria-hidden="true"><span class="num">9:41</span><span class="sicons"><i></i><i></i><i></i><b></b></span></div>
   <header class="apphead"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>
     <button class="hpill num" id="hpill" data-tab="rutina" hidden></button>
@@ -1402,7 +1426,7 @@ function renderFicha(s){
   </section>`;
   const fy=S.fc.y, fm=S.fc.m, fdays=attMonth(s,fy,fm), fn=new Date(fy,fm+1,0).getDate(), flead=(new Date(fy,fm,1).getDay()+6)%7;
   let fcells=''; for(let i=0;i<flead;i++) fcells+='<span class="d e"></span>';
-  for(let d=1;d<=fn;d++){const fut=new Date(fy,fm,d)>TODAY; fcells+=`<button class="d num ${fdays.includes(d)?'went':''}" data-att="${d}" ${fut?'disabled':''} aria-pressed="${fdays.includes(d)}">${d}</button>`}
+  for(let d=1;d<=fn;d++){const fd=new Date(fy,fm,d), fut=fd>TODAY, ce=cerrado(fd)&&!fdays.includes(d); fcells+=`<button class="d num ${fdays.includes(d)?'went':''} ${ce?'cerr':''}" data-att="${d}" ${fut||ce?'disabled':''} ${ce?'title="Cerrado"':''} aria-pressed="${fdays.includes(d)}">${d}</button>`}
   const asis=`<section class="panel"><div class="panelhead"><h2>Asistencias</h2><span class="muted num">${fdays.length} en ${MES[fm].toLowerCase()}</span></div>
     <div class="calhead"><button data-fcal="-1" aria-label="Mes anterior">‹</button><strong>${MES[fm]} ${fy}</strong><button data-fcal="1" aria-label="Mes siguiente" ${fy*12+fm>=Y*12+M?'disabled':''}>›</button></div>
     <div class="cal fcal">${['L','M','M','J','V','S','D'].map(w=>`<span class="wd">${w}</span>`).join('')}${fcells}</div>
@@ -1566,10 +1590,12 @@ document.addEventListener('click',e=>{
   if(b.id==='v-duenio'){S.view='duenio';return render()}
   if(b.dataset.tab){ if(S.tab===b.dataset.tab&&b.closest('.nav')){const sc=$('#app .screen');if(sc)sc.scrollTo({top:0,behavior:'smooth'});return} return goTab(b.dataset.tab)}
   if(b.id==='pay') return pagar(b.dataset.mes!=null?+b.dataset.mes:M);
+  if(b.id==='sttog') return plegarCuota();
   if(b.dataset.plan){elegirPlan(b.dataset.plan);return}
   if(b.id==='quitar'){S.photo=null;savePerfil();toast('Foto quitada');return render()}
   if(b.id==='logout'){if(CLOUD) desactivarPush(); S.ldni=S.user&&S.user.dni; S.lmode=null; try{localStorage.removeItem('tc-sesion')}catch(e){} S.pendiente=false; if(CLOUD) DB={socios:{}}; S.user=null;S.tab='inicio';S.lastTab=null;return render()}
   if(b.id==='checkin'){const s=me();
+    if(cerrado(TODAY)) return toast('Sábados y domingos el gimnasio está cerrado');
     if(estado(s).c==='bad') return toast('Entrada bloqueada: la cuota está vencida');
     const a=s.att[mk(Y,M)]=s.att[mk(Y,M)]||[]; if(a.includes(D)) return toast('Ya registraste tu entrada de hoy');
     a.push(D); saveDB(); toast('Entrada registrada. ¡A entrenar!'); return render();
