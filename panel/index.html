@@ -445,8 +445,8 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .apphead .avbtn .avatar{width:34px;height:34px;font-size:12px;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--teal)}
 .apphead .avbtn{transition:transform .25s var(--spring)}.apphead .avbtn:active{transform:scale(.9)}
 /* barra inferior con indicador que se desliza */
-.nav{grid-template-columns:repeat(6,1fr);position:relative;padding:6px 6px calc(10px + env(safe-area-inset-bottom,0px))}
-.nav .ind{position:absolute;top:6px;left:6px;height:52px;width:calc((100% - 12px)/6);border-radius:14px;background:var(--accent-soft);
+.nav{grid-template-columns:repeat(5,1fr);position:relative;padding:6px 6px calc(10px + env(safe-area-inset-bottom,0px))}
+.nav .ind{position:absolute;top:6px;left:6px;height:52px;width:calc((100% - 12px)/5);border-radius:14px;background:var(--accent-soft);
   transform:translateX(calc(var(--x,0)*100%));transition:transform .45s var(--spring),opacity .2s;z-index:0;box-shadow:inset 0 0 0 1px rgba(36,201,167,.18)}
 .nav button{position:relative;z-index:1;height:52px;justify-content:center;font-size:10px;letter-spacing:-.1px;min-width:0}
 .nav button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1229,6 +1229,52 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .c1xadm.c1xdevt,.c1xchip.c1xdevc{background:linear-gradient(90deg,#8b5cf6,#24C9A7);color:#fff}
 .c1xprot{font-size:12px;color:var(--muted);border:1px dashed var(--line);background:none}
 #bnvx .bnvrol.bnvdev::before{background:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.25)}
+/* v40: funcional en la lista */
+.fnth{text-align:right!important}
+.fncell{display:inline-flex;align-items:center;gap:10px;justify-content:flex-end}
+.fnck{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--muted);padding:5px 9px 5px 6px;border-radius:999px;border:1px solid var(--line);background:var(--sunk);transition:color .25s,border-color .25s,background .25s;user-select:none}
+.fnck input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.fnck i{width:18px;height:18px;border-radius:6px;border:2px solid var(--line);display:grid;place-items:center;transition:background .25s,border-color .25s,transform .35s var(--spring)}
+.fnck i::after{content:'';width:5px;height:9px;border:solid #06110e;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) scale(0);margin-top:-2px;transition:transform .3s var(--spring)}
+.fnck.on{color:var(--accent);border-color:rgba(36,201,167,.45);background:var(--accent-soft)}
+.fnck.on i{background:var(--accent);border-color:var(--accent)}.fnck.on i::after{transform:rotate(45deg) scale(1)}
+.fnck:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.fnck:has(input:disabled){opacity:.55;cursor:not-allowed}
+.fnck.fnpop i{animation:fnPop .45s var(--spring)}@keyframes fnPop{40%{transform:scale(1.3)}}
+@media (max-width:700px){.fncell{width:100%;justify-content:flex-start}}
+/* v40: días completos */
+.days button.rdok{border-color:rgba(36,201,167,.6)!important;background:linear-gradient(135deg,rgba(36,201,167,.22),rgba(36,201,167,.08))!important;color:var(--ink);position:relative}
+.days button.rdok small{color:var(--accent)}
+.rdtic{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#06110e;font-size:11px;display:grid;place-items:center;box-shadow:0 4px 10px -2px rgba(36,201,167,.6)}
+.days button.rdnew{animation:rdPulse .9s var(--spring)}.days button.rdnew .rdtic{animation:rdTic .6s var(--spring) .15s both}
+@keyframes rdPulse{30%{transform:scale(1.08);box-shadow:0 0 0 6px rgba(36,201,167,.25)}}
+@keyframes rdTic{from{transform:scale(0) rotate(-90deg)}}
+.rdfin{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,rgba(36,201,167,.2),rgba(252,224,36,.1));border:1px solid rgba(36,201,167,.45);margin-top:4px}
+.rdfin b{display:block;font-size:15px}.rdfin small{color:var(--muted);font-size:12.5px}
+.rdfico{font-size:28px}.rdfin.rdnew{animation:rdIn .6s var(--spring)}.rdfin.rdnew .rdfico{animation:rdFlag 1s var(--spring)}
+@keyframes rdIn{from{opacity:0;transform:translateY(10px) scale(.96)}}@keyframes rdFlag{0%{transform:scale(.3) rotate(-30deg)}60%{transform:scale(1.2) rotate(10deg)}}
+/* v40: tiempos de la semana */
+.tcb-ses.rsdone{color:var(--accent);border-color:rgba(36,201,167,.4);background:var(--accent-soft)}
+.rsem{margin-top:16px;padding:14px;border-radius:18px;background:var(--surface);border:1px solid var(--line);animation:rdIn .5s var(--spring) both}
+.rsemh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}.rsemh b{font-size:14px}.rsemh span{font-size:12.5px;color:var(--accent);font-weight:800}
+.rsgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.rsd{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);min-width:0;animation:rdIn .45s var(--spring) both;animation-delay:calc(var(--i)*40ms)}
+.rsd span{font-size:11px;font-weight:800;color:var(--muted)}.rsd b{font-size:11.5px;color:var(--muted)}
+.rsd small{font-size:9.5px;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
+.rsd.on{background:var(--accent-soft);border-color:rgba(36,201,167,.45)}.rsd.on b{color:var(--ink)}
+.rsd.hoy{box-shadow:inset 0 0 0 2px rgba(252,224,36,.55)}
+/* v40: cambiar de cuota */
+.ccrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ccbtn{border:1px solid rgba(36,201,167,.45);background:var(--accent-soft);color:var(--accent);font:inherit;font-size:12.5px;font-weight:800;padding:7px 12px;border-radius:999px;cursor:pointer;transition:transform .2s var(--spring),background .2s}
+.ccbtn:active{transform:scale(.94)}.ccbtn[aria-expanded="true"]{background:var(--accent);color:#06110e}
+.ccwrap{animation:rdIn .45s var(--spring) both;margin-top:4px}.ccsub{margin:2px 0 8px;color:var(--muted);font-size:12.5px}
+/* v40: progresos */
+.pgin{position:relative;display:flex;align-items:center}.pgin .inp{padding-left:36px}
+.pglupa{position:absolute;left:13px;color:var(--muted);font-size:14px;pointer-events:none}
+.pgquick{margin-top:10px}.pgquick small{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+.pgwrap{flex-wrap:wrap;overflow:visible!important}
+.pgseg{margin-bottom:12px}
+@media (prefers-reduced-motion:reduce){.days button.rdnew,.rdtic,.rdfin,.rdfico,.rsem,.rsd,.ccwrap,.fnck i{animation:none!important}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -1975,7 +2021,7 @@ const ICONS={
   asist:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18M8 14l3 3 5-5"/></svg>'
 };
 ICONS.gimnasio='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
-const TABS=[['inicio','Inicio'],['rutina','Rutina'],['progreso','Progreso'],['cuotas','Cuotas'],['asist','Asistencia'],['gimnasio','Gimnasio']];
+const TABS=[['inicio','Inicio'],['rutina','Rutina'],['cuotas','Cuotas'],['asist','Asistencia'],['gimnasio','Gimnasio']];
 const TABKEYS=TABS.map(t=>t[0]);
 
 const attMonth=(s,y,m)=>(s&&s.att[mk(y,m)])||[];
@@ -2068,9 +2114,9 @@ function screenInicio(){
        <span class="big">Elegí tu cuota</span><span class="sub">Tocá la que querés pagar. Después la podés cambiar.</span>${planesHtml(s)}${uniHtml}</div></div></section>`
     :`<section class="status ${e.c==='ok'?'ok':e.c==='bad'?'bad':'warn'} ${pleg?'pleg':''}">
     ${head(`<span class="pill ${e.c}">${e.c==='ok'?'Pagada':e.t}</span>`)}<div class="stbody" id="stbody"><div class="stin">
-    <span class="big num">${e.c==='ok'?'Vence '+e.v:fmt(e.c==='bad'?montoMes(s,M):s.precio)}</span>
+    ${e.c==='ok'?`<div class="ccrow"><span class="big num">Vence ${e.v}</span><button class="ccbtn" id="ccambiar" aria-expanded="${!!S.ccOpen}">⇄ Cambiar de cuota</button></div>`:`<span class="big num">${fmt(e.c==='bad'?montoMes(s,M):s.precio)}</span>`}
     <span class="sub num">${e.c==='ok'?`Pagaste el ${e.pago.fecha} con ${e.pago.medio}. Te quedan ${e.days} días.`:e.c==='bad'?`Venció el ${e.v}. Incluye el 10% de recargo.`:`Hasta el ${e.v} sin recargo${e.days===0?', hoy':`, en ${e.days} día${e.days===1?'':'s'}`}.`}</span>
-    ${e.c==='ok'?'':`${planesHtml(s)}<div class="payrow">${comoPagarHtml(e.c==='bad'?montoMes(s,M):s.precio)}${uniHtml}</div>`}</div></div></section>${pedir}`;
+    ${e.c==='ok'?(S.ccOpen?`<div class="ccwrap"><p class="ccsub">Tocá la cuota que querés. Este mes ya está pago: el cambio corre desde la próxima.</p>${planesHtml(s)}</div>`:''):`${planesHtml(s)}<div class="payrow">${comoPagarHtml(e.c==='bad'?montoMes(s,M):s.precio)}${uniHtml}</div>`}</div></div></section>${pedir}`;
   const best=Object.entries(s.prog||{}).map(([n,a])=>[n,Math.max(0,...a.map(x=>+x.kg||0))]).sort((a,b)=>b[1]-a[1])[0];
   return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div>${miniRank()}</div>
   ${st}
@@ -2088,7 +2134,7 @@ function screenInicio(){
   :`<section class="card soft"><div class="ttl"><b>Tu rutina</b></div><p class="muted">Todavía no tenés rutina. ${PROFE} te la arma y te aparece acá.</p></section>`}
   <div class="row2">
     <div class="tile"><div class="k">Visitas en ${MES[M].toLowerCase()}</div><div class="v num" data-count="${att.length}">${att.length}</div></div>
-    <button class="tile tbtn" data-tab="progreso"><div class="k">Mejor marca</div><div class="v num">${best&&best[1]?best[1]+'<span class="of"> kg</span>':'—'}</div><div class="s">${best&&best[1]?esc(best[0]):'Anotá tus pesos'}</div></button>
+    <button class="tile tbtn" data-tab="rutina" data-rsubgo="prog"><div class="k">Mejor marca</div><div class="v num">${best&&best[1]?best[1]+'<span class="of"> kg</span>':'—'}</div><div class="s">${best&&best[1]?esc(best[0]):'Anotá tus pesos'}</div></button>
   </div>`;
 }
 
@@ -2191,9 +2237,10 @@ function screenRutina(){
     ${s.funcional?c2FunVacio():empty(ICONS.rutina,'Todavía no tenés rutina',PROFE+' te la arma desde el panel del gimnasio. Apenas la cargue, te aparece acá con cada ejercicio animado.')}`;
   if(S.day>=R.length) S.day=0;
   const r=R[S.day]; const n=r.ex.length; const d=[...S.done].filter(k=>k.startsWith(S.day+'-')).length;
+  const hechos=new Set(R.map((x,i)=>rdHecho(R,i)?i:-1).filter(i=>i>=0)), rdNuevo=new Set(S.rdVisto?[...hechos].filter(i=>!S.rdVisto.has(i)):[]); S.rdVisto=hechos;
   return `${timerCard()}
   <div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${PROFE}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
-  ${R.length>1?`<div class="days hscroll" role="group" aria-label="Día">${R.map((x,i)=>`<button data-day="${i}" aria-pressed="${i===S.day}">${esc(x.d)}<small>${esc(x.t||'')}</small></button>`).join('')}</div>`:''}
+  ${R.length>1?`<div class="days hscroll" role="group" aria-label="Día">${R.map((x,i)=>`<button data-day="${i}" aria-pressed="${i===S.day}" class="${rdHecho(R,i)?'rdok':''} ${rdNuevo.has(i)?'rdnew':''}">${rdHecho(R,i)?'<b class="rdtic" aria-label="completo">✓</b>':''}${esc(x.d)}<small>${esc(x.t||'')}</small></button>`).join('')}</div>`:''}
   <div class="prog"><i style="width:${n?d/n*100:0}%"></i></div>
   <div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k); const RN=runOf(e); if(RN) return runCard(RN,k,on);
     return `<div class="ex ${on?'done':''}">
@@ -2201,7 +2248,7 @@ function screenRutina(){
       <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${exMeta(e)}</span>
         ${e[3]?`<button class="restbtn" data-rest="${restSecs(e[3])}">⏱ Descanso ${esc(e[3])}</button>`:''}</div>
       <button class="chk" data-ex="${k}" aria-pressed="${on}" aria-label="Marcar ${esc(e[0])} como hecho">✓</button></div>`}).join('')}</div>
-  ${n&&d===n?'<button class="btn" id="fin">Terminar entrenamiento</button>':''}`;
+  ${n&&d===n?`<div class="rdfin ${rdNuevo.has(S.day)?'rdnew':''}"><span class="rdfico" aria-hidden="true">🏁</span><div><b>¡${esc(r.d)} completo!</b><small>Queda en verde toda la semana. El lunes se reinicia para volver a marcarlo.</small></div></div>${TCB.sesT0?'<button class="btn" id="fin">Terminar entrenamiento</button>':''}`:''}`;
 }
 /* nombres parecidos usan la misma animación (ej. "press de banca" → Press banca) */
 const sinTilde=t=>String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
@@ -3080,11 +3127,11 @@ function renderDuenio(){
   <section class="panel">
     <div class="panelhead"><h2>Socios</h2>${all.length?`<label class="psearch ${S.q?'con':''}" title="Buscar socio (Ctrl+F)"><span class="pslupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg></span><input id="psq" type="search" autocomplete="off" spellcheck="false" placeholder="Buscar por nombre o DNI" aria-label="Buscar socio por nombre o DNI" value="${esc(S.q||'')}"><kbd aria-hidden="true">Ctrl F</kbd><button type="button" class="psx" id="psx" aria-label="Borrar búsqueda">×</button></label><span class="pscnt muted" id="pscnt" aria-live="polite"></span>`:''}${all.length?`<div class="chips" role="group" aria-label="Filtrar">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div>`:''}</div>
     ${addForm}
-    ${all.length?`<div class="tablewrap"><table><thead><tr><th>Socio</th><th>Plan</th><th>Vence</th><th>Estado</th><th>Cuotas ${Y}</th><th>Rutina</th><th></th></tr></thead><tbody>
+    ${all.length?`<div class="tablewrap"><table><thead><tr><th>Socio</th><th>Plan</th><th>Vence</th><th>Estado</th><th>Cuotas ${Y}</th><th>Rutina</th><th class="fnth">Funcional</th></tr></thead><tbody>
     ${list.map(({s,e})=>`<tr class="rowlink" data-open="${s.dni}" data-q="${esc(psNorm(s.name)+' '+s.dni)}"><td><span class="who">${avatar('sm',s.photo,s.name)}<span><strong><span class="psn" data-n="${esc(s.name)}">${esc(s.name)}</span>${ultSens(s)}</strong><small class="num">DNI ${fmtDNI(s.dni)}</small></span></span></td>
       <td>${s.plan?esc(s.plan):'<span class="muted">—</span>'}</td><td class="num">${e.v}</td><td><span class="pill ${e.c}">${e.t}</span></td><td>${dotsOf(s)}</td>
       <td>${c2RutCell(s)}</td>
-      <td style="text-align:right"><button class="mini" data-open="${s.dni}">Abrir ficha</button></td></tr>`).join('')||`<tr><td colspan="7" class="muted">Nadie en este filtro.</td></tr>`}
+      <td style="text-align:right"><span class="fncell"><label class="fnck ${s.funcional?'on':''}" title="Entrenamiento funcional"><input type="checkbox" data-fnck="${s.dni}" ${s.funcional?'checked':''} ${puedeP('asignar')||puedeP('rutinas')?'':'disabled'}><i aria-hidden="true"></i><span>Funcional</span></label><button class="mini" data-open="${s.dni}">Abrir ficha</button></span></td></tr>`).join('')||`<tr><td colspan="7" class="muted">Nadie en este filtro.</td></tr>`}
     <tr class="psnone" id="psnone" hidden><td colspan="7"><span class="psnico" aria-hidden="true">🔍</span><b id="psnotx"></b>${S.filter!=='todos'?'<button type="button" class="linkb" id="pstodos">Buscar en todos los socios</button>':''}</td></tr>
     </tbody></table></div>`
     :empty(ICONS.asist,'Todavía no hay socios','Se suman solos cuando se registran con su DNI en la app. También podés agregarlos acá arriba y después asignarles la cuota y la rutina.')}
@@ -3352,6 +3399,9 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.26',t:'Funcional con un toque',items:[
+    ['✅','En la lista de <b>Socios</b>, al lado de «Abrir ficha», hay un tilde <b>Funcional</b> para marcarlo o desmarcarlo al toque.'],
+    ['📱','En la app, los socios ven en verde los días de rutina que completaron en la semana, sus tiempos de entrenamiento y pueden cambiar de cuota aunque ya la hayan pagado.']]},
   {v:'1.1.25',t:'Rangos: desarrollador, dueño y profe',items:[
     ['⚡','Ahora hay <b>tres rangos</b>: el <b>desarrollador</b> (acceso total), el <b>dueño</b> (todo lo del gimnasio) y los <b>profes</b> con los permisos que les des.'],
     ['🔒','El dueño maneja a los profes, pero no puede cambiar ni quitar al desarrollador ni a otros dueños: aparecen como “Protegido”.']]},
@@ -3611,9 +3661,10 @@ function tcbCargar(){ const dni=S.user&&S.user.dni; if(!dni||TCB.dni===dni) retu
     TCB.sesT0=Date.now()-(+r.ses||0)<10*3600e3?+r.ses||0:0; TCB.drafts=r.drafts||{}; TCB.scroll=+r.scroll||0;
     if(TCB.boot&&r.tab==='rutina'&&Date.now()-(+r.ts||0)<6*3600e3){ S.tab='rutina'; S.lastTab='rutina'; TCB.scrollPend=TCB.scroll>0 } }
   else S.day=0;
-  TCB.boot=false }
+  if(r&&r.fecha!==iso(TODAY)&&r.semana===rdSemana()){ (r.done||[]).forEach(k=>S.done.add(k)); S.day=+r.day||0 }
+  S.rdVisto=null; TCB.boot=false }
 function tcbGuardar(force){ const dni=S.user&&S.user.dni; if(!dni||TCB.dni!==dni) return;
-  const c={sw:S.sw,rest:S.rest,tmode:S.tmode}, r={fecha:iso(TODAY),day:S.day,done:[...S.done],rsub:S.rsub||'ent',ex:S.tcbEx||null,otro:!!S.tcbOtro,ses:TCB.sesT0||0,drafts:TCB.drafts,scroll:TCB.scroll,tab:S.tab};
+  const c={sw:S.sw,rest:S.rest,tmode:S.tmode}, r={fecha:iso(TODAY),semana:rdSemana(),day:S.day,done:[...S.done],rsub:S.rsub||'ent',ex:S.tcbEx||null,otro:!!S.tcbOtro,ses:TCB.sesT0||0,drafts:TCB.drafts,scroll:TCB.scroll,tab:S.tab};
   const sig=JSON.stringify([c,r]); if(!force&&sig===TCB.sig) return; TCB.sig=sig; r.ts=Date.now();
   tcbLS('tc-crono-'+dni,c); tcbLS('tc-rutdia-'+dni,r) }
 /* el descanso terminó mientras la pantalla estaba bloqueada (o hace rato): se marca terminado y se avisa una sola vez, sin sonido */
@@ -3640,7 +3691,7 @@ function tcbEjercicios(s){ const out=[], has=n=>out.some(x=>x.toLowerCase()===n.
   Object.keys(s.prog||{}).forEach(n=>{ if(!has(n)) out.push(n) }); return out }
 function tcbStats(L){ const l=(L||[]).filter(x=>+x.kg>0).slice().sort((a,b)=>byF(a,b)||String(a.id).localeCompare(String(b.id))); if(!l.length) return null;
   let pr=null; l.forEach(x=>{const v=tcbRM(x); if(!pr||v>pr.v) pr={v,x}}); return {l,pr,first:l[0],firstV:tcbRM(l[0]),est:(+pr.x.reps||0)>1} }
-function tcbExSel(){ const s=me(); if(!S.tcbOtro) return S.tcbEx; const i=document.getElementById('tcbotro'), n=(i?i.value:TCB.drafts.tcbotro||'').trim(); return n?(tcbKey(s,n)||n):null }
+function tcbExSel(){ const s=me(); const i=document.getElementById('tcbotro'), n=(i?i.value:TCB.drafts.tcbotro||'').trim(); return n?(tcbKey(s,n)||n):null }
 function tcbCard(ex,st,cele){
   if(!st) return `<section class="tcb-card tcb-vacio"><div class="tcb-lab">${esc(ex)}</div><p>Todavía no cargaste marcas de ${esc(ex)}. Poné los kilos y las reps de tu mejor serie y arrancamos la curva.</p></section>`;
   const byD={}; st.l.forEach(x=>{const v=tcbRM(x); if(!byD[x.fecha]||v>byD[x.fecha].rm) byD[x.fecha]={fecha:x.fecha,rm:v}}); const pts=Object.values(byD).sort(byF);
@@ -3660,22 +3711,23 @@ function tcbCard(ex,st,cele){
 function tcbProgresos(){ const s=me(); s.prog=s.prog||{}; const names=tcbEjercicios(s), con=names.filter(n=>tcbStats(s.prog[n]));
   if(!S.tcbEx||!names.includes(S.tcbEx)) S.tcbEx=con[0]||names[0]||null;
   if(!names.length) S.tcbOtro=true;
-  const ex=S.tcbOtro?null:S.tcbEx, st=ex?tcbStats(s.prog[ex]):null, cele=S.tcbCele&&S.tcbCele.ex===ex?S.tcbCele:null;
+  if(S.ptab==='cuerpo') return pgSeg()+screenCuerpo(s);
+  const ex=S.tcbEx, st=ex?tcbStats(s.prog[ex]):null, cele=S.tcbCele&&S.tcbCele.ex===ex?S.tcbCele:null;
   const form=`<form class="tcb-form" id="tcbf" novalidate><div class="tcb-lab">Cargá una marca de hoy</div>
-    <div class="chips hscroll pexs tcb-exs" role="group" aria-label="Ejercicio">${names.map(n=>`<button type="button" data-tcbex="${esc(n)}" aria-pressed="${!S.tcbOtro&&n===S.tcbEx}">${esc(n)}</button>`).join('')}<button type="button" class="tcb-otro" data-tcbotro="1" aria-pressed="${!!S.tcbOtro}">＋ Otro</button></div>
-    ${S.tcbOtro?`<div class="tcb-otrow"><input class="inp" id="tcbotro" list="tcb-exl" placeholder="Escribí el ejercicio (ej: Press banca)" autocomplete="off" aria-label="Nombre del ejercicio"><datalist id="tcb-exl">${exOptions(s).map(n=>`<option value="${esc(n)}">`).join('')}</datalist></div>`:''}
+    <div class="tcb-otrow pgin"><span class="pglupa" aria-hidden="true">✎</span><input class="inp" id="tcbotro" list="tcb-exl" value="${esc(S.tcbOtro?'':(S.tcbEx||''))}" placeholder="Escribí el ejercicio (ej: Press banca)" autocomplete="off" aria-label="Nombre del ejercicio"><datalist id="tcb-exl">${exOptions(s).map(n=>`<option value="${esc(n)}">`).join('')}</datalist></div>
+    ${names.length?`<div class="pgquick"><small>O tocá uno de tu rutina:</small><div class="chips pexs tcb-exs pgwrap" role="group" aria-label="Ejercicios de tu rutina">${names.map(n=>`<button type="button" data-tcbex="${esc(n)}" aria-pressed="${!S.tcbOtro&&n===S.tcbEx}">${esc(n)}</button>`).join('')}</div></div>`:''}
     <div class="tcb-row"><label class="field"><span>Kilos</span><input class="inp num" id="tcbkg" inputmode="decimal" placeholder="${st?fmtKg(st.l[st.l.length-1].kg):'80'}" autocomplete="off"></label>
       <label class="field"><span>Reps</span><input class="inp num" id="tcbreps" inputmode="numeric" placeholder="1" autocomplete="off"></label>
       <button class="btn tcb-go" type="submit">Guardar</button></div>
     <p class="tcb-prev" id="tcbprev" aria-live="polite">${TCB_HINT}</p></form>`;
   const recs=con.length>1?`<section class="tcb-recs"><div class="tcb-lab">Tus récords</div>${con.map((n,i)=>{const t=tcbStats(s.prog[n]);
     return `<button type="button" class="tcb-rec" data-tcbex="${esc(n)}" aria-pressed="${n===ex}" style="--i:${i}"><span class="tcb-recn">${esc(n)}</span><b class="num">${fmtKg(t.pr.v)} kg</b><small>${t.est?'est.':'RM'}</small></button>`}).join('')}</section>`:'';
-  return `<div class="rhead"><div><h2>Progresos</h2><p class="h2sub2">Tu RM y tus récords, ejercicio por ejercicio</p></div></div>${form}${ex?tcbCard(ex,st,cele):''}${recs}` }
+  return `${pgSeg()}${form}${ex?tcbCard(ex,st,cele):''}${recs}` }
 function tcbPreview(){ const p=document.getElementById('tcbprev'); if(!p) return; const kg=parseFloat(($('#tcbkg').value||'').replace(',','.')), r=parseInt($('#tcbreps').value)||1;
   if(!(kg>0)){ p.innerHTML=TCB_HINT; return } const v=tcbRM({kg,reps:r}), n=tcbExSel(), st=n?tcbStats((me().prog||{})[n]):null;
   p.innerHTML=(r>1?`1RM estimado ≈ <b>${fmtKg(v)} kg</b>`:`RM real: <b>${fmtKg(v)} kg</b>`)+(st&&v>st.pr.v?' · <span class="tcb-si">¡Sería nuevo PR! 🏆</span>':st?` · tu PR: ${fmtKg(st.pr.v)} kg`:'') }
 function tcbGuardarMarca(){ const s=me(); if(!s) return; s.prog=s.prog||{};
-  let n=S.tcbOtro?($('#tcbotro')||{value:''}).value.trim().replace(/\s+/g,' '):S.tcbEx;
+  let n=($('#tcbotro')||{value:''}).value.trim().replace(/\s+/g,' ')||S.tcbEx;
   if(!n){ toast('Elegí o escribí el ejercicio'); const i=$('#tcbotro'); if(i) i.focus(); return }
   const kg=parseFloat(($('#tcbkg').value||'').replace(',','.')), rv=$('#tcbreps').value.trim(), reps=rv?parseInt(rv):1;
   if(!(kg>0&&kg<=1000)){ toast('Poné los kilos (ej: 80 o 82,5)'); return $('#tcbkg').focus() }
@@ -3695,7 +3747,8 @@ screenRutina=function(){ const p=S.rsub==='prog'?1:0, prev=S.tcbPrev==null?p:S.t
   if(p) return seg+tcbProgresos();
   let h=tcbScreenRutina.apply(this,arguments); const i=h.indexOf('<div class="prog">');
   if(i>=0&&TCB.sesT0) h=h.slice(0,i)+`<div class="tcb-ses" id="tcbses"><span class="live"></span><span>Sesión de hoy</span><b class="num" id="tcbsest">${tcbDur(Date.now()-TCB.sesT0)}</b></div>`+h.slice(i);
-  return seg+h };
+  else if(i>=0&&rsHoy()) h=h.slice(0,i)+`<div class="tcb-ses rsdone"><span aria-hidden="true">💪</span><span>Hoy estuviste entrenando</span><b class="num">${tcbDur(rsHoy())}</b></div>`+h.slice(i);
+  return seg+h+rsSemanaHtml() };
 const tcbRenderSocio=renderSocio;
 renderSocio=function(){ if(S.user) tcbCargar(); tcbRenderSocio.apply(this,arguments); if(!S.user) return;
   const scr=document.getElementById('scr-rutina');
@@ -3713,7 +3766,7 @@ document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closes
   if(b.dataset.tcbdel){ e.stopPropagation(); const s=me(), k=S.tcbEx; if(!s||!s.prog||!s.prog[k]) return; s.prog[k]=s.prog[k].filter(x=>x.id!==b.dataset.tcbdel); saveDB(); toast('Marca borrada'); render(); return }
   if(b.id==='restgo'||b.id==='restreset'||b.id==='restplus') delete S.rest.fin;
   if((b.dataset.ex||b.id==='swgo')&&!TCB.sesT0) TCB.sesT0=Date.now();
-  if(b.id==='fin'){ const d=TCB.sesT0?Date.now()-TCB.sesT0:0; TCB.sesT0=0; if(d>60000) setTimeout(()=>toast('Entrenamiento guardado: '+tcbDur(d)+' de sesión. ¡Bien ahí!'),0) }
+  if(b.id==='fin'){ const d=TCB.sesT0?Date.now()-TCB.sesT0:0; TCB.sesT0=0; if(d>0) rsAgregar(d); setTimeout(()=>toast(d>60000?'¡Bien ahí! Entrenaste '+tcbDur(d):'Entrenamiento guardado. ¡Bien ahí!'),0) }
   setTimeout(()=>tcbGuardar(),0) },true);
 document.addEventListener('input',e=>{ const t=e.target; if(S.view!=='socio'||!S.user||!t.closest) return;
   if(t.closest('#scr-rutina')){ const k=tcbDraftKey(t); if(k){ if(t.value) TCB.drafts[k]=t.value; else delete TCB.drafts[k] } }
@@ -4054,6 +4107,35 @@ function c2Aprobado(){ S.tab='inicio'; S.lastTab=null; S.forceTop=true; render()
 setInterval(()=>{ if(document.visibilityState==='visible') c2Revisar(false) },20000);
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') c2Revisar(false) });
 window.addEventListener('focus',()=>c2Revisar(false));
+/* ---------- v40: días completos de la semana, tiempos de entrenamiento y atajos ---------- */
+function rdSemana(){ const l=new Date(TODAY); l.setDate(TODAY.getDate()-((TODAY.getDay()+6)%7)); return iso(l) }
+function rdHecho(R,i){ const d=R&&R[i]; if(!d||!d.ex||!d.ex.length) return false; for(let j=0;j<d.ex.length;j++) if(!S.done.has(i+'-'+j)) return false; return true }
+function rsLista(){ const dni=S.user&&S.user.dni; return dni?(tcbLS('tc-ses-'+dni)||[]):[] }
+function rsAgregar(ms){ const dni=S.user&&S.user.dni; if(!dni) return; const s=me(), R=s&&s.rutina, dia=R&&R[S.day]?R[S.day].d:'';
+  const L=rsLista().filter(x=>x.f>=iso(new Date(TODAY.getTime()-60*864e5))); L.push({f:iso(TODAY),ms:Math.round(ms),dia}); tcbLS('tc-ses-'+dni,L) }
+const rsHoy=()=>rsLista().filter(x=>x.f===iso(TODAY)).reduce((a,x)=>a+x.ms,0);
+function rsSemanaHtml(){ const lun=new Date(rdSemana()+'T00:00'), L=rsLista(); let tot=0, hay=false;
+  const cel=['L','M','X','J','V','S','D'].map((l,i)=>{ const d=new Date(lun); d.setDate(lun.getDate()+i); const f=iso(d), xs=L.filter(x=>x.f===f), ms=xs.reduce((a,x)=>a+x.ms,0)+(f===iso(TODAY)&&TCB.sesT0?Date.now()-TCB.sesT0:0);
+    tot+=ms; if(ms) hay=true; const hoy=f===iso(TODAY);
+    return `<div class="rsd ${ms?'on':''} ${hoy?'hoy':''}" style="--i:${i}" title="${xs.map(x=>x.dia).filter(Boolean).join(', ')}"><span>${l}</span><b class="num">${ms?tcbDur(ms):'—'}</b>${xs[0]&&xs[0].dia?`<small>${esc(xs[0].dia)}</small>`:''}</div>` }).join('');
+  if(!hay) return '';
+  return `<section class="rsem"><div class="rsemh"><b>Tus entrenamientos de la semana</b><span class="num">Total ${tcbDur(tot)}</span></div><div class="rsgrid">${cel}</div></section>` }
+function pgSeg(){ const t=S.ptab==='cuerpo'?1:0, prev=S.pgPrev==null?t:S.pgPrev; S.pgPrev=t;
+  return `<div class="rhead"><div><h2>Progresos</h2><p class="h2sub2">${t?'Tu peso (y tu % graso si lo medís), semana a semana':'Tu RM y tus récords, ejercicio por ejercicio'}</p></div></div>
+  <div class="seg2 pgseg" role="group" aria-label="Qué medir" style="--m:${prev}" data-to="${t}"><button data-ptab="cargas" aria-pressed="${!t}">Fuerza</button><button data-ptab="cuerpo" aria-pressed="${!!t}">Peso</button></div>` }
+document.addEventListener('click',e=>{ const t=e.target;
+  if(t.closest&&t.closest('.fnck')){ e.stopPropagation(); return }              /* el tilde de funcional no abre la ficha */
+  const b=t.closest&&t.closest('button'); if(!b) return;
+  if(b.dataset.rsubgo){ S.rsub=b.dataset.rsubgo; S.ptab='cargas' }
+  if(b.id==='ccambiar'){ e.stopPropagation(); S.ccOpen=!S.ccOpen; render(true); if(S.ccOpen){ const w=document.querySelector('.ccwrap'); if(w) w.scrollIntoView({block:'nearest',behavior:reduceMotion?'auto':'smooth'}) } } },true);
+document.addEventListener('change',e=>{ const t=e.target; if(!t.dataset||t.dataset.fnck==null) return; const s=DB.socios[t.dataset.fnck]; if(!s) return;
+  s.funcional=t.checked; saveDB(); const l=t.closest('.fnck'); if(l){ l.classList.toggle('on',t.checked); l.classList.remove('fnpop'); void l.offsetWidth; l.classList.add('fnpop') }
+  toast(t.checked?s.name.split(' ')[0]+' hace Entrenamiento funcional':s.name.split(' ')[0]+' ya no figura en funcional'); setTimeout(()=>render(true),450) });
+document.addEventListener('input',e=>{ const t=e.target; if(t.id!=='tcbotro') return; const v=t.value.trim().toLowerCase();
+  S.tcbOtro=!!v&&v!==String(S.tcbEx||'').toLowerCase();
+  document.querySelectorAll('.pgwrap [data-tcbex]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tcbex.toLowerCase()===v)) });
+const rdRenderSocio=renderSocio;
+renderSocio=function(){ if(S.tab==='progreso'){ S.tab='rutina'; S.rsub='prog' } return rdRenderSocio.apply(this,arguments) };
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
@@ -4070,6 +4152,7 @@ async function elegirPlan(n){
   document.querySelectorAll('.plan').forEach(x=>{const on=x.dataset.plan===n; x.classList.toggle('on',on); x.setAttribute('aria-checked',on)});
   if(CLOUD){ try{ await q(sb.rpc('elegir_plan',{p_plan:n})); await loadAll() }catch(e){ toast(errTxt(e)); return render() } }
   else{ const uni=esUni(s); if(!s.plan){s.desde=mk(Y,M);s.desdeDia=D} s.plan=n; s.precio=uni?conUni(p.p):p.p; s.vence=s.vence||10; saveDB() }
+  if(S.ccOpen){ S.ccOpen=false; toast('Listo: desde la próxima cuota pasás a '+n) }
   render(true);
 }
 /* ---------- Cómo pagar: alias y CVU/CBU para copiar y pegar en cualquier billetera o banco ---------- */
@@ -4391,7 +4474,7 @@ document.addEventListener('click',e=>{
   if(b.id==='restreset'){S.rest.run=false;S.rest.left=S.rest.total;return render()}
   if(b.dataset.rest){const ms=+b.dataset.rest*1000;S.rest={run:true,end:Date.now()+ms,left:ms,total:ms};S.tmode='rest';
     S.forceTop=true;toast('Descanso de '+fmtR(ms)+' en marcha');return render()}
-  if(b.id==='fin'){toast('Entrenamiento guardado. ¡Bien ahí!');[...S.done].filter(k=>k.startsWith(S.day+'-')).forEach(k=>S.done.delete(k));return render()}
+  if(b.id==='fin'){return render()}
   if(b.dataset.m){S.selMonth=+b.dataset.m;return render()}
   if(b.dataset.mrk!=null){ S.asView='rank'; S.rkP=S.mrkCara||'mes'; S.rkSig=null; S.tab='asist'; S.forceTop=true; return render() }
   if(b.dataset.asv){ if((S.asView==='rank')!==(b.dataset.asv==='rank')){ S.asView=b.dataset.asv==='rank'?'rank':'mia'; S.rkSig=null } return render(true) }
