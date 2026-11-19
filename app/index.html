@@ -2,7 +2,7 @@
 <html lang="es-AR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#070807">
 <meta name="description" content="Training Club: tu rutina, tus cuotas y tus asistencias. Una marca de AdForge.">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -728,6 +728,7 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .chwrap .chbar{position:static;flex:none;background:var(--bg);padding:8px 12px calc(10px + env(safe-area-inset-bottom,0px));align-items:flex-end}
 .chin{flex:1;position:relative;display:flex}
 .chin textarea{flex:1;resize:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:22px;padding:11px 16px;font:inherit;font-size:15px;max-height:120px;line-height:1.35;outline:none;transition:border-color .2s,box-shadow .2s}
+.chin textarea{overflow-y:auto;scrollbar-width:none}.chin textarea::-webkit-scrollbar{display:none}
 .chin textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(36,201,167,.15)}
 .chcnt{position:absolute;right:12px;bottom:-14px;font-size:10px;color:var(--muted)}
 .chsend{transition:transform .25s var(--spring),opacity .2s,filter .2s}
@@ -735,6 +736,67 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .chsend:not(:disabled){animation:sendOn .35s var(--spring)}
 @keyframes sendOn{from{transform:scale(.8) rotate(-20deg)}}
 @media (prefers-reduced-motion:reduce){.chfab,.chfab::before,.chtip,.chsheet,.chback,.minirk,.mrp *,.chchips button,.bub,.chon::after,.chola{animation:none!important}}
+/* editar mensajes */
+.bub{cursor:pointer;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;transition:transform .18s var(--spring),filter .18s}
+.bub:active{transform:scale(.97)}
+.bub.menu{z-index:5;filter:brightness(1.08)}
+.bub.menu.mio{transform:scale(1.02)}
+.bed{font-style:italic;opacity:.85;margin-right:3px}
+.bmenu{position:absolute;bottom:calc(100% + 6px);z-index:6;display:flex;flex-direction:column;min-width:150px;padding:5px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 30px -8px rgba(0,0,0,.55);color:var(--ink);animation:bmIn .2s var(--spring) both;cursor:default}
+.bub.mio .bmenu{right:0;transform-origin:bottom right}.bub.otro .bmenu{left:0;transform-origin:bottom left}
+.bmenu.abajo{bottom:auto;top:calc(100% + 6px)}
+.bub.mio .bmenu.abajo{transform-origin:top right}.bub.otro .bmenu.abajo{transform-origin:top left}
+.bmenu button{border:0;background:none;color:inherit;font:inherit;font-size:14px;font-weight:600;text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.bmenu button:hover,.bmenu button:active{background:var(--sunk)}
+.bmnote{font-size:11px;color:var(--muted);padding:4px 12px 6px;white-space:nowrap}
+.bmenu.fuera{animation:bmOut .15s ease both}
+@keyframes bmIn{from{opacity:0;transform:scale(.7)}}@keyframes bmOut{to{opacity:0;transform:scale(.85)}}
+.bub.editando{outline:2px solid var(--accent);outline-offset:2px}
+.bub.eflash p{animation:eFlash .9s ease both}
+@keyframes eFlash{0%{opacity:.2;filter:blur(2px)}100%{opacity:1;filter:none}}
+.chedit{flex:none;display:flex;align-items:center;gap:10px;margin:0 12px;padding:8px 10px 8px 12px;border-radius:14px 14px 0 0;background:var(--surface);border:1px solid var(--line);border-bottom:0;border-left:3px solid var(--accent);animation:ceIn .25s var(--spring) both}
+.chthread .chedit{margin:8px 0 0}
+.chedit.fuera{animation:ceOut .18s ease both}
+@keyframes ceIn{from{opacity:0;transform:translateY(12px)}}@keyframes ceOut{to{opacity:0;transform:translateY(10px)}}
+.cheico{font-size:16px}.chetx{flex:1;min-width:0}.chetx b{display:block;font-size:12.5px;color:var(--accent)}.chetx small{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chex{flex:none;width:28px;height:28px;border-radius:50%;border:0;background:var(--sunk);color:var(--ink);font-size:18px;line-height:1;cursor:pointer}
+.chbar.editmode .chsend{background:var(--accent)}
+.chbar.editmode .chsend svg{display:none}.chbar.editmode .chsend::after{content:'✓';font-size:22px;font-weight:900;color:#06110e}
+/* teclado abierto en el celu: la app ocupa solo lo visible y la barra queda pegada al teclado */
+@media (max-width:600px){
+  html.kbon #app{top:var(--vvt,0px)!important;bottom:auto!important;height:var(--vvh,100%)!important}
+  html.kbon .phone{padding-top:0!important}
+  html.kbon .nav,html.kbon .chfab,html.kbon .chtip,html.kbon .toast{display:none!important}
+  html.kbon .phone:has(.chwrap) .apphead{display:none}
+  html.kbon .chsheet{height:100%!important;border-radius:0;animation:none!important}
+  html.kbon .chback{display:none}
+  html.kbon .chwrap .chbar{padding-bottom:8px}
+  html.kbon .chchips{display:none}
+  html.kbon .chwrap.sheet .chtop{padding-top:calc(10px + env(safe-area-inset-top,0px))}html.kbon .chgrab{display:none}
+}
+@media (prefers-reduced-motion:reduce){.bmenu,.chedit,.bub.eflash p{animation:none!important}}
+/* novedades del panel */
+#tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
+#tcnov.fuera{animation:fadeOut .25s ease both}
+.nvbox{position:relative;width:min(480px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:28px 26px 22px;text-align:center;box-shadow:0 30px 80px -20px rgba(36,201,167,.35);animation:nvIn .55s cubic-bezier(.2,1.2,.3,1) both}
+#tcnov.fuera .nvbox{animation:nvOut .25s ease both}
+@keyframes nvIn{from{opacity:0;transform:translateY(24px) scale(.9)}}@keyframes nvOut{to{opacity:0;transform:scale(.95)}}
+.nvico{font-size:54px;display:inline-block;animation:nvGift 1s var(--spring) both .2s,famBob 2.6s ease-in-out infinite 1.3s}
+@keyframes nvGift{0%{transform:scale(.2) rotate(-30deg)}60%{transform:scale(1.2) rotate(8deg)}100%{transform:scale(1)}}
+.nvver{display:inline-block;margin-top:6px;padding:4px 12px;border-radius:99px;background:var(--accent-soft);border:1px solid rgba(36,201,167,.4);color:var(--accent);font-size:12.5px;font-weight:800}
+.nvbox h2{font-family:var(--display);text-transform:uppercase;font-size:26px;line-height:1.05;margin:10px 0 4px}
+.nvsub{margin:0 0 14px;color:var(--muted);font-size:14px}
+.nvbox ul{list-style:none;margin:0 0 18px;padding:0;text-align:left;display:flex;flex-direction:column;gap:8px}
+.nvbox li{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;border-radius:14px;background:var(--sunk);border:1px solid var(--line);font-size:14px;line-height:1.4;animation:nvLi .45s var(--spring) both;animation-delay:calc(var(--k)*80ms + 350ms)}
+@keyframes nvLi{from{opacity:0;transform:translateX(-16px)}}
+.nve{font-size:20px;line-height:1.2;flex:none}
+.nvbox .btn{width:100%}
+.nvconf{position:absolute;top:0;left:0;right:0;height:0;pointer-events:none}
+.nvconf i{position:absolute;top:40px;left:50%;width:7px;height:11px;border-radius:2px;opacity:0;animation:nvConf 1.4s cubic-bezier(.2,.7,.3,1) both .25s}
+.nvconf i:nth-child(odd){background:#FCE024}.nvconf i:nth-child(even){background:#24C9A7}.nvconf i:nth-child(3n){background:#ff7a59}
+.nvconf i:nth-child(1){--x:-170px;--y:60px;--r:200deg}.nvconf i:nth-child(2){--x:-120px;--y:-30px;--r:-160deg}.nvconf i:nth-child(3){--x:-80px;--y:110px;--r:300deg}.nvconf i:nth-child(4){--x:-40px;--y:-50px;--r:120deg}.nvconf i:nth-child(5){--x:-200px;--y:20px;--r:-240deg}.nvconf i:nth-child(6){--x:170px;--y:50px;--r:-200deg}.nvconf i:nth-child(7){--x:120px;--y:-40px;--r:160deg}.nvconf i:nth-child(8){--x:80px;--y:120px;--r:-300deg}.nvconf i:nth-child(9){--x:40px;--y:-60px;--r:-120deg}.nvconf i:nth-child(10){--x:200px;--y:10px;--r:240deg}.nvconf i:nth-child(11){--x:-140px;--y:150px;--r:90deg}.nvconf i:nth-child(12){--x:140px;--y:150px;--r:-90deg}.nvconf i:nth-child(13){--x:0px;--y:-70px;--r:180deg}.nvconf i:nth-child(14){--x:-10px;--y:160px;--r:-180deg}
+@keyframes nvConf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){#tcnov,.nvbox,.nvbox li,.nvico,.nvconf i{animation:none!important}.nvconf{display:none}}
 /* sugerencias */
 .sugc .anon{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:99px;background:var(--sunk);border:1px solid var(--line)}
 .sugp{margin:4px 0 10px;color:var(--muted);font-size:13px}
@@ -2827,9 +2889,51 @@ function screenPendiente(logo){
     <button class="btn ghost" id="logout">Usar otro DNI</button></div>`;
 }
 
+/* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
+   Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
+const NOVEDADES=[
+  {v:'1.1.21',t:'Chat más cómodo',items:[
+    ['✏️','Ahora podés <b>editar tus mensajes</b> como en WhatsApp: tocá el mensaje → Editar (hasta 15 minutos después de mandarlo). Al socio le aparece “editado”.'],
+    ['📋','Tocando cualquier mensaje lo podés <b>copiar</b>.'],
+    ['📱','En la app de los socios, la barra para escribir queda <b>pegada al teclado</b> del celu.'],
+    ['🎁','Y esta ventanita: cada vez que el panel se actualice te contamos qué hay de nuevo.']]},
+  {v:'1.1.19',t:'Chat y ranking en Inicio',items:[
+    ['💬','Los socios tienen una <b>burbuja de chat</b> en Inicio para escribirte al toque, con mensajes rápidos.'],
+    ['🏆','En Inicio ven un <b>ranking chiquito</b> del mes debajo de su foto.']]},
+  {v:'1.1.18',t:'Mensajes, sugerencias y ranking',items:[
+    ['💬','Pestaña <b>Mensajes</b>: los socios te escriben desde la app y les respondés desde acá (les llega notificación).'],
+    ['🕶️','<b>Sugerencias anónimas</b>: “¿Qué podemos mejorar del gimnasio?”. Las ves en Mensajes → Sugerencias.'],
+    ['🥇','<b>Ranking de asistencia</b> para los socios: top 10 del mes o del año, con podio para los 3 primeros.']]}
+];
+const vNum=v=>String(v||'0').split('.').map(n=>parseInt(n)||0);
+const vCmp=(a,b)=>{const x=vNum(a),y=vNum(b); for(let i=0;i<3;i++){ if((x[i]||0)!==(y[i]||0)) return (x[i]||0)-(y[i]||0) } return 0};
+function novedadesCheck(){ const D=window.tcDesktop; if(!D||!D.version||S.novHecho) return; S.novHecho=true;
+  let visto=null; try{ visto=localStorage.getItem('tc-nov-visto') }catch(e){}
+  try{ localStorage.setItem('tc-nov-visto',D.version) }catch(e){}
+  if(visto&&vCmp(visto,D.version)>=0) return;
+  const L=NOVEDADES.filter(n=>vCmp(n.v,D.version)<=0&&(visto?vCmp(n.v,visto)>0:vCmp(n.v,D.version)===0));
+  if(!L.length) return;
+  setTimeout(()=>novedadesMostrar(L,D.version),700) }
+function novedadesMostrar(L,ver){ if(document.getElementById('tcnov')) return;
+  const items=L.flatMap(n=>n.items); let k=0;
+  document.body.insertAdjacentHTML('beforeend',`<div id="tcnov" role="dialog" aria-modal="true" aria-labelledby="tcnovt"><div class="nvbox">
+    <div class="nvconf" aria-hidden="true">${'<i></i>'.repeat(14)}</div>
+    <div class="nvico" aria-hidden="true">🎁</div>
+    <span class="nvver">Versión ${esc(ver)}</span>
+    <h2 id="tcnovt">¡Hay novedades en el panel!</h2>
+    <p class="nvsub">${L.length===1?esc(L[0].t):'Lo nuevo desde tu última actualización'}</p>
+    <ul>${items.map(([e,t])=>`<li style="--k:${k++}"><span class="nve" aria-hidden="true">${e}</span><span>${t}</span></li>`).join('')}</ul>
+    <button class="btn" id="tcnovok">¡Entendido!</button></div></div>`);
+  const cerrar=()=>{ const d=document.getElementById('tcnov'); if(!d) return; d.classList.add('fuera'); setTimeout(()=>d.remove(),260); document.removeEventListener('keydown',esc_) };
+  const esc_=e=>{ if(e.key==='Escape'||e.key==='Enter') cerrar() };
+  document.addEventListener('keydown',esc_);
+  document.getElementById('tcnovok').addEventListener('click',cerrar);
+  document.getElementById('tcnov').addEventListener('click',e=>{ if(e.target.id==='tcnov') cerrar() });
+  setTimeout(()=>{const b=document.getElementById('tcnovok'); if(b) b.focus()},400) }
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
+  if(S.view==='duenio'&&S.pro) novedadesCheck();
   if(fid==='chatin'||fid==='chatpin'){ const t=document.getElementById(fid); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(fsel,fsel)}catch(x){} } }
   /* cambio que llegó de otro lado (tiempo real): se actualiza en el lugar, sin animaciones de entrada ni saltos */
   if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
@@ -2918,14 +3022,14 @@ const chBurbujas=(L,yo)=>{ let out='', dia=null;
   L.forEach((m,i)=>{ const dd=chDia(m.creado); if(dd!==dia){ dia=dd; out+=`<div class="chday"><span>${dd}</span></div>` }
     const mio=m.de===yo, ant=L[i-1], sig=L[i+1], prim=!ant||ant.de!==m.de||chDia(ant.creado)!==dd, ult=!sig||sig.de!==m.de||chDia(sig.creado)!==dd;
     const st=mio?(m.err?'':m.env?TKR:m.leido?TK2:TK1):'';
-    out+=`<div class="bub ${mio?'mio':'otro'} ${prim?'prim':''} ${ult?'ult':''} ${m.env?'env':''} ${m.err?'err':''} ${m.nuevo?'nuevo':''}">${!mio&&ult?`<span class="bav">${avatar('xs',m.de==='socio'?(Object.values(DB.socios).find(x=>chK(x)===m.k)||{}).photo||null:null,m.autor||PROFE)}</span>`:''}${!mio&&prim&&m.autor?`<b class="bau">${esc(m.autor)}</b>`:''}<p>${chLink(m.texto)}</p><small>${chHm(m.creado)}${st}</small>${m.err?`<button type="button" class="bretry" data-retry="${esc(m.id)}">No se envió · Reintentar</button>`:''}</div>` });
+    out+=`<div class="bub ${mio?'mio':'otro'} ${prim?'prim':''} ${ult?'ult':''} ${m.env?'env':''} ${m.err?'err':''} ${m.nuevo?'nuevo':''} ${m.flash?'eflash':''} ${S.chEdit&&String(S.chEdit.id)===String(m.id)?'editando':''}" data-mid="${esc(m.id)}">${!mio&&ult?`<span class="bav">${avatar('xs',m.de==='socio'?(Object.values(DB.socios).find(x=>chK(x)===m.k)||{}).photo||null:null,m.autor||PROFE)}</span>`:''}${!mio&&prim&&m.autor?`<b class="bau">${esc(m.autor)}</b>`:''}<p>${chLink(m.texto)}</p><small>${m.editado?'<em class="bed">editado</em>':''}${chHm(m.creado)}${st}</small>${m.err?`<button type="button" class="bretry" data-retry="${esc(m.id)}">No se envió · Reintentar</button>`:''}</div>` });
   return out };
 const ICO_SEND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
 async function cargarChat(){ if(!CLOUD||!sb) return;
   try{ const r=await sb.from('mensajes').select('*').order('id').limit(3000); if(r.error) return;
     let sg=SUGS; if(S.pro){ const q=await sb.from('sugerencias').select('*').order('id',{ascending:false}).limit(300); if(!q.error) sg=q.data.map(x=>({id:x.id,texto:x.texto,creado:x.creado,leida:x.leida})) }
     const viejos=new Set(MSGS.map(m=>m.id)), antes=JSON.stringify([MSGS,SUGS]);
-    MSGS=r.data.map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,creado:m.creado,leido:m.leido,nuevo:viejos.size&&!viejos.has(m.id)}));
+    MSGS=r.data.map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,creado:m.creado,leido:m.leido,editado:m.editado||null,nuevo:viejos.size&&!viejos.has(m.id)}));
     SUGS=sg; if(antes!==JSON.stringify([MSGS,SUGS])) chRefrescar(true) }catch(e){} }
 function chRefrescar(dePush){
   const yoSocio=S.view==='socio'&&S.user, enChat=yoSocio&&(S.tab==='chat'||(S.tab==='inicio'&&S.chSheet)), enPanel=S.view==='duenio'&&S.pro&&S.ptabP==='mensajes';
@@ -2947,12 +3051,49 @@ async function chMarcarLeido(k,yo){ const otro=yo==='socio'?'profe':'socio', pen
 async function chEnviar(txt,k,yo){ txt=String(txt||'').trim(); if(!txt) return false; if(txt.length>1000){toast('El mensaje es muy largo');return false}
   const autor=yo==='socio'?(me()||{}).name:(PRO?PRO.nombre:'Tu profe');
   MSGS.forEach(x=>x.nuevo=false);
-  const m={id:'t'+Date.now(),k,de:yo,autor,texto:txt,creado:new Date().toISOString(),leido:false,env:!!CLOUD,nuevo:true}; MSGS.push(m);
+  const m={id:CLOUD?'t'+Date.now():Date.now(),k,de:yo,autor,texto:txt,creado:new Date().toISOString(),leido:false,env:!!CLOUD,nuevo:true}; MSGS.push(m);
   const lst=document.getElementById('chatlist'); if(lst){ lst.innerHTML=chBurbujas(MSGS.filter(x=>x.k===k),yo); chAbajo() } chUpdBar();
   if(!CLOUD){ chGuardarLocal(); if(yo==='socio') setTimeout(()=>{},0); return true }
   try{ const r=yo==='socio'?await sb.rpc('chat_enviar',{p_texto:txt}):await sb.rpc('chat_responder',{p_socio:k,p_texto:txt,p_autor:autor});
     if(r.error) throw r.error; m.id=r.data; m.env=false }catch(e){ m.env=false; m.err=true; toast(errTxt(e)||'No se pudo enviar. Probá de nuevo.') }
   m.nuevo=false; if(lst){ const L=MSGS.filter(x=>x.k===k); lst.innerHTML=chBurbujas(L,yo); chAbajo() } return true }
+const CH_EDIT_MIN=15;
+const chEditable=(m,yo)=>m&&m.de===yo&&typeof m.id==='number'&&!m.env&&!m.err&&Date.now()-new Date(m.creado).getTime()<CH_EDIT_MIN*60e3;
+const chYo=()=>document.getElementById('chatf')?'socio':'profe';
+const chKAct=()=>document.getElementById('chatf')?chK(me()):S.chSel;
+function chPintar(){ const l=document.getElementById('chatlist'); if(!l) return; const L=MSGS.filter(x=>x.k===chKAct()); if(L.length) l.innerHTML=chBurbujas(L,chYo()) }
+function chCerrarMenu(){ document.querySelectorAll('.bmenu').forEach(x=>{x.classList.add('fuera'); setTimeout(()=>x.remove(),160)}); document.querySelectorAll('.bub.menu').forEach(b=>b.classList.remove('menu')) }
+function chAbrirMenu(b){ const m=MSGS.find(x=>String(x.id)===b.dataset.mid); if(!m) return; const yo=chYo(); chCerrarMenu();
+  const l=b.closest('.chlist'), arriba=l&&(b.offsetTop-l.scrollTop<70);
+  const ed=chEditable(m,yo), viejo=m.de===yo&&typeof m.id==='number'&&!ed;
+  b.classList.add('menu');
+  b.insertAdjacentHTML('beforeend',`<div class="bmenu ${arriba?'abajo':''}" role="menu">${ed?'<button type="button" data-bact="editar" role="menuitem">✏️ Editar</button>':''}<button type="button" data-bact="copiar" role="menuitem">📋 Copiar</button>${viejo?`<span class="bmnote">Se edita hasta ${CH_EDIT_MIN} min después</span>`:''}</div>`);
+  try{navigator.vibrate&&navigator.vibrate(12)}catch(x){} }
+function chEntrarEdit(m){ const t=$('#chatpin')||$('#chatin'); if(!t) return; const f=t.form;
+  S.chEdit={id:m.id,form:f.id,antes:t.value}; f.classList.add('editmode');
+  let ban=f.parentNode.querySelector('.chedit'); if(!ban){ f.insertAdjacentHTML('beforebegin','<div class="chedit" role="status"><span class="cheico" aria-hidden="true">✏️</span><span class="chetx"><b>Editando mensaje</b><small></small></span><button type="button" class="chex" id="chex" aria-label="Cancelar edición">×</button></div>'); ban=f.parentNode.querySelector('.chedit') }
+  ban.querySelector('small').textContent=m.texto;
+  t.value=m.texto; t.dispatchEvent(new Event('input',{bubbles:true})); t.focus(); t.setSelectionRange(t.value.length,t.value.length);
+  const c=document.getElementById('chchips'); if(c) c.hidden=true; chPintar() }
+function chSalirEdit(restaurar){ const e=S.chEdit; if(!e) return; S.chEdit=null; const f=document.getElementById(e.form), t=f&&f.querySelector('textarea');
+  if(f){ f.classList.remove('editmode'); const ban=f.parentNode.querySelector('.chedit'); if(ban){ ban.classList.add('fuera'); setTimeout(()=>ban.remove(),180) } }
+  if(t){ t.value=restaurar?e.antes:''; t.dispatchEvent(new Event('input',{bubbles:true})) } chPintar() }
+async function chEditar(id,txt){ txt=String(txt||'').trim(); const m=MSGS.find(x=>String(x.id)===String(id)); if(!m||!txt) return false;
+  if(txt===m.texto) return true; if(!chEditable(m,m.de)){ toast('Ya pasaron más de '+CH_EDIT_MIN+' minutos: no se puede editar'); return true }
+  const prev=[m.texto,m.editado]; m.texto=txt; m.editado=new Date().toISOString(); m.flash=true; chPintar(); setTimeout(()=>{m.flash=false},900);
+  if(!CLOUD){ chGuardarLocal(); return true }
+  try{ const r=await sb.rpc('chat_editar',{p_id:id,p_texto:txt}); if(r.error) throw r.error; return true }
+  catch(e){ m.texto=prev[0]; m.editado=prev[1]; chPintar(); toast(errTxt(e)||'No se pudo editar'); return true } }
+document.addEventListener('click',e=>{ const a=e.target.closest('[data-bact]');
+  if(a){ e.stopPropagation(); const b=a.closest('.bub'), m=b&&MSGS.find(x=>String(x.id)===b.dataset.mid); chCerrarMenu(); if(!m) return;
+    if(a.dataset.bact==='editar') chEntrarEdit(m);
+    else { (navigator.clipboard?navigator.clipboard.writeText(m.texto):Promise.reject()).then(()=>toast('Mensaje copiado'),()=>toast('No se pudo copiar')) } return }
+  if(e.target.closest('#chex')){ e.stopPropagation(); return chSalirEdit(true) }
+  const b=e.target.closest('.chlist .bub'); if(b&&!e.target.closest('a,button')){ if(b.classList.contains('menu')) chCerrarMenu(); else chAbrirMenu(b); return }
+  if(!e.target.closest('.bmenu')) chCerrarMenu() },true);
+document.addEventListener('contextmenu',e=>{ const b=e.target.closest('.chlist .bub'); if(b){ e.preventDefault(); chAbrirMenu(b) } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.chEdit){ e.stopImmediatePropagation(); chSalirEdit(true) } },true);
+document.addEventListener('scroll',e=>{ if(e.target&&e.target.classList&&e.target.classList.contains('chlist')) chCerrarMenu() },true);
 async function chReintentar(id){ const i=MSGS.findIndex(x=>String(x.id)===String(id)); if(i<0) return; const m=MSGS[i]; MSGS.splice(i,1);
   await chEnviar(m.texto,m.k,m.de) }
 async function sugEnviar(txt){ txt=String(txt||'').trim(); if(txt.length<3){toast('Escribí un poco más');return false}
@@ -2971,8 +3112,21 @@ function chatSocioUI(modo){ const k=chK(me()), L=MSGS.filter(m=>m.k===k).map(m=>
   <div class="chchips" id="chchips" ${dr?'hidden':''} role="group" aria-label="Mensajes rápidos">${CHIPS.map(([e,c],i)=>`<button type="button" data-chip="${esc(c)}" style="--k:${i}"><span aria-hidden="true">${e}</span>${esc(c)}</button>`).join('')}</div>
   <form class="chbar" id="chatf" autocomplete="off"><div class="chin"><textarea id="chatin" rows="1" placeholder="Escribile a ${esc(pn)}…" maxlength="1000" aria-label="Mensaje para ${esc(pn)}" enterkeyhint="send">${esc(dr)}</textarea><span class="chcnt" id="chcnt" aria-live="polite"></span></div><button class="chsend" aria-label="Enviar" ${dr.trim()?'':'disabled'}>${ICO_SEND}</button></form></div>`}
 function screenChat(){ if(S.lastTab&&S.lastTab!=='chat') S.chBack=S.lastTab; S.chSheet=false; return chatSocioUI('full') }
-function chUpdBar(){ const t=document.getElementById('chatin'); if(!t) return; const v=t.value, b=t.form&&t.form.querySelector('.chsend'), c=document.getElementById('chchips'), n=document.getElementById('chcnt');
+function chUpdBar(){ if(S.chEdit&&!document.getElementById(S.chEdit.form)) S.chEdit=null; const t=document.getElementById('chatin'); if(!t) return; const v=t.value, b=t.form&&t.form.querySelector('.chsend'), c=document.getElementById('chchips'), n=document.getElementById('chcnt');
   if(b) b.disabled=!v.trim(); if(c) c.hidden=!!v; if(n) n.textContent=v.length>800?(1000-v.length)+'':'' }
+/* teclado del celu */
+(function(){ const vv=window.visualViewport; if(!vv) return; let base=window.innerHeight, raf=0, era=false;
+  const upd=()=>{ raf=0; base=Math.max(base,window.innerHeight); const kb=base-vv.height, a=document.activeElement, campo=a&&/TEXTAREA|INPUT/.test(a.tagName)&&a.type!=='checkbox';
+    const on=kb>130&&campo; const r=document.documentElement;
+    r.style.setProperty('--vvh',Math.round(vv.height)+'px'); r.style.setProperty('--vvt',Math.round(vv.offsetTop)+'px');
+    if(on!==era){ era=on; r.classList.toggle('kbon',on); if(on&&a.closest('.chwrap,.chthread')){ chAbajo(); } }
+    if(on&&window.scrollY) window.scrollTo(0,0) };
+  const pide=()=>{ if(!raf) raf=requestAnimationFrame(upd) };
+  vv.addEventListener('resize',pide); vv.addEventListener('scroll',pide); addEventListener('focusin',()=>setTimeout(pide,60)); addEventListener('focusout',()=>setTimeout(pide,120));
+  addEventListener('orientationchange',()=>{ base=0; setTimeout(()=>{base=window.innerHeight; pide()},400) });
+  /* tocar fuera del cuadro de texto (en la lista) baja el teclado, como en WhatsApp */
+  document.addEventListener('touchstart',e=>{ if(!document.documentElement.classList.contains('kbon')) return; if(e.target.closest('.chlist')&&!e.target.closest('.bub,.bmenu')){ const t=document.activeElement; if(t&&t.blur) t.blur() } },{passive:true});
+})();
 /* burbuja flotante del chat en Inicio */
 function chFabHtml(){ if(S.tab!=='inicio') return ''; const n=chNoLeidosSocio(), tip=!S.chTipDone&&!S.chSheet&&!n;
   if(tip&&!S.chTipT) S.chTipT=setTimeout(()=>{S.chTipDone=true; const t=document.querySelector('.chtip'); if(t) t.classList.add('fuera')},6500);
@@ -3036,6 +3190,7 @@ document.addEventListener('submit',async e=>{ const f=e.target; if(f.id!=='chatf
   if(f.id==='sugf'){ const t=$('#sugin'), bt=f.querySelector('button'); bt.disabled=true; bt.textContent='Mandando…'; const ok=await sugEnviar(t.value);
     if(ok){ S.sugOk=true; const c=document.getElementById('sugc'); if(c){ c.outerHTML=sugCard(); } toast('Sugerencia enviada, ¡gracias!') } else { bt.disabled=false; bt.textContent='Mandar anónimo' } return }
   const t=f.querySelector('textarea'), txt=t.value; if(!txt.trim()) return t.focus();
+  if(S.chEdit&&S.chEdit.form===f.id){ await chEditar(S.chEdit.id,txt); chSalirEdit(false); return t.focus() }
   t.value=''; t.style.height=''; if(f.id==='chatf'){ S.chatDraft=''; await chEnviar(txt,chK(me()),'socio') } else { (S.chDraft||{})[S.chSel]=''; await chEnviar(txt,S.chSel,'profe') } t.focus() },true);
 document.addEventListener('keydown',e=>{ const t=e.target; if(e.key==='Enter'&&!e.shiftKey&&t&&(t.id==='chatin'||t.id==='chatpin')){ e.preventDefault(); const f=t.form; if(f) f.requestSubmit() } });
 document.addEventListener('input',e=>{ const t=e.target; if(t.id==='chatin'||t.id==='chatpin'){ t.style.height='auto'; t.style.height=Math.min(120,t.scrollHeight)+'px'; chUpdBar(); if(t.id==='chatin') S.chatDraft=t.value; else {S.chDraft=S.chDraft||{}; S.chDraft[S.chSel]=t.value} } });
