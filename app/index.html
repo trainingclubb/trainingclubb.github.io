@@ -634,6 +634,107 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .chbar textarea:focus{border-color:var(--accent)}
 .chsend{width:44px;height:44px;flex:none;border-radius:50%;border:0;background:var(--grad);color:#06110e;display:grid;place-items:center;cursor:pointer;transition:transform .2s var(--spring)}
 .chsend svg{width:20px;height:20px}.chsend:active{transform:scale(.88) rotate(-12deg)}
+/* ---- ranking chiquito en Inicio ---- */
+.hi{gap:10px;align-items:flex-start}
+.minirk{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 9px 6px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(252,224,36,.08),rgba(36,201,167,.06)),var(--surface);color:var(--ink);font:inherit;cursor:pointer;margin-top:-4px;transition:transform .25s var(--spring),border-color .25s}
+.minirk:active{transform:scale(.94)}.minirk:hover{border-color:rgba(36,201,167,.5)}
+.minirk small{font-size:10.5px;font-weight:700;color:var(--muted);white-space:nowrap}.minirk small b{color:var(--accent)}
+.mrkpod{display:flex;align-items:flex-end;gap:3px;height:46px}
+.mp{position:relative;display:flex;flex-direction:column;align-items:center;width:26px}
+.mp .avatar{width:22px;height:22px;font-size:8.5px;font-weight:800;box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px var(--c1);z-index:1}
+.mp b{width:100%;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,var(--c2),var(--c1));margin-top:2px;display:flex;justify-content:center;font-size:9px;font-weight:900;color:rgba(0,0,0,.55);transform-origin:bottom}
+.mp.m1{--c1:#F4C430;--c2:#FCE024}.mp.m2{--c1:#C0C7CF;--c2:#E3E8EC}.mp.m3{--c1:#CD7F32;--c2:#E3A35F}
+.mp.m1 b{height:18px}.mp.m2 b{height:12px}.mp.m3 b{height:8px;font-size:0}
+.mp.m1 .avatar{width:25px;height:25px}
+.mp.yo .avatar{box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px var(--accent)}
+.mcor{position:absolute;top:-11px;font-size:11px;font-style:normal;z-index:2;animation:mcor 2.4s ease-in-out infinite}
+@keyframes mcor{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg) translateY(-1px)}}
+.minirk.cargando .mrkpod i{width:22px;border-radius:5px;background:var(--sunk);animation:rkDot 1s ease-in-out infinite}.minirk.cargando .mrkpod i:nth-child(1){height:24px}.minirk.cargando .mrkpod i:nth-child(2){height:34px;animation-delay:.15s}.minirk.cargando .mrkpod i:nth-child(3){height:18px;animation-delay:.3s}
+.mrkcopa{font-size:28px;line-height:46px;animation:famBob 2.4s ease-in-out infinite}
+.screen.enter .minirk,.minirk.mrkanim{animation:mrkIn .55s var(--spring) both .15s}
+@keyframes mrkIn{from{opacity:0;transform:translateY(-8px) scale(.85)}}
+.screen.enter .mp b,.minirk.mrkanim .mp b{animation:pGrow .6s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc((2 - var(--k))*110ms + 300ms)}
+.screen.enter .mp .avatar,.minirk.mrkanim .mp .avatar{animation:pDrop .5s var(--spring) both;animation-delay:calc((2 - var(--k))*110ms + 520ms)}
+.minirk .mp.m1 .avatar{animation:mGlow 2.4s ease-in-out infinite 1.4s}
+@keyframes mGlow{50%{box-shadow:0 0 0 1.5px var(--surface),0 0 0 3px #F4C430,0 0 12px 3px rgba(244,196,48,.55)}}
+@media (max-width:360px){.minirk{padding:6px 6px 5px}.mp{width:23px}}
+/* ---- burbuja flotante del chat ---- */
+.chfab{position:absolute;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;width:58px;height:58px;border-radius:50%;border:0;background:var(--grad);color:#06110e;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px -6px rgba(36,201,167,.6),0 2px 6px rgba(0,0,0,.35);transition:transform .3s var(--spring);animation:fabIn .6s var(--spring) both .35s}
+.chfab svg{width:27px;height:27px}
+.chfab::before{content:'';position:absolute;top:0;right:0;bottom:0;left:0;border-radius:50%;border:2px solid #24C9A7;opacity:0;animation:fabPing 2.8s ease-out infinite 1.4s;pointer-events:none}
+.chfab:active{transform:scale(.88)}.chfab.abierto{transform:scale(.0001) rotate(90deg);pointer-events:none}
+.chfab .nbadge{position:absolute;top:-2px;right:-2px;min-width:20px;height:20px;font-size:11px;box-shadow:0 0 0 2.5px var(--surface)}
+.chfab.hay{animation:fabIn .6s var(--spring) both .35s,fabWig 2.6s ease-in-out infinite 1.5s}
+@keyframes fabIn{from{opacity:0;transform:scale(.3) rotate(-30deg)}}
+@keyframes fabPing{0%{transform:scale(1);opacity:.8}70%,100%{transform:scale(1.55);opacity:0}}
+@keyframes fabWig{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-14deg)}80%{transform:rotate(12deg)}85%{transform:rotate(-8deg)}90%{transform:rotate(5deg)}}
+.chtip{position:absolute;right:84px;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--surface);font-size:13px;font-weight:700;padding:9px 13px;border-radius:14px 14px 4px 14px;box-shadow:0 8px 20px -6px rgba(0,0,0,.5);pointer-events:none;white-space:nowrap;animation:tipIn .5s var(--spring) both 1.1s}
+.chtip.fuera{animation:tipOut .3s ease both}
+@keyframes tipIn{from{opacity:0;transform:translateX(14px) scale(.8)}}
+@keyframes tipOut{to{opacity:0;transform:translateX(10px) scale(.9)}}
+.screen#scr-inicio{padding-bottom:90px}
+/* ---- hoja del chat ---- */
+.chback{position:absolute;top:0;right:0;bottom:0;left:0;z-index:40;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.chback.abre{animation:fadeIn .25s ease both}.chback.cierra{animation:fadeOut .23s ease both}
+@keyframes fadeIn{from{opacity:0}}@keyframes fadeOut{to{opacity:0}}
+.chsheet{position:absolute;left:0;right:0;bottom:0;z-index:41;height:min(82%,640px);background:var(--bg);border-radius:26px 26px 0 0;box-shadow:0 -14px 40px -10px rgba(0,0,0,.6);display:flex;flex-direction:column;overflow:hidden;border-top:1px solid var(--line)}
+.chsheet.abre{animation:shUp .42s cubic-bezier(.2,.9,.25,1.08) both}.chsheet.cierra{animation:shDown .23s ease-in both}
+@keyframes shUp{from{transform:translateY(100%)}}@keyframes shDown{to{transform:translateY(100%)}}
+/* ---- chat del socio (rediseño) ---- */
+#scr-chat{padding:0!important;gap:0;overflow:hidden}
+.chwrap{display:flex;flex-direction:column;height:100%;min-height:0;flex:1}
+.chtop{display:flex;align-items:center;gap:11px;padding:12px 14px 11px;border-bottom:1px solid var(--line);background:var(--surface);position:relative;flex:none}
+.chwrap.sheet .chtop{padding-top:20px}
+.chgrab{position:absolute;top:7px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:9px;background:var(--line)}
+.chtop .back{flex:none}
+.chav{position:relative;flex:none}.chav .avatar{width:42px;height:42px;font-size:15px}
+.chon{position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:#2fd47a;box-shadow:0 0 0 2.5px var(--surface)}
+.chon::after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;border-radius:50%;background:#2fd47a;animation:onPing 2s ease-out infinite}
+@keyframes onPing{to{transform:scale(2.4);opacity:0}}
+.chtit{flex:1;min-width:0}.chtit b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chtit small{display:block;font-size:12px;color:var(--muted)}
+.chx,.chfull{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--sunk);color:var(--ink);font-size:22px;line-height:1;display:grid;place-items:center;cursor:pointer;transition:transform .2s var(--spring)}
+.chfull svg{width:16px;height:16px}.chx:active,.chfull:active{transform:scale(.88)}
+.chwrap .chlist{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:10px 12px 12px;gap:2px;
+  background:radial-gradient(circle at 1px 1px,rgba(127,127,127,.12) 1px,transparent 0) 0 0/18px 18px,var(--bg)}
+.chday{display:flex;justify-content:center;margin:12px 0 6px;position:sticky;top:0;z-index:2}
+.chday span{font-size:11px;font-weight:800;letter-spacing:.3px;padding:4px 11px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--muted);box-shadow:0 2px 8px -3px rgba(0,0,0,.4)}
+.bub{position:relative;max-width:78%;padding:7px 11px 5px;border-radius:18px;font-size:14.5px;line-height:1.38}
+.bub p a{color:inherit;text-decoration:underline}
+.bub small{display:flex;align-items:center;justify-content:flex-end;gap:3px;font-size:10.5px;opacity:.75;margin-top:1px}
+.bub.prim{margin-top:7px}
+.bub.mio{border-radius:18px 18px 6px 18px}.bub.mio:not(.ult){border-radius:18px 6px 6px 18px}.bub.mio.prim:not(.ult){border-radius:18px 18px 6px 18px}
+.bub.mio.ult:not(.prim){border-radius:18px 6px 18px 18px}
+.bub.otro{margin-left:32px;border-radius:18px 18px 18px 6px}.bub.otro:not(.ult){border-radius:6px 18px 18px 6px}.bub.otro.prim:not(.ult){border-radius:18px 18px 18px 6px}
+.bub.otro.ult:not(.prim){border-radius:6px 18px 18px 18px}
+.bav{position:absolute;left:-32px;bottom:0}.bav .avatar,.avatar.xs{width:24px;height:24px;font-size:9px;font-weight:800}
+.chpanel .bub.otro{margin-left:32px}
+.tk{width:15px;height:11px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tk2{width:19px;color:#0a6bff}.bub.mio .tk2{color:#05458f}
+[data-theme="dark"] .bub.mio .tk2{color:#0b4fbf}
+.tkr{width:11px;animation:spinR 1.2s linear infinite}@keyframes spinR{to{transform:rotate(360deg)}}
+.bub.env{opacity:.8}.bub.err{opacity:1;background:var(--sunk)!important;color:var(--ink)!important;border:1px dashed #ff5d4e}
+.bretry{display:block;margin-top:4px;border:0;background:none;color:#ff5d4e;font:inherit;font-size:12px;font-weight:800;padding:0;cursor:pointer}
+.bub.mio.nuevo{animation:bubSend .45s cubic-bezier(.2,.9,.3,1.25) both;transform-origin:bottom right}
+@keyframes bubSend{from{opacity:0;transform:translate(10px,26px) scale(.5)}}
+.bub.otro.nuevo{animation:bubIn .5s var(--spring) both}
+.chvacio .chola{display:inline-block;font-size:46px;transform-origin:70% 80%;animation:ola 2.2s ease-in-out infinite}
+@keyframes ola{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(18deg)}20%,40%{transform:rotate(-10deg)}}
+.chvacio{max-width:290px}.chvacio p{line-height:1.45}
+.chchips{display:flex;gap:7px;overflow-x:auto;padding:8px 12px 2px;scrollbar-width:none;flex:none;background:var(--bg)}
+.chchips::-webkit-scrollbar{display:none}.chchips[hidden]{display:none}
+.chchips button{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:99px;cursor:pointer;white-space:nowrap;animation:chipIn .4s var(--spring) both;animation-delay:calc(var(--k)*60ms + 150ms);transition:transform .2s var(--spring),border-color .2s}
+.chchips button:active{transform:scale(.93)}.chchips button:hover{border-color:var(--accent)}
+@keyframes chipIn{from{opacity:0;transform:translateY(10px)}}
+.chwrap .chbar{position:static;flex:none;background:var(--bg);padding:8px 12px calc(10px + env(safe-area-inset-bottom,0px));align-items:flex-end}
+.chin{flex:1;position:relative;display:flex}
+.chin textarea{flex:1;resize:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:22px;padding:11px 16px;font:inherit;font-size:15px;max-height:120px;line-height:1.35;outline:none;transition:border-color .2s,box-shadow .2s}
+.chin textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(36,201,167,.15)}
+.chcnt{position:absolute;right:12px;bottom:-14px;font-size:10px;color:var(--muted)}
+.chsend{transition:transform .25s var(--spring),opacity .2s,filter .2s}
+.chsend:disabled{opacity:.4;filter:grayscale(1);transform:scale(.86);cursor:default}
+.chsend:not(:disabled){animation:sendOn .35s var(--spring)}
+@keyframes sendOn{from{transform:scale(.8) rotate(-20deg)}}
+@media (prefers-reduced-motion:reduce){.chfab,.chfab::before,.chtip,.chsheet,.chback,.minirk,.mp *,.chchips button,.bub,.chon::after,.chola{animation:none!important}}
 /* sugerencias */
 .sugc .anon{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:99px;background:var(--sunk);border:1px solid var(--line)}
 .sugp{margin:4px 0 10px;color:var(--muted);font-size:13px}
@@ -1468,7 +1569,7 @@ function screenInicio(){
     <span class="sub num">${e.c==='ok'?`Pagaste el ${e.pago.fecha} con ${e.pago.medio}. Te quedan ${e.days} días.`:e.c==='bad'?`Venció el ${e.v}. Incluye el 10% de recargo.`:`Hasta el ${e.v} sin recargo${e.days===0?', hoy':`, en ${e.days} día${e.days===1?'':'s'}`}.`}</span>
     ${e.c==='ok'?'':`${planesHtml(s)}<div class="payrow">${comoPagarHtml(e.c==='bad'?montoMes(s,M):s.precio)}${uniHtml}</div>`}</div></div></section>${pedir}`;
   const best=Object.entries(s.prog||{}).map(([n,a])=>[n,Math.max(0,...a.map(x=>+x.kg||0))]).sort((a,b)=>b[1]-a[1])[0];
-  return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div></div>
+  return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div>${miniRank()}</div>
   ${st}
   <section class="card">
     <div class="ttl"><b>Esta semana</b><span class="num">${semana} entrenamiento${semana===1?'':'s'}</span></div>
@@ -1749,11 +1850,21 @@ function rkLocal(p){ const [a,b]=rkRango(p);
   return rkPos(L).filter((x,i)=>i<10||x.yo) }
 async function rkCargar(p){ if(S.rkBusy===p) return; S.rkBusy=p; const [a,b]=rkRango(p);
   try{ const r=await sb.rpc('ranking_asistencia',{p_desde:a,p_hasta:b});
-    if(!r.error){ S.rk={p,t:Date.now(),list:(r.data||[]).map(x=>({nombre:x.nombre,visitas:+x.visitas,pos:+x.pos,yo:!!x.yo,foto:x.yo?S.photo:null}))};
-      if(S.tab==='asist'&&S.asView==='rank') render(true) } }catch(e){} finally{ S.rkBusy=null } }
+    if(!r.error){ S.rkC=S.rkC||{}; S.rkC[p]={t:Date.now(),list:(r.data||[]).map(x=>({nombre:x.nombre,visitas:+x.visitas,pos:+x.pos,yo:!!x.yo,foto:x.yo?S.photo:null}))};
+      if((S.tab==='asist'&&S.asView==='rank')||S.tab==='inicio'){ const a=document.activeElement; if(!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))) render(true) } } }catch(e){} finally{ S.rkBusy=null } }
+function rkLista(p){ if(!CLOUD) return rkLocal(p); const c=(S.rkC||{})[p]; if(!c||Date.now()-c.t>60000) rkCargar(p); return c?c.list:null }
+/* ranking chiquito en Inicio, debajo del redondel del perfil */
+function miniRank(){ const L=rkLista('mes');
+  if(!L) return '<button class="minirk cargando" data-mrk aria-label="Ver ranking"><span class="mrkpod"><i></i><i></i><i></i></span><small>Ranking</small></button>';
+  if(!L.length) return '<button class="minirk vacio" data-mrk aria-label="Ver ranking"><span class="mrkcopa" aria-hidden="true">🏆</span><small>¡Sé el primero!</small></button>';
+  const sig=JSON.stringify(L.slice(0,3).map(x=>[x.nombre,x.visitas])), anim=S.mrkSig!==sig; S.mrkSig=sig;
+  const top=L.slice(0,3), yo=L.find(x=>x.yo), orden=[1,0,2].filter(i=>top[i]);
+  return `<button class="minirk ${anim?'mrkanim':''}" data-mrk aria-label="Ranking del mes: ${top.map((x,i)=>(i+1)+' '+esc(x.nombre)).join(', ')}. Tocá para ver el top 10">
+    <span class="mrkpod">${orden.map(i=>`<span class="mp m${i+1} ${top[i].yo?'yo':''}" style="--k:${i}">${i===0?'<em class="mcor" aria-hidden="true">👑</em>':''}${avatar('xs',top[i].foto,top[i].nombre)}<b><span>${i+1}</span></b></span>`).join('')}</span>
+    <small>${yo?(yo.pos<=3?'¡Estás en el podio!':'Vas <b class="num">#'+yo.pos+'</b>'):'Top del mes'} <span aria-hidden="true">›</span></small></button>`}
 const MEDAL=['🥇','🥈','🥉'];
 function rankHtml(){ const p=S.rkP||'mes'; let L=null;
-  if(CLOUD){ if(!S.rk||S.rk.p!==p||Date.now()-S.rk.t>60000) rkCargar(p); if(S.rk&&S.rk.p===p) L=S.rk.list } else L=rkLocal(p);
+  L=rkLista(p);
   const per=`<div class="rkper" role="group" aria-label="Período">${[['mes',MES[M]],['anio','Año '+Y]].map(([k,l])=>`<button data-rkp="${k}" aria-pressed="${p===k}">${l}</button>`).join('')}</div>`;
   if(!L) return per+'<div class="rkload" aria-label="Cargando"><i></i><i></i><i></i></div>';
   if(!L.length) return per+empty(ICONS.asist,'Nadie vino todavía '+(p==='mes'?'este mes':'este año'),'Marcá «Vine hoy al gym» en Inicio y arrancá primero en el ranking.');
@@ -1849,7 +1960,7 @@ function renderSocio(){
     <button class="hpill num" id="hpill" data-tab="rutina" hidden></button>
     <button class="avbtn" data-tab="perfil" aria-label="Mi perfil">${avatar()}</button></header>
   <div class="screen ${same?'':'enter '+dir}" id="scr-${S.tab}">${body}</div>
-  <nav class="nav" aria-label="Secciones"><span class="ind" style="--x:${S.indFrom!=null?S.indFrom:(pi<0?ti:pi)};${ti<0?'opacity:0':''}"></span>${TABS.map(([k,l])=>`<button data-tab="${k}" ${S.tab===k||(k==='gimnasio'&&S.tab==='chat')?'aria-current="page"':''}>${ICONS[k]}<span>${l}</span>${k==='gimnasio'?`<i class="nbadge" data-chbadge ${chNoLeidosSocio()?'':'hidden'}>${chNoLeidosSocio()||''}</i>`:''}</button>`).join('')}</nav></div>`;
+  <nav class="nav" aria-label="Secciones"><span class="ind" style="--x:${S.indFrom!=null?S.indFrom:(pi<0?ti:pi)};${ti<0?'opacity:0':''}"></span>${TABS.map(([k,l])=>`<button data-tab="${k}" ${S.tab===k||(k==='gimnasio'&&S.tab==='chat')?'aria-current="page"':''}>${ICONS[k]}<span>${l}</span>${k==='gimnasio'?`<i class="nbadge" data-chbadge ${chNoLeidosSocio()?'':'hidden'}>${chNoLeidosSocio()||''}</i>`:''}</button>`).join('')}</nav>${chFabHtml()}</div>`;
   const scr=document.querySelector('#app .screen'); if(S.forceTop){S.forceTop=false;scr.scrollTop=0}else scr.scrollTop=keep;
   const ind=document.querySelector('.nav .ind'); if(ti>=0&&pi!==ti){void ind.offsetWidth; ind.style.setProperty('--x',ti)}
   const tmm=scr.querySelector('.tmodes'); if(tmm&&tmm.style.getPropertyValue('--m')!==tmm.dataset.to){void tmm.offsetWidth; tmm.style.setProperty('--m',tmm.dataset.to)}
@@ -1873,7 +1984,7 @@ function goTab(t){if(t===S.tab)return; S.tab=t; S.forceTop=true; render()}
 /* ---------- Deslizar a izquierda/derecha para cambiar de sección ---------- */
 let SW=null;
 document.addEventListener('touchstart',e=>{
-  const scr=e.target.closest('#app .screen'); if(!scr||S.view!=='socio'||!S.user||S.tab==='perfil'||S.tab==='chat'||e.touches.length>1) return;
+  const scr=e.target.closest('#app .screen'); if(!scr||S.view!=='socio'||!S.user||S.tab==='perfil'||S.tab==='chat'||S.chSheet||e.touches.length>1) return;
   if(e.target.closest('.hscroll,input,textarea,select,label,.timer .rbar')) return;
   const t=e.touches[0]; SW={x:t.clientX,y:t.clientY,scr,dir:0,dx:0,t:Date.now()};
 },{passive:true});
@@ -2235,6 +2346,7 @@ function renderMensajes(){ const byK={}; Object.values(DB.socios).forEach(s=>byK
     <div class="seg2 chvis" style="--m:${vista==='sug'?1:0}"><button data-chvista="chat" aria-pressed="${vista==='chat'}">Chats</button><button data-chvista="sug" aria-pressed="${vista==='sug'}">🕶️ Sugerencias${nsug?` <span class="cnt">${nsug}</span>`:''}</button></div></div>
     <div class="chgrid ${vista==='sug'?'sug':''}">${vista==='chat'?conversaciones:''}${hilo}</div></section></div>`;
   }
+document.addEventListener('click',e=>{ const r=e.target.closest('[data-retry]'); if(r&&S.view==='duenio'){ e.stopPropagation(); chReintentar(r.dataset.retry) } },true);
 document.addEventListener('click',async e=>{ const b=e.target.closest('[data-chsel],[data-chvista],[data-sugleida],[data-sugborrar],[data-chficha]'); if(!b||S.view!=='duenio') return;
   if(b.dataset.chsel!=null){ S.chSel=b.dataset.chsel; S.chVista='chat'; return render(true) }
   if(b.dataset.chvista){ S.chVista=b.dataset.chvista; return render(true) }
@@ -2716,8 +2828,9 @@ function screenPendiente(logo){
 }
 
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
-  const y=scrollY;
+  const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
+  if(fid==='chatin'||fid==='chatpin'){ const t=document.getElementById(fid); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(fsel,fsel)}catch(x){} } }
   /* cambio que llegó de otro lado (tiempo real): se actualiza en el lugar, sin animaciones de entrada ni saltos */
   if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
@@ -2795,8 +2908,18 @@ const chK=s=>s?(s.id||s.dni):null;
 const chNoLeidosSocio=()=>{const k=chK(me()); return MSGS.filter(m=>m.k===k&&m.de==='profe'&&!m.leido).length};
 const chNoLeidosProfe=()=>MSGS.filter(m=>m.de==='socio'&&!m.leido).length+SUGS.filter(x=>!x.leida).length;
 const chHora=t=>{const d=new Date(t), h=new Date(); return (d.toDateString()===h.toDateString()?'':p2(d.getDate())+'/'+p2(d.getMonth()+1)+' ')+p2(d.getHours())+':'+p2(d.getMinutes())};
-const chBurbujas=(L,yo)=>L.map((m,i)=>{const mio=m.de===yo, prim=i===0||L[i-1].de!==m.de;
-  return `<div class="bub ${mio?'mio':'otro'} ${prim?'prim':''} ${m.env?'env':''} ${m.err?'err':''} ${m.nuevo?'nuevo':''}">${!mio&&prim&&m.autor?`<b class="bau">${esc(m.autor)}</b>`:''}<p>${esc(m.texto).replace(/\n/g,'<br>')}</p><small>${chHora(m.creado)}${mio?(m.err?' · no se envió':m.env?' · enviando…':m.leido?' · ✓✓':' · ✓'):''}</small></div>`}).join('');
+const chDia=t=>{const d=new Date(t); d.setHours(0,0,0,0); const n=Math.round((TODAY-d)/864e5); return n<=0?'Hoy':n===1?'Ayer':n<7?DIAS[d.getDay()]:d.getDate()+' de '+MES[d.getMonth()].toLowerCase()};
+const chHm=t=>{const d=new Date(t); return p2(d.getHours())+':'+p2(d.getMinutes())};
+const TK1='<svg class="tk" viewBox="0 0 16 12" aria-label="Enviado"><path d="M1.5 6.5l3.5 3.5 7-8"/></svg>';
+const TK2='<svg class="tk tk2" viewBox="0 0 21 12" aria-label="Leído"><path d="M1.5 6.5l3.5 3.5 7-8"/><path d="M9 9.5l.5.5 7-8"/></svg>';
+const TKR='<svg class="tk tkr" viewBox="0 0 12 12" aria-label="Enviando"><circle cx="6" cy="6" r="4.6"/><path d="M6 3.4V6l1.7 1.1"/></svg>';
+const chLink=t=>esc(t).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/\n/g,'<br>');
+const chBurbujas=(L,yo)=>{ let out='', dia=null;
+  L.forEach((m,i)=>{ const dd=chDia(m.creado); if(dd!==dia){ dia=dd; out+=`<div class="chday"><span>${dd}</span></div>` }
+    const mio=m.de===yo, ant=L[i-1], sig=L[i+1], prim=!ant||ant.de!==m.de||chDia(ant.creado)!==dd, ult=!sig||sig.de!==m.de||chDia(sig.creado)!==dd;
+    const st=mio?(m.err?'':m.env?TKR:m.leido?TK2:TK1):'';
+    out+=`<div class="bub ${mio?'mio':'otro'} ${prim?'prim':''} ${ult?'ult':''} ${m.env?'env':''} ${m.err?'err':''} ${m.nuevo?'nuevo':''}">${!mio&&ult?`<span class="bav">${avatar('xs',m.de==='socio'?(Object.values(DB.socios).find(x=>chK(x)===m.k)||{}).photo||null:null,m.autor||PROFE)}</span>`:''}${!mio&&prim&&m.autor?`<b class="bau">${esc(m.autor)}</b>`:''}<p>${chLink(m.texto)}</p><small>${chHm(m.creado)}${st}</small>${m.err?`<button type="button" class="bretry" data-retry="${esc(m.id)}">No se envió · Reintentar</button>`:''}</div>` });
+  return out };
 const ICO_SEND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
 async function cargarChat(){ if(!CLOUD||!sb) return;
   try{ const r=await sb.from('mensajes').select('*').order('id').limit(3000); if(r.error) return;
@@ -2805,7 +2928,7 @@ async function cargarChat(){ if(!CLOUD||!sb) return;
     MSGS=r.data.map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,creado:m.creado,leido:m.leido,nuevo:viejos.size&&!viejos.has(m.id)}));
     SUGS=sg; if(antes!==JSON.stringify([MSGS,SUGS])) chRefrescar(true) }catch(e){} }
 function chRefrescar(dePush){
-  const yoSocio=S.view==='socio'&&S.user, enChat=yoSocio&&S.tab==='chat', enPanel=S.view==='duenio'&&S.pro&&S.ptabP==='mensajes';
+  const yoSocio=S.view==='socio'&&S.user, enChat=yoSocio&&(S.tab==='chat'||(S.tab==='inicio'&&S.chSheet)), enPanel=S.view==='duenio'&&S.pro&&S.ptabP==='mensajes';
   if(dePush){ const nuevos=MSGS.filter(m=>m.nuevo&&(yoSocio?m.de==='profe':m.de==='socio'));
     if(nuevos.length&&!enChat&&!(enPanel&&S.chSel===nuevos[nuevos.length-1].k)) toast(yoSocio?'💬 Te respondió '+(nuevos[nuevos.length-1].autor||'tu profe'):'💬 Mensaje nuevo de '+(nuevos[nuevos.length-1].autor||'un socio')) }
   const lst=document.getElementById('chatlist');
@@ -2815,27 +2938,56 @@ function chRefrescar(dePush){
   const a=document.activeElement; if(!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))) render(true); else chBadges() }
 function chBadges(){ const n=S.view==='socio'?chNoLeidosSocio():chNoLeidosProfe();
   document.querySelectorAll('[data-chbadge]').forEach(el=>{ el.textContent=n||''; el.hidden=!n }) }
-function chAbajo(){ requestAnimationFrame(()=>{ const l=document.getElementById('chatlist'); if(!l) return; const sc=l.closest('.screen')||l;
-  if(l.classList.contains('chpanel')) l.scrollTop=l.scrollHeight; else sc.scrollTop=sc.scrollHeight }) }
+function chAbajo(suave){ requestAnimationFrame(()=>{ const l=document.getElementById('chatlist'); if(!l) return;
+  l.scrollTo?l.scrollTo({top:l.scrollHeight,behavior:suave?'smooth':'auto'}):(l.scrollTop=l.scrollHeight) }) }
 let chLeyendo=false;
 async function chMarcarLeido(k,yo){ const otro=yo==='socio'?'profe':'socio', pend=MSGS.filter(m=>m.k===k&&m.de===otro&&!m.leido); if(!pend.length||chLeyendo) return;
   pend.forEach(m=>m.leido=true); setTimeout(()=>{ chBadges(); if(yo==='profe') document.querySelectorAll('.chc[data-chsel="'+k+'"]').forEach(c=>{c.classList.remove('nl'); const i=c.querySelector('.chcm i'); if(i) i.remove()}) },0);
   if(!CLOUD) return chGuardarLocal(); chLeyendo=true; try{ await sb.rpc('chat_leido',yo==='profe'?{p_socio:k}:{}) }catch(e){} chLeyendo=false }
 async function chEnviar(txt,k,yo){ txt=String(txt||'').trim(); if(!txt) return false; if(txt.length>1000){toast('El mensaje es muy largo');return false}
   const autor=yo==='socio'?(me()||{}).name:(PRO?PRO.nombre:'Tu profe');
+  MSGS.forEach(x=>x.nuevo=false);
   const m={id:'t'+Date.now(),k,de:yo,autor,texto:txt,creado:new Date().toISOString(),leido:false,env:!!CLOUD,nuevo:true}; MSGS.push(m);
-  const lst=document.getElementById('chatlist'); if(lst){ const v=lst.querySelector('.chvacio'); if(v) lst.innerHTML=''; lst.insertAdjacentHTML('beforeend',chBurbujas([m],yo)); chAbajo() }
+  const lst=document.getElementById('chatlist'); if(lst){ lst.innerHTML=chBurbujas(MSGS.filter(x=>x.k===k),yo); chAbajo() } chUpdBar();
   if(!CLOUD){ chGuardarLocal(); if(yo==='socio') setTimeout(()=>{},0); return true }
   try{ const r=yo==='socio'?await sb.rpc('chat_enviar',{p_texto:txt}):await sb.rpc('chat_responder',{p_socio:k,p_texto:txt,p_autor:autor});
     if(r.error) throw r.error; m.id=r.data; m.env=false }catch(e){ m.env=false; m.err=true; toast(errTxt(e)||'No se pudo enviar. Probá de nuevo.') }
-  if(lst){ const L=MSGS.filter(x=>x.k===k); lst.innerHTML=chBurbujas(L,yo); chAbajo() } return true }
+  m.nuevo=false; if(lst){ const L=MSGS.filter(x=>x.k===k); lst.innerHTML=chBurbujas(L,yo); chAbajo() } return true }
+async function chReintentar(id){ const i=MSGS.findIndex(x=>String(x.id)===String(id)); if(i<0) return; const m=MSGS[i]; MSGS.splice(i,1);
+  await chEnviar(m.texto,m.k,m.de) }
 async function sugEnviar(txt){ txt=String(txt||'').trim(); if(txt.length<3){toast('Escribí un poco más');return false}
   if(!CLOUD){ SUGS.unshift({id:Date.now(),texto:txt.slice(0,800),creado:new Date().toISOString(),leida:false}); chGuardarLocal(); return true }
   try{ const r=await sb.rpc('enviar_sugerencia',{p_texto:txt}); if(r.error) throw r.error; return true }catch(e){ toast(errTxt(e)||'No se pudo mandar. Probá de nuevo.'); return false } }
-function screenChat(){ const s=me(), k=chK(s), L=MSGS.filter(m=>m.k===k); setTimeout(()=>{chAbajo(); chMarcarLeido(k,'socio')},30);
-  return `<div class="pfhead"><button class="back" data-tab="gimnasio" aria-label="Volver">‹</button><h2>Chat con el profe</h2></div>
-  <div class="chat"><div class="chlist" id="chatlist">${L.length?chBurbujas(L.map(m=>Object.assign({},m,{nuevo:false})),'socio'):`<div class="chvacio"><span aria-hidden="true">💬</span><b>Escribile a ${PROFE.split(' ')[0]}</b><p>Consultas sobre tu rutina, la cuota o lo que necesites. Los profes te responden acá mismo.</p></div>`}</div>
-  <form class="chbar" id="chatf" autocomplete="off"><textarea id="chatin" rows="1" placeholder="Escribí tu mensaje…" maxlength="1000" aria-label="Mensaje">${esc(S.chatDraft||'')}</textarea><button class="chsend" aria-label="Enviar">${ICO_SEND}</button></form></div>`}
+const CHIPS=[['💪','¿Me podés cambiar la rutina?'],['🤕','Tengo una molestia, ¿qué hago?'],['📅','Hoy no voy a poder ir'],['💳','Tengo una consulta sobre la cuota'],['🥗','¿Me das un consejo de alimentación?']];
+const ICO_CHAT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20.5l1.6-4.4A8.2 8.2 0 0 1 3 11.5 8.6 8.6 0 0 1 12 3a8.6 8.6 0 0 1 9 8.5z"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke-width="2.8"/></svg>';
+function chatSocioUI(modo){ const k=chK(me()), L=MSGS.filter(m=>m.k===k).map(m=>Object.assign({},m,{nuevo:false})), pn=PROFE.split(' ')[0], dr=S.chatDraft||'';
+  setTimeout(()=>{chAbajo(); chMarcarLeido(k,'socio')},30);
+  return `<div class="chwrap ${modo}">
+  <div class="chtop">${modo==='full'?`<button class="back" data-tab="${S.chBack||'inicio'}" aria-label="Volver">‹</button>`:'<span class="chgrab" aria-hidden="true"></span>'}
+    <span class="chav">${avatar('md',null,PROFE)}<i class="chon" aria-hidden="true"></i></span>
+    <span class="chtit"><b>${PROFE}</b><small>Tu profe · te responde por acá</small></span>
+    ${modo==='sheet'?`<button class="chfull" data-tab="chat" aria-label="Abrir en pantalla completa" title="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button><button class="chx" id="chsheetx" aria-label="Cerrar">×</button>`:''}</div>
+  <div class="chlist" id="chatlist">${L.length?chBurbujas(L,'socio'):`<div class="chvacio"><span class="chola" aria-hidden="true">👋</span><b>¡Hola! Soy ${esc(pn)}</b><p>Preguntame lo que necesites: tu rutina, una molestia, si no podés venir o la cuota. Te respondo acá y te llega una notificación.</p></div>`}</div>
+  <div class="chchips" id="chchips" ${dr?'hidden':''} role="group" aria-label="Mensajes rápidos">${CHIPS.map(([e,c],i)=>`<button type="button" data-chip="${esc(c)}" style="--k:${i}"><span aria-hidden="true">${e}</span>${esc(c)}</button>`).join('')}</div>
+  <form class="chbar" id="chatf" autocomplete="off"><div class="chin"><textarea id="chatin" rows="1" placeholder="Escribile a ${esc(pn)}…" maxlength="1000" aria-label="Mensaje para ${esc(pn)}" enterkeyhint="send">${esc(dr)}</textarea><span class="chcnt" id="chcnt" aria-live="polite"></span></div><button class="chsend" aria-label="Enviar" ${dr.trim()?'':'disabled'}>${ICO_SEND}</button></form></div>`}
+function screenChat(){ if(S.lastTab&&S.lastTab!=='chat') S.chBack=S.lastTab; S.chSheet=false; return chatSocioUI('full') }
+function chUpdBar(){ const t=document.getElementById('chatin'); if(!t) return; const v=t.value, b=t.form&&t.form.querySelector('.chsend'), c=document.getElementById('chchips'), n=document.getElementById('chcnt');
+  if(b) b.disabled=!v.trim(); if(c) c.hidden=!!v; if(n) n.textContent=v.length>800?(1000-v.length)+'':'' }
+/* burbuja flotante del chat en Inicio */
+function chFabHtml(){ if(S.tab!=='inicio') return ''; const n=chNoLeidosSocio(), tip=!S.chTipDone&&!S.chSheet&&!n;
+  if(tip&&!S.chTipT) S.chTipT=setTimeout(()=>{S.chTipDone=true; const t=document.querySelector('.chtip'); if(t) t.classList.add('fuera')},6500);
+  return `<button class="chfab ${n?'hay':''} ${S.chSheet?'abierto':''}" id="chfab" aria-label="Escribile al profe${n?' ('+n+' sin leer)':''}">${ICO_CHAT}<i class="nbadge" data-chbadge ${n?'':'hidden'}>${n||''}</i></button>
+  ${tip?`<span class="chtip" aria-hidden="true">¿Dudas? Escribile a ${esc(PROFE.split(' ')[0])} 👋</span>`:''}
+  ${S.chSheet?`<div class="chback ${S.chSheetAnim?'abre':''}" id="chback"></div><div class="chsheet ${S.chSheetAnim?'abre':''}" role="dialog" aria-label="Chat con ${esc(PROFE)}">${chatSocioUI('sheet')}</div>`:''}`}
+function chAbrirHoja(){ S.chSheet=true; S.chSheetAnim=true; S.chTipDone=true; render(); S.chSheetAnim=false; setTimeout(()=>{const t=$('#chatin'); if(t) t.focus({preventScroll:true})},380) }
+function chCerrarHoja(){ const h=document.querySelector('.chsheet'), b=document.getElementById('chback'); if(!h){S.chSheet=false;return}
+  h.classList.add('cierra'); if(b) b.classList.add('cierra'); const a=document.activeElement; if(a&&a.blur) a.blur(); setTimeout(()=>{S.chSheet=false; render(true)},230) }
+document.addEventListener('click',e=>{ if(S.view!=='socio') return;
+  if(e.target.closest('#chfab')){ e.stopPropagation(); return S.chSheet?chCerrarHoja():chAbrirHoja() }
+  if(e.target.closest('#chsheetx,#chback')){ e.stopPropagation(); return chCerrarHoja() }
+  const r=e.target.closest('[data-retry]'); if(r){ e.stopPropagation(); return chReintentar(r.dataset.retry) }
+  const c=e.target.closest('[data-chip]'); if(c){ e.stopPropagation(); const t=$('#chatin'); if(!t) return; t.value=c.dataset.chip; S.chatDraft=t.value; t.dispatchEvent(new Event('input',{bubbles:true})); t.focus(); const L=t.value.length; t.setSelectionRange(L,L) } },true);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.chSheet&&S.view==='socio') chCerrarHoja() });
 const chatCard=()=>{const n=chNoLeidosSocio(); return `<button class="card gymlink chatlink" data-tab="chat"><span class="gico">💬</span><span class="gtx"><b>Chat con el profe</b><small>${n?n+' mensaje'+(n===1?'':'s')+' sin leer':'Escribile a '+PROFE.split(' ')[0]+' directo desde la app'}</small></span><span class="chb" data-chbadge ${n?'':'hidden'}>${n||''}</span><span class="garr" aria-hidden="true">›</span></button>`};
 const sugCard=()=>`<section class="card sugc" id="sugc"><div class="ttl"><b>¿Qué podemos mejorar del gimnasio?</b><span class="anon">🕶️ Anónimo</span></div>
   ${S.sugOk?`<div class="sugok"><span class="sugtick" aria-hidden="true">✓</span><b>¡Gracias! Ya nos llegó.</b><p>Lo leemos todo. <button class="linkb" id="sugotra" type="button">Mandar otra</button></p></div>`
@@ -2886,7 +3038,7 @@ document.addEventListener('submit',async e=>{ const f=e.target; if(f.id!=='chatf
   const t=f.querySelector('textarea'), txt=t.value; if(!txt.trim()) return t.focus();
   t.value=''; t.style.height=''; if(f.id==='chatf'){ S.chatDraft=''; await chEnviar(txt,chK(me()),'socio') } else { (S.chDraft||{})[S.chSel]=''; await chEnviar(txt,S.chSel,'profe') } t.focus() },true);
 document.addEventListener('keydown',e=>{ const t=e.target; if(e.key==='Enter'&&!e.shiftKey&&t&&(t.id==='chatin'||t.id==='chatpin')){ e.preventDefault(); const f=t.form; if(f) f.requestSubmit() } });
-document.addEventListener('input',e=>{ const t=e.target; if(t.id==='chatin'||t.id==='chatpin'){ t.style.height='auto'; t.style.height=Math.min(120,t.scrollHeight)+'px'; if(t.id==='chatin') S.chatDraft=t.value; else {S.chDraft=S.chDraft||{}; S.chDraft[S.chSel]=t.value} } });
+document.addEventListener('input',e=>{ const t=e.target; if(t.id==='chatin'||t.id==='chatpin'){ t.style.height='auto'; t.style.height=Math.min(120,t.scrollHeight)+'px'; chUpdBar(); if(t.id==='chatin') S.chatDraft=t.value; else {S.chDraft=S.chDraft||{}; S.chDraft[S.chSel]=t.value} } });
 document.addEventListener('click',e=>{ const b=e.target.closest('#sugotra'); if(b){ S.sugOk=false; const c=document.getElementById('sugc'); if(c) c.outerHTML=sugCard(); const t=$('#sugin'); if(t) t.focus() } });
 document.addEventListener('submit',e=>{ if(e.target.id!=='gymf') return; e.preventDefault(); e.stopImmediatePropagation(); guardarGym() },true);
 document.addEventListener('input',e=>{ const f=e.target.closest&&e.target.closest('#gymf'); if(!f||!e.target.name) return; (S.gymDraft=S.gymDraft||{})[e.target.name]=e.target.value });
@@ -2940,7 +3092,7 @@ document.addEventListener('click',e=>{
     if(cerrado(TODAY)) return toast('Sábados y domingos el gimnasio está cerrado');
     if(estado(s).c==='bad') return toast('Entrada bloqueada: la cuota está vencida');
     const a=s.att[mk(Y,M)]=s.att[mk(Y,M)]||[]; if(a.includes(D)) return toast('Ya registraste tu entrada de hoy');
-    a.push(D); saveDB(); S.justIn=iso(TODAY); S.rk=null; try{navigator.vibrate&&navigator.vibrate([18,40,28])}catch(x){} toast('Entrada registrada. ¡A entrenar!'); return render(true);}
+    a.push(D); saveDB(); S.justIn=iso(TODAY); S.rkC={}; S.mrkSig=null; try{navigator.vibrate&&navigator.vibrate([18,40,28])}catch(x){} toast('Entrada registrada. ¡A entrenar!'); return render(true);}
   if(b.id==='uncheckin'){const s=me(); const a=(s.att||{})[mk(Y,M)]||[];   /* solo la de hoy: los días anteriores los cambia el profe */
     if(!a.includes(D)) return render(true);
     s.att[mk(Y,M)]=a.filter(d=>d!==D); saveDB(); S.justOut=iso(TODAY); toast('Entrada de hoy quitada'); return render(true);
@@ -2959,6 +3111,7 @@ document.addEventListener('click',e=>{
     S.forceTop=true;toast('Descanso de '+fmtR(ms)+' en marcha');return render()}
   if(b.id==='fin'){toast('Entrenamiento guardado. ¡Bien ahí!');[...S.done].filter(k=>k.startsWith(S.day+'-')).forEach(k=>S.done.delete(k));return render()}
   if(b.dataset.m){S.selMonth=+b.dataset.m;return render()}
+  if(b.dataset.mrk!=null){ S.asView='rank'; S.rkP='mes'; S.rkSig=null; S.tab='asist'; S.forceTop=true; return render() }
   if(b.dataset.asv){ if((S.asView==='rank')!==(b.dataset.asv==='rank')){ S.asView=b.dataset.asv==='rank'?'rank':'mia'; S.rkSig=null } return render(true) }
   if(b.dataset.rkp){ if(S.rkP!==b.dataset.rkp){ S.rkP=b.dataset.rkp; S.rkSig=null } return render(true) }
   if(b.id==='prevM'){S.calM--;if(S.calM<0){S.calM=11;S.calY--} S.calDir='prev'; return render()}
