@@ -16,6 +16,9 @@
 <title>Training Club</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Archivo:wght@700;800&family=Inter:wght@400;500;600;700&display=swap">
+<script>(function(){var t='oscuro';try{t=localStorage.getItem('tc-tema')||'oscuro'}catch(e){}
+var d=t==='auto'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):(t==='claro'?'light':'dark');
+document.documentElement.setAttribute('data-theme',d);document.documentElement.setAttribute('data-tema',t)})()</script>
 <style>
 /* Layout: marca Training Club (negro + degradé amarillo→turquesa del logo), una sola apariencia oscura a propósito.
    Barra superior con selector Socio/Dueño; socio = teléfono centrado; dueño = panel ancho */
@@ -405,6 +408,30 @@ td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
 @media (max-width:440px){.phone{border-radius:24px;min-height:0}}
 /* v7: arranca vacío, progreso, animaciones y deslizar entre secciones */
 :root{--ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.45,.5,1)}
+:root[data-theme="light"]{--bg:#ECEFEA;--surface:#FFFFFF;--sunk:#F2F4F0;--ink:#121512;--muted:#5D655E;--line:#DBE0D8;
+  --teal:#0F9F81;--accent:#0F9F81;--accent-soft:#D9F3EC;--ok:#0F9F81;--ok-bg:#DAF3EC;--bad:#D63A2B;--bad-bg:#FCE3E0;--warn:#9A7F00;--warn-bg:#FAF2C4;--future:#E6E9E3;color-scheme:light}
+[data-theme="light"] .anim{background:radial-gradient(circle at 50% 40%,#ffffff,#eaeee8)}
+[data-theme="light"] .anim svg{filter:none}
+[data-theme="light"] .anim .gear-s{stroke:#c9cfc6}
+[data-theme="light"] .plan.estrella{background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(120deg,#FCE024,#DDDC34,#24C9A7,#FCE024) border-box;background-size:100% 100%,300% 100%}
+[data-theme="light"] .plan.estrella.on{background:linear-gradient(var(--accent-soft),var(--accent-soft)) padding-box,linear-gradient(120deg,#FCE024,#DDDC34,#24C9A7,#FCE024) border-box;background-size:100% 100%,300% 100%}
+[data-theme="light"] .brand img,[data-theme="light"] .boot img{background:#070807;border-radius:12px;padding:4px 6px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+[data-theme="light"] .plan{background:rgba(255,255,255,.75)}
+[data-theme="light"] .plan.on{background:var(--accent-soft)}
+[data-theme="light"] .hline .hnow{background:var(--ink);box-shadow:none}
+[data-theme="light"] .toast{background:#121512;color:#F3F5F0}
+[data-theme="light"] .phone,[data-theme="light"] .panel,[data-theme="light"] .card{box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(20,30,20,.06)}
+/* cambio de tema: un círculo que se expande desde donde tocaste */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){animation:temaIn .65s cubic-bezier(.4,0,.2,1) both}
+@keyframes temaIn{from{clip-path:circle(0 at var(--tx,50%) var(--ty,50%))}to{clip-path:circle(150vmax at var(--tx,50%) var(--ty,50%))}}
+html.tema-fade *{transition:background-color .35s,color .35s,border-color .35s,fill .35s,stroke .35s!important}
+.temaseg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border-radius:14px;background:var(--sunk);border:1px solid var(--line)}
+.temaseg button{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 4px;border:0;border-radius:10px;background:none;color:var(--muted);font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:background .25s,color .25s,transform .2s var(--spring)}
+.temaseg button:active{transform:scale(.95)}
+.temaseg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.temab{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--sunk);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:16px;transition:transform .35s var(--spring)}
+.temab:active{transform:rotate(-30deg) scale(.9)}
 .muted{color:var(--muted)}
 .up{color:var(--teal);font-weight:700}.down{color:var(--bad);font-weight:700}
 .screen{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;will-change:transform}
@@ -823,7 +850,7 @@ const esUni=s=>{const p=planDe(s.plan); return !!p&&s.precio===conUni(p.p)};
 const uniHtml=`<div class="uni"><span class="uico" aria-hidden="true">🎓</span><span><b>10% de descuento</b> a alumnos universitarios. Mostrá tu libreta o certificado en el gimnasio.</span></div>`;
 const planesHtml=s=>`<div class="planes" role="radiogroup" aria-label="Elegí tu cuota">${PLANES.map(p=>{const on=s.plan===p.n;
   return `<button class="plan ${on?'on':''} ${p.top?'estrella':''}" role="radio" aria-checked="${on}" data-plan="${esc(p.n)}">${p.top?`<i class="rib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z"/></svg>${p.top}</i>`:''}<b>${p.n}</b><span>${p.d}</span><em class="num">${fmt(on?s.precio:p.p)}<small>/mes</small></em></button>`}).join('')}</div>`;
-const PROFE='Ezequiel Heinz';          /* el profe que ven todos los socios */
+const PROFE='Ezequiel Heeinz';          /* el profe que ven todos los socios */
 const RECARGO=.10;                      /* recargo por pagar después del vencimiento */
 function profesLS(){let L=null;try{L=JSON.parse(localStorage.getItem('tc-profes')||'null')}catch(e){}
   if(!L){L=[];try{const o=JSON.parse(localStorage.getItem('tc-profe')||'null');if(o&&o.dni)L.push(Object.assign({},o,{aprobado:true,creado:new Date().toISOString()}))}catch(e){}}
@@ -969,6 +996,22 @@ setInterval(()=>{const el=document.getElementById('hst'); if(!el) return; const 
   if(t!==g.txt){el.lastChild.textContent=g.txt; el.className='hst '+(g.abierto?'ok ':'')+(g.pronto?'pronto':'')}
   const sb_=document.getElementById('hsub'); if(sb_&&sb_.textContent!==g.sub) sb_.textContent=g.sub;
   const n=document.querySelector('.hnow'); if(n){const d=new Date(),m=d.getHours()*60+d.getMinutes(); n.style.left=((Math.min(1380,Math.max(420,m))-420)/960*100).toFixed(2)+'%'}},20000);
+/* ---------- Tema ---------- */
+const temaGuardado=()=>{try{return localStorage.getItem('tc-tema')||'oscuro'}catch(e){return 'oscuro'}};
+const temaReal=t=>t==='auto'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):(t==='claro'?'light':'dark');
+function aplicarTema(t){const r=document.documentElement, d=temaReal(t); r.setAttribute('data-theme',d); r.setAttribute('data-tema',t);
+  const m=document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute('content',d==='light'?'#ECEFEA':'#070807')}
+function setTema(t,ev){try{localStorage.setItem('tc-tema',t)}catch(e){}
+  const cambia=temaReal(t)!==document.documentElement.getAttribute('data-theme');
+  const fin=()=>{aplicarTema(t); document.querySelectorAll('[data-tema-op]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.temaOp===t));
+    const tb=document.getElementById('temab'); if(tb){tb.textContent=temaReal(t)==='light'?'🌙':'☀️'; tb.title=temaReal(t)==='light'?'Pasar a fondo oscuro':'Pasar a fondo claro'}};
+  if(!cambia||reduceMotion) return fin();
+  if(document.startViewTransition){const x=ev&&ev.clientX!=null?ev.clientX:innerWidth/2, y=ev&&ev.clientY!=null?ev.clientY:innerHeight/2;
+    document.documentElement.style.setProperty('--tx',x+'px'); document.documentElement.style.setProperty('--ty',y+'px'); document.startViewTransition(fin); return}
+  document.documentElement.classList.add('tema-fade'); fin(); setTimeout(()=>document.documentElement.classList.remove('tema-fade'),400)}
+try{matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(temaGuardado()==='auto') aplicarTema('auto')})}catch(e){}
+aplicarTema(temaGuardado());
+const temaSeg=()=>{const t=temaGuardado(); return `<div class="field"><label>Apariencia</label><div class="temaseg" role="group" aria-label="Apariencia de la app">${[['oscuro','🌙','Oscuro'],['claro','☀️','Claro'],['auto','📱','Auto']].map(([k,i,l])=>`<button type="button" data-tema-op="${k}" aria-pressed="${t===k}"><span aria-hidden="true">${i}</span>${l}</button>`).join('')}</div></div>`};
 function cuotaPlegada(){try{return localStorage.getItem('tc-cuota-plegada')==='1'}catch(e){return false}}
 function plegarCuota(){const sec=document.querySelector('.status'), bt=document.getElementById('sttog'); if(!sec||!bt) return;
   const p=!sec.classList.contains('pleg'); sec.classList.toggle('pleg',p); bt.setAttribute('aria-expanded',!p);
@@ -1038,6 +1081,7 @@ function screenPerfil(){
   </div>
   <div class="field"><label for="nombre">Nombre y apellido</label><input class="inp" id="nombre" value="${esc(S.name)}" autocomplete="name"></div>
   <div class="pfopc">
+    ${temaSeg()}
     <label class="motsw"><span><b>Mensajes de motivación</b><small>2 por día, a cualquier hora entre las 7 y las 20 💪</small></span><input type="checkbox" id="pmotiv" role="switch" ${s.motiv!==false?'checked':''}><i aria-hidden="true"></i></label>
     <div class="field"><label for="pnac">Fecha de nacimiento <span class="opc">opcional</span></label><input class="inp" type="date" id="pnac" value="${s.nac||''}" min="1920-01-02" max="${iso(TODAY)}"><small class="hint" id="pedad">${edadDe(s.nac)!=null?'Tenés '+edadDe(s.nac)+' años':'Así tu profe sabe tu edad.'}</small></div>
     <form class="field" id="pesof" novalidate><label for="ppeso">Peso <span class="opc">opcional</span></label><div class="pesorow"><input class="inp num" id="ppeso" inputmode="decimal" placeholder="${pesoActual(s)?fmtKg(pesoActual(s).peso):'Ej: 72,5'}"><span>kg</span><button class="btn sm" type="submit">Guardar</button></div><small class="hint">${pesoActual(s)?'Último: '+fmtKg(pesoActual(s).peso)+' kg el '+ddmm(pesoActual(s).fecha):'Se suma a tu progreso y lo ve tu profe.'}</small></form>
@@ -1579,7 +1623,7 @@ const dotsOf=s=>`<span class="dots" aria-label="Cuotas ${Y}">${MES.map((_,i)=>{c
 
 function proBar(){const n=(S.profes||[]).filter(p=>!p.aprobado).length; const t=S.ptabP==='profes'?1:0; const prev=S.pnPrev==null?t:S.pnPrev; S.pnPrev=t;
   return `<div class="probar"><div class="seg2 pnav" role="group" aria-label="Secciones del panel" style="--m:${prev}" data-to="${t}"><button data-pnav="socios" aria-pressed="${!t}">Socios</button><button data-pnav="profes" aria-pressed="${!!t}">Profes${n?` <span class="cnt">${n}</span>`:''}</button></div>
-  <div class="pwho"><label class="pfav" for="pfoto" title="Cambiar tu foto">${avatar('sm',PRO.foto||null,PRO.nombre+' '+PRO.apellido)}<i aria-hidden="true">✎</i></label><input type="file" id="pfoto" accept="image/*" hidden><span>Panel de <b>${esc(PRO.nombre+' '+PRO.apellido)}</b></span><button class="mini" id="prologout">Cerrar sesión</button></div></div>`}
+  <div class="pwho"><label class="pfav" for="pfoto" title="Cambiar tu foto">${avatar('sm',PRO.foto||null,PRO.nombre+' '+PRO.apellido)}<i aria-hidden="true">✎</i></label><input type="file" id="pfoto" accept="image/*" hidden><span>Panel de <b>${esc(PRO.nombre+' '+PRO.apellido)}</b></span><button class="temab" id="temab" title="${document.documentElement.getAttribute('data-theme')==='light'?'Pasar a fondo oscuro':'Pasar a fondo claro'}" aria-label="Cambiar entre fondo claro y oscuro">${document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️'}</button><button class="mini" id="prologout">Cerrar sesión</button></div></div>`}
 async function cargarProfes(){
   if(CLOUD){ if(sb&&S.pro){ try{S.profes=(await q(sb.rpc('profes_lista')))||[]}catch(e){} } }
   else S.profes=profesLS().map(p=>Object.assign({},p,{yo:!!PRO&&p.dni===PRO.dni})).sort((a,b)=>(b.aprobado-a.aprobado)||(a.nombre+a.apellido).localeCompare(b.nombre+b.apellido,'es'));
@@ -1945,6 +1989,8 @@ document.addEventListener('click',e=>{
   if(b.dataset.tab){ if(S.tab===b.dataset.tab&&b.closest('.nav')){const sc=$('#app .screen');if(sc)sc.scrollTo({top:0,behavior:'smooth'});return} return goTab(b.dataset.tab)}
   if(b.id==='pay') return pagar(b.dataset.mes!=null?+b.dataset.mes:M);
   if(b.id==='sttog') return plegarCuota();
+  if(b.dataset.temaOp) return setTema(b.dataset.temaOp,e);
+  if(b.id==='temab') return setTema(document.documentElement.getAttribute('data-theme')==='light'?'oscuro':'claro',e);
   if(b.id==='htog'){const sm=document.getElementById('hsem'); const ab=!sm.classList.contains('open'); sm.classList.toggle('open',ab); b.setAttribute('aria-expanded',ab);
     b.firstChild.textContent=ab?'Ocultar la semana':'Ver toda la semana'; try{localStorage.setItem('tc-horarios-semana',ab?'1':'0')}catch(x){} return}
   if(b.dataset.sen){elegirSens(+b.dataset.sen);return}
