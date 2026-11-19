@@ -445,10 +445,21 @@ button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .apphead .avbtn .avatar{width:34px;height:34px;font-size:12px;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--teal)}
 .apphead .avbtn{transition:transform .25s var(--spring)}.apphead .avbtn:active{transform:scale(.9)}
 /* barra inferior con indicador que se desliza */
-.nav{grid-template-columns:repeat(5,1fr);position:relative;padding:6px 6px calc(10px + env(safe-area-inset-bottom,0px))}
-.nav .ind{position:absolute;top:6px;left:6px;height:52px;width:calc((100% - 12px)/5);border-radius:14px;background:var(--accent-soft);
+.nav{grid-template-columns:repeat(6,1fr);position:relative;padding:6px 6px calc(10px + env(safe-area-inset-bottom,0px))}
+.nav .ind{position:absolute;top:6px;left:6px;height:52px;width:calc((100% - 12px)/6);border-radius:14px;background:var(--accent-soft);
   transform:translateX(calc(var(--x,0)*100%));transition:transform .45s var(--spring),opacity .2s;z-index:0;box-shadow:inset 0 0 0 1px rgba(36,201,167,.18)}
-.nav button{position:relative;z-index:1;height:52px;justify-content:center;font-size:10.5px}
+.nav button{position:relative;z-index:1;height:52px;justify-content:center;font-size:10px;letter-spacing:-.1px;min-width:0}
+.nav button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status.fam{background:linear-gradient(135deg,rgba(252,224,36,.14),rgba(36,201,167,.14));border-color:rgba(36,201,167,.35)}
+.pill.fam,.status .pill.fam,.status.fam .pill{background:linear-gradient(90deg,#FCE024,#24C9A7)!important;color:#0b0d0b!important;font-weight:800}
+.famtag{display:inline-block;animation:famBob 2.4s ease-in-out infinite}
+@keyframes famBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(-6deg)}}
+.famjoke{display:block;margin-top:8px;font-weight:700;color:var(--ink);font-size:14px}
+.famcard{text-align:center;padding:26px 18px}.famcard b{font-size:20px;display:block;margin-top:6px}.famcard p{margin:6px 0 0;color:var(--muted)}
+.famcard .famjoke{color:var(--ink)}
+.famico{font-size:46px;display:inline-block;transform-origin:50% 90%;animation:famBarre 1.6s ease-in-out infinite}
+@keyframes famBarre{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(14deg)}}
+@media (prefers-reduced-motion:reduce){.famtag,.famico{animation:none}}
 .nav button[aria-current="page"]{background:none!important}
 .nav button svg{transition:transform .35s var(--spring)}
 .nav button[aria-current="page"] svg{transform:translateY(-2px) scale(1.1)}
@@ -1078,6 +1089,10 @@ const edadDe=f=>{if(!f) return null; const b=new Date(f+'T00:00'); let a=TODAY.g
 const pesoActual=s=>{const L=(s.medidas||[]).filter(x=>x.peso!=null).sort((a,b)=>a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0); return L[L.length-1]||null};
 const PLANES=[{n:'Training Básico',p:42000,d:'Hasta 3 veces por semana'},{n:'Training Full',p:45000,d:'Todos los días, sin límite',top:'La más elegida'}];
 const planDe=n=>PLANES.find(x=>x.n===n);
+/* Plan familiar: solo lo asigna el profe desde el panel; no aparece para elegir, no paga nunca, pase libre ilimitado */
+const FAMILIAR='Plan familiar'; const esFam=s=>!!(s&&s.plan===FAMILIAR);
+const FAM_CHISTE=['Eso sí: ponete a limpiar el gimnasio 🧹','Tu cuota se paga pasando el trapo por las máquinas 🧽','Los discos no se guardan solos, ¿eh? 🏋️','Pase libre a cambio de dejar todo ordenadito 😎','Vos no pagás… pero el lampazo te espera 🪣'];
+const famChiste=()=>FAM_CHISTE[(TODAY.getDate()+TODAY.getMonth())%FAM_CHISTE.length];
 /* las cuotas las edita el profe (pestaña Cuotas del panel). En la nube vienen de la tabla planes; en el prototipo, de la base local */
 const planTxt=v=>String(v==null?'':v).trim().replace(/\s+/g,' ').replace(/[<>"]/g,'');
 const planLimpio=x=>{const o={n:planTxt(x.n),p:Math.max(0,parseInt(String(x.p).replace(/\D/g,''))||0),d:planTxt(x.d)}; if(planTxt(x.top)) o.top=planTxt(x.top); return o};
@@ -1114,6 +1129,7 @@ function venceDia(s,y,i){const n=new Date(y,i+1,0).getDate(); if(s.desde===mk(y,
 /* Estado de la cuota de un socio en el mes actual */
 function estado(s){
   if(!s||!s.plan) return {c:'none',t:'Sin cuota',v:'—'};
+  if(esFam(s)) return {c:'fam',t:'Plan familiar',v:'Libre'};
   const pago=s.pagos[mk(Y,M)];
   const vd=venceDia(s,Y,M); const venceEste=new Date(Y,M,vd);
   if(pago){const n=new Date(Y,M+1,venceDia(s,Y,M+1));return {c:'ok',t:'Al día',v:p2(n.getDate())+'/'+p2(n.getMonth()+1),days:Math.round((n-TODAY)/864e5),pago}}
@@ -1124,6 +1140,7 @@ function estado(s){
 /* Meses de este año: na (antes de tener cuota) / paid / owed / due (mes actual sin vencer) / future */
 function mesEstado(s,i){
   if(s.pagos[mk(Y,i)]) return 'paid';
+  if(esFam(s)) return 'na';
   if(!s.plan||!s.desde) return 'na';
   const [dy,dm]=s.desde.split('-').map(Number);
   if(Y<dy||(Y===dy&&i<dm)) return 'na';
@@ -1199,7 +1216,8 @@ const ICONS={
   cuotas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>',
   asist:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18M8 14l3 3 5-5"/></svg>'
 };
-const TABS=[['inicio','Inicio'],['rutina','Rutina'],['progreso','Progreso'],['cuotas','Cuotas'],['asist','Asistencia']];
+ICONS.gimnasio='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
+const TABS=[['inicio','Inicio'],['rutina','Rutina'],['progreso','Progreso'],['cuotas','Cuotas'],['asist','Asistencia'],['gimnasio','Gimnasio']];
 const TABKEYS=TABS.map(t=>t[0]);
 
 const attMonth=(s,y,m)=>(s&&s.att[mk(y,m)])||[];
@@ -1275,13 +1293,17 @@ function screenInicio(){
     const on=attMonth(s,d.getFullYear(),d.getMonth()).includes(d.getDate()); if(on) semana++;
     return `<div class="${cerrado(d)?'cerr':''}">${l}<i class="${on?'on':''} ${d.getTime()===TODAY.getTime()?'today':''} num">${d.getDate()}</i></div>`}).join('');
   const r=s.rutina&&s.rutina[S.day]?s.rutina[S.day]:(s.rutina&&s.rutina[0]);
-  const pleg=cuotaPlegada(), resu=e.c==='none'?'Elegí tu cuota':e.c==='ok'?'Vence '+e.v:fmt(e.c==='bad'?montoMes(s,M):s.precio);
+  const pleg=cuotaPlegada(), resu=e.c==='none'?'Elegí tu cuota':e.c==='fam'?'Pase libre':e.c==='ok'?'Vence '+e.v:fmt(e.c==='bad'?montoMes(s,M):s.precio);
   const head=pill=>`<button class="strow sttog" id="sttog" aria-expanded="${!pleg}" aria-controls="stbody"><span class="lab">Cuota de ${MES[M].toLowerCase()}<em class="stres num">${resu}</em></span><span class="stder">${pill}<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>`;
   const hoyS=(s.sens||{})[iso(TODAY)];
   const sensH=cerrado(TODAY)&&!hoyS?'':`<section class="card sens"><div class="ttl"><b>¿Cómo te sentiste hoy?</b><span id="senok">${hoyS?'✓ Tu profe lo ve':'Contale a tu profe'}</span></div>
     <div class="sensbar" role="radiogroup" aria-label="Cómo te sentiste en el entrenamiento">${SENS.map(([n,e,l])=>`<button class="sen ${hoyS&&hoyS.n===n?'on':''}" data-sen="${n}" role="radio" aria-checked="${!!(hoyS&&hoyS.n===n)}"><span class="se" aria-hidden="true">${e}</span><small>${l}</small></button>`).join('')}</div>
     ${hoyS?sensNota(hoyS):''}</section>`;
-  const st=e.c==='none'
+  const st=e.c==='fam'
+    ?`<section class="status fam ${pleg?'pleg':''}">${head('<span class="pill fam">Pase libre</span>')}<div class="stbody" id="stbody"><div class="stin">
+       <span class="big">Plan familiar <span class="famtag" aria-hidden="true">🏠</span></span><span class="sub">No pagás cuota: tenés pase libre ilimitado, todos los días.</span>
+       <span class="famjoke">${famChiste()}</span></div></div></section>`
+    :e.c==='none'
     ?`<section class="status none ${pleg?'pleg':''}">${head('<span class="pill">Sin asignar</span>')}<div class="stbody" id="stbody"><div class="stin">
        <span class="big">Elegí tu cuota</span><span class="sub">Tocá la que querés pagar. Después la podés cambiar.</span>${planesHtml(s)}${uniHtml}</div></div></section>`
     :`<section class="status ${e.c==='ok'?'ok':e.c==='bad'?'bad':'warn'} ${pleg?'pleg':''}">
@@ -1298,8 +1320,6 @@ function screenInicio(){
     ${att.includes(D)?'<div class="donerow"><p class="done-msg"><span class="tick" aria-hidden="true">✓</span> Ya registraste tu entrada de hoy.</p><button class="mini" id="uncheckin" title="Solo se puede quitar la entrada del mismo día">Quitar</button></div>':cerrado(TODAY)?'<p class="closed-msg"><span aria-hidden="true">🔒</span> Sábados y domingos el gimnasio está cerrado. ¡Nos vemos el lunes!</p>':`<button class="btn ghost" id="checkin">Vine hoy al gym</button>`}
   </section>
   ${sensH}
-  ${horariosHtml()}
-  ${gymLinkHtml()}
   ${r?`<section class="card">
     <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
     <div>${r.ex.slice(0,3).map(x=>`<div class="mini-ex"><span>${esc(exNm(x))}</span><span class="num">${exMeta(x)}</span></div>`).join('')}</div>
@@ -1337,7 +1357,6 @@ function screenPerfil(){
     <div><span>Cuota</span><span class="pill ${e.c}">${e.t}</span></div>
     <div><span>Notificaciones</span>${!notifOK()?'<span class="muted" style="font-size:13px;text-align:right">Instalá la app en tu inicio para recibirlos</span>':Notification.permission==='granted'?'<span class="pill ok">Activados</span>':Notification.permission==='denied'?'<span class="muted" style="font-size:13px">Bloqueados en el celu</span>':'<button class="mini pay" id="avisos">Activar</button>'}</div>
   </div>
-  ${gymLinkHtml()}
   <button class="btn ghost logout" id="logout">Cerrar sesión</button>`;
 }
 
@@ -1543,6 +1562,8 @@ const fmtKg=v=>{const n=Math.round(+v*10)/10;return String(n).replace('.',',')};
 
 function screenCuotas(){
   const s=me();
+  if(esFam(s)) return `<h2>Cuotas ${Y}</h2><section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Plan familiar</b>
+    <p>Pase libre ilimitado. Nunca tenés que pagar la cuota.</p><p class="famjoke">${famChiste()}</p></section>`;
   if(!s.plan) return `<h2>Cuotas ${Y}</h2>${empty(ICONS.cuotas,'Todavía no hay cuotas','Cuando tu gimnasio te asigne el plan, acá vas a ver qué meses pagaste y cuáles te faltan.')}`;
   const cells=MES.map((m,i)=>{const c=mesEstado(s,i);const t={paid:'Pagado',owed:'Adeuda',due:'A pagar',future:'Próximo',na:'—'}[c];
     return `<button class="m ${c==='due'?'future due':c==='na'?'future na':c}" data-m="${i}" aria-pressed="${i===S.selMonth}"><b>${m.slice(0,3)}</b><span>${t}</span></button>`}).join('');
@@ -1631,7 +1652,7 @@ function renderSocio(){
   const body={inicio:screenInicio,rutina:screenRutina,progreso:screenProgreso,cuotas:screenCuotas,asist:screenAsist,perfil:screenPerfil,gimnasio:screenGimnasio}[S.tab]();
   const prev=document.querySelector('#app .screen'); const same=prev&&prev.id==='scr-'+S.tab; const keep=same?prev.scrollTop:0;
   const ti=TABKEYS.indexOf(S.tab), pi=TABKEYS.indexOf(S.lastTab||S.tab);
-  const sube=t=>t==='perfil'||t==='gimnasio', dir=same?'':sube(S.tab)?'navsube':sube(S.lastTab)?'navbaja':ti>pi?'fromr':ti<pi?'froml':'';
+  const sube=t=>t==='perfil', dir=same?'':sube(S.tab)?'navsube':sube(S.lastTab)?'navbaja':ti>pi?'fromr':ti<pi?'froml':'';
   $('#app').innerHTML=`<div class="phone"><div class="sbar" aria-hidden="true"><span class="num">9:41</span><span class="sicons"><i></i><i></i><i></i><b></b></span></div>
   <header class="apphead"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>
     <button class="hpill num" id="hpill" data-tab="rutina" hidden></button>
@@ -1661,7 +1682,7 @@ function goTab(t){if(t===S.tab)return; S.tab=t; S.forceTop=true; render()}
 /* ---------- Deslizar a izquierda/derecha para cambiar de sección ---------- */
 let SW=null;
 document.addEventListener('touchstart',e=>{
-  const scr=e.target.closest('#app .screen'); if(!scr||S.view!=='socio'||!S.user||S.tab==='perfil'||S.tab==='gimnasio'||e.touches.length>1) return;
+  const scr=e.target.closest('#app .screen'); if(!scr||S.view!=='socio'||!S.user||S.tab==='perfil'||e.touches.length>1) return;
   if(e.target.closest('.hscroll,input,textarea,select,label,.timer .rbar')) return;
   const t=e.touches[0]; SW={x:t.clientX,y:t.clientY,scr,dir:0,dx:0,t:Date.now()};
 },{passive:true});
@@ -2256,7 +2277,7 @@ function renderFicha(s){
       <span class="pinfo num"><b>${fmt(p.monto)}</b> · ${esc(p.medio||'')} · ${esc(p.fecha||'')}</span>
       <button class="mini" data-pedit="${i}" aria-label="Editar pago de ${m}">Editar</button></div>`;
     const sel=MS.set.includes(i);
-    const pill=c==='paid'?'<span class="pill ok">Pagado</span>':c==='owed'?'<span class="pill bad">Adeuda</span>':c==='due'?'<span class="pill warn">A pagar</span>':c==='na'?'<span class="pill">Sin cuota</span>':'<span class="pill">Próximo</span>';
+    const pill=esFam(s)&&c!=='paid'?'<span class="pill fam">Familiar</span>':c==='paid'?'<span class="pill ok">Pagado</span>':c==='owed'?'<span class="pill bad">Adeuda</span>':c==='due'?'<span class="pill warn">A pagar</span>':c==='na'?'<span class="pill">Sin cuota</span>':'<span class="pill">Próximo</span>';
     return `<div class="mrow ${c} ${p?'editing':''} ${sel?'sel':''}">${p?'':`<label class="mchk" title="Seleccionar ${m}"><input type="checkbox" data-msel="${i}" ${sel?'checked':''} aria-label="Seleccionar ${m} para registrar"><i></i></label>`}<span class="mname">${m}</span>${pill}
       <select class="inp sm" id="medio${i}" aria-label="Medio de pago de ${m}">${MEDIOS.map(x=>`<option ${p&&p.medio===x?'selected':''}>${x}</option>`).join('')}</select>
       <input class="inp sm num" id="monto${i}" value="${p?p.monto:(c==='na'||c==='future'?s.precio:montoMes(s,i))}" inputmode="numeric" aria-label="Monto de ${m}" style="width:86px">
@@ -2281,7 +2302,7 @@ function renderFicha(s){
   </section>`;
   const cuota=`<section class="panel"><div class="panelhead"><h2>Cuota y pagos</h2><button type="button" class="linkb" data-pnav="cuotas">Cambiar precios de las cuotas ›</button></div>
     <form class="cuotaf" id="cuotaf">
-      <div class="field"><label for="cplan">Plan</label><select class="inp" id="cplan"><option value="">Sin cuota</option>${PLANES.map(p=>`<option value="${p.n}" ${s.plan===p.n?'selected':''}>${p.n} · ${fmt(p.p)}</option>`).join('')}${s.plan&&!planDe(s.plan)?`<option selected>${esc(s.plan)}</option>`:''}</select></div>
+      <div class="field"><label for="cplan">Plan</label><select class="inp" id="cplan"><option value="">Sin cuota</option>${PLANES.map(p=>`<option value="${p.n}" ${s.plan===p.n?'selected':''}>${p.n} · ${fmt(p.p)}</option>`).join('')}<option value="${FAMILIAR}" ${esFam(s)?'selected':''}>🏠 Plan familiar · no paga</option>${s.plan&&!planDe(s.plan)&&!esFam(s)?`<option selected>${esc(s.plan)}</option>`:''}</select></div>
       <div class="field"><label for="cprecio">Precio</label><input class="inp num" id="cprecio" inputmode="numeric" value="${s.precio||''}" placeholder="42000"></div>
       <label class="cuni"><input type="checkbox" id="cuni" ${esUni(s)?'checked':''}><span>🎓 Universitario <b>−10%</b></span></label>
       <div class="field"><label for="cvence">Vence el día</label><input class="inp num" id="cvence" inputmode="numeric" value="${s.vence}" maxlength="2"></div>
@@ -2547,18 +2568,17 @@ const GICO={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 const gymLinkHtml=()=>{const d=gTxt(gymInfo().direccion);
   return `<button class="card gymlink" data-tab="gimnasio"><span class="gico">${GICO.pin}</span><span class="gtx"><b>Gimnasio</b><small>${d?esc(d):'Ubicación, contacto, tu profe y cómo pagar'}</small></span><span class="garr" aria-hidden="true">›</span></button>`};
 function screenGimnasio(){
-  if(S.lastTab&&S.lastTab!=='gimnasio') S.gymBack=S.lastTab;
   const g=gymInfo(), s=me(), e=estado(s), d=gTxt(g.direccion), maps=mapsLink(g), ig=igLink(g.instagram), wa=waLink(g.whatsapp), tel=telLink(g.telefono), P1=PROFE.split(' ')[0];
   const lk=(cl,h,ico,t,sub)=>`<a class="gbtn ${cl}" href="${esc(h)}" ${cl==='tel'?'':'target="_blank" rel="noopener"'}><span class="gi">${ico}</span><span class="gtx"><b>${t}</b><small>${sub}</small></span><span class="garr" aria-hidden="true">›</span></a>`;
   const cont=[wa&&lk('wa',wa,GICO.wa,'WhatsApp','Escribile a '+P1), tel&&lk('tel',tel,GICO.tel,'Llamar',esc(gTxt(g.telefono))), ig&&lk('ig',ig,GICO.ig,'Instagram','@'+esc(igUser(g.instagram)))].filter(Boolean);
   const monto=s&&s.plan?(e.c==='bad'?montoMes(s,M):s.precio):0;
-  return `<div class="pfhead"><button class="back" data-tab="${S.gymBack||'inicio'}" aria-label="Volver">‹</button><h2>Gimnasio</h2></div>
+  return `<h2>Gimnasio</h2>
   <div class="gymscr" style="display:contents">
   ${d||maps?`<section class="card gubic"><span class="gico">${GICO.pin}</span><span class="gtx"><small>Ubicación</small><b>${d?esc(d):'Training Club'}</b></span>${maps?`<a class="btn sm" href="${esc(maps)}" target="_blank" rel="noopener">Cómo llegar</a>`:''}</section>`:''}
   ${cont.length?`<section class="card"><div class="ttl"><b>Contacto</b></div><div class="glinks">${cont.join('')}</div></section>`:''}
   <section class="card gprofe">${avatar('md',null,PROFE)}<span class="gtx"><small>Tu profe</small><b>${PROFE}</b><p>${esc(gTxt(g.profe_bio)||PROFE_BIO)}</p></span></section>
   ${horariosHtml()}
-  <section class="card">${comoPagarHtml(monto)}</section></div>`}
+  ${esFam(s)?`<section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Plan familiar</b><p>No pagás cuota. ${famChiste()}</p></section>`:`<section class="card">${comoPagarHtml(monto)}</section>`}</div>`}
 /* nube: se baja junto con el resto (loadAll) y si cambió se refresca la pantalla sin saltos */
 async function cargarGym(){ if(!CLOUD||!sb) return;
   try{ const {data,error}=await sb.from('gym_info').select('*').eq('id',1).maybeSingle(); if(error) return;
@@ -2569,7 +2589,7 @@ function gymEditorHtml(){ const g=Object.assign({},gymInfo(),S.gymDraft||{}), v=
   const F=[['direccion','Dirección','Ej: Calle 15 N° 1234, ciudad','text',200],['maps_url','Link de Google Maps <span class="opc">opcional</span>','Pegá el link de «Compartir» en Maps','url',500],
     ['instagram','Instagram','@usuario o link del perfil','text',100],['whatsapp','WhatsApp','Con característica, sin 0 ni 15: 2302 123456','tel',30],
     ['telefono','Teléfono <span class="opc">opcional</span>','Si querés que también puedan llamar','tel',30]];
-  return `<section class="panel" id="gyminfo"><div class="panelhead"><h2>Info del gimnasio</h2><span class="muted">La ven los socios en Inicio → Gimnasio</span></div>
+  return `<section class="panel" id="gyminfo"><div class="panelhead"><h2>Info del gimnasio</h2><span class="muted">La ven los socios en la sección Gimnasio</span></div>
   <form class="gymf" id="gymf" novalidate><div class="gymgrid">${F.map(([k,l,ph,t,mx])=>`<div class="field"><label for="g_${k}">${l}</label><input class="inp" id="g_${k}" name="${k}" type="${t}" maxlength="${mx}" placeholder="${esc(ph)}" value="${v(k)}" autocomplete="off"></div>`).join('')}</div>
     <div class="field"><label for="g_profe_bio">Sobre el profe</label><textarea class="inp" id="g_profe_bio" name="profe_bio" maxlength="300" placeholder="${esc(PROFE_BIO)}">${v('profe_bio')}</textarea><small class="hint" style="max-width:none">Si lo dejás vacío se muestra: ${esc(PROFE_BIO)}.</small></div>
     <div class="gymacts"><button class="btn sm" type="submit">Guardar info</button><small class="hint" style="margin:0;max-width:none;flex:1;min-width:200px">Lo que dejes vacío no se muestra. Los horarios y los alias de pago ya aparecen solos.</small></div></form></section>`}
@@ -2835,7 +2855,7 @@ document.addEventListener('submit',e=>{
     (s.prog[k]=s.prog[k]||[]).push({id:Date.now().toString(36),fecha:$('#pgfec').value||iso(TODAY),kg,reps:parseInt($('#pgrep').value)||null,series:parseInt($('#pgser').value)||null});
     saveDB(); toast('Marca agregada a '+k); return render()}
   if(f.id==='cuotaf'){const s=DB.socios[S.sel]; const plan=$('#cplan').value||null; const precio=parseInt($('#cprecio').value.replace(/\D/g,''))||0; const v=Math.min(28,Math.max(1,parseInt($('#cvence').value)||10));
-    if(plan&&!precio){toast('Poné el precio de la cuota');return $('#cprecio').focus()}
+    if(plan&&plan!==FAMILIAR&&!precio){toast('Poné el precio de la cuota');return $('#cprecio').focus()}
     if(plan&&!s.plan){s.desde=mk(Y,M);s.desdeDia=D} if(!plan){s.desde=null;s.desdeDia=null}
     s.plan=plan; s.precio=plan?precio:0; s.vence=v; saveDB(); toast(plan?'Cuota guardada: '+plan+' '+fmt(precio):'Cuota quitada'); return render()}
 });
@@ -2845,6 +2865,7 @@ document.addEventListener('change',e=>{
   if(e.target.id==='pmotiv'){const s=me(); if(s){s.motiv=e.target.checked; saveDB(); toast(s.motiv?'Te vamos a mandar 2 mensajes de motivación por día':'Listo, no te mandamos más mensajes de motivación'); if(s.motiv) campana('motivacion')} return}
   if(e.target.id==='pnac'){const s=me(); if(s){const v=e.target.value||null; if(v&&(v>=iso(TODAY)||v<='1920-01-01')) return toast('Revisá la fecha de nacimiento'); s.nac=v; saveDB(); const h=$('#pedad'); if(h) h.textContent=edadDe(v)!=null?'Tenés '+edadDe(v)+' años':'Así tu profe sabe tu edad.'; toast(v?'Fecha de nacimiento guardada':'Fecha de nacimiento borrada')}}
   if(e.target.id==='pfoto'&&e.target.files[0]){ fotoCuadrada(e.target.files[0],fotoProfe); e.target.value='' }
+  if(e.target.id==='cplan'&&$('#cplan').value===FAMILIAR){const c=$('#cprecio'); if(c){c.value='0'; c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash')}}
   if(e.target.id==='cplan'||e.target.id==='cuni'){const p=planDe($('#cplan').value), c=$('#cprecio'); if(p&&c){c.value=$('#cuni').checked?conUni(p.p):p.p; c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash')}}
   if(e.target.id==='nombre'){const v=e.target.value.trim(); if(v){S.name=v;S.user.name=v;try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){} savePerfil();toast('Nombre guardado')}}
 });
@@ -2889,7 +2910,7 @@ function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdSa
     if(dni!==s.dni&&DB.socios[dni]) return bad('Ya hay un socio con ese DNI','fdni');
     DD={name,dni,alta,nac} }
   if(q.includes('cuota')){ const plan=g('cplan',s.plan||'')||null, precio=parseInt(String(g('cprecio',s.precio||'')).replace(/\D/g,''))||0, ve=Math.min(28,Math.max(1,parseInt(g('cvence',s.vence))||10));
-    if(plan&&!precio) return bad('Poné el precio de la cuota','cprecio'); CC={plan,precio,ve} }
+    if(plan&&plan!==FAMILIAR&&!precio) return bad('Poné el precio de la cuota','cprecio'); CC={plan,precio:plan===FAMILIAR?0:precio,ve} }
   if(q.includes('pagos')) for(const i of [...new Set(Object.keys(v).map(k=>k.match(GS_PAGO)).filter(Boolean).map(m=>+m[2]))].sort((a,c)=>a-c)){
     const p=s.pagos[mk(Y,i)]; if(!p) continue;
     let fecha=String(g('fecha'+i,p.fecha)).trim(); if(!/^\d{1,2}\/\d{1,2}$/.test(fecha)) return bad('Fecha como dd/mm, ej: 05/11','fecha'+i);
