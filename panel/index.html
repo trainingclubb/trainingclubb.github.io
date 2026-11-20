@@ -2821,6 +2821,7 @@ function hsVer(k,origen){
   const d=document.createElement('dialog');d.className='hsig';d.tabIndex=-1;d.setAttribute('aria-label','Historias');
   d.innerHTML='<div class="hsbox"><div class="hsbar"></div><header><span class="hsquien"></span><button class="hsborrar" hidden aria-label="Eliminar esta historia">🗑️</button><button class="hsmute" hidden aria-label="Sonido">🔇</button><button class="hscerrar" aria-label="Cerrar">×</button></header><div class="hsmedia"></div><div class="hspie"></div><div class="hshoja" hidden role="dialog" aria-label="Actividad de la historia"></div><div class="hsconf" hidden role="alertdialog" aria-label="Eliminar historia"><b>¿Eliminar esta historia?</b><p>Se borra para todos y no se puede recuperar.</p><button class="hsconfsi">Eliminar</button><button class="hsconfno">Cancelar</button></div></div><nav><button class="hsprev" aria-label="Anterior">‹</button><button class="hsnext" aria-label="Siguiente">›</button></nav>';
   document.body.append(d);d.showModal();d.focus({preventScroll:true});
+  const reproducidas=new Set();
   const quieto=hsQuieto();let dirAutor=0,cerrando=false;
   const box=d.querySelector('.hsbox'),bar=d.querySelector('.hsbar'),caja=d.querySelector('.hsmedia'),quien=d.querySelector('.hsquien'),mute=d.querySelector('.hsmute'),borrar=d.querySelector('.hsborrar'),conf=d.querySelector('.hsconf');
   let confAbierto=false,turno=0,raf=0,dur=5000,trans=0,inicio=0,pausa=true,cargando=true,el=null,retenido=false,pd=null,holdT=0;
@@ -2841,20 +2842,21 @@ function hsVer(k,origen){
   async function mostrar(){
     const g=gs[gi],h=g.items[si],t=++turno;
     cargando=true;pausa=true;trans=0;dur=5000;if(el?.tagName==='VIDEO')el.pause();el=null;
-    if(!historiaViva(h)){cargando=false;dur=1;return}
+    box.querySelectorAll('.hsflot').forEach(x=>x.remove());
+    if(!historiaViva(h)){siguiente();return}
     bar.innerHTML=g.items.map((_,j)=>'<span><i style="transform:scaleX('+(j<si?1:0)+')"></i></span>').join('');
     quien.innerHTML=hsAvatar(g,'chico')+'<b>'+esc(g.k===hsYo()?'Tu historia':g.autor)+'</b><small>'+hsHace(h.creado)+'</small>';
-    caja.innerHTML='<span class="hscarga" role="status" aria-label="Cargando"></span>';mute.hidden=true;borrar.hidden=!(g.k===hsYo()||hsPanel());hsMarcar(h.ruta);pie(g,h,t);
+    caja.innerHTML='<span class="hscarga" role="status" aria-label="Cargando"></span>';mute.hidden=true;borrar.hidden=!(g.k===hsYo()||hsPanel());pieEl.innerHTML='';hoja.hidden=true;
     try{const url=await hsUrl(h);if(!d.open||t!==turno)return;
       const vid=esVideo(h),m=document.createElement(vid?'video':'img');
       if(vid){m.playsInline=true;m.preload='auto';m.muted=hsMudo;m.onended=()=>{if(t===turno&&!cargando)siguiente()}}
       else{m.alt='Historia de '+g.autor;m.decoding='async';m.draggable=false}
       await new Promise((ok,no)=>{m[vid?'onloadedmetadata':'onload']=ok;m.onerror=no;m.src=url});
       if(!d.open||t!==turno)return;
-      caja.replaceChildren(m);el=m;cargando=false;
+      caja.replaceChildren(m);el=m;cargando=false;hsMarcar(h.ruta);pie(g,h,t);
       if(dirAutor&&!quieto){const a=[{transform:`translateX(${dirAutor*28}%) scale(.94)`,opacity:0},{transform:'none',opacity:1}];caja.animate(a,{duration:300,easing:'cubic-bezier(.2,.8,.2,1)'});quien.animate(a,{duration:300,easing:'cubic-bezier(.2,.8,.2,1)'})}dirAutor=0;
       if(vid){mute.hidden=false;mute.textContent=m.muted?'🔇':'🔊';
-        if(!retenido&&!document.hidden)try{await m.play()}catch{m.muted=hsMudo=true;mute.textContent='🔇';m.play().catch(()=>{})}}
+        if(!retenido&&!confAbierto&&!document.hidden)try{await m.play()}catch{if(!d.open||t!==turno)return;m.muted=hsMudo=true;mute.textContent='🔇';m.play().catch(()=>{})}}
       if(t===turno)pausar(false);precargar();
     }catch{if(d.open&&t===turno){caja.innerHTML='<p class="hserr">No se pudo cargar esta historia.</p>';cargando=false;dur=2500;pausar(false)}}
   }
@@ -2863,12 +2865,28 @@ function hsVer(k,origen){
   function pie(g,h,t){const mio=hsEsMio(g);pieEl.innerHTML=hsPieHtml(h,mio);hoja.hidden=true;if(confAbierto&&conf.hidden){confAbierto=false}
     if(!CLOUD||!sb)return;
     if(!mio&&!h.vistaOk){h.vistaOk=true;Promise.resolve(sb.rpc('historia_vista',{p_ruta:h.ruta})).then(r=>{if(r&&r.error)h.vistaOk=false},()=>{h.vistaOk=false})}
-    hsInfo(h).then(()=>{if(t===turno&&d.open){pieEl.innerHTML=hsPieHtml(h,mio);if(!hoja.hidden)hoja.innerHTML=hsHojaHtml(h,mio)}})}
+    hsInfo(h,true).then(()=>{if(t!==turno||!d.open||cerrando)return;
+      pieEl.innerHTML=hsPieHtml(h,mio);if(!hoja.hidden)hoja.innerHTML=hsHojaHtml(h,mio);
+      if(!quieto&&!document.hidden&&hoja.hidden&&!reproducidas.has(h.ruta)){
+        reproducidas.add(h.ruta);
+        (h.info?.reac||[]).filter(x=>x.quien!==hsQuien()&&HS_REAC.includes(x.emoji)).slice(0,4)
+          .forEach((x,i)=>hsVuela(x.emoji,null,box,i));
+      }
+    })}
   pieEl.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;const g=gs[gi],h=g&&g.items[si];if(!h)return;const mio=hsEsMio(g);
-    if(b.dataset.hsr){const ant=hsMiReac(h),nuevo=ant===b.dataset.hsr?null:b.dataset.hsr;hsSetReac(h,nuevo);pieEl.innerHTML=hsPieHtml(h,mio);if(nuevo)hsVuela(nuevo,b,box);
-      try{await q(sb.rpc('historia_reaccionar',{p_ruta:h.ruta,p_emoji:nuevo}))}catch(err){hsSetReac(h,ant);if(d.open)pieEl.innerHTML=hsPieHtml(h,mio);toast(errTxt(err))}return}
+    if(b.dataset.hsr){
+      if(h.guardando)return;
+      const t=turno,ant=hsMiReac(h),nuevo=ant===b.dataset.hsr?null:b.dataset.hsr;
+      h.guardando=true;h.infoRevision=(h.infoRevision||0)+1;hsSetReac(h,nuevo);
+      pieEl.innerHTML=hsPieHtml(h,mio);
+      if(nuevo)hsVuela(nuevo,pieEl.querySelector('[aria-pressed="true"]'),box);
+      try{await q(sb.rpc('historia_reaccionar',{p_ruta:h.ruta,p_emoji:nuevo}))}
+      catch(err){hsSetReac(h,ant);toast(errTxt(err))}
+      finally{h.guardando=false;h.infoT=0;if(d.open&&turno===t)pieEl.innerHTML=hsPieHtml(h,mio)}
+      return;
+    }
     if(b.hasAttribute('data-hslista')){confAbierto=true;pausar(true);hoja.innerHTML=hsHojaHtml(h,mio);hoja.hidden=false;hoja.querySelector('[data-hscerrarhoja]')?.focus();
-      hsInfo(h,true).then(()=>{if(!hoja.hidden&&d.open)hoja.innerHTML=hsHojaHtml(h,mio)})}});
+      const t=turno;hsInfo(h,true).then(()=>{if(t===turno&&!hoja.hidden&&d.open)hoja.innerHTML=hsHojaHtml(h,mio)})}});
   hoja.addEventListener('click',e=>{if(e.target.closest('[data-hscerrarhoja]')||e.target===hoja){hoja.hidden=true;confAbierto=false;pausar(false)}});
   function circulo(k){const a=document.querySelector('#historias [data-hs-ver="'+CSS.escape(k)+'"] .hsav');if(!a)return null;const r=a.getBoundingClientRect();return r.width&&r.bottom>0&&r.top<innerHeight?r:null}
   function zoom(r,inv){const b=box.getBoundingClientRect(),s=r.width/b.width,dx=r.left+r.width/2-(b.left+b.width/2),dy=r.top+r.height/2-(b.top+b.height/2),R=Math.hypot(b.width,b.height)/2+2;
@@ -5990,7 +6008,8 @@ const hsMiReac=h=>((h.info&&h.info.reac)||[]).find(x=>x.quien===hsQuien())?.emoj
 function hsSetReac(h,em){h.info=h.info||{reac:[],vistas:[]};const yo=hsQuien();h.info.reac=h.info.reac.filter(x=>x.quien!==yo);
   if(em)h.info.reac.unshift({quien:yo,nombre:'Vos',foto:S.view==='socio'?me()?.photo:PRO&&PRO.foto,emoji:em,cuando:new Date().toISOString()})}
 function hsInfo(h,force){if(!CLOUD||!sb)return Promise.resolve();if(!force&&h.infoT&&Date.now()-h.infoT<15000)return Promise.resolve();
-  h.infoT=Date.now();return Promise.resolve(sb.rpc('historias_info',{p_rutas:[h.ruta]})).then(r=>{if(!r||r.error||!Array.isArray(r.data))return;
+  if(h.guardando)return Promise.resolve();const revision=h.infoRevision||0,consulta=h.infoConsulta=(h.infoConsulta||0)+1;
+  h.infoT=Date.now();return Promise.resolve(sb.rpc('historias_info',{p_rutas:[h.ruta]})).then(r=>{if(consulta!==h.infoConsulta||revision!==(h.infoRevision||0)||!r||r.error||!Array.isArray(r.data))return;
     const yo=hsQuien(),nom=x=>x.quien===yo?'Vos':(x.nombre||'Alguien');
     h.info={reac:r.data.filter(x=>x.tipo==='reaccion').map(x=>({...x,nombre:nom(x)})),vistas:r.data.filter(x=>x.tipo==='vista').map(x=>({...x,nombre:nom(x)}))}},()=>{})}
 function hsMini(x){const n=String(x.nombre||'?').trim();return x.foto?`<i class="hsmini"><img src="${esc(x.foto)}" alt=""></i>`:`<i class="hsmini">${esc((n.replace(/^Prof\.\s*/,'')[0]||'?').toUpperCase())}</i>`}
@@ -5998,17 +6017,30 @@ function hsResumen(L){const c={};L.forEach(x=>{c[x.emoji]=(c[x.emoji]||0)+1});re
 function hsPieHtml(h,mio){const inf=h.info,reac=inf?inf.reac:[],mia=hsMiReac(h);
   if(mio){const V=inf?inf.vistas:[],n=V.length;
     return `<button class="hsvistos" data-hslista aria-label="Ver quién vio tu historia"><span class="hscaras">${V.slice(0,3).map(hsMini).join('')}</span><span class="hsvt">${!inf?'Cargando…':n?'Visto por <b class="num">'+n+'</b>':'Todavía nadie la vio'}</span>${reac.length?`<span class="hsrsum">${hsResumen(reac)}</span>`:''}<i aria-hidden="true">›</i></button>`}
-  return `<div class="hsreac">${reac.length?`<button class="hsquienes" data-hslista aria-label="Ver quiénes reaccionaron"><span class="hscaras">${reac.slice(0,3).map(hsMini).join('')}</span><span class="hsrsum">${hsResumen(reac)}</span></button>`:''}<div class="hsemos" role="group" aria-label="Reaccionar a la historia">${HS_REAC.map((e,i)=>`<button data-hsr="${e}" class="${i?'':'hslike'}" aria-pressed="${mia===e}" aria-label="${i?'Reaccionar con '+e:'Me gusta'}">${e}</button>`).join('')}</div></div>`}
+  return `<div class="hsreac">${reac.length?`<button class="hsquienes" data-hslista aria-label="Ver quiénes reaccionaron"><span class="hscaras">${reac.slice(0,3).map(hsMini).join('')}</span><span class="hsrsum">${hsResumen(reac)}</span></button>`:''}<div class="hsemos" role="group" aria-label="Reaccionar a la historia">${HS_REAC.map((e,i)=>`<button data-hsr="${e}" class="${i?'':'hslike'}" ${h.guardando?'disabled':''} aria-pressed="${mia===e}" aria-label="${i?'Reaccionar con '+e:'Me gusta'}">${e}</button>`).join('')}</div></div>`}
 function hsHojaHtml(h,mio){const inf=h.info||{reac:[],vistas:[]};
   const L=mio?inf.vistas.concat(inf.reac.filter(r=>!inf.vistas.some(v=>v.quien===r.quien))):inf.reac;
   const fila=x=>`<li>${hsMini(x)}<span><b>${esc(x.nombre)}</b><small>hace ${hsHace(x.cuando)}</small></span><em>${x.emoji||''}</em></li>`;
   return `<div class="hshojab"><header><b>${mio?'Actividad':'Reacciones'}</b>${mio?`<span>${inf.vistas.length} ${inf.vistas.length===1?'vista':'vistas'} · ${inf.reac.length} ${inf.reac.length===1?'reacción':'reacciones'}</span>`:`<span>${inf.reac.length}</span>`}<button data-hscerrarhoja aria-label="Cerrar">×</button></header>
     ${L.length?`<ul>${L.map(fila).join('')}</ul>`:`<p>${mio?'Cuando alguien vea tu historia, aparece acá.':'Todavía nadie reaccionó. ¡Sé el primero!'}</p>`}</div>`}
-function hsVuela(em,b,box){if(hsQuieto())return;const r=b.getBoundingClientRect(),o=box.getBoundingClientRect();
-  for(let i=0;i<6;i++){const sp=document.createElement('span');sp.className='hsflot';sp.textContent=em;sp.style.left=(r.left-o.left+r.width/2)+'px';sp.style.top=(r.top-o.top)+'px';box.append(sp);
-    const dx=(Math.random()-.5)*120,dy=-140-Math.random()*160;
-    sp.animate([{transform:'translate(-50%,0) scale(.6)',opacity:0},{transform:`translate(calc(-50% + ${dx*.3}px),${dy*.3}px) scale(1.25)`,opacity:1,offset:.25},{transform:`translate(calc(-50% + ${dx}px),${dy}px) scale(1)`,opacity:0}],{duration:900+i*90,delay:i*45,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'}).finished.finally(()=>sp.remove())}
-  b.animate([{transform:'scale(1)'},{transform:'scale(1.45)'},{transform:'scale(.92)'},{transform:'scale(1)'}],{duration:420,easing:'ease-out'})}
+function hsVuela(emoji,boton,box,indice=0){
+  if(hsQuieto())return;
+  const base=box.getBoundingClientRect(),r=boton?.getBoundingClientRect();
+  const x=r?r.left-base.left+r.width/2:base.width*(.26+.15*indice);
+  const y=r?r.top-base.top:base.height*.77;
+  const cantidad=boton?5:1;
+  for(let i=0;i<cantidad;i++){
+    const sp=document.createElement('span');sp.className='hsflot';sp.textContent=emoji;
+    sp.setAttribute('aria-hidden','true');sp.style.left=x+'px';sp.style.top=y+'px';box.append(sp);
+    const dx=(i-(cantidad-1)/2)*18,dy=-Math.min(base.height*.35,210)-i*8;
+    const anim=sp.animate([{transform:'translate(-50%,0) scale(.65)',opacity:0},
+      {transform:`translate(calc(-50% + ${dx*.4}px),${dy*.28}px) scale(1.2)`,opacity:1,offset:.28},
+      {transform:`translate(calc(-50% + ${dx}px),${dy}px) scale(.95)`,opacity:0}],
+      {duration:1050,delay:indice*200+i*45,easing:'ease-out',fill:'both'});
+    anim.finished.then(()=>sp.remove(),()=>sp.remove());
+  }
+  boton?.animate([{transform:'scale(1)'},{transform:'scale(1.35)'},{transform:'scale(1)'}],{duration:360});
+}
 
 /* historias: cámara de la app, en 9:16 */
 async function hsCamara(){
