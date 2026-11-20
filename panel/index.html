@@ -931,27 +931,19 @@ tr.psnone b{display:block;color:var(--ink);margin:4px 0 6px}
 /* ---------- lote 38 A: bienvenida después de iniciar sesión ---------- */
 #bnvx{position:fixed;top:0;right:0;bottom:0;left:0;z-index:99980;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:16px}
 #bnvx *{pointer-events:none}
-#bnvx::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;
-  background:rgba(36,201,167,.055);-webkit-backdrop-filter:blur(12px) saturate(1.15);
-  backdrop-filter:blur(12px) saturate(1.15);animation:bnvFondo 2.6s ease both}
-@keyframes bnvFondo{0%,100%{opacity:0}18%,82%{opacity:1}}
-@media(prefers-reduced-motion:reduce){#bnvx::before{animation:none}}
-#bnvx .bnvglow{position:absolute;width:min(92vw,560px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(36,201,167,.32) 0%,rgba(252,224,36,.13) 38%,transparent 66%);filter:blur(12px);animation:bnvGlow 1.7s var(--ease) both}
 #bnvx .bnvcard{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 34px 20px;border-radius:26px;text-align:center;max-width:100%;
-  background:rgba(36,201,167,.13);background:color-mix(in srgb,var(--surface) 44%,rgba(36,201,167,.11));border:1px solid var(--line);box-shadow:0 24px 70px -28px rgba(0,0,0,.38);animation:bnvCard 1.7s var(--ease) both}
+  background:transparent;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);animation:bnvCard 1.7s var(--ease) both}
 #bnvx .bnvhi{font:700 14px var(--wide);color:var(--muted);letter-spacing:.02em;animation:bnvSube .6s var(--spring) .08s both}
 #bnvx .bnvnm{font-family:var(--display);font-weight:900;font-size:clamp(36px,10vw,56px);line-height:.95;text-transform:uppercase;padding:0 .08em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;overflow-wrap:anywhere;animation:bnvNombre .75s var(--spring) .14s both}
 #bnvx .bnvrol{display:flex;align-items:center;gap:7px;font:800 11px var(--wide);letter-spacing:.26em;text-transform:uppercase;padding:6px 12px 6px 10px;border-radius:999px;background:var(--sunk);border:1px solid var(--line);color:var(--ink);animation:bnvSube .55s var(--spring) .3s both}
 #bnvx .bnvrol::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(36,201,167,.2)}
 #bnvx .bnvrol.adm::before{background:var(--warn);box-shadow:0 0 0 3px rgba(252,224,36,.2)}
 #bnvx .bnvbar{width:64px;height:3px;border-radius:3px;background:var(--grad);transform-origin:left;animation:bnvBar 1.45s var(--ease) .2s both}
-@keyframes bnvCard{0%{opacity:0;transform:translateY(16px) scale(.92);filter:blur(8px)}20%{opacity:1;transform:none;filter:blur(0)}80%{opacity:1;transform:none;filter:blur(0)}100%{opacity:0;transform:translateY(-12px) scale(.98);filter:blur(6px)}}
-@keyframes bnvGlow{0%{opacity:0;transform:scale(.6)}25%{opacity:1;transform:scale(1)}80%{opacity:.8}100%{opacity:0;transform:scale(1.15)}}
+@keyframes bnvCard{0%{opacity:0;transform:translateY(16px) scale(.92)}20%{opacity:1;transform:none}80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-12px) scale(.98)}}
 @keyframes bnvSube{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes bnvNombre{from{opacity:0;transform:translateY(40%) skewX(-8deg) scale(.9);letter-spacing:.12em}to{opacity:1;transform:skewX(-8deg);letter-spacing:0}}
 @keyframes bnvBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 [data-theme="light"] #bnvx .bnvnm{background:linear-gradient(120deg,#9A7F00 0%,#6E9A12 45%,#0F9F81 100%);-webkit-background-clip:text;background-clip:text}
-[data-theme="light"] #bnvx .bnvcard{box-shadow:0 30px 70px -26px rgba(20,30,20,.35)}
 [data-theme="light"] .gnnew{background:#FCE024}
 @media (prefers-reduced-motion: reduce){
   #bnvx,#bnvx *{animation:none!important}
@@ -1286,7 +1278,7 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .c2rc .pill,.fnck,.fncell .mini{white-space:nowrap}
 .c2fmini{padding-left:7px!important;padding-right:7px!important;animation:bmIn .3s var(--spring)}
 /* lote 42x: app del socio */
-#bnvx .bnvcard,#bnvx .bnvglow{animation-duration:2.6s}#bnvx .bnvbar{animation-duration:2.2s}
+#bnvx .bnvcard{animation-duration:2.6s}#bnvx .bnvbar{animation-duration:2.2s}
 .x42fun .ttl span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .x42ftop{display:flex;align-items:center;gap:12px;margin:2px 0 12px}
 .x42fico{flex:none;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:linear-gradient(135deg,var(--c2fun,#FF8A3D),#FCE024);box-shadow:0 10px 22px -10px var(--c2fun,#FF8A3D);animation:pop .6s var(--spring) both}
@@ -3775,6 +3767,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.36',t:'Bienvenida con desenfoque localizado',items:[['👋','El desenfoque aparece solo detrás del saludo.']]},
   {v:'1.1.35',t:'Forge Studio y nueva bienvenida',items:[['✦','Los logos de Forge Studio acompañan a Training Club.'],['👋','La bienvenida desenfoca la pantalla durante el saludo.']]},
   {v:'1.1.34',t:'Los socios pueden pausar o dar de baja su cuota',items:[
     ['🚪','Desde la app, en Cuotas (o con «Pausar o dar de baja mi cuota» en Inicio), el socio puede dar de baja su cuota si no va a venir más: desde ese mes no se le cobra. Lo ves en su ficha como «Dio de baja su cuota» y en el filtro «De baja».'],
@@ -4047,7 +4040,7 @@ function bnvLanzar(nombre,rol,clave){ nombre=gTxt(nombre); if(!nombre) return;
   const go=()=>{ if(document.getElementById('intro')) return setTimeout(go,150);
     const v=document.getElementById('bnvx'); if(v) v.remove();
     const w=document.createElement('div'); w.id='bnvx'; w.setAttribute('role','status'); w.setAttribute('aria-live','polite');
-    w.innerHTML=`<div class="bnvglow"></div><div class="bnvcard"><span class="bnvhi">¡Bienvenido,</span><b class="bnvnm">${esc(nombre)}!</b><span class="bnvrol ${rol==='Desarrollador'?'adm bnvdev':rol==='Dueño'?'adm':''}">${esc(rol)}</span><i class="bnvbar"></i></div>`;
+    w.innerHTML=`<div class="bnvcard"><span class="bnvhi">¡Bienvenido,</span><b class="bnvnm">${esc(nombre)}!</b><span class="bnvrol ${rol==='Desarrollador'?'adm bnvdev':rol==='Dueño'?'adm':''}">${esc(rol)}</span><i class="bnvbar"></i></div>`;
     document.body.appendChild(w); setTimeout(()=>w.remove(),reduceMotion?2200:2700) };
   setTimeout(go,80) }
 const bnvProfe=()=>{ if(PRO) bnvLanzar(String(PRO.nombre||'').split(' ')[0],ROL_TXT[PRO.dev?'dev':esAdmin()?'dueno':'profe'],'p'+(PRO.dni||'')) };
