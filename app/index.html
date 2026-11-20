@@ -1480,6 +1480,19 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .bmenu.bmconf{animation:bmIn45 .18s var(--ease)}
 @keyframes bmIn45{from{opacity:.5;transform:scale(.97)}}
 @media (prefers-reduced-motion:reduce){#gnver,.gnvc,.bub.bdel.eflash,.bmenu.bmconf{transition:none!important;animation:none!important}}
+
+.panel-pagos{display:grid;gap:16px}
+.panel-pagos p{color:var(--muted);margin:0}
+.panel-pagos .pago-fila{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end;padding:14px 0;border-bottom:1px solid var(--line)}
+.panel-pagos .pago-datos{display:grid;gap:4px;overflow-wrap:anywhere}
+.panel-pagos .pago-controles{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.panel-pagos label{display:grid;gap:4px;color:var(--muted);font-size:12px}
+.panel-pagos .pago-monto{width:108px}
+.panel-pagos .pago-fecha{width:70px}
+.panel-pagos .pago-bloque{display:grid;gap:10px}
+.panel-pagos .pago-lista{display:grid;gap:5px}
+@media(max-width:850px){.panel-pagos .pago-fila{grid-template-columns:1fr}}
+
 /* lote 46 · ya pagué / pausa */
 .pill.pend{background:rgba(36,201,167,.16)!important;color:var(--teal)!important}
 .pill.pause{background:rgba(140,160,255,.16)!important;color:#a9b6ff!important}
@@ -3471,11 +3484,132 @@ function a14det(a){ if(!a) return '';
 function a14sel(){const box=document.getElementById('a14det'); if(!box||!S.a14d) return;
   document.querySelectorAll('.a14d').forEach(x=>{const on=+x.dataset.a14===S.a14; x.classList.toggle('sel',on); x.setAttribute('aria-pressed',on)});
   box.innerHTML=a14det(S.a14d[S.a14]); box.classList.remove('in'); void box.offsetWidth; if(!reduceMotion) box.classList.add('in')}
+
+function panelPagosLista(socios){
+  const solicitudes=[], historial=[];
+  const periodoValido=k=>/^\d{4}-(?:[0-9]|1[01])$/.test(k);
+  for(const socio of socios){
+    for(const [periodo,pago] of Object.entries(socio.pagos||{})){
+      if(periodoValido(periodo)) historial.push({socio,periodo,pago});
+    }
+    for(const [periodo,aviso] of Object.entries(socio.avisos||{})){
+      if(periodoValido(periodo)&&aviso&&!socio.pagos?.[periodo]) solicitudes.push({socio,periodo,aviso});
+    }
+  }
+  solicitudes.sort((a,b)=>String(b.aviso.fecha||'').localeCompare(String(a.aviso.fecha||'')));
+  historial.sort((a,b)=>y47Num(b.periodo)-y47Num(a.periodo)||a.socio.name.localeCompare(b.socio.name,'es'));
+  return {solicitudes,historial};
+}
+function panelPagoMes(periodo){
+  const [anio,mes]=periodo.split('-');
+  return MES[Number(mes)]+' '+anio;
+}
+let panelPagoEnCurso=false;
+function renderPagos(){
+  const socios=Object.values(DB.socios).sort((a,b)=>a.name.localeCompare(b.name,'es'));
+  const {solicitudes,historial}=panelPagosLista(socios);
+  const periodos=[...new Set([mk(Y,M),...historial.map(x=>x.periodo)])].sort((a,b)=>y47Num(b)-y47Num(a));
+  const periodo=periodos.includes(S.periodoPagos)?S.periodoPagos:mk(Y,M);
+  const pagos=historial.filter(x=>x.periodo===periodo);
+  $('#app').innerHTML=`<div class="owner">${proBar()}<div class="panel-pagos">
+    <section class="panel pago-bloque">
+      <div class="panelhead"><h2>Solicitudes de pago</h2><span class="pill warn">${solicitudes.length} pendientes</span></div>
+      ${solicitudes.length?solicitudes.map(({socio,periodo,aviso})=>`<form class="pago-fila" data-pago-solicitud="${periodo}" data-socio="${esc(socio.dni)}">
+        <div class="pago-datos"><b>${esc(socio.name)}</b><span>${panelPagoMes(periodo)} · ${esc(aviso.medio||'Sin medio informado')}</span></div>
+        <fieldset class="pago-controles" style="margin:0;padding:0;border:0;min-width:0" ${panelPagoEnCurso?'disabled':''}>
+          <label>Importe ($)<input class="inp sm pago-monto" name="monto" type="number" min="1" max="2147483647" required value="${Number(socio.precio)||''}"></label>
+          <label>Fecha (dd/mm)<input class="inp sm pago-fecha" name="fecha" maxlength="5" required value="${ddmm(iso(TODAY))}"></label>
+          <button class="btn sm" type="submit" value="registrar">Registrar pago</button>
+          <button class="mini danger" type="submit" value="rechazar" formnovalidate>No se registró</button>
+        </fieldset></form>`).join(''):'<p>No hay solicitudes para revisar.</p>'}
+    </section>
+    <section class="panel pago-bloque">
+      <div class="panelhead"><h2>Pagos registrados</h2><strong>${fmt(pagos.reduce((n,x)=>n+(Number(x.pago.monto)||0),0))}</strong></div>
+      <label>Mes<select class="inp sm" id="pago-periodo">${periodos.map(k=>`<option value="${k}" ${k===periodo?'selected':''}>${panelPagoMes(k)}</option>`).join('')}</select></label>
+      <div class="pago-lista">${pagos.length?pagos.map(({socio,pago})=>`<div class="pago-fila">
+        <div class="pago-datos"><b>${esc(socio.name)}</b><span>${esc(pago.fecha)} · ${esc(pago.medio)} · ${fmt(pago.monto)}</span></div>
+        <button type="button" class="mini" data-pago-ficha="${esc(socio.dni)}">Abrir ficha</button></div>`).join(''):'<p>No hay pagos registrados en este mes.</p>'}</div>
+    </section>
+    <section class="panel pago-bloque"><div class="panelhead"><h2>Registrar un pago manual</h2></div>
+      <form id="pago-manual" class="pago-controles"><label>Socio<select name="socio" class="inp sm" required>
+        <option value="">Elegí un socio</option>${socios.filter(x=>x.plan&&!esFam(x)&&x.aprobado!==false).map(x=>`<option value="${esc(x.dni)}">${esc(x.name)} · ${fmtDNI(x.dni)}</option>`).join('')}</select></label>
+        <button class="mini" type="submit">Abrir pagos del socio</button></form>
+    </section></div></div>`;
+}
+function panelPagoFicha(dni){
+  if(!DB.socios[dni])return;
+  S.ptabP='socios'; S.ui43View='socios'; S.sel=dni; S.edit=null; S.fd=null;
+  S.fc={y:Y,m:M}; render();
+  document.querySelector('#mbfecha')?.closest('section')?.scrollIntoView({block:'start'});
+}
+async function panelPagoResolver(form,rechazar){
+  const socio=DB.socios[form.dataset.socio], periodo=form.dataset.pagoSolicitud;
+  const aviso=socio?.avisos?.[periodo];
+  if(!aviso||socio.pagos[periodo]){reload(true); return toast('La solicitud ya fue resuelta.')}
+  const monto=Number(form.elements.monto.value);
+  const partes=/^(\d{1,2})\/(\d{1,2})$/.exec(form.elements.fecha.value.trim());
+  const dia=Number(partes?.[1]), mes=Number(partes?.[2]);
+  if(!rechazar&&(!partes||mes<1||mes>12||dia<1||dia>new Date(2000,mes,0).getDate())){
+    toast('Ingresá una fecha válida en formato dd/mm.'); return form.elements.fecha.focus();
+  }
+  if(!rechazar&&(!Number.isInteger(monto)||monto<1||monto>2147483647)){
+    toast('Ingresá el importe recibido.'); return form.elements.monto.focus();
+  }
+  const pago={fecha:p2(dia)+'/'+p2(mes),medio:aviso.medio,monto};
+  panelPagoEnCurso=true;
+  document.querySelectorAll('[data-pago-solicitud] fieldset').forEach(el=>el.disabled=true);
+  try{
+    if(CLOUD){
+      const actual=await q(sb.from('socios').select('avisos').eq('id',socio.id).single());
+      if(actual.avisos?.[periodo]?.fecha!==aviso.fecha||actual.avisos?.[periodo]?.medio!==aviso.medio){
+        throw Error('La solicitud cambió. Revisá el estado actualizado.');
+      }
+      if(rechazar) await q(sb.rpc('profe_aviso_quitar',{p_socio:socio.id,p_mes:periodo}));
+      else await q(sb.from('pagos').insert({socio_id:socio.id,periodo,...pago}));
+    }else{
+      delete socio.avisos[periodo];
+      if(!rechazar){
+        socio.pagos[periodo]=pago;
+        socio.pausas=(socio.pausas||[]).filter(k=>k!==periodo);
+      }
+      saveDB();
+      if(S.ptabP==='pagos')render(true);
+    }
+    toast(rechazar?'Pago no registrado. El mes vuelve a figurar sin pagar.':'Pago registrado.');
+  }catch(error){
+    toast(error.code==='23505'?'Ese mes ya figura pagado.':errTxt(error));
+  }finally{
+    panelPagoEnCurso=false;
+    if(CLOUD)reload(true);
+    document.querySelectorAll('[data-pago-solicitud] fieldset').forEach(el=>el.disabled=false);
+  }
+}
+document.addEventListener('change',e=>{
+  if(e.target.id==='pago-periodo'&&S.ptabP==='pagos'&&!c1xPlataOff()){
+    S.periodoPagos=e.target.value; render(true); document.getElementById('pago-periodo')?.focus();
+  }
+});
+document.addEventListener('click',e=>{
+  const boton=e.target.closest?.('[data-pago-ficha]');
+  if(boton&&S.view==='duenio'&&S.pro&&S.ptabP==='pagos'&&!c1xPlataOff()){
+    e.stopImmediatePropagation(); panelPagoFicha(boton.dataset.pagoFicha);
+  }
+},true);
+document.addEventListener('submit',e=>{
+  const form=e.target;
+  if(!form.matches('#pago-manual,[data-pago-solicitud]'))return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  if(S.view!=='duenio'||!S.pro||S.ptabP!=='pagos'||c1xPlataOff()||panelPagoEnCurso)return;
+  if(form.id==='pago-manual') return panelPagoFicha(form.elements.socio.value);
+  panelPagoResolver(form,e.submitter?.value==='rechazar');
+},true);
+
 function renderDuenio(){
   if(!PRO||!S.pro) return renderProAuth();
   if(!CLOUD&&!S.profes) cargarProfes();
   if(S.ptabP==='profes') return renderProfes();
   if(S.ptabP==='cuotas') return renderCuotas();
+  if(S.ptabP==='pagos'&&!c1xPlataOff()) return renderPagos();
   if(S.ptabP==='mensajes') return renderMensajes();
   if(S.ptabP==='novedades'&&puedeP('novedades')) return renderGN();
   if(S.sel&&DB.socios[S.sel]) return renderFicha(DB.socios[S.sel]);
@@ -3804,6 +3938,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
   {v:'1.1.36',t:'Bienvenida con desenfoque localizado',items:[['👋','El desenfoque aparece solo detrás del saludo.']]},
   {v:'1.1.35',t:'Forge Studio y nueva bienvenida',items:[['✦','Los logos de Forge Studio acompañan a Training Club.'],['👋','La bienvenida desenfoca la pantalla durante el saludo.']]},
   {v:'1.1.34',t:'Los socios pueden pausar o dar de baja su cuota',items:[
@@ -4038,12 +4173,14 @@ document.addEventListener('submit',async e=>{ if(e.target.id!=='gnform') return;
 const PNI=p=>'<svg class="gnpi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
 const PNAV_ICO={socios:PNI('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>'),
   mensajes:PNI('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/>'),
+  pagos:PNI('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8m-8 4h8m-8 4h4"/>'),
   cuotas:PNI('<rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M6.5 15h4"/>'),
   novedades:PNI('<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>'),
   profes:PNI('<path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 9.8V15c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3V9.8"/>')};
 function proTabs(n,nm){ return [
   {k:'socios',l:'Socios',extra:c2Badge()},
   {k:'mensajes',l:'Mensajes',ok:puedeP('chat'),extra:`<span class="cnt" data-chbadge ${nm?'':'hidden'}>${nm||''}</span>`},
+  {k:'pagos',l:'Pagos',ok:!c1xPlataOff()},
   {k:'cuotas',l:'Cuotas',ok:!c1xPlataOff()},
   {k:'novedades',l:'Novedades',ok:puedeP('novedades')},
   {k:'profes',l:esAdmin()?'Profes':'Mi perfil',extra:n&&esAdmin()?` <span class="cnt">${n}</span>`:''}
@@ -4287,7 +4424,7 @@ const c1xRD0=renderDuenio;
 renderDuenio=function(){ const on=!!(PRO&&S.pro), r=document.documentElement;
   if(on){ const off=c1xPlataOff(); r.classList.toggle('tcplata-off',off); r.classList.toggle('tcplata-no',!puedeP('dinero'));
     if(off&&C1X_FPLATA.includes(S.filter)) S.filter='todos';
-    if(off&&S.ptabP==='cuotas'){ S.ptabP='socios'; S.pd=null }
+    if(off&&['cuotas','pagos'].includes(S.ptabP)){ S.ptabP='socios'; S.pd=null }
     if(S.ptabP==='mensajes'&&!puedeP('chat')) S.ptabP='socios' }
   else r.classList.remove('tcplata-off','tcplata-no');
   const x=c1xRD0.apply(this,arguments);
@@ -4994,7 +5131,7 @@ async function y46Profe(fn,args,aplicar,okTxt){ const s=DB.socios[S.sel]; if(!s)
   catch(e){ s.avisos=antes.avisos; s.pausas=antes.pausas; s.baja=antes.baja; render(true); toast(errTxt(e)||'No se pudo guardar. Probá de nuevo.') } }
 document.addEventListener('click',e=>{ const t=e.target.closest&&e.target.closest('[data-y46abrir],[data-y46pz],[data-y46cerrar],[data-y46medio],[data-y46cancel],[data-y46pausa],[data-y46rech],[data-y46p],[data-ui43task="avisos"]'); if(!t) return;
   e.preventDefault(); e.stopImmediatePropagation(); const box=t.closest('.y46'), d=t.dataset, P1=PROFE.split(' ')[0];
-  if(d.ui43task==='avisos'){ S.y46Filtro='avisaron'; ui43Go('socios'); return }
+  if(d.ui43task==='avisos'){ ui43Go('pagos'); return }
   if(d.y46abrir!=null) return y46Panel(box,'y46pick');
   if(d.y46pz!=null) return y46Panel(box,'y46conf');
   if(d.y46cerrar!=null) return y46Panel(box,'nada');
@@ -5694,7 +5831,7 @@ addEventListener('storage',e=>{if(!CLOUD&&e.key===DBK){try{DB=JSON.parse(e.newVa
    controles y manejadores originales; no se reemplaza la capa de datos. */
 const UI43_PATH={home:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M17 14a5 5 0 0 1 4 4v2"/>',gym:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',chat:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5A8.5 8.5 0 0 1 21 11.5Z"/><path d="M7 9h9M7 13h6"/>',eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M19 5l-1 1M6 18l-1 1"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',plus:'<path d="M12 5v14M5 12h14"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',logout:'<path d="M10 4H4v16h6M10 12h11m-4-4 4 4-4 4"/>',wallet:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 9h18M16 13h5"/>',bell:'<path d="M5 17h14l-2-3V9a5 5 0 0 0-10 0v5l-2 3ZM10 21h4"/>'};
 const ui43Icon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${UI43_PATH[k]||UI43_PATH.home}</svg>`;
-const ui43Name=()=>{if(S.sel&&DB.socios[S.sel])return DB.socios[S.sel].name;return ({mensajes:'Mensajes',cuotas:'Cuotas',novedades:'Novedades',profes:esAdmin()?'Profesores':'Mi perfil'})[S.ptabP]||({socios:'Socios',rutinas:'Rutinas'})[S.ui43View]||'Vista general'};
+const ui43Name=()=>{if(S.sel&&DB.socios[S.sel])return DB.socios[S.sel].name;return ({mensajes:'Mensajes',pagos:'Pagos',cuotas:'Cuotas',novedades:'Novedades',profes:esAdmin()?'Profesores':'Mi perfil'})[S.ptabP]||({socios:'Socios',rutinas:'Rutinas'})[S.ui43View]||'Vista general'};
 function ui43Go(dest){
   if(!PRO||!S.pro||S.view!=='duenio')return;
   const exists=proTabs(0,0).some(p=>p.k===dest);
@@ -5723,7 +5860,7 @@ function ui43Tasks(){
   const routines=people.filter(s=>s.aprobado!==false&&!(s.rutina&&s.rutina.length)&&!s.funcional).length;
   const unread=chNoLeidosProfe();let list='';
   if(puedeP('aprobar'))list+=ui43Task('users',`${pendientes+devices} solicitudes de ingreso`,pendientes?'Socios esperando tu aprobación':'Registros y nuevos dispositivos','approvals','Revisar');
-  const avs=people.filter(s=>y46Avisos(s).length).length;
+  const avs=c1xPlataOff()?0:panelPagosLista(people).solicitudes.length;
   if(puedeP('dinero')&&avs)list+=ui43Task('bell',`${avs} aviso${avs===1?'':'s'} de pago`,'Socios que dicen que ya pagaron: confirmalo y registralo','avisos','Revisar');
   if(puedeP('chat'))list+=ui43Task('chat',`${unread} mensajes sin leer`,'Tus conversaciones con los alumnos','mensajes','Abrir');
   if(puedeP('rutinas')||puedeP('asignar'))list+=ui43Task('gym',`${routines} socios sin rutina`,'Musculación pendiente de asignación','rutinas','Ver socios');
