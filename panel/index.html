@@ -1635,8 +1635,8 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 @keyframes offin{from{transform:translate(-50%,-140%);opacity:0}}
 /* animaciones generales: tocar, diálogos y avisos */
 .card,.panel{transition:transform .2s ease,box-shadow .25s ease}
-dialog[open]:not(.hsig):not(.hsvisor){animation:dlgin .28s cubic-bezier(.2,.85,.25,1.1)}
-dialog[open]:not(.hsig):not(.hsvisor)::backdrop{animation:bdin .25s ease}
+dialog[open]:not(.hsig):not(.hsvisor):not(.hscam){animation:dlgin .28s cubic-bezier(.2,.85,.25,1.1)}
+dialog[open]:not(.hsig):not(.hsvisor):not(.hscam)::backdrop{animation:bdin .25s ease}
 @keyframes dlgin{from{opacity:0;transform:translateY(14px) scale(.97)}}
 @keyframes bdin{from{opacity:0}}
 .owner.enter>.panel-pagos>*{animation:rise .45s var(--ease) both}
@@ -1866,6 +1866,10 @@ html[data-theme="light"] .forge-signature[width="96"]{content:url(data:image/web
 @media (max-width:600px){.hrschart{gap:2px}.hrsb small{font-size:9px}.hrsres b{font-size:17px}.hrstabs{min-width:0;width:100%}}
 @media (prefers-reduced-motion:reduce){.hrsb i,.hrsind{animation:none;transition:none}}
 .a14who .a14h{margin-left:6px;font-size:11px;opacity:.7}
+.hscam[open]{animation:hsentra .2s ease}
+.hsig,.hscam{outline:none}
+.hsig button:focus:not(:focus-visible),.hscam button:focus:not(:focus-visible){outline:none;box-shadow:none}
+@media (prefers-reduced-motion:reduce){.hscam[open]{animation:none}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2814,9 +2818,9 @@ async function hsUrl(h){
 function hsVer(k,origen){
   const gs=hsGrupos();let gi=gs.findIndex(g=>g.k===k);if(gi<0)return hsCargar(true);
   const v0=hsVistas();let si=gs[gi].items.findIndex(h=>!v0.has(h.ruta));if(si<0)si=0;
-  const d=document.createElement('dialog');d.className='hsig';d.setAttribute('aria-label','Historias');
+  const d=document.createElement('dialog');d.className='hsig';d.tabIndex=-1;d.setAttribute('aria-label','Historias');
   d.innerHTML='<div class="hsbox"><div class="hsbar"></div><header><span class="hsquien"></span><button class="hsborrar" hidden aria-label="Eliminar esta historia">🗑️</button><button class="hsmute" hidden aria-label="Sonido">🔇</button><button class="hscerrar" aria-label="Cerrar">×</button></header><div class="hsmedia"></div><div class="hspie"></div><div class="hshoja" hidden role="dialog" aria-label="Actividad de la historia"></div><div class="hsconf" hidden role="alertdialog" aria-label="Eliminar historia"><b>¿Eliminar esta historia?</b><p>Se borra para todos y no se puede recuperar.</p><button class="hsconfsi">Eliminar</button><button class="hsconfno">Cancelar</button></div></div><nav><button class="hsprev" aria-label="Anterior">‹</button><button class="hsnext" aria-label="Siguiente">›</button></nav>';
-  document.body.append(d);d.showModal();
+  document.body.append(d);d.showModal();d.focus({preventScroll:true});
   const quieto=hsQuieto();let dirAutor=0,cerrando=false;
   const box=d.querySelector('.hsbox'),bar=d.querySelector('.hsbar'),caja=d.querySelector('.hsmedia'),quien=d.querySelector('.hsquien'),mute=d.querySelector('.hsmute'),borrar=d.querySelector('.hsborrar'),conf=d.querySelector('.hsconf');
   let confAbierto=false,turno=0,raf=0,dur=5000,trans=0,inicio=0,pausa=true,cargando=true,el=null,retenido=false,pd=null,holdT=0;
@@ -4610,6 +4614,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.46',t:'Cámara de historias más prolija',items:[['📸','La cámara para subir una historia abre directo en pantalla completa, sin achicarse primero.'],['✨','La X del visor y de la cámara ya no aparece marcada al abrir.']]},
   {v:'1.1.45',t:'Horarios con más gente, historias al estilo Instagram y login más limpio',items:[['🕐','Nueva sección «Horarios con más gente» en la Vista general: hora pico, franja con más socios y un gráfico por hora, de hoy, los últimos 7 días o el mes.'],['✅','En la asistencia de hoy ves a qué hora entró cada socio.'],['📸','Historias en 9:16 con la foto de perfil de cada uno. Los socios reaccionan con me gusta o emojis y ven quién reaccionó; vos ves quién vio las historias del gym.'],['📱','En el celular, el login del panel ya no tiene la barra de arriba y no se mueve al escribir.']]},
   {v:'1.1.44',t:'Historias desde el panel, cargas con escala de Borg y horario de entrada',items:[['📸','Desde la Vista general del panel ves las historias de los socios y podés subir historias propias: los socios las ven como Training Club. También podés borrar cualquier historia.'],['🏋️','Las cargas de los socios ya no calculan un estimado: guardan el ejercicio, el peso, las repeticiones y cómo les costó (liviano, exigente o muy exigente), con fecha y hora.'],['🕒','Se ve a qué hora registró cada socio su entrada, en su app y en su ficha.'],['💬','El chat del panel desde el celular deja escribir bien y las fotos del chat se ven a la medida de la pantalla.']]},{v:'1.1.43',t:'Logo de Forge Studio sin fondo',items:[['✨','El logo de Forge Studio en el inicio, el login y el panel ahora es transparente, sin el recuadro negro, y se adapta al tema claro y oscuro.']]},{v:'1.1.42',t:'Chat como WhatsApp y mensajes del plan familiar',items:[['🟢','En el chat ves cuándo el socio está en línea, escribiendo o grabando un audio (y él ve lo mismo de vos).'],['🏠','En Cuotas podés escribir los mensajes que ven los socios con plan familiar. Cambian solos cada día.'],['📱','Arreglado: en el Perfil del celular la pantalla ya no se mueve hacia los costados.']]},{v:'1.1.41',t:'Editor de historias y app más pulida',items:[['🎨','Antes de subir una historia, los socios pueden dibujar con pincel, marcador o neón, escribir texto y elegir el formato de la foto.'],['✨','Las historias se abren y se cierran con animación, y la foto vuela al círculo al publicarla.'],['📷','En el chat, el botón para mandar fotos ahora tiene una cámara.'],['🛠️','Arreglos generales: aviso de sin conexión, sin zoom molesto en iPhone al escribir y botones más fáciles de tocar.']]},{v:'1.1.40',t:'Historias arriba y se pueden borrar',items:[['⭕','Las historias ahora están arriba, entre el logo y tu perfil, en todas las pantallas.'],['🗑️','Cada socio puede eliminar sus historias antes de las 24 horas.']]},{v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
   {v:'1.1.36',t:'Bienvenida con desenfoque localizado',items:[['👋','El desenfoque aparece solo detrás del saludo.']]},
@@ -6009,9 +6014,9 @@ function hsVuela(em,b,box){if(hsQuieto())return;const r=b.getBoundingClientRect(
 async function hsCamara(){
   if(historias.subiendo)return toast('Esperá a que termine de subirse tu historia.');
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return hsElegir();
-  const d=document.createElement('dialog');d.className='hscam';d.setAttribute('aria-label','Cámara para tu historia');
+  const d=document.createElement('dialog');d.className='hscam';d.tabIndex=-1;d.setAttribute('aria-label','Cámara para tu historia');
   d.innerHTML='<div class="hscbox"><video playsinline muted autoplay></video><div class="hscflash"></div><p class="hscmsg" hidden></p><header><button class="hscx" aria-label="Cerrar">×</button><span>Historia · 9:16</span><span class="hscesp"></span></header><footer><button class="hscgal" aria-label="Elegir una foto o video de la galería"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></button><button class="hscdisp" aria-label="Sacar foto"><i></i></button><button class="hscflip" aria-label="Cambiar de cámara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3l-2-3H9L7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M9 13a3 3 0 0 1 5.2-2"/><path d="M15 13a3 3 0 0 1-5.2 2"/><path d="M14 9.5V11h-1.5M10 16.5V15h1.5"/></svg></button></footer></div>';
-  document.body.append(d);d.showModal();
+  document.body.append(d);d.showModal();d.focus({preventScroll:true});
   const v=d.querySelector('video'),msg=d.querySelector('.hscmsg'),disp=d.querySelector('.hscdisp'),flip=d.querySelector('.hscflip');
   let facing='environment',stream=null,vivo=true;
   const parar=()=>{if(stream)stream.getTracks().forEach(t=>t.stop());stream=null};
