@@ -1569,10 +1569,10 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .hsesq small{height:10px;width:46px;margin:6px auto 0;border-radius:5px;background:var(--line);animation:hspulso 1.2s ease-in-out infinite}
 .hssr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .hsvac{align-self:center;margin:0 0 20px;color:var(--muted);font-size:13px;line-height:1.35;max-width:190px}
-.hsig{padding:0;margin:0;border:0;width:100vw;height:100vh;height:100vh;height:100dvh;max-width:none;max-height:none;background:#000;color:#fff;overflow:hidden}
+.hsig{padding:0;margin:0;border:0;width:100%;height:100vh;height:100vh;height:100dvh;max-width:none;max-height:none;background:#000;color:#fff;overflow:hidden}
 .hsig[open]{display:grid;place-items:center;animation:hsentra .2s ease}
 .hsig::backdrop{background:#000}
-.hsbox{position:relative;display:grid;width:min(100vw,calc(100vh*9/16));width:min(100vw,calc(100dvh*9/16));height:100%;background:#0b0b0b;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .22s ease,opacity .2s ease}
+.hsbox{position:relative;display:grid;width:min(100%,calc(100vh*9/16));width:min(100%,calc(100dvh*9/16));height:100%;background:#0b0b0b;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .22s ease,opacity .2s ease}
 .hsbox.arr{transition:none}
 .hsbox::before{content:'';position:absolute;top:0;left:0;right:0;height:120px;z-index:1;pointer-events:none;background:linear-gradient(#000a,#0000)}
 .hsbar{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;gap:4px;padding:10px 10px 0;transition:opacity .2s}
@@ -1817,6 +1817,41 @@ html[data-theme="light"] .forge-signature[width="96"]{content:url(data:image/web
 .hshojab li small{opacity:.55;font-size:12px}
 .hshojab li em{font-style:normal;font-size:22px}
 .hshojab p{margin:0;padding:22px 18px 28px;opacity:.7;text-align:center}
+/* v58 comentarios, como Instagram */
+.hscbar{display:flex;align-items:center;gap:8px}
+.hscin{flex:1;min-width:0;height:44px;border:1px solid rgba(255,255,255,.7);border-radius:999px;background:transparent;color:rgba(255,255,255,.88);text-align:left;padding:0 18px;font:inherit;font-size:15px;cursor:text;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hscin:active{background:rgba(255,255,255,.08)}
+.hscic{display:flex;align-items:center;justify-content:center;gap:5px;min-width:44px;height:44px;border:0;background:none;color:#fff;font:inherit;font-size:14px;font-weight:600;padding:0 6px;cursor:pointer;flex:none}
+.hscic svg{width:26px;height:26px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linejoin:round}
+.hscic:active svg{transform:scale(.88)}
+.hsmio{display:flex;gap:8px;align-items:stretch}
+.hsmio .hsvistos{flex:1;width:auto;min-width:0}
+.hsmio .hscic{height:auto;background:rgba(0,0,0,.45);border-radius:999px;padding:0 14px}
+.hshoja[data-modo="com"]{top:16%}
+.hscoms{height:100%}
+.hsig .hshojab .hscl{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 16px 10px}
+.hsig .hshojab .hscl li{align-items:flex-start;gap:12px;padding:10px 0}
+.hsig .hshojab .hscl li .hsmini{width:34px;height:34px;font-size:13px;flex:none}
+.hscl li.env{opacity:.55}
+.hscx{flex:1;min-width:0}
+.hscn{display:flex;gap:7px;align-items:baseline;font-size:13px}
+.hscn b{font-weight:600}
+.hsig .hshojab .hscn small{opacity:.55;font-size:12px}
+.hsct{margin-top:2px;font-size:14.5px;line-height:1.38;overflow-wrap:anywhere}
+.hscdel{border:0;background:none;color:rgba(255,255,255,.55);font:inherit;font-size:12px;font-weight:600;padding:5px 0 0;cursor:pointer}
+.hscdel.seguro{color:#ff6b5e}
+.hsig .hshojab .hscl li.hscvac{flex-direction:column;align-items:center;gap:4px;padding:34px 16px;text-align:center}
+.hscvac b{font-size:18px}.hscvac span{opacity:.6;font-size:14px}
+.hscf{border-top:1px solid #ffffff1a;padding:6px 12px calc(10px + env(safe-area-inset-bottom,0px));flex:none}
+.hsqe{display:flex;justify-content:space-between;padding:6px 2px 10px}
+.hsqe button{border:0;background:none;font-size:24px;line-height:1;cursor:pointer;padding:2px 3px}
+.hscfr{display:flex;align-items:center;gap:10px}
+.hsig .hscfr .hsmini{width:34px;height:34px;margin:0;font-size:13px;flex:none;border:0}
+.hscfr input{flex:1;min-width:0;height:42px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:transparent;color:#fff;padding:0 16px;font:inherit;font-size:16px;outline:none}
+.hscfr input::placeholder{color:rgba(255,255,255,.5)}
+.hscfr input:focus{border-color:rgba(255,255,255,.55)}
+.hscfr [type=submit]{border:0;background:none;color:#4ea8ff;font:inherit;font-weight:700;font-size:15px;cursor:pointer;padding:6px 2px;flex:none}
+.hscfr [type=submit]:disabled{opacity:.4;cursor:default}
 /* v54: cámara 9:16 */
 .hscam{padding:0;margin:0;border:0;width:100vw;height:100vh;height:100vh;height:100dvh;max-width:none;max-height:none;background:#000;color:#fff;overflow:hidden}
 .hscam[open]{display:grid;place-items:center}
@@ -2964,7 +2999,7 @@ function hsVer(k,origen){
     if(!CLOUD||!sb)return;
     if(!mio&&!h.vistaOk){h.vistaOk=true;Promise.resolve(sb.rpc('historia_vista',{p_ruta:h.ruta})).then(r=>{if(r&&r.error)h.vistaOk=false},()=>{h.vistaOk=false})}
     hsInfo(h,true).then(()=>{if(t!==turno||!d.open||cerrando)return;
-      pieEl.innerHTML=hsPieHtml(h,mio);if(!hoja.hidden)hoja.innerHTML=hsHojaHtml(h,mio);
+      pieEl.innerHTML=hsPieHtml(h,mio);if(!hoja.hidden){if(hoja.dataset.modo==='com')hsComLista(hoja,h);else hoja.innerHTML=hsHojaHtml(h,mio)}
       if(!quieto&&!document.hidden&&hoja.hidden&&!reproducidas.has(h.ruta)){
         reproducidas.add(h.ruta);
         (h.info?.reac||[]).filter(x=>x.quien!==hsQuien()&&HS_REAC.includes(x.emoji)).slice(0,4)
@@ -2983,9 +3018,35 @@ function hsVer(k,origen){
       finally{h.guardando=false;h.infoT=0;if(d.open&&turno===t)pieEl.innerHTML=hsPieHtml(h,mio)}
       return;
     }
-    if(b.hasAttribute('data-hslista')){confAbierto=true;pausar(true);hoja.innerHTML=hsHojaHtml(h,mio);hoja.hidden=false;hoja.querySelector('[data-hscerrarhoja]')?.focus();
+    if(b.hasAttribute('data-hscom')){confAbierto=true;pausar(true);hoja.dataset.modo='com';hoja.innerHTML=hsComHtml(h);hoja.hidden=false;
+      if(b.dataset.hscom==='escribir')hoja.querySelector('.hscf input')?.focus();else hoja.querySelector('[data-hscerrarhoja]')?.focus({preventScroll:true});
+      const t=turno;hsInfo(h,true).then(()=>{if(t===turno&&!hoja.hidden&&d.open&&hoja.dataset.modo==='com'){hsComLista(hoja,h);pieEl.innerHTML=hsPieHtml(h,mio)}});return}
+    if(b.hasAttribute('data-hslista')){confAbierto=true;pausar(true);hoja.dataset.modo='act';hoja.innerHTML=hsHojaHtml(h,mio);hoja.hidden=false;hoja.querySelector('[data-hscerrarhoja]')?.focus();
       const t=turno;hsInfo(h,true).then(()=>{if(t===turno&&!hoja.hidden&&d.open)hoja.innerHTML=hsHojaHtml(h,mio)})}});
   hoja.addEventListener('click',e=>{if(e.target.closest('[data-hscerrarhoja]')||e.target===hoja){hoja.hidden=true;confAbierto=false;pausar(false)}});
+  hoja.addEventListener('input',e=>{if(e.target.matches('.hscf input')){const s=hoja.querySelector('.hscf [type=submit]');if(s)s.disabled=!e.target.value.trim()}});
+  hoja.addEventListener('keydown',e=>e.stopPropagation());
+  hoja.addEventListener('click',async e=>{const g=gs[gi],h=g&&g.items[si];if(!h||hoja.dataset.modo!=='com')return;const mio=hsEsMio(g);
+    const qe=e.target.closest('[data-hsqe]');
+    if(qe){const i=hoja.querySelector('.hscf input');if(!i)return;const p=i.selectionStart??i.value.length;i.value=(i.value.slice(0,p)+qe.dataset.hsqe+i.value.slice(i.selectionEnd??p)).slice(0,300);
+      i.dispatchEvent(new Event('input',{bubbles:true}));i.focus();if(!quieto)qe.animate([{transform:'scale(1)'},{transform:'scale(1.35)'},{transform:'scale(1)'}],{duration:260});return}
+    const del=e.target.closest('[data-hscdel]');if(!del)return;
+    if(del.dataset.ok!=='1'){del.dataset.ok='1';del.textContent='Tocá de nuevo para eliminar';del.classList.add('seguro');return}
+    const id=del.dataset.hscdel,L=(h.info&&h.info.com)||[],c=L.find(x=>String(x.id)===id);if(!c)return;
+    h.infoRevision=(h.infoRevision||0)+1;h.info.com=L.filter(x=>x!==c);hsComLista(hoja,h);pieEl.innerHTML=hsPieHtml(h,mio);
+    try{if(CLOUD&&sb)await q(sb.rpc('historia_borrar_comentario',{p_id:+id}));toast('Comentario eliminado')}
+    catch(err){h.info.com=[...h.info.com,c].sort((a,b)=>Date.parse(b.cuando)-Date.parse(a.cuando));toast(errTxt(err))}
+    finally{h.infoT=0;if(d.open&&!hoja.hidden){hsComLista(hoja,h);pieEl.innerHTML=hsPieHtml(h,mio)}}});
+  hoja.addEventListener('submit',async e=>{e.preventDefault();const g=gs[gi],h=g&&g.items[si];if(!h)return;const mio=hsEsMio(g);
+    const i=hoja.querySelector('.hscf input'),texto=(i?.value||'').replace(/\s+/g,' ').trim();if(!texto)return;
+    h.info=h.info||{reac:[],vistas:[],com:[]};h.info.com=h.info.com||[];
+    const yo=hsYoMini(),c={id:'t'+Date.now(),quien:hsQuien(),nombre:'Vos',foto:yo.foto,texto,cuando:new Date().toISOString(),borra:true,env:true};
+    h.infoRevision=(h.infoRevision||0)+1;h.info.com=[c,...h.info.com];i.value='';i.dispatchEvent(new Event('input',{bubbles:true}));
+    hsComLista(hoja,h);const ul=hoja.querySelector('.hscl');if(ul)ul.scrollTop=0;
+    const li=ul&&ul.firstElementChild;if(li&&!quieto)li.animate([{opacity:0,transform:'translateY(-8px)'},{opacity:.55,transform:'none'}],{duration:220,easing:'ease-out'});
+    try{if(CLOUD&&sb){const r=await q(sb.rpc('historia_comentar',{p_ruta:h.ruta,p_texto:texto}));if(r!=null)c.id=r}c.env=false}
+    catch(err){h.info.com=h.info.com.filter(x=>x!==c);if(i&&!i.value){i.value=texto;i.dispatchEvent(new Event('input',{bubbles:true}))}toast(errTxt(err))}
+    finally{h.infoT=0;if(d.open&&!hoja.hidden&&hoja.dataset.modo==='com'){hsComLista(hoja,h)}if(d.open)pieEl.innerHTML=hsPieHtml(h,mio)}});
   function circulo(k){const a=document.querySelector('#historias [data-hs-ver="'+CSS.escape(k)+'"] .hsav');if(!a)return null;const r=a.getBoundingClientRect();return r.width&&r.bottom>0&&r.top<innerHeight?r:null}
   function zoom(r,inv){const b=box.getBoundingClientRect(),s=r.width/b.width,dx=r.left+r.width/2-(b.left+b.width/2),dy=r.top+r.height/2-(b.top+b.height/2),R=Math.hypot(b.width,b.height)/2+2;
     const k1={transform:`translate(${dx}px,${dy}px) scale(${s})`,clipPath:`circle(${b.width/2}px at 50% 50%)`,opacity:.35},k2={transform:'none',clipPath:`circle(${R}px at 50% 50%)`,opacity:1};
@@ -2994,7 +3055,7 @@ function hsVer(k,origen){
     d.animate([{backgroundColor:'rgb(0,0,0)'},{backgroundColor:'rgba(0,0,0,0)'}],{duration:280,fill:'forwards'});
     const r=abajo?null:circulo(gs[gi]?.k);
     (r?zoom(r,true):box.animate([{transform:box.style.transform||'none',opacity:1},{transform:'translateY(60%) scale(.8)',opacity:0}],{duration:240,easing:'ease-in',fill:'forwards'})).finished.then(fin,fin)}
-  d.addEventListener('cancel',e=>{e.preventDefault();cerrar()});
+  d.addEventListener('cancel',e=>{e.preventDefault();if(!hoja.hidden){hoja.hidden=true;confAbierto=false;pausar(false);return}cerrar()});
   function irGrupo(n){dirAutor=n>gi?1:-1;gi=n;const v=hsVistas();si=gs[gi].items.findIndex(h=>!v.has(h.ruta));if(si<0)si=0;mostrar()}
   function siguiente(){if(si<gs[gi].items.length-1){si++;mostrar()}else if(gi<gs.length-1)irGrupo(gi+1);else cerrar()}
   function anterior(){if(si>0){si--;mostrar()}else if(gi>0){dirAutor=-1;gi--;si=0;mostrar()}else mostrar()}
@@ -4730,6 +4791,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.49',t:'Comentarios en las historias',items:[['💬','Ahora se puede comentar en las historias, como en Instagram: tocá «Agregá un comentario…» o el globito.'],['🗑️','Podés borrar tus comentarios, y el dueño de la historia o un profe también pueden.']]},
   {v:'1.1.48',t:'Cuotas vencidas bien sumadas',items:[['💸','«Cuotas vencidas» ahora suma bien la plata por cobrar: ya no aparece $0 cuando hay cuotas vencidas.'],['📅','Si un socio debe meses anteriores, cuenta como vencido aunque la cuota de este mes todavía no venza.']]},
   {v:'1.1.47',t:'Vista general a tu gusto',items:[['❤️','Las reacciones flotan al tocar el emoji y al abrir historias.'],['🧩','Tocá «Personalizar» en la Vista general: arrastrá las tarjetas para moverlas, cambiales el ancho desde el borde o con ⅓ ½ ⅔ Todo, y ocultá o mostrá las que quieras desde «Tarjetas». Se guarda para la web y la app.'],['💳','«Cuotas a cobrar» ahora está al lado de «Horarios con más gente».'],['🕐','«Horarios con más gente» se ve solo en la Vista general.'],['⏱️','La app de los socios ya no muestra el tiempo que llevan entrenando.']]},
   {v:'1.1.46',t:'Cámara de historias más prolija',items:[['📸','La cámara para subir una historia abre directo en pantalla completa, sin achicarse primero.'],['✨','La X del visor y de la cámara ya no aparece marcada al abrir.']]},
@@ -6108,20 +6170,34 @@ function hsSetReac(h,em){h.info=h.info||{reac:[],vistas:[]};const yo=hsQuien();h
   if(em)h.info.reac.unshift({quien:yo,nombre:'Vos',foto:S.view==='socio'?me()?.photo:PRO&&PRO.foto,emoji:em,cuando:new Date().toISOString()})}
 function hsInfo(h,force){if(!CLOUD||!sb)return Promise.resolve();if(!force&&h.infoT&&Date.now()-h.infoT<15000)return Promise.resolve();
   if(h.guardando)return Promise.resolve();const revision=h.infoRevision||0,consulta=h.infoConsulta=(h.infoConsulta||0)+1;
-  h.infoT=Date.now();return Promise.resolve(sb.rpc('historias_info',{p_rutas:[h.ruta]})).then(r=>{if(consulta!==h.infoConsulta||revision!==(h.infoRevision||0)||!r||r.error||!Array.isArray(r.data))return;
+  h.infoT=Date.now();return Promise.all([sb.rpc('historias_info',{p_rutas:[h.ruta]}),Promise.resolve(sb.rpc('historias_comentarios',{p_ruta:h.ruta})).catch(()=>null)]).then(([r,rc])=>{if(consulta!==h.infoConsulta||revision!==(h.infoRevision||0)||!r||r.error||!Array.isArray(r.data))return;
     const yo=hsQuien(),nom=x=>x.quien===yo?'Vos':(x.nombre||'Alguien');
-    h.info={reac:r.data.filter(x=>x.tipo==='reaccion').map(x=>({...x,nombre:nom(x)})),vistas:r.data.filter(x=>x.tipo==='vista').map(x=>({...x,nombre:nom(x)}))}},()=>{})}
+    h.info={reac:r.data.filter(x=>x.tipo==='reaccion').map(x=>({...x,nombre:nom(x)})),vistas:r.data.filter(x=>x.tipo==='vista').map(x=>({...x,nombre:nom(x)})),com:rc&&!rc.error&&Array.isArray(rc.data)?rc.data.map(x=>({...x,nombre:nom(x)})):((h.info&&h.info.com)||[])}},()=>{})}
 function hsMini(x){const n=String(x.nombre||'?').trim();return x.foto?`<i class="hsmini"><img src="${esc(x.foto)}" alt=""></i>`:`<i class="hsmini">${esc((n.replace(/^Prof\.\s*/,'')[0]||'?').toUpperCase())}</i>`}
 function hsResumen(L){const c={};L.forEach(x=>{c[x.emoji]=(c[x.emoji]||0)+1});return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]).join('')+' <b class="num">'+L.length+'</b>'}
 function hsPieHtml(h,mio){const inf=h.info,reac=inf?inf.reac:[],mia=hsMiReac(h);
   if(mio){const V=inf?inf.vistas:[],n=V.length;
-    return `<button class="hsvistos" data-hslista aria-label="Ver quién vio tu historia"><span class="hscaras">${V.slice(0,3).map(hsMini).join('')}</span><span class="hsvt">${!inf?'Cargando…':n?'Visto por <b class="num">'+n+'</b>':'Todavía nadie la vio'}</span>${reac.length?`<span class="hsrsum">${hsResumen(reac)}</span>`:''}<i aria-hidden="true">›</i></button>`}
-  return `<div class="hsreac">${reac.length?`<button class="hsquienes" data-hslista aria-label="Ver quiénes reaccionaron"><span class="hscaras">${reac.slice(0,3).map(hsMini).join('')}</span><span class="hsrsum">${hsResumen(reac)}</span></button>`:''}<div class="hsemos" role="group" aria-label="Reaccionar a la historia">${HS_REAC.map((e,i)=>`<button data-hsr="${e}" class="${i?'':'hslike'}" ${h.guardando?'disabled':''} aria-pressed="${mia===e}" aria-label="${i?'Reaccionar con '+e:'Me gusta'}">${e}</button>`).join('')}</div></div>`}
+    return `<div class="hsmio"><button class="hsvistos" data-hslista aria-label="Ver quién vio tu historia"><span class="hscaras">${V.slice(0,3).map(hsMini).join('')}</span><span class="hsvt">${!inf?'Cargando…':n?'Visto por <b class="num">'+n+'</b>':'Todavía nadie la vio'}</span>${reac.length?`<span class="hsrsum">${hsResumen(reac)}</span>`:''}<i aria-hidden="true">›</i></button>${hsComIco(inf)}</div>`}
+  return `<div class="hsreac">${reac.length?`<button class="hsquienes" data-hslista aria-label="Ver quiénes reaccionaron"><span class="hscaras">${reac.slice(0,3).map(hsMini).join('')}</span><span class="hsrsum">${hsResumen(reac)}</span></button>`:''}<div class="hsemos" role="group" aria-label="Reaccionar a la historia">${HS_REAC.map((e,i)=>`<button data-hsr="${e}" class="${i?'':'hslike'}" ${h.guardando?'disabled':''} aria-pressed="${mia===e}" aria-label="${i?'Reaccionar con '+e:'Me gusta'}">${e}</button>`).join('')}</div><div class="hscbar"><button type="button" class="hscin" data-hscom="escribir">Agregá un comentario…</button>${hsComIco(inf)}</div></div>`}
 function hsHojaHtml(h,mio){const inf=h.info||{reac:[],vistas:[]};
   const L=mio?inf.vistas.concat(inf.reac.filter(r=>!inf.vistas.some(v=>v.quien===r.quien))):inf.reac;
   const fila=x=>`<li>${hsMini(x)}<span><b>${esc(x.nombre)}</b><small>hace ${hsHace(x.cuando)}</small></span><em>${x.emoji||''}</em></li>`;
   return `<div class="hshojab"><header><b>${mio?'Actividad':'Reacciones'}</b>${mio?`<span>${inf.vistas.length} ${inf.vistas.length===1?'vista':'vistas'} · ${inf.reac.length} ${inf.reac.length===1?'reacción':'reacciones'}</span>`:`<span>${inf.reac.length}</span>`}<button data-hscerrarhoja aria-label="Cerrar">×</button></header>
     ${L.length?`<ul>${L.map(fila).join('')}</ul>`:`<p>${mio?'Cuando alguien vea tu historia, aparece acá.':'Todavía nadie reaccionó. ¡Sé el primero!'}</p>`}</div>`}
+const HS_QE=['❤️','🙌','🔥','👏','💪','😍','😮','😂'];
+const hsComN=inf=>inf&&inf.com?inf.com.length:null;
+function hsComIco(inf){const n=hsComN(inf);
+  return `<button type="button" class="hscic" data-hscom aria-label="Ver comentarios${n?' ('+n+')':''}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 16.2A9 9 0 1 0 17 20l3.9 1.1z"/></svg>${n?`<b class="num">${n}</b>`:''}</button>`}
+function hsYoMini(){return S.view==='socio'?{nombre:me()?.name||'Yo',foto:me()?.photo||null}:{nombre:PRO?PRO.nombre:'Yo',foto:PRO&&PRO.foto||null}}
+function hsComItems(h){const L=(h.info&&h.info.com)||[];
+  if(!L.length) return `<li class="hscvac"><b>Todavía no hay comentarios</b><span>${h.info?'Empezá la conversación.':'Cargando…'}</span></li>`;
+  return L.map(c=>`<li class="${c.env?'env':''}" data-cid="${esc(String(c.id))}">${hsMini(c)}<div class="hscx"><div class="hscn"><b>${esc(c.nombre||'Alguien')}</b><small>${c.env?'Publicando…':hsHace(c.cuando)}</small></div><div class="hsct">${esc(c.texto)}</div>${c.borra&&!c.env?`<button type="button" class="hscdel" data-hscdel="${esc(String(c.id))}">Eliminar</button>`:''}</div></li>`).join('')}
+function hsComHtml(h){const n=hsComN(h.info);
+  return `<div class="hshojab hscoms"><header><b>Comentarios</b><span class="hscnum num">${n||''}</span><button data-hscerrarhoja aria-label="Cerrar">×</button></header>
+    <ul class="hscl">${hsComItems(h)}</ul>
+    <form class="hscf" autocomplete="off"><div class="hsqe" role="group" aria-label="Emojis rápidos">${HS_QE.map(e=>`<button type="button" data-hsqe="${e}" aria-label="Agregar ${e}">${e}</button>`).join('')}</div>
+    <div class="hscfr">${hsMini(hsYoMini())}<input type="text" maxlength="300" placeholder="Agregá un comentario…" aria-label="Comentario" enterkeyhint="send"><button type="submit" disabled>Publicar</button></div></form></div>`}
+function hsComLista(hoja,h){const ul=hoja.querySelector('.hscl');if(!ul)return;ul.innerHTML=hsComItems(h);const n=hoja.querySelector('.hscnum');if(n)n.textContent=hsComN(h.info)||''}
 function hsVuela(emoji,boton,box,indice=0){
   if(hsQuieto())return;
   const base=box.getBoundingClientRect(),r=boton?.getBoundingClientRect();
