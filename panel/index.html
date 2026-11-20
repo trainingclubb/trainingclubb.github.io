@@ -2644,6 +2644,8 @@ function venceDia(s,y,i){const n=new Date(y,i+1,0).getDate(); if(s.desde===mk(y,
 function estado(s){
   if(!s||!s.plan) return {c:'none',t:'Sin cuota',v:'—'};
   if(esFam(s)) return {c:'fam',t:'Plan familiar',v:'Libre'};
+  const atras=MES.slice(0,M).map((_,i)=>i).filter(i=>mesEstado(s,i)==='owed');
+  if(atras.length){ const i0=atras[0], vd0=venceDia(s,Y,i0); return {c:'bad',t:atras.length>1?'Debe '+atras.length+' meses':'Vencida',v:p2(vd0)+'/'+p2(i0+1),days:Math.min(-1,Math.round((new Date(Y,i0,vd0)-TODAY)/864e5)),atras:atras.length} }
   const pago=s.pagos[mk(Y,M)];
   const vd=venceDia(s,Y,M); const venceEste=new Date(Y,M,vd);
   if(pago){const n=new Date(Y,M+1,venceDia(s,Y,M+1));return {c:'ok',t:'Al día',v:p2(n.getDate())+'/'+p2(n.getMonth()+1),days:Math.round((n-TODAY)/864e5),pago}}
@@ -2662,8 +2664,8 @@ function mesEstado(s,i){
   if(!esFam(s)&&s.plan&&y46Pausa(s,i)) return 'paused';
   if(!esFam(s)&&s.plan&&(s.debe||[]).includes(mk(Y,i))) return 'owed';
   if(esFam(s)) return 'na';
-  if(!s.plan||!s.desde) return 'na';
-  const [dy,dm]=s.desde.split('-').map(Number);
+  if(!s.plan) return 'na';
+  const [dy,dm]=(s.desde||mk(Y,M)).split('-').map(Number);
   if(Y<dy||(Y===dy&&i<dm)) return 'na';
   if(s.pagos[mk(Y,i)]) return 'paid';
   if(i<M) return 'owed';
@@ -2673,6 +2675,7 @@ function mesEstado(s,i){
 const vencido=(s,i)=>i<M||(i===M&&D>venceDia(s,Y,i));
 const montoMes=(s,i)=>Math.round((s.precio||0)*(vencido(s,i)?1+RECARGO:1));
 const deudaMonto=s=>s.plan?MES.reduce((n,_,i)=>n+(mesEstado(s,i)==='owed'?montoMes(s,i):0),0):0;
+const deudaVenc=s=>deudaMonto(s)||montoMes(s,M);
 /* Avisos de pago: solo dos por mes, igual que el push de la nube: el 5 (está por vencer) y el 10 (ya venció). El plan familiar no paga. */
 function aviso(s){
   if(!s||!s.plan||esFam(s)||(s.pagos||{})[mk(Y,M)]||y46Aviso(s,M)||y46Pausa(s,M)||y47Baja(s,M)) return null;
@@ -4378,7 +4381,7 @@ function renderDuenio(){
   const pico=asist.reduce((b,a)=>a.v>b.v?a:b,asist[0]);
   if(S.a14==null||!asist[S.a14]||asist[S.a14].ce){const ab=asist.map((a,k)=>a.ce?-1:k).filter(k=>k>=0); S.a14=ab.length?ab[ab.length-1]:13}
   S.a14d=asist; const a14anim=!document.querySelector('#app .a14');
-  const cob=[...venc.map(x=>({...x,n:deudaMonto(x.s),t:'Vencida '+(x.e.days===-1?'ayer':'hace '+(-x.e.days)+' días')})),
+  const cob=[...venc.map(x=>({...x,n:deudaVenc(x.s),t:'Vencida '+(x.e.days===-1?'ayer':'hace '+(-x.e.days)+' días')})),
     ...por.map(x=>({...x,n:montoMes(x.s,M),t:x.e.days===0?'Vence hoy':'Vence en '+x.e.days+' día'+(x.e.days===1?'':'s')}))];
   const F=[['todos','Todos'],['avisaron','Avisaron pago'],['vencidos','Vencidos'],['por','Por vencer'],['al','Al día'],['pausa','En pausa'],['baja','De baja'],['sincuota','Sin cuota'],['sinrut','Sin rutina'],['funcional','Funcional']];
   const list=est.filter(({s,e})=>S.filter==='todos'||(S.filter==='avisaron'&&y46Avisos(s).length>0)||(S.filter==='pausa'&&e.c==='pause')||(S.filter==='baja'&&e.c==='baja')||(S.filter==='vencidos'&&e.c==='bad')||(S.filter==='por'&&e.c==='warn'&&e.days<=7)||(S.filter==='al'&&e.c==='ok')||(S.filter==='sincuota'&&e.c==='none')||(S.filter==='sinrut'&&!s.rutina&&!s.funcional)||(S.filter==='funcional'&&!!s.funcional));
@@ -4387,7 +4390,7 @@ function renderDuenio(){
   <div class="kpis">
     <div class="kpi"><div class="k">Socios</div><div class="v num">${all.length}</div><div class="s">${all.length?'registrados':'todavía nadie'}</div></div>
     <div class="kpi"><div class="k">Cobrado en ${MES[M].toLowerCase()}</div><div class="v num">${fmt(cobrado)}</div><div class="s">Mercado Pago, efectivo y transferencia</div></div>
-    <div class="kpi ${venc.length?'alert':''}"><div class="k">Cuotas vencidas</div><div class="v num">${venc.length}</div><div class="s num">${fmt(venc.reduce((n,x)=>n+deudaMonto(x.s),0))} por cobrar</div></div>
+    <div class="kpi ${venc.length?'alert':''}"><div class="k">Cuotas vencidas</div><div class="v num">${venc.length}</div><div class="s num">${fmt(venc.reduce((n,x)=>n+deudaVenc(x.s),0))} por cobrar</div></div>
     <div class="kpi"><div class="k">Entraron hoy</div><div class="v num">${asist[13].v}</div><div class="s">registradas en la app</div></div>
   </div>
   ${all.length?`<div class="grid2">
@@ -4690,6 +4693,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.48',t:'Cuotas vencidas bien sumadas',items:[['💸','«Cuotas vencidas» ahora suma bien la plata por cobrar: ya no aparece $0 cuando hay cuotas vencidas.'],['📅','Si un socio debe meses anteriores, cuenta como vencido aunque la cuota de este mes todavía no venza.']]},
   {v:'1.1.47',t:'Vista general a tu gusto',items:[['❤️','Las reacciones flotan al tocar el emoji y al abrir historias.'],['🧩','Tocá «Personalizar» en la Vista general: arrastrá las tarjetas para moverlas, cambiales el ancho desde el borde o con ⅓ ½ ⅔ Todo, y ocultá o mostrá las que quieras desde «Tarjetas». Se guarda para la web y la app.'],['💳','«Cuotas a cobrar» ahora está al lado de «Horarios con más gente».'],['🕐','«Horarios con más gente» se ve solo en la Vista general.'],['⏱️','La app de los socios ya no muestra el tiempo que llevan entrenando.']]},
   {v:'1.1.46',t:'Cámara de historias más prolija',items:[['📸','La cámara para subir una historia abre directo en pantalla completa, sin achicarse primero.'],['✨','La X del visor y de la cámara ya no aparece marcada al abrir.']]},
   {v:'1.1.45',t:'Horarios con más gente, historias al estilo Instagram y login más limpio',items:[['🕐','Nueva sección «Horarios con más gente» en la Vista general: hora pico, franja con más socios y un gráfico por hora, de hoy, los últimos 7 días o el mes.'],['✅','En la asistencia de hoy ves a qué hora entró cada socio.'],['📸','Historias en 9:16 con la foto de perfil de cada uno. Los socios reaccionan con me gusta o emojis y ven quién reaccionó; vos ves quién vio las historias del gym.'],['📱','En el celular, el login del panel ya no tiene la barra de arriba y no se mueve al escribir.']]},
