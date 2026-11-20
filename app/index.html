@@ -1605,6 +1605,26 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 @keyframes hspulso{50%{opacity:.45}}
 @keyframes hsentra{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){.hsbox,.hsav,.hsig[open],.hsig .hsmedia img,.hsig .hsmedia video{transition:none;animation:none}}
+/* historias en el encabezado (v49) */
+.apphead .hshead{flex:1 1 auto;min-width:0;align-self:stretch;display:flex;align-items:center;margin-left:4px}
+.hshead .hsfila{flex:1;min-width:0;min-height:0;gap:8px;padding:2px 10px 2px 2px;align-items:center;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 14px),transparent)}
+.hshead .hsit,.hshead .hsfila .hsbt{width:40px}
+.hshead .hsav{width:40px;height:40px;padding:2.5px}
+.hshead .hsav i{border-width:2px;border-color:var(--surface);font-size:15px}
+.hshead .hsit small,.hshead .hsvac{display:none}
+.hshead .hsfila .hsmas{top:24px;left:24px;width:18px;height:18px;border-width:2px;border-color:var(--surface);font-size:13px}
+.hshead .hsesq .hsav i{border-color:var(--surface)}
+.apphead .hshead~.hpill,.apphead .hshead~.hpill[hidden]+.avbtn{margin-left:0}
+.hsig header .hsborrar{font-size:18px}
+.hsconf{position:absolute;left:16px;right:16px;bottom:24px;z-index:3;display:grid;gap:8px;padding:18px;border-radius:16px;background:#1c1c1ef2;color:#fff;text-align:center;animation:hssube .2s ease}
+.hsconf[hidden]{display:none}
+.hsconf b{font-size:16px}
+.hsconf p{margin:0 0 6px;opacity:.75;font-size:13px}
+.hsconf button{border:0;border-radius:12px;padding:13px;font-weight:800;font-size:15px;cursor:pointer}
+.hsconfsi{background:#ed4956;color:#fff}
+.hsconfsi:disabled{opacity:.6}
+.hsconfno{background:#ffffff1f;color:#fff}
+@keyframes hssube{from{transform:translateY(20px);opacity:0}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2541,7 +2561,7 @@ function historiasFila(){
   const tu=`<div class="hsit" role="listitem"><button class="hsbt" ${mio?`data-hs-ver="${esc(yo)}" aria-label="Ver tu historia"`:'data-hs-add aria-label="Publicar una historia"'}>${hsAvatar(yoG,anillo)}<small>Tu historia</small></button><button class="hsmas" data-hs-add aria-label="Publicar una historia" ${historias.subiendo?'disabled':''}>+</button></div>`;
   let resto;
   if(historias.error)resto='<div class="hsit" role="listitem"><button class="hsbt" data-hs-retry><span class="hsav visto" aria-hidden="true"><i>↻</i></span><small>Reintentar</small></button></div>';
-  else if(!historias.cargado)resto='<div class="hsit hsesq" aria-hidden="true"><span class="hsav"><i></i></span><small></small></div>'.repeat(3)+'<span class="hssr" role="status">Cargando historias…</span>';
+  else if(!historias.cargado)resto='<div class="hsit hsesq" aria-hidden="true"><span class="hsav"><i></i></span><small></small></div>'.repeat(2)+'<span class="hssr" role="status">Cargando historias…</span>';
   else resto=otros.map(g=>`<div class="hsit" role="listitem"><button class="hsbt" data-hs-ver="${esc(g.k)}" aria-label="Historia de ${esc(g.autor)}${g.visto?'':', sin ver'}">${hsAvatar(g,g.visto?'visto':'nuevo')}<small>${esc(g.autor)}</small></button></div>`).join('')
     +(otros.length?'':'<p class="hsvac">Todavía no hay historias de otros socios. ¡Subí la primera!</p>');
   return `<div class="hsfila" role="list" aria-label="Historias de las últimas 24 horas">${tu}${resto}</div>`;
@@ -2558,9 +2578,10 @@ async function hsCargar(force=false){
   catch{if(historias.socio===socio)historias.error=true}
   hsActualizar();
 }
-function historiasInicio(){
-  if(!CLOUD)return '';
-  hsCargar();return '<section class="card" id="historias" aria-label="Historias">'+historiasFila()+'</section>';
+function historiasInicio(){return ''}
+function historiasHead(){
+  if(!CLOUD||S.view!=='socio')return '';
+  hsCargar();return '<div class="hshead" id="historias" aria-label="Historias">'+historiasFila()+'</div>';
 }
 setInterval(()=>{if(!document.hidden&&document.getElementById('historias')){hsActualizar();hsCargar()}},30000);
 function hsDialogo(titulo){
@@ -2589,10 +2610,10 @@ function hsVer(k){
   const gs=hsGrupos();let gi=gs.findIndex(g=>g.k===k);if(gi<0)return hsCargar(true);
   const v0=hsVistas();let si=gs[gi].items.findIndex(h=>!v0.has(h.ruta));if(si<0)si=0;
   const d=document.createElement('dialog');d.className='hsig';d.setAttribute('aria-label','Historias');
-  d.innerHTML='<div class="hsbox"><div class="hsbar"></div><header><span class="hsquien"></span><button class="hsmute" hidden aria-label="Sonido">🔇</button><button class="hscerrar" aria-label="Cerrar">×</button></header><div class="hsmedia"></div></div><nav><button class="hsprev" aria-label="Anterior">‹</button><button class="hsnext" aria-label="Siguiente">›</button></nav>';
+  d.innerHTML='<div class="hsbox"><div class="hsbar"></div><header><span class="hsquien"></span><button class="hsborrar" hidden aria-label="Eliminar esta historia">🗑️</button><button class="hsmute" hidden aria-label="Sonido">🔇</button><button class="hscerrar" aria-label="Cerrar">×</button></header><div class="hsmedia"></div><div class="hsconf" hidden role="alertdialog" aria-label="Eliminar historia"><b>¿Eliminar esta historia?</b><p>Se borra para todos y no se puede recuperar.</p><button class="hsconfsi">Eliminar</button><button class="hsconfno">Cancelar</button></div></div><nav><button class="hsprev" aria-label="Anterior">‹</button><button class="hsnext" aria-label="Siguiente">›</button></nav>';
   document.body.append(d);d.showModal();
-  const box=d.querySelector('.hsbox'),bar=d.querySelector('.hsbar'),caja=d.querySelector('.hsmedia'),quien=d.querySelector('.hsquien'),mute=d.querySelector('.hsmute');
-  let turno=0,raf=0,dur=5000,trans=0,inicio=0,pausa=true,cargando=true,el=null,retenido=false,pd=null,holdT=0;
+  const box=d.querySelector('.hsbox'),bar=d.querySelector('.hsbar'),caja=d.querySelector('.hsmedia'),quien=d.querySelector('.hsquien'),mute=d.querySelector('.hsmute'),borrar=d.querySelector('.hsborrar'),conf=d.querySelector('.hsconf');
+  let confAbierto=false,turno=0,raf=0,dur=5000,trans=0,inicio=0,pausa=true,cargando=true,el=null,retenido=false,pd=null,holdT=0;
   const esVideo=h=>/\.(mp4|webm)$/i.test(h.ruta);
   function frac(){
     if(el&&el.tagName==='VIDEO'){const D=isFinite(el.duration)&&el.duration>0?Math.min(el.duration,60):60;return el.currentTime/D}
@@ -2604,7 +2625,7 @@ function hsVer(k){
     if(d.open)raf=requestAnimationFrame(tick)}
   function pausar(on){
     if(on){if(!pausa){trans+=performance.now()-inicio;pausa=true}if(el?.tagName==='VIDEO')el.pause()}
-    else if(pausa&&!cargando&&!retenido&&!document.hidden){inicio=performance.now();pausa=false;if(el?.tagName==='VIDEO')el.play().catch(()=>{})}}
+    else if(pausa&&!cargando&&!retenido&&!confAbierto&&!document.hidden){inicio=performance.now();pausa=false;if(el?.tagName==='VIDEO')el.play().catch(()=>{})}}
   function precargar(){const n=gs[gi].items[si+1]||gs[gi+1]?.items[0];
     if(n&&historiaViva(n))hsUrl(n).then(u=>{if(!esVideo(n)){const im=new Image();im.src=u}}).catch(()=>{})}
   async function mostrar(){
@@ -2613,7 +2634,7 @@ function hsVer(k){
     if(!historiaViva(h)){cargando=false;dur=1;return}
     bar.innerHTML=g.items.map((_,j)=>'<span><i style="transform:scaleX('+(j<si?1:0)+')"></i></span>').join('');
     quien.innerHTML=hsAvatar(g,'chico')+'<b>'+esc(g.k===me()?.id?'Tu historia':g.autor)+'</b><small>'+hsHace(h.creado)+'</small>';
-    caja.innerHTML='<span class="hscarga" role="status" aria-label="Cargando"></span>';mute.hidden=true;hsMarcar(h.ruta);
+    caja.innerHTML='<span class="hscarga" role="status" aria-label="Cargando"></span>';mute.hidden=true;borrar.hidden=g.k!==me()?.id;hsMarcar(h.ruta);
     try{const url=await hsUrl(h);if(!d.open||t!==turno)return;
       const vid=esVideo(h),m=document.createElement(vid?'video':'img');
       if(vid){m.playsInline=true;m.preload='auto';m.muted=hsMudo;m.onended=()=>{if(t===turno&&!cargando)siguiente()}}
@@ -2647,9 +2668,22 @@ function hsVer(k){
   box.addEventListener('pointerup',fin);box.addEventListener('pointercancel',fin);
   box.addEventListener('contextmenu',e=>e.preventDefault());
   d.querySelector('.hscerrar').onclick=()=>d.close();
+  const si0=conf.querySelector('.hsconfsi'),cerrarConf=()=>{confAbierto=false;conf.hidden=true;si0.disabled=false;si0.textContent='Eliminar'};
+  conf.addEventListener('pointerdown',e=>e.stopPropagation());conf.addEventListener('pointerup',e=>e.stopPropagation());
+  borrar.onclick=()=>{confAbierto=true;pausar(true);conf.hidden=false;conf.querySelector('.hsconfno').focus()};
+  conf.querySelector('.hsconfno').onclick=()=>{cerrarConf();pausar(false)};
+  si0.onclick=async()=>{
+    const g=gs[gi],h=g.items[si];if(!h||si0.disabled)return;si0.disabled=true;si0.textContent='Eliminando…';
+    try{const r=await q(sb.storage.from('historias').remove([h.ruta]));if(!r||!r.length)throw Error('No se pudo eliminar la historia. Probá de nuevo.');
+      historias.lista=historias.lista.filter(x=>x.ruta!==h.ruta);g.items.splice(si,1);cerrarConf();toast('Historia eliminada');
+      if(!g.items.length){gs.splice(gi,1);if(gi>=gs.length)return d.close();si=0;irGrupo(gi)}
+      else{if(si>=g.items.length)si=g.items.length-1;mostrar()}
+      hsActualizar();
+    }catch(e){si0.disabled=false;si0.textContent='Eliminar';toast(errTxt(e))}
+  };
   d.querySelector('.hsprev').onclick=anterior;d.querySelector('.hsnext').onclick=siguiente;
   mute.onclick=()=>{if(el?.tagName!=='VIDEO')return;el.muted=hsMudo=!el.muted;mute.textContent=el.muted?'🔇':'🔊'};
-  d.addEventListener('keydown',e=>{if(e.key==='ArrowRight')siguiente();else if(e.key==='ArrowLeft')anterior();
+  d.addEventListener('keydown',e=>{if(confAbierto)return;if(e.key==='ArrowRight')siguiente();else if(e.key==='ArrowLeft')anterior();
     else if(e.key===' '){e.preventDefault();pausa?pausar(false):pausar(true)}});
   const vis=()=>document.hidden?pausar(true):pausar(false);document.addEventListener('visibilitychange',vis);
   d.addEventListener('close',()=>{turno++;cancelAnimationFrame(raf);if(el?.tagName==='VIDEO')el.pause();document.removeEventListener('visibilitychange',vis);d.remove();hsActualizar()},{once:true});
@@ -3152,7 +3186,7 @@ function renderSocio(){
   const ti=TABKEYS.indexOf(S.tab), pi=TABKEYS.indexOf(S.lastTab||S.tab);
   const sube=t=>t==='perfil'||t==='chat', dir=same?'':sube(S.tab)?'navsube':sube(S.lastTab)?'navbaja':ti>pi?'fromr':ti<pi?'froml':'';
   $('#app').innerHTML=`<div class="phone"><div class="sbar" aria-hidden="true"><span class="num">9:41</span><span class="sicons"><i></i><i></i><i></i><b></b></span></div>
-  <header class="apphead"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>
+  <header class="apphead"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>${historiasHead()}
     <button class="hpill num" id="hpill" data-tab="rutina" hidden></button>
     <button class="avbtn" data-tab="perfil" aria-label="Mi perfil">${avatar()}</button></header>
   <div class="screen ${same?'':'enter '+dir}" id="scr-${S.tab}">${body}</div>
@@ -4164,7 +4198,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
-  {v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
+  {v:'1.1.40',t:'Historias arriba y se pueden borrar',items:[['⭕','Las historias ahora están arriba, entre el logo y tu perfil, en todas las pantallas.'],['🗑️','Cada socio puede eliminar sus historias antes de las 24 horas.']]},{v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
   {v:'1.1.36',t:'Bienvenida con desenfoque localizado',items:[['👋','El desenfoque aparece solo detrás del saludo.']]},
   {v:'1.1.35',t:'Forge Studio y nueva bienvenida',items:[['✦','Los logos de Forge Studio acompañan a Training Club.'],['👋','La bienvenida desenfoca la pantalla durante el saludo.']]},
   {v:'1.1.34',t:'Los socios pueden pausar o dar de baja su cuota',items:[
