@@ -2596,7 +2596,7 @@ async function entrarSocio(dni,name,nuevo){ if(await c2PendAntes(dni,name)) retu
   S.user={dni,name}; S.name=name; S.tab='inicio'; S.lastTab=null; S.pendiente=false; S.lmode=null; S.ldni=null;
   try{localStorage.setItem('tc-sesion',JSON.stringify(S.user))}catch(x){}
   if(CLOUD) await loadAll(); else { const s=DB.socios[dni]; if(s&&s.photo) S.photo=s.photo; savePerfil() }
-  if(nuevo) toast('¡Cuenta creada!'); render(); bnvLanzar(name.split(' ')[0],'Socio','s'+dni); lanzarAviso(); if(CLOUD) activarPush();
+  if(nuevo) toast('¡Cuenta creada!'); render(); lanzarAviso(); if(CLOUD) activarPush();
 }
 
 function renderSocio(){
@@ -3746,6 +3746,27 @@ function bnvLanzar(nombre,rol,clave){ nombre=gTxt(nombre); if(!nombre) return;
     document.body.appendChild(w); setTimeout(()=>w.remove(),reduceMotion?1300:1750) };
   setTimeout(go,80) }
 const bnvProfe=()=>{ if(PRO) bnvLanzar(String(PRO.nombre||'').split(' ')[0],ROL_TXT[PRO.dev?'dev':esAdmin()?'dueno':'profe'],'p'+(PRO.dni||'')) };
+let bnvSocioEspera=0;
+const bnvSocioVisto=new Map();
+function bnvSocio(){
+  const socio=me();
+  if(S.view!=='socio'||S.pendiente||!socio||document.hidden) return;
+  const nombre=gTxt(socio.name||S.name);
+  if(!nombre) return;
+  const fecha=iso(new Date()), clave='tc-bnv-dia-'+socio.dni;
+  if(bnvSocioVisto.get(clave)===fecha) return;
+  try{ if(localStorage.getItem(clave)===fecha) return }catch(e){}
+  if(document.getElementById('intro')){
+    if(!bnvSocioEspera) bnvSocioEspera=setTimeout(()=>{
+      bnvSocioEspera=0;
+      bnvSocio();
+    },100);
+    return;
+  }
+  bnvSocioVisto.set(clave,fecha);
+  try{ localStorage.setItem(clave,fecha) }catch(e){}
+  bnvLanzar(nombre.split(' ')[0],'Socio','s'+socio.dni+'-'+fecha);
+}
 /* ---------- lote 38b: Rutina del socio — Progresos (RM/PR), cronómetro y estado que sobreviven al bloqueo ---------- */
 /* Todo se guarda por socio: tc-crono-<dni> (cronómetro + descanso, con marcas de tiempo) y tc-rutdia-<dni> (lo de HOY: día, tildados, sesión, pestaña, borradores, scroll). */
 const TCB={dni:null,boot:true,scroll:0,scrollPend:false,sesT0:0,drafts:{},sig:'',avisar:0};
@@ -3770,16 +3791,19 @@ function tcbGuardar(force){ const dni=S.user&&S.user.dni; if(!dni||TCB.dni!==dni
   const sig=JSON.stringify([c,r]); if(!force&&sig===TCB.sig) return; TCB.sig=sig; r.ts=Date.now();
   tcbLS('tc-crono-'+dni,c); tcbLS('tc-rutdia-'+dni,r) }
 /* el descanso terminó mientras la pantalla estaba bloqueada (o hace rato): se marca terminado y se avisa una sola vez, sin sonido */
-function tcbFinTarde(){ const late=Date.now()-S.rest.end; if(late<4000&&!document.hidden) return false;
+function tcbFinTarde(alVolver=false){ const late=Date.now()-S.rest.end; if(!alVolver&&late<4000&&!document.hidden) return false;
   S.rest.run=false; S.rest.left=S.rest.total; S.rest.fin=S.rest.end; tcbGuardar(true);
   if(document.hidden) TCB.avisar=S.rest.end; else toast('Tu descanso terminó '+tcbHace(S.rest.end));
   if(S.view==='socio') render(true); return true }
 function tcbVolver(){ if(document.hidden||S.view!=='socio'||!S.user) return;
-  if(S.rest.run&&restNow()<=0) tcbFinTarde();
+  if(S.rest.run&&restNow()<=0) tcbFinTarde(true);
   if(TCB.avisar){ const t=TCB.avisar; TCB.avisar=0; toast('Tu descanso terminó '+tcbHace(t)) }
   setRoll(document.getElementById('swtime'),fmtSW(swNow())); if(S.rest.run) setRoll(document.getElementById('resttime'),fmtR(restNow()));
   const st=document.getElementById('tcbsest'); if(st&&TCB.sesT0) st.textContent=tcbDur(Date.now()-TCB.sesT0) }
-document.addEventListener('visibilitychange',()=>{ if(document.hidden) tcbGuardar(true); else tcbVolver() });
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden) tcbGuardar(true);
+  else { tcbVolver(); bnvSocio() }
+});
 addEventListener('pagehide',()=>tcbGuardar(true)); addEventListener('pageshow',tcbVolver); addEventListener('focus',tcbVolver);
 document.addEventListener('freeze',()=>tcbGuardar(true));
 setInterval(()=>{ const st=document.getElementById('tcbsest'); if(st&&TCB.sesT0) st.textContent=tcbDur(Date.now()-TCB.sesT0); tcbGuardar() },1000);
@@ -4253,7 +4277,9 @@ function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return
   if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
   $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio'); gsUpd();
-  cerrarIntro()}
+  cerrarIntro();
+  if(S.view==='socio') bnvSocio();
+}
 
 async function elegirPlan(n){
   const s=me(), p=planDe(n); if(!s||!p||s.plan===n) return;
