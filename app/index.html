@@ -1245,7 +1245,8 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 /* v40: días completos */
 .days button.rdok{border-color:rgba(36,201,167,.6)!important;background:linear-gradient(135deg,rgba(36,201,167,.22),rgba(36,201,167,.08))!important;color:var(--ink);position:relative}
 .days button.rdok small{color:var(--accent)}
-.rdtic{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#06110e;font-size:11px;display:grid;place-items:center;box-shadow:0 4px 10px -2px rgba(36,201,167,.6)}
+.days button[data-day]{padding-right:27px}
+.rdtic{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#06110e;font-size:11px;display:grid;place-items:center;box-shadow:0 4px 10px -2px rgba(36,201,167,.6)}
 .days button.rdnew{animation:rdPulse .9s var(--spring)}.days button.rdnew .rdtic{animation:rdTic .6s var(--spring) .15s both}
 @keyframes rdPulse{30%{transform:scale(1.08);box-shadow:0 0 0 6px rgba(36,201,167,.25)}}
 @keyframes rdTic{from{transform:scale(0) rotate(-90deg)}}
@@ -4213,8 +4214,13 @@ function rdSemana(){ const l=new Date(TODAY); l.setDate(TODAY.getDate()-((TODAY.
 function rdHecho(R,i){ const d=R&&R[i]; if(!d||!d.ex||!d.ex.length) return false; for(let j=0;j<d.ex.length;j++) if(!S.done.has(i+'-'+j)) return false; return true }
 function rsLista(){ const dni=S.user&&S.user.dni; return dni?(tcbLS('tc-ses-'+dni)||[]):[] }
 function rsAgregar(ms){ const dni=S.user&&S.user.dni; if(!dni) return; const s=me(), R=s&&s.rutina, dia=R&&R[S.day]?R[S.day].d:'';
-  const L=rsLista().filter(x=>x.f>=iso(new Date(TODAY.getTime()-60*864e5))); L.push({f:iso(TODAY),ms:Math.round(ms),dia}); tcbLS('tc-ses-'+dni,L) }
-const rsHoy=()=>rsLista().filter(x=>x.f===iso(TODAY)).reduce((a,x)=>a+x.ms,0);
+  const L=rsLista().filter(x=>x.f>=iso(new Date(TODAY.getTime()-60*864e5))); L.push({f:iso(TODAY),ms:Math.round(ms),dia,indice:S.day}); tcbLS('tc-ses-'+dni,L) }
+function rsHoy(){
+  const rutina=(me()||{}).rutina||[], dia=rutina[S.day];
+  if(!dia) return 0;
+  return rsLista().filter(x=>x.f===iso(TODAY)&&x.dia===dia.d&&
+    (rutina.filter(d=>d.d===dia.d).length===1||x.indice===S.day)).reduce((total,x)=>total+x.ms,0);
+}
 function rsSemanaHtml(){ const lun=new Date(rdSemana()+'T00:00'), L=rsLista(); let tot=0, hay=false;
   const cel=['L','M','X','J','V','S','D'].map((l,i)=>{ const d=new Date(lun); d.setDate(lun.getDate()+i); const f=iso(d), xs=L.filter(x=>x.f===f), ms=xs.reduce((a,x)=>a+x.ms,0)+(f===iso(TODAY)&&TCB.sesT0?Date.now()-TCB.sesT0:0);
     tot+=ms; if(ms) hay=true; const hoy=f===iso(TODAY);
