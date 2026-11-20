@@ -1355,6 +1355,40 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 [data-theme="light"] .a14line{border-top-color:rgba(20,26,22,.38)}
 [data-theme="light"] .a14d.ce .a14t{background:repeating-linear-gradient(135deg,rgba(20,26,22,.075) 0 4px,transparent 4px 8px)}
 @media (prefers-reduced-motion:reduce){.y42sw>*,#dirty{transition:none}.chvis .cnt.y42scnt{animation:none}}
+
+/* lote 43: fotos y videos en el chat */
+.chadj{width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);display:grid;place-items:center;cursor:pointer;padding:0;transition:transform .25s var(--spring),color .2s,border-color .2s}
+.chadj svg{width:21px;height:21px}.chadj:hover{color:var(--accent);border-color:var(--accent)}.chadj:active{transform:scale(.9)}
+.chbar.editmode .chadj{visibility:hidden}
+.bmed{position:relative;width:min(240px,62vw);aspect-ratio:var(--ar,1.33);max-height:340px;border-radius:14px;overflow:hidden;background:var(--sunk);margin:-2px -4px 6px;cursor:zoom-in}
+.bmed.vid{cursor:default}.bmed img,.bmed video{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s ease}
+.bmed.vid video{object-fit:contain;background:#000}
+.bmed.lista img,.bmed.lista video{opacity:1}
+.bmed:not(.lista)::after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);background-size:220% 100%;animation:bmSh 1.3s linear infinite}
+@keyframes bmSh{from{background-position:120% 0}to{background-position:-120% 0}}
+.bmplay{position:absolute;top:0;right:0;bottom:0;left:0;display:grid;place-items:center;font-size:28px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);pointer-events:none}
+.bmed.subiendo img,.bmed.subiendo video{filter:brightness(.7)}
+.bmup{position:absolute;top:0;right:0;bottom:0;left:0;display:grid;place-items:center;pointer-events:none}
+.bmup i{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;animation:bmGira .8s linear infinite}
+@keyframes bmGira{to{transform:rotate(360deg)}}
+.bub.bconm>p{margin-top:0}.bub.bconm:not(:has(p)) small{margin-top:-2px}
+.bmenu .bmdl{display:block;padding:9px 12px;border-radius:9px;color:var(--ink);text-decoration:none;font-size:14px;white-space:nowrap}.bmenu .bmdl:hover{background:var(--sunk)}
+.chvisor{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(0,0,0,.92);display:grid;place-items:center;padding:20px;animation:chvIn .25s ease both;cursor:zoom-out}
+.chvisor img{max-width:100%;max-height:100%;border-radius:10px;object-fit:contain;animation:chvImg .35s var(--spring) both}
+.chvisor.fuera{animation:chvOut .2s ease both}
+.chvx{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:26px;cursor:pointer}
+@keyframes chvIn{from{opacity:0}}@keyframes chvOut{to{opacity:0}}@keyframes chvImg{from{transform:scale(.88);opacity:0}}
+/* lote 43: Asistencia / Ranking */
+.as43.izq,.as43m.izq~*:not(h2):not(.asseg){animation:as43I .45s var(--spring) both}
+.as43.der,.as43m.der~*:not(h2):not(.asseg){animation:as43D .45s var(--spring) both}
+@keyframes as43I{from{opacity:0;transform:translateX(26px)}}@keyframes as43D{from{opacity:0;transform:translateX(-26px)}}
+.rk.rkswap.izq{animation:rkSwI .5s var(--spring) both}.rk.rkswap.der{animation:rkSwD .5s var(--spring) both}
+@keyframes rkSwI{from{opacity:0;transform:translateX(40px) scale(.97);filter:blur(3px)}}
+@keyframes rkSwD{from{opacity:0;transform:translateX(-40px) scale(.97);filter:blur(3px)}}
+.rkcual.rkcx{animation:rkCx .4s var(--spring) both}@keyframes rkCx{from{opacity:0;transform:translateY(6px)}}
+.rkper button b,.rkper button small{transition:transform .35s var(--spring),color .3s}
+.rkper button[aria-pressed="true"] b{transform:scale(1.06)}
+@media (prefers-reduced-motion:reduce){.as43,.rk.rkswap,.rkcual.rkcx,.chvisor,.chvisor img,.bmed::after,.bmup i{animation:none!important}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2254,17 +2288,17 @@ function screenInicio(){
   return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div>${miniRank()}</div>
   ${st}
   ${gnInicioHtml()}
+  ${r?`<section class="card">
+    <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
+    <div>${r.ex.slice(0,3).map(x=>`<div class="mini-ex"><span>${esc(exNm(x))}</span><span class="num">${exMeta(x)}</span></div>`).join('')}</div>
+    <button class="link" data-tab="rutina">Ver rutina completa →</button></section>`
+  :s.funcional?x42FunCard():`<section class="card soft"><div class="ttl"><b>Tu rutina</b></div><p class="muted">Todavía no tenés rutina. ${PROFE} te la arma y te aparece acá.</p></section>`}
   <section class="card">
     <div class="ttl"><b>Esta semana</b><span class="num">${semana} entrenamiento${semana===1?'':'s'}</span></div>
     <div class="week">${wk}</div>
     ${att.includes(D)?'<div class="donerow'+(justIn?' nuevo':'')+'"><p class="done-msg"><svg class="tick2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7 12.5l3.2 3.2L17.2 8.7"/></svg><span class="dtx">Ya registraste tu entrada de hoy.</span></p><button class="mini" id="uncheckin" title="Solo se puede quitar la entrada del mismo día">Quitar</button></div>':cerrado(TODAY)?'<p class="closed-msg"><span aria-hidden="true">🔒</span> Sábados y domingos el gimnasio está cerrado. ¡Nos vemos el lunes!</p>':`<button class="btn ghost" id="checkin">Vine hoy al gym</button>`}
   </section>
   ${sensH}
-  ${r?`<section class="card">
-    <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
-    <div>${r.ex.slice(0,3).map(x=>`<div class="mini-ex"><span>${esc(exNm(x))}</span><span class="num">${exMeta(x)}</span></div>`).join('')}</div>
-    <button class="link" data-tab="rutina">Ver rutina completa →</button></section>`
-  :s.funcional?x42FunCard():`<section class="card soft"><div class="ttl"><b>Tu rutina</b></div><p class="muted">Todavía no tenés rutina. ${PROFE} te la arma y te aparece acá.</p></section>`}
   <div class="row2">
     <div class="tile"><div class="k">Visitas en ${MES[M].toLowerCase()}</div><div class="v num" data-count="${att.length}">${att.length}</div></div>
     <button class="tile tbtn" data-tab="rutina" data-rsubgo="prog"><div class="k">Mejor marca</div><div class="v num">${best&&best[1]?best[1]+'<span class="of"> kg</span>':'—'}</div><div class="s">${best&&best[1]?esc(best[0]):'Anotá tus pesos'}</div></button>
@@ -2559,8 +2593,9 @@ document.addEventListener('click',e=>{ const t=e.target.closest('[data-mrkc]'); 
 const MEDAL=['🥇','🥈','🥉'];
 function rankHtml(){ const p=S.rkP||'mes'; let L=null;
   L=rkLista(p);
-  const per=`<div class="rkper" role="group" aria-label="Período" style="--m:${p==='anio'?1:0}">${[['mes','Mensual',MES[M]],['anio','Anual',String(Y)]].map(([k,l,sub])=>`<button data-rkp="${k}" aria-pressed="${p===k}"><b>${l}</b><small>${sub}</small></button>`).join('')}</div>
-    <p class="rkcual">${p==='mes'?'🗓️ Los que más vinieron en '+MES[M].toLowerCase():'📅 Los que más vinieron en todo '+Y}</p>`;
+  const rkTo=p==='anio'?1:0, rkFr=S.rkFrom!=null?S.rkFrom:rkTo, rkDir=S.rkDir||''; S.rkFrom=null;
+  const per=`<div class="rkper" role="group" aria-label="Período" style="--m:${rkFr}" data-to="${rkTo}">${[['mes','Mensual',MES[M]],['anio','Anual',String(Y)]].map(([k,l,sub])=>`<button data-rkp="${k}" aria-pressed="${p===k}"><b>${l}</b><small>${sub}</small></button>`).join('')}</div>
+    <p class="rkcual ${rkDir?'rkcx '+rkDir:''}">${p==='mes'?'🗓️ Los que más vinieron en '+MES[M].toLowerCase():'📅 Los que más vinieron en todo '+Y}</p>`;
   if(!L) return per+'<div class="rkload" aria-label="Cargando"><i></i><i></i><i></i></div>';
   if(!L.length) return per+empty(ICONS.asist,'Nadie vino todavía '+(p==='mes'?'este mes':'este año'),'Marcá «Vine hoy al gym» en Inicio y arrancá primero en el ranking.');
   const sig=p+JSON.stringify(L.map(x=>[x.nombre,x.visitas])), anim=S.rkSig!==sig; S.rkSig=sig;
@@ -2573,13 +2608,14 @@ function rankHtml(){ const p=S.rkP||'mes'; let L=null;
   const fila=(x,k)=>`<div class="rkrow ${x.yo?'yo':''}" style="--k:${k}"><span class="rkn num">${x.pos}</span>${avatar('sm',x.foto,x.nombre)}<span class="rknom">${esc(x.nombre)}${x.yo?' <em>vos</em>':''}</span>
       <span class="rkbar"><i style="--w:${Math.max(6,Math.round(x.visitas/max*100))}%"></i></span><b class="num">${x.visitas}</b></div>`;
   const yoEn=L.find(x=>x.yo);
-  return per+`<div class="rk ${anim?'rkanim':''}">${podio}
+  S.rkDir=null; return per+`<div class="rk ${anim?'rkanim':''} ${rkDir?'rkswap '+rkDir:''}">${podio}
     ${dentro.length?`<div class="rklist">${dentro.slice(0,7).map(fila).join('')}</div>`:''}
     ${fuera?`<div class="rkdots" aria-hidden="true">···</div><div class="rklist">${fila(fuera,0)}</div>`:''}
     <p class="rknote">${yoEn?(yoEn.pos===1?'¡Vas primero! Que nadie te alcance 🔥':`Estás en el puesto ${yoEn.pos}. ${yoEn.pos<=3?'¡Estás en el podio!':'Cada entrada suma para subir.'}`):'Todavía no sumaste entradas en este período. Marcá «Vine hoy al gym» en Inicio.'}</p></div>`}
-const asSeg=()=>`<div class="seg2 asseg" role="group" aria-label="Vista" style="--m:${S.asView==='rank'?1:0}"><button data-asv="mia" aria-pressed="${S.asView!=='rank'}">Mi asistencia</button><button data-asv="rank" aria-pressed="${S.asView==='rank'}">🏆 Ranking</button></div>`;
+const asSeg=()=>{ const to=S.asView==='rank'?1:0, fr=S.asFrom!=null?S.asFrom:to; S.asFrom=null; return `<div class="seg2 asseg" role="group" aria-label="Vista" style="--m:${fr}" data-to="${to}"><button data-asv="mia" aria-pressed="${S.asView!=='rank'}">Mi asistencia</button><button data-asv="rank" aria-pressed="${S.asView==='rank'}">🏆 Ranking</button></div>` };
 function screenAsist(){
-  if(S.asView==='rank') return `<h2>Asistencia</h2>${asSeg()}${rankHtml()}`;
+  const asd=S.asDir; S.asDir=null;
+  if(S.asView==='rank') return `<h2>Asistencia</h2>${asSeg()}<div class="as43 ${asd||''}">${rankHtml()}</div>`;
   const s=me(); const y=S.calY,m=S.calM; const days=attMonth(s,y,m); const f=new Date(y,m,1); const n=new Date(y,m+1,0).getDate();
   const lead=(f.getDay()+6)%7; let cells=''; const cdir=S.calDir||''; S.calDir=null;
   for(let i=0;i<lead;i++) cells+='<span class="d e"></span>';
@@ -2588,7 +2624,7 @@ function screenAsist(){
   const alta=new Date(s.alta+'T00:00'); const prevOk=(y*12+m)>(alta.getFullYear()*12+alta.getMonth()), nextOk=(y*12+m)<(Y*12+M);
   const isCur=y===Y&&m===M; const weeks=Math.max(1,(isCur?D:n)/7);
   const total=Object.values(s.att).reduce((a,b)=>a+b.length,0);
-  return `<h2>Asistencia</h2>${asSeg()}
+  return `<i class="as43m ${asd||''}" hidden></i><h2>Asistencia</h2>${asSeg()}
   <div class="row2"><div class="tile"><div class="k">${MES[m]}</div><div class="v num"><span class="cnt x42cnt" data-count="${days.length}" data-ck="x42as${Y}-${m}" style="min-width:${String(days.length).length}ch">${days.length}</span> <span style="font-size:16px">visita${days.length===1?'':'s'}</span></div></div>
   <div class="tile"><div class="k">${total?'Por semana':'En total'}</div><div class="v num">${total?(days.length/weeks).toFixed(1).replace('.',','):'0'}</div></div></div>
   <div class="calhead"><button id="prevM" aria-label="Mes anterior" ${prevOk?'':'disabled'}>‹</button><strong>${MES[m]} ${y}</strong><button id="nextM" aria-label="Mes siguiente" ${nextOk?'':'disabled'}>›</button></div>
@@ -2682,7 +2718,7 @@ function renderSocio(){
   const scr=document.querySelector('#app .screen'); if(S.forceTop){S.forceTop=false;scr.scrollTop=0}else scr.scrollTop=keep;
   const ind=document.querySelector('.nav .ind'); if(ti>=0&&pi!==ti){void ind.offsetWidth; ind.style.setProperty('--x',ti)}
   const tmm=scr.querySelector('.tmodes'); if(tmm&&tmm.style.getPropertyValue('--m')!==tmm.dataset.to){void tmm.offsetWidth; tmm.style.setProperty('--m',tmm.dataset.to)}
-  const sg=scr.querySelector('.seg2'); if(sg&&sg.style.getPropertyValue('--m')!==sg.dataset.to){void sg.offsetWidth; sg.style.setProperty('--m',sg.dataset.to)}
+  scr.querySelectorAll('.seg2[data-to],.rkper[data-to]').forEach(sg=>{ if(sg.style.getPropertyValue('--m')!==sg.dataset.to){void sg.offsetWidth; sg.style.setProperty('--m',sg.dataset.to)} });
   countUp(scr, same);
   S.indFrom=null;
   S.lastTab=S.tab;
@@ -3055,12 +3091,12 @@ function renderMensajes(){ const byK={}, c1v=c1xChatFn(); Object.values(DB.socio
   const vista=S.chVista==='sug'&&esAdmin()?'sug':'chat', nsug=esAdmin()?SUGS.filter(x=>!x.leida).length:0, sel=S.chSel, ss=sel&&byK[sel], L=sel?(conv[sel]||[]):[];
   if(vista==='chat'&&sel) setTimeout(()=>{chAbajo(); chMarcarLeido(sel,'profe')},30);
   const sinConv=Object.values(DB.socios).filter(s=>!conv[chK(s)]&&byK[chK(s)]).sort((a,b)=>a.name.localeCompare(b.name,'es'));
-  const conversaciones=`<div class="chconv">${lista.length?lista.map((x,i)=>`<button class="chc ${x.k===sel&&vista==='chat'?'on':''} ${x.nl?'nl':''}" data-chsel="${esc(x.k)}" style="--k:${i}">${avatar('sm',x.s.photo||null,x.s.name)}<span class="chct"><b>${esc(x.s.name)}</b><small>${x.u.de==='profe'?'Vos: ':''}${esc(x.u.texto.slice(0,60))}</small></span><span class="chcm"><small>${chHora(x.u.creado)}</small>${x.nl?`<i>${x.nl}</i>`:''}</span></button>`).join(''):'<p class="muted chnada">Todavía no hay mensajes. Cuando un socio te escriba desde la app, aparece acá.</p>'}
+  const conversaciones=`<div class="chconv">${lista.length?lista.map((x,i)=>`<button class="chc ${x.k===sel&&vista==='chat'?'on':''} ${x.nl?'nl':''}" data-chsel="${esc(x.k)}" style="--k:${i}">${avatar('sm',x.s.photo||null,x.s.name)}<span class="chct"><b>${esc(x.s.name)}</b><small>${x.u.de==='profe'?'Vos: ':''}${esc(chResumen(x.u).slice(0,60))}</small></span><span class="chcm"><small>${chHora(x.u.creado)}</small>${x.nl?`<i>${x.nl}</i>`:''}</span></button>`).join(''):'<p class="muted chnada">Todavía no hay mensajes. Cuando un socio te escriba desde la app, aparece acá.</p>'}
     ${sinConv.length?`<label class="chnew"><span>Escribirle a un socio</span><select class="inp" id="chnuevo"><option value="">Elegí un socio…</option>${sinConv.map(s=>`<option value="${esc(chK(s))}">${esc(s.name)}</option>`).join('')}</select></label>`:''}</div>`;
   const hilo=vista==='sug'?`<div class="chsug"><div class="chhead"><b>Sugerencias anónimas</b><span class="muted">No se sabe quién las manda</span></div>${SUGS.length?SUGS.map((x,i)=>`<div class="sugi ${x.leida?'':'nl'}" style="--k:${i}"><p>${esc(x.texto).replace(/\n/g,'<br>')}</p><small>${chHora(x.creado)}</small><span class="sugac">${x.leida?'':`<button class="mini" data-sugleida="${x.id}">Marcar leída</button>`}<button class="mini danger" data-sugborrar="${x.id}">Borrar</button></span></div>`).join(''):'<p class="muted chnada">Todavía no llegó ninguna. Los socios las mandan desde la sección Gimnasio.</p>'}</div>`
     :ss?`<div class="chthread"><div class="chhead">${avatar('sm',ss.photo||null,ss.name)}<b>${esc(ss.name)}</b><button class="linkb" data-chficha="${esc(ss.dni)}">Ver ficha ›</button></div>
       <div class="chlist chpanel" id="chatlist">${L.length?chBurbujas(L.map(m=>Object.assign({},m,{nuevo:false})),'profe'):'<div class="chvacio"><span aria-hidden="true">💬</span><b>Empezá la charla</b><p>Lo que escribas le llega al socio en la app (y como notificación si las activó).</p></div>'}</div>
-      <form class="chbar" id="chatpf" autocomplete="off"><textarea id="chatpin" rows="1" placeholder="Escribile a ${esc(ss.name.split(' ')[0])}…" maxlength="1000" aria-label="Respuesta">${esc((S.chDraft||{})[sel]||'')}</textarea><button class="chsend" aria-label="Enviar">${ICO_SEND}</button></form></div>`
+      <form class="chbar" id="chatpf" autocomplete="off">${chAdjHtml()}<textarea id="chatpin" rows="1" placeholder="Escribile a ${esc(ss.name.split(' ')[0])}…" maxlength="1000" aria-label="Respuesta">${esc((S.chDraft||{})[sel]||'')}</textarea><button class="chsend" aria-label="Enviar">${ICO_SEND}</button></form></div>`
     :'<div class="chthread chempty"><p class="muted">Elegí una conversación.</p></div>';
   $('#app').innerHTML=`<div class="owner enter">${proBar()}<section class="panel chpanelw"><div class="panelhead"><h2>Mensajes</h2>
     ${esAdmin()?`<div class="seg2 chvis" style="--m:${vista==='sug'?1:0}"><button data-chvista="chat" aria-pressed="${vista==='chat'}">Chats</button><button data-chvista="sug" aria-pressed="${vista==='sug'}">🕶️ Sugerencias<span class="cnt y42scnt" ${nsug?'':'hidden'}>${nsug||''}</span></button></div>`:''}</div>
@@ -3565,6 +3601,10 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.30',t:'Fotos y videos en el chat',items:[
+    ['📷','Ahora podés mandar fotos y videos en el chat con tus alumnos, y ellos a vos. Tocá el ícono de la imagen al lado del cuadro de texto.'],
+    ['🔍','Tocá una foto para verla en grande. Los videos se reproducen ahí mismo.'],
+    ['🔒','Los archivos son privados: solo los ven el alumno y sus profes.']]},
   {v:'1.1.29',t:'Más prolijo, más seguro y con más dibujos',items:[
     ['💾','La info del gimnasio y los servicios ahora se guardan con «Guardar todo», como el resto.'],
     ['🏋️','Cada ejercicio del editor de rutina muestra su dibujo animado, y hay 23 ejercicios nuevos dibujados.'],
@@ -3994,7 +4034,7 @@ function c1xBau(m,mio,prim,yo){ if(!prim) return '';
   return '' }
 function c1xCab(L){ const m=L.filter(x=>x.de==='profe').pop(); const p=profeChat(); return m?{n:c1xAutor(m),f:c1xFoto(m.autor)}:{n:p.nombre,f:p.foto} }
 function c1xFabPrev(n){ if(!n||S.chSheet) return ''; const k=chK(me()), m=MSGS.filter(x=>x.k===k&&x.de==='profe'&&!x.leido).pop(); if(!m) return '';
-  const a=c1xAutor(m); return `<button type="button" class="c1xfabp" id="c1xfabp" aria-label="${esc(a)} te escribió. Abrir el chat">${avatar('xs',c1xFoto(m.autor),a)}<span><b>${esc(a)} <em>te escribió</em></b><small>${esc(String(m.texto||'').slice(0,90))}</small></span></button>` }
+  const a=c1xAutor(m); return `<button type="button" class="c1xfabp" id="c1xfabp" aria-label="${esc(a)} te escribió. Abrir el chat">${avatar('xs',c1xFoto(m.autor),a)}<span><b>${esc(a)} <em>te escribió</em></b><small>${esc(chResumen(m).slice(0,90))}</small></span></button>` }
 document.addEventListener('click',e=>{ if(S.view==='socio'&&e.target.closest&&e.target.closest('#c1xfabp')){ e.stopPropagation(); chAbrirHoja() } },true);
 
 /* ---------- plata: oculta con el ojito (se recuerda) o siempre si el profe no tiene permiso «dinero» ---------- */
@@ -4548,6 +4588,62 @@ function y42GymSave(){ if(!y42GymDirty()) return true;
 /* la barra aparece apenas cambia algo de la info del gym (después de que los otros oyentes guardan el borrador) */
 document.addEventListener('input',e=>{ if(e.target.closest&&e.target.closest('#gymf')) setTimeout(gsUpd,0) });
 document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#gymf [data-svdia]')) setTimeout(gsUpd,0) });
+
+/* ---------- lote 43: fotos y videos en el chat ---------- */
+const CH_MAX_MB=50, CHURL={};
+const ICO_ADJ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10.5" r="1.8"/><path d="M21 15.5l-5-5L7 19"/></svg>';
+const chAdjHtml=()=>`<button type="button" class="chadj" data-chadj aria-label="Mandar foto o video" title="Foto o video">${ICO_ADJ}</button><input type="file" class="chfile" accept="image/*,video/*" hidden tabindex="-1" aria-hidden="true">`;
+const chResumen=m=>m.texto||(m.media?(m.media.t==='vid'?'🎥 Video':'📷 Foto'):'');
+function chMediaSrc(m){ const d=m.media; if(!d) return ''; if(d.u) return d.u; const c=CHURL[d.p]; return c&&c.exp>Date.now()?c.u:'' }
+let chUrlPend=new Set(), chUrlT=0;
+function chPedirUrls(){ if(!CLOUD||!sb||!chUrlPend.size) return; const L=[...chUrlPend]; chUrlPend=new Set();
+  sb.storage.from('chat').createSignedUrls(L,3600*6).then(r=>{ (r.data||[]).forEach(x=>{ if(!x.signedUrl) return; CHURL[x.path]={u:x.signedUrl,exp:Date.now()+3600*6*1000-60e3};
+    document.querySelectorAll('.bmed[data-mpath="'+CSS.escape(x.path)+'"]').forEach(el=>chMediaPoner(el,x.signedUrl)) }) }).catch(()=>{}) }
+function chMediaPoner(el,u){ const t=el.dataset.mt; if(el.querySelector('img,video')) return;
+  el.insertAdjacentHTML('afterbegin',t==='vid'?`<video src="${esc(u)}" controls playsinline preload="metadata"></video>`:`<img src="${esc(u)}" alt="Foto" loading="lazy" decoding="async">`);
+  const v=el.querySelector('img,video'); const ok=()=>el.classList.add('lista'); if(t==='vid') v.addEventListener('loadeddata',ok,{once:true}); else if(v.complete) ok(); else v.addEventListener('load',ok,{once:true}); setTimeout(ok,2500) }
+function chMediaHtml(m){ const d=m.media, w=+d.w||4, h=+d.h||3, ar=Math.min(1.9,Math.max(.56,w/h)), u=chMediaSrc(m);
+  if(!u&&d.p){ chUrlPend.add(d.p); clearTimeout(chUrlT); chUrlT=setTimeout(chPedirUrls,30) }
+  const med=u?(d.t==='vid'?`<video src="${esc(u)}" controls playsinline preload="metadata"></video>`:`<img src="${esc(u)}" alt="Foto" decoding="async">`):'';
+  return `<div class="bmed ${d.t} ${u?'lista':''} ${m.env?'subiendo':''}" data-mt="${d.t}" ${d.p?`data-mpath="${esc(d.p)}"`:''} style="--ar:${ar}">${med}${m.env?'<span class="bmup" aria-label="Enviando"><i></i></span>':''}${d.t==='vid'&&!u?'<span class="bmplay" aria-hidden="true">▶</span>':''}</div>` }
+function chImgProcesar(file){ return new Promise((res,rej)=>{ if(/gif$/i.test(file.type)){ const i=new Image(); i.onload=()=>res({blob:file,w:i.naturalWidth,h:i.naturalHeight,ext:'gif',type:'image/gif'}); i.onerror=rej; i.src=URL.createObjectURL(file); return }
+  const i=new Image(); i.onload=()=>{ const max=1600, k=Math.min(1,max/Math.max(i.naturalWidth,i.naturalHeight)), w=Math.round(i.naturalWidth*k), h=Math.round(i.naturalHeight*k);
+    const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(i,0,0,w,h); URL.revokeObjectURL(i.src);
+    c.toBlob(b=>b?res({blob:b,w,h,ext:'jpg',type:'image/jpeg'}):rej(new Error('img')),'image/jpeg',.84) };
+  i.onerror=()=>rej(new Error('No se pudo leer la foto')); i.src=URL.createObjectURL(file) }) }
+function chVidProcesar(file){ return new Promise(res=>{ const v=document.createElement('video'); let listo=false; const fin=(w,h)=>{ if(listo) return; listo=true; URL.revokeObjectURL(v.src); res({blob:file,w:w||16,h:h||9,ext:(file.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'')||'mp4',type:file.type||'video/mp4'}) };
+  v.preload='metadata'; v.muted=true; v.onloadedmetadata=()=>fin(v.videoWidth,v.videoHeight); v.onerror=()=>fin(); setTimeout(()=>fin(),4000); v.src=URL.createObjectURL(file) }) }
+const chALeer=b=>new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(b) });
+async function chEnviarMedia(file,k,yo,txt){ txt=String(txt||'').trim().slice(0,1000);
+  const esVid=/^video\//.test(file.type), esImg=/^image\//.test(file.type);
+  if(!esVid&&!esImg){ toast('Solo se pueden mandar fotos o videos'); return false }
+  if(file.size>CH_MAX_MB*1048576){ toast(`${esVid?'El video':'La foto'} pesa demasiado (máximo ${CH_MAX_MB} MB). Probá con ${esVid?'uno más corto':'otra'}.`); return false }
+  let pr; try{ pr=esVid?await chVidProcesar(file):await chImgProcesar(file) }catch(e){ toast('No se pudo leer el archivo'); return false }
+  const autor=yo==='socio'?(me()||{}).name:c1xYoAutor(); MSGS.forEach(x=>x.nuevo=false);
+  const media={t:esVid?'vid':'img',w:pr.w,h:pr.h};
+  const m={id:'t'+Date.now(),k,de:yo,autor,texto:txt,media:Object.assign({u:URL.createObjectURL(pr.blob)},media),file,creado:new Date().toISOString(),leido:false,env:true,nuevo:true}; MSGS.push(m);
+  const pintar=()=>{ const lst=document.getElementById('chatlist'); if(lst&&chKAct()===k){ lst.innerHTML=chBurbujas(MSGS.filter(x=>x.k===k),yo); chAbajo(true) } };
+  pintar();
+  if(!CLOUD){ if(esVid&&file.size>8*1048576){ m.env=false; m.err=true; pintar(); toast('En la demo los videos tienen que pesar menos de 8 MB'); return false }
+    try{ m.media.u=await chALeer(pr.blob) }catch(e){} m.id=Date.now(); m.env=false; delete m.file; pintar(); chGuardarLocal(); return true }
+  try{ const id=(crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g,()=>(Math.random()*16|0).toString(16)));
+    const path=k+'/'+id+'.'+pr.ext;
+    const up=await sb.storage.from('chat').upload(path,pr.blob,{contentType:pr.type,upsert:false}); if(up.error) throw up.error;
+    const meta=Object.assign({p:path},media);
+    const r=yo==='socio'?await sb.rpc('chat_enviar_media',{p_texto:txt,p_media:meta}):await sb.rpc('chat_responder_media',{p_socio:k,p_texto:txt,p_autor:autor,p_media:meta});
+    if(r.error) throw r.error; CHURL[path]={u:m.media.u,exp:Date.now()+3600e3}; m.id=r.data; m.media=Object.assign({u:m.media.u},meta); m.env=false; delete m.file }
+  catch(e){ m.env=false; m.err=true; toast(errTxt(e)||'No se pudo enviar. Probá de nuevo.') }
+  m.nuevo=false; pintar(); return true }
+document.addEventListener('click',e=>{ const a=e.target.closest('[data-chadj]'); if(!a) return; e.preventDefault(); e.stopPropagation(); const f=a.parentNode.querySelector('.chfile'); if(f){ f.value=''; f.click() } },true);
+document.addEventListener('change',async e=>{ const f=e.target; if(!f.classList||!f.classList.contains('chfile')||!f.files||!f.files.length) return;
+  const form=f.closest('form'), t=form&&form.querySelector('textarea'), socio=form&&form.id==='chatf', k=socio?chK(me()):S.chSel; if(!k) return;
+  const txt=t&&!S.chEdit?t.value:''; if(t&&txt){ t.value=''; t.style.height=''; if(socio) S.chatDraft=''; else (S.chDraft||{})[S.chSel]=''; chUpdBar() }
+  const files=[...f.files].slice(0,6); for(let i=0;i<files.length;i++) await chEnviarMedia(files[i],k,socio?'socio':'profe',i===0?txt:'') });
+/* visor de fotos a pantalla completa */
+document.addEventListener('click',e=>{ const im=e.target.closest('.bmed.img img'); if(im){ e.preventDefault(); e.stopPropagation();
+    document.body.insertAdjacentHTML('beforeend',`<div class="chvisor" id="chvisor" role="dialog" aria-label="Foto"><img src="${esc(im.src)}" alt="Foto"><button type="button" class="chvx" aria-label="Cerrar">×</button></div>`); return }
+  const v=e.target.closest('#chvisor'); if(v){ e.stopPropagation(); v.classList.add('fuera'); setTimeout(()=>v.remove(),200) } },true);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ const v=document.getElementById('chvisor'); if(v){ e.stopImmediatePropagation(); v.remove() } } },true);
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
@@ -4644,14 +4740,14 @@ const chBurbujas=(L,yo)=>{ let out='', dia=null;
   L.forEach((m,i)=>{ const dd=chDia(m.creado); if(dd!==dia){ dia=dd; out+=`<div class="chday"><span>${dd}</span></div>` }
     const mio=m.de===yo, ant=L[i-1], sig=L[i+1], prim=!ant||ant.de!==m.de||chDia(ant.creado)!==dd, ult=!sig||sig.de!==m.de||chDia(sig.creado)!==dd;
     const st=mio?(m.err?'':m.env?TKR:m.leido?TK2:TK1):'';
-    out+=`<div class="bub ${mio?'mio':'otro'} ${prim?'prim':''} ${ult?'ult':''} ${m.env?'env':''} ${m.err?'err':''} ${m.nuevo?'nuevo':''} ${m.flash?'eflash':''} ${S.chEdit&&String(S.chEdit.id)===String(m.id)?'editando':''}" data-mid="${esc(m.id)}">${!mio&&ult?`<span class="bav">${avatar('xs',m.de==='socio'?(Object.values(DB.socios).find(x=>chK(x)===m.k)||{}).photo||null:c1xFoto(m.autor),m.de==='profe'?c1xAutor(m):(m.autor||PROFE))}</span>`:''}${c1xBau(m,mio,prim,yo)}<p>${chLink(m.texto)}</p><small>${m.editado?'<em class="bed">editado</em>':''}${chHm(m.creado)}${st}</small>${m.err?`<button type="button" class="bretry" data-retry="${esc(m.id)}">No se envió · Reintentar</button>`:''}</div>` });
+    out+=`<div class="bub ${mio?'mio':'otro'} ${m.media?'bconm':''} ${prim?'prim':''} ${ult?'ult':''} ${m.env?'env':''} ${m.err?'err':''} ${m.nuevo?'nuevo':''} ${m.flash?'eflash':''} ${S.chEdit&&String(S.chEdit.id)===String(m.id)?'editando':''}" data-mid="${esc(m.id)}">${!mio&&ult?`<span class="bav">${avatar('xs',m.de==='socio'?(Object.values(DB.socios).find(x=>chK(x)===m.k)||{}).photo||null:c1xFoto(m.autor),m.de==='profe'?c1xAutor(m):(m.autor||PROFE))}</span>`:''}${c1xBau(m,mio,prim,yo)}${m.media?chMediaHtml(m):''}${m.texto?`<p>${chLink(m.texto)}</p>`:''}<small>${m.editado?'<em class="bed">editado</em>':''}${chHm(m.creado)}${st}</small>${m.err?`<button type="button" class="bretry" data-retry="${esc(m.id)}">No se envió · Reintentar</button>`:''}</div>` });
   return out };
 const ICO_SEND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
 async function cargarChat(){ if(!CLOUD||!sb) return;
   try{ const r=await sb.from('mensajes').select('*').order('id').limit(3000); if(r.error) return;
     let sg=SUGS; if(S.pro&&esAdmin()){ const q=await sb.from('sugerencias').select('*').order('id',{ascending:false}).limit(300); if(!q.error) sg=q.data.map(x=>({id:x.id,texto:x.texto,creado:x.creado,leida:x.leida})) }
     const viejos=new Set(MSGS.map(m=>m.id)), antes=JSON.stringify([MSGS,SUGS]);
-    MSGS=r.data.map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,creado:m.creado,leido:m.leido,editado:m.editado||null,nuevo:viejos.size&&!viejos.has(m.id)}));
+    MSGS=r.data.map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,media:m.media||null,creado:m.creado,leido:m.leido,editado:m.editado||null,nuevo:viejos.size&&!viejos.has(m.id)}));
     SUGS=sg; if(antes!==JSON.stringify([MSGS,SUGS])) chRefrescar(true) }catch(e){} }
 function chRefrescar(dePush){
   const yoSocio=S.view==='socio'&&S.user, enChat=yoSocio&&(S.tab==='chat'||(S.tab==='inicio'&&S.chSheet)), enPanel=S.view==='duenio'&&S.pro&&S.ptabP==='mensajes';
@@ -4680,7 +4776,7 @@ async function chEnviar(txt,k,yo){ txt=String(txt||'').trim(); if(!txt) return f
     if(r.error) throw r.error; m.id=r.data; m.env=false }catch(e){ m.env=false; m.err=true; toast(errTxt(e)||'No se pudo enviar. Probá de nuevo.') }
   m.nuevo=false; if(lst){ const L=MSGS.filter(x=>x.k===k); lst.innerHTML=chBurbujas(L,yo); chAbajo() } return true }
 const CH_EDIT_MIN=15;
-const chEditable=(m,yo)=>m&&m.de===yo&&typeof m.id==='number'&&!m.env&&!m.err&&Date.now()-new Date(m.creado).getTime()<CH_EDIT_MIN*60e3;
+const chEditable=(m,yo)=>m&&!!m.texto&&m.de===yo&&typeof m.id==='number'&&!m.env&&!m.err&&Date.now()-new Date(m.creado).getTime()<CH_EDIT_MIN*60e3;
 const chYo=()=>document.getElementById('chatf')?'socio':'profe';
 const chKAct=()=>document.getElementById('chatf')?chK(me()):S.chSel;
 function chPintar(){ const l=document.getElementById('chatlist'); if(!l) return; const L=MSGS.filter(x=>x.k===chKAct()); if(L.length) l.innerHTML=chBurbujas(L,chYo()) }
@@ -4689,7 +4785,7 @@ function chAbrirMenu(b){ const m=MSGS.find(x=>String(x.id)===b.dataset.mid); if(
   const l=b.closest('.chlist'), arriba=l&&(b.offsetTop-l.scrollTop<70);
   const ed=chEditable(m,yo), viejo=m.de===yo&&typeof m.id==='number'&&!ed;
   b.classList.add('menu');
-  b.insertAdjacentHTML('beforeend',`<div class="bmenu ${arriba?'abajo':''}" role="menu">${ed?'<button type="button" data-bact="editar" role="menuitem">✏️ Editar</button>':''}<button type="button" data-bact="copiar" role="menuitem">📋 Copiar</button>${viejo?`<span class="bmnote">Se edita hasta ${CH_EDIT_MIN} min después</span>`:''}</div>`);
+  b.insertAdjacentHTML('beforeend',`<div class="bmenu ${arriba?'abajo':''}" role="menu">${ed?'<button type="button" data-bact="editar" role="menuitem">✏️ Editar</button>':''}${m.texto?'<button type="button" data-bact="copiar" role="menuitem">📋 Copiar</button>':''}${m.media&&chMediaSrc(m)?`<a class="bmdl" href="${esc(chMediaSrc(m))}" target="_blank" rel="noopener" download role="menuitem">⬇️ Guardar ${m.media.t==='vid'?'video':'foto'}</a>`:''}${viejo?`<span class="bmnote">Se edita hasta ${CH_EDIT_MIN} min después</span>`:''}</div>`);
   try{navigator.vibrate&&navigator.vibrate(12)}catch(x){} }
 function chEntrarEdit(m){ const t=$('#chatpin')||$('#chatin'); if(!t) return; const f=t.form;
   S.chEdit={id:m.id,form:f.id,antes:t.value}; f.classList.add('editmode');
@@ -4711,13 +4807,13 @@ document.addEventListener('click',e=>{ const a=e.target.closest('[data-bact]');
     if(a.dataset.bact==='editar') chEntrarEdit(m);
     else { (navigator.clipboard?navigator.clipboard.writeText(m.texto):Promise.reject()).then(()=>toast('Mensaje copiado'),()=>toast('No se pudo copiar')) } return }
   if(e.target.closest('#chex')){ e.stopPropagation(); return chSalirEdit(true) }
-  const b=e.target.closest('.chlist .bub'); if(b&&!e.target.closest('a,button')){ if(b.classList.contains('menu')) chCerrarMenu(); else chAbrirMenu(b); return }
+  const b=e.target.closest('.chlist .bub'); if(b&&!e.target.closest('a,button,.bmed')){ if(b.classList.contains('menu')) chCerrarMenu(); else chAbrirMenu(b); return }
   if(!e.target.closest('.bmenu')) chCerrarMenu() },true);
 document.addEventListener('contextmenu',e=>{ const b=e.target.closest('.chlist .bub'); if(b){ e.preventDefault(); chAbrirMenu(b) } });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.chEdit){ e.stopImmediatePropagation(); chSalirEdit(true) } },true);
 document.addEventListener('scroll',e=>{ if(e.target&&e.target.classList&&e.target.classList.contains('chlist')) chCerrarMenu() },true);
 async function chReintentar(id){ const i=MSGS.findIndex(x=>String(x.id)===String(id)); if(i<0) return; const m=MSGS[i]; MSGS.splice(i,1);
-  await chEnviar(m.texto,m.k,m.de) }
+  if(m.media&&m.file) return chEnviarMedia(m.file,m.k,m.de,m.texto); await chEnviar(m.texto,m.k,m.de) }
 async function sugEnviar(txt){ txt=String(txt||'').trim(); if(txt.length<3){toast('Escribí un poco más');return false}
   if(!CLOUD){ SUGS.unshift({id:Date.now(),texto:txt.slice(0,800),creado:new Date().toISOString(),leida:false}); chGuardarLocal(); return true }
   try{ const r=await sb.rpc('enviar_sugerencia',{p_texto:txt}); if(r.error) throw r.error; return true }catch(e){ toast(errTxt(e)||'No se pudo mandar. Probá de nuevo.'); return false } }
@@ -4732,7 +4828,7 @@ function chatSocioUI(modo){ const k=chK(me()), L=MSGS.filter(m=>m.k===k).map(m=>
     ${modo==='sheet'?`<button class="chfull" data-tab="chat" aria-label="Abrir en pantalla completa" title="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button><button class="chx" id="chsheetx" aria-label="Cerrar">×</button>`:''}</div>
   <div class="chlist" id="chatlist">${L.length?chBurbujas(L,'socio'):`<div class="chvacio"><span class="chola" aria-hidden="true">👋</span><b>¡Hola! Soy ${esc(pn)}</b><p>Preguntame lo que necesites: tu rutina, una molestia, si no podés venir o la cuota. Te respondo acá y te llega una notificación.</p></div>`}</div>
   <div class="chchips" id="chchips" ${dr?'hidden':''} role="group" aria-label="Mensajes rápidos">${CHIPS.map(([e,c],i)=>`<button type="button" data-chip="${esc(c)}" style="--k:${i}"><span aria-hidden="true">${e}</span>${esc(c)}</button>`).join('')}</div>
-  <form class="chbar" id="chatf" autocomplete="off"><div class="chin"><textarea id="chatin" rows="1" placeholder="Escribile a ${esc(pn)}…" maxlength="1000" aria-label="Mensaje para ${esc(pn)}" enterkeyhint="send">${esc(dr)}</textarea><span class="chcnt" id="chcnt" aria-live="polite"></span></div><button class="chsend" aria-label="Enviar" ${dr.trim()?'':'disabled'}>${ICO_SEND}</button></form></div>`}
+  <form class="chbar" id="chatf" autocomplete="off">${chAdjHtml()}<div class="chin"><textarea id="chatin" rows="1" placeholder="Escribile a ${esc(pn)}…" maxlength="1000" aria-label="Mensaje para ${esc(pn)}" enterkeyhint="send">${esc(dr)}</textarea><span class="chcnt" id="chcnt" aria-live="polite"></span></div><button class="chsend" aria-label="Enviar" ${dr.trim()?'':'disabled'}>${ICO_SEND}</button></form></div>`}
 function screenChat(){ if(S.lastTab&&S.lastTab!=='chat') S.chBack=S.lastTab; S.chSheet=false; return chatSocioUI('full') }
 function chUpdBar(){ if(S.chEdit&&!document.getElementById(S.chEdit.form)) S.chEdit=null; const t=document.getElementById('chatin'); if(!t) return; const v=t.value, b=t.form&&t.form.querySelector('.chsend'), c=document.getElementById('chchips'), n=document.getElementById('chcnt');
   if(b) b.disabled=!v.trim(); if(c) c.hidden=!!v; if(n) n.textContent=v.length>800?(1000-v.length)+'':'' }
@@ -4774,7 +4870,7 @@ function screenGimnasio(){
   const lk=(cl,h,ico,t,sub)=>`<a class="gbtn ${cl}" href="${esc(h)}" ${cl==='tel'?'':'target="_blank" rel="noopener"'}><span class="gi">${ico}</span><span class="gtx"><b>${t}</b><small>${sub}</small></span><span class="garr" aria-hidden="true">›</span></a>`;
   const cont=[wa&&lk('wa',wa,GICO.wa,'WhatsApp','Escribile a '+P1), tel&&lk('tel',tel,GICO.tel,'Llamar',esc(gTxt(g.telefono))), ig&&lk('ig',ig,GICO.ig,'Instagram','@'+esc(igUser(g.instagram)))].filter(Boolean);
   const monto=s&&s.plan?(e.c==='bad'?montoMes(s,M):s.precio):0;
-  return `<h2>Gimnasio</h2>${chatCard()}${gnListaHtml()}
+  return `<h2>Gimnasio</h2>${gnListaHtml()}
   <div class="gymscr" style="display:contents">
   ${d||maps?`<section class="card gubic"><span class="gico">${GICO.pin}</span><span class="gtx"><small>Ubicación</small><b>${d?esc(d):'Training Club'}</b></span>${maps?`<a class="btn sm" href="${esc(maps)}" target="_blank" rel="noopener">Cómo llegar</a>`:''}</section>`:''}
   ${cont.length?`<section class="card"><div class="ttl"><b>Contacto</b></div><div class="glinks">${cont.join('')}</div></section>`:''}
@@ -4892,8 +4988,8 @@ document.addEventListener('click',e=>{
   if(b.id==='fin'){return render()}
   if(b.dataset.m){S.selMonth=+b.dataset.m;return render()}
   if(b.dataset.mrk!=null){ S.asView='rank'; S.rkP=S.mrkCara||'mes'; S.rkSig=null; S.tab='asist'; S.forceTop=true; return render() }
-  if(b.dataset.asv){ if((S.asView==='rank')!==(b.dataset.asv==='rank')){ S.asView=b.dataset.asv==='rank'?'rank':'mia'; S.rkSig=null } return render(true) }
-  if(b.dataset.rkp){ if(S.rkP!==b.dataset.rkp){ S.rkP=b.dataset.rkp; S.rkSig=null } return render(true) }
+  if(b.dataset.asv){ if((S.asView==='rank')!==(b.dataset.asv==='rank')){ S.asFrom=S.asView==='rank'?1:0; S.asDir=b.dataset.asv==='rank'?'izq':'der'; S.asView=b.dataset.asv==='rank'?'rank':'mia'; S.rkSig=null; return render() } return }
+  if(b.dataset.rkp){ if((S.rkP||'mes')!==b.dataset.rkp){ S.rkFrom=(S.rkP||'mes')==='anio'?1:0; S.rkDir=b.dataset.rkp==='anio'?'izq':'der'; S.rkP=b.dataset.rkp; S.rkSig=null; return render() } return }
   if(b.id==='prevM'){S.calM--;if(S.calM<0){S.calM=11;S.calY--} S.calDir='prev'; return render()}
   if(b.id==='nextM'){S.calM++;if(S.calM>11){S.calM=0;S.calY++} S.calDir='next'; return render()}
   /* progreso */
