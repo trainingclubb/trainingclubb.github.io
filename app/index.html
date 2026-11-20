@@ -1625,6 +1625,72 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .hsconfsi:disabled{opacity:.6}
 .hsconfno{background:#ffffff1f;color:#fff}
 @keyframes hssube{from{transform:translateY(20px);opacity:0}}
+/* v50 · revisión general */
+@media (pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),textarea,select{font-size:max(16px,1em)!important}}
+.del,.mrktabs button,.link{position:relative}
+.del::after,.mrktabs button::after,.link::after{content:'';position:absolute;top:-10px;bottom:-10px;left:-6px;right:-6px}
+#pmotiv,#gn_a,#cuni,[data-msel]{width:20px;height:20px;accent-color:var(--teal)}
+#offbar{position:fixed;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:9998;display:flex;gap:6px;align-items:center;padding:8px 14px;border-radius:999px;background:#2b1d1d;color:#ffd7d7;border:1px solid #ff6b6b55;font:700 13px system-ui,sans-serif;box-shadow:0 8px 24px #0006;pointer-events:none;animation:offin .35s cubic-bezier(.2,.9,.3,1.2)}
+#offbar[hidden]{display:none}
+@keyframes offin{from{transform:translate(-50%,-140%);opacity:0}}
+/* animaciones generales: tocar, diálogos y avisos */
+.card,.panel{transition:transform .2s ease,box-shadow .25s ease}
+dialog[open]:not(.hsig):not(.hsvisor){animation:dlgin .28s cubic-bezier(.2,.85,.25,1.1)}
+dialog[open]:not(.hsig):not(.hsvisor)::backdrop{animation:bdin .25s ease}
+@keyframes dlgin{from{opacity:0;transform:translateY(14px) scale(.97)}}
+@keyframes bdin{from{opacity:0}}
+.owner.enter>.panel-pagos>*{animation:rise .45s var(--ease) both}
+.owner.enter>.panel-pagos>*:nth-child(2){animation-delay:.06s}
+/* historias: visor, envío y editor */
+.hsig::backdrop{background:transparent}
+.hsav.fallo{--ring:#ed4956}
+.hsav.fallo i{background:#ed4956}
+.hsghost{position:fixed;z-index:10000;object-fit:cover;pointer-events:none;box-shadow:0 14px 40px #0009}
+.hsvisor[open]{animation:dlgin .3s cubic-bezier(.2,.85,.25,1)}
+.hsvisor footer .hsshare,.hsed .hsshare{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;background:#fff;color:#000;font:800 15px system-ui,sans-serif;padding:12px 18px;cursor:pointer;box-shadow:0 6px 20px #0006;transition:transform .2s cubic-bezier(.2,.9,.3,1.3)}
+.hsshare{white-space:nowrap;flex:none}
+.hsshare span{font-size:20px;line-height:0}
+.hsshare:active{transform:scale(.94)}
+.hsshare:disabled{opacity:.6}
+.hsed{touch-action:none}
+.hscv{position:absolute;top:50%;left:50%;max-width:100%;max-height:100%;transform:translate(-50%,-50%);touch-action:none;cursor:grab}
+.hsedtop{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;gap:6px;align-items:center;padding:12px 10px;background:linear-gradient(#0008,#0000);transition:opacity .2s}
+.hsedsp{flex:1}
+.hsedb{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:0;background:#0000004d;color:#fff;font:700 22px/1 system-ui,sans-serif;cursor:pointer;transition:transform .2s cubic-bezier(.2,.9,.3,1.3),background .2s}
+.hsedb:active{transform:scale(.88)}
+.hsedb:disabled{opacity:.35}
+.hsedb[aria-pressed="true"]{background:#fff;color:#000}
+.hsaa{font-size:17px;font-weight:800}
+.hsedpin{position:absolute;top:66px;left:10px;right:10px;z-index:3;display:grid;gap:10px;justify-items:center;animation:hsbaja .22s ease;transition:opacity .2s}
+.hsedpin[hidden],.hspal[hidden],.hstxt[hidden]{display:none}
+.hstipos{display:flex;gap:6px;padding:4px;border-radius:999px;background:#0000006b}
+.hstipos button{display:grid;justify-items:center;gap:1px;min-width:62px;padding:6px 8px;border:0;border-radius:999px;background:none;color:#fff;cursor:pointer;font:inherit;transition:background .2s,color .2s}
+.hstipos button i{font-style:normal;font-size:17px;line-height:1.1}
+.hstipos button small{font-size:10.5px;font-weight:700}
+.hstipos button[aria-checked="true"]{background:#fff;color:#000}
+.hsgros{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:#0000006b;color:#fff;font:700 12px system-ui,sans-serif}
+.hsgros input{width:150px;accent-color:#fff}
+.hspal{position:absolute;left:0;right:0;bottom:84px;z-index:5;display:flex;gap:7px;justify-content:safe center;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:6px 12px;animation:hssube .22s ease;transition:opacity .2s}
+.hspal button{flex:none;width:28px;height:28px;border-radius:50%;border:3px solid #fff;background:var(--c);cursor:pointer;padding:0;box-shadow:0 2px 8px #0006;transition:transform .2s cubic-bezier(.2,.9,.3,1.4)}
+.hspal button[aria-checked="true"]{transform:scale(1.25)}
+.hsedbot{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;gap:10px;justify-content:space-between;padding:14px 12px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(#0000,#0009);transition:opacity .2s}
+.hsfmts{display:flex;gap:4px;padding:4px;border-radius:999px;background:#0000006b;overflow-x:auto;scrollbar-width:none;min-width:0}
+.hsfmts button{flex:none;padding:7px 10px;border:0;border-radius:999px;background:none;color:#fff;font:700 12.5px system-ui,sans-serif;cursor:pointer;transition:background .2s,color .2s}
+.hsfmts button[aria-checked="true"]{background:#fff;color:#000}
+.hsed.hspinta .hsfmts{opacity:0;pointer-events:none}
+.hsed.hstexto .hsedtop,.hsed.hstexto .hsedbot,.hsed.hstexto .hsedpin{opacity:0;pointer-events:none}
+.hsed.hsedoc .hsedtop,.hsed.hsedoc .hsedbot,.hsed.hsedoc .hsedpin,.hsed.hsedoc .hspal{opacity:0;pointer-events:none}
+.hstxt{position:absolute;top:0;left:0;right:0;bottom:0;z-index:4;display:grid;grid-template-rows:auto 1fr;background:#000a;animation:hsentra .18s ease}
+.hstxtbar{display:flex;align-items:center;gap:8px;padding:12px 10px}
+.hstxtlisto{border:0;background:none;color:#fff;font:800 16px system-ui,sans-serif;padding:10px 12px;cursor:pointer}
+.hstxta{align-self:center;justify-self:center;width:auto;min-width:40%;max-width:88%;field-sizing:content;max-height:50%;resize:none;overflow:hidden;border:0;outline:0;border-radius:12px;padding:8px 12px;background:transparent;font:800 32px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;text-align:center;text-shadow:0 2px 12px #0006}
+.hstxta::placeholder{color:#ffffff8c}
+.hsed .hstxta{font-size:32px!important}
+.hsdel{position:absolute;left:50%;bottom:42px;z-index:3;display:grid;place-items:center;width:56px;height:56px;margin-left:-28px;border-radius:50%;border:2px solid #fff;background:#0007;font-size:24px;opacity:0;transform:scale(.6);pointer-events:none;transition:opacity .2s,transform .2s cubic-bezier(.2,.9,.3,1.4),background .2s}
+.hsdel.ver{opacity:1;transform:none}
+.hsdel.sobre{transform:scale(1.3);background:#ed4956}
+@keyframes hsbaja{from{opacity:0;transform:translateY(-10px)}}
+@media (prefers-reduced-motion:reduce){.hsedpin,.hspal,.hstxt,#offbar,dialog[open]{animation:none!important}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2554,11 +2620,11 @@ function hsGrupos(){
   return historias.orden.map(k=>gs.find(g=>g.k===k)).filter(Boolean);
 }
 function hsAvatar(g,cls){const n=String(g.autor||'?').trim();let h=0;for(const c of String(g.k))h=(h*31+c.charCodeAt(0))%360;
-  return `<span class="hsav ${cls||''}" style="--hh:${h}" aria-hidden="true"><i>${esc((n[0]||'?').toUpperCase())}</i></span>`}
+  return `<span class="hsav ${cls||''}" style="--hh:${h}" aria-hidden="true"><i>${cls==='fallo'?'!':esc((n[0]||'?').toUpperCase())}</i></span>`}
 function historiasFila(){
   const gs=hsGrupos(),yo=me()?.id,mio=gs.find(g=>g.k===yo),otros=gs.filter(g=>g.k!==yo);
-  const yoG={k:yo||'yo',autor:me()?.name||first()||'Yo'},anillo=historias.subiendo?'sube':mio?(mio.visto?'visto':'nuevo'):'';
-  const tu=`<div class="hsit" role="listitem"><button class="hsbt" ${mio?`data-hs-ver="${esc(yo)}" aria-label="Ver tu historia"`:'data-hs-add aria-label="Publicar una historia"'}>${hsAvatar(yoG,anillo)}<small>Tu historia</small></button><button class="hsmas" data-hs-add aria-label="Publicar una historia" ${historias.subiendo?'disabled':''}>+</button></div>`;
+  const yoG={k:yo||'yo',autor:me()?.name||first()||'Yo'},anillo=historias.subiendo?'sube':historias.fallo?'fallo':mio?(mio.visto?'visto':'nuevo'):'';
+  const tu=`<div class="hsit" role="listitem"><button class="hsbt" ${historias.fallo?'data-hs-reint aria-label="No se subió tu historia. Tocá para reintentar"':mio?`data-hs-ver="${esc(yo)}" aria-label="Ver tu historia"`:'data-hs-add aria-label="Publicar una historia"'}>${hsAvatar(yoG,anillo)}<small>Tu historia</small></button><button class="hsmas" data-hs-add aria-label="Publicar una historia" ${historias.subiendo?'disabled':''}>+</button></div>`;
   let resto;
   if(historias.error)resto='<div class="hsit" role="listitem"><button class="hsbt" data-hs-retry><span class="hsav visto" aria-hidden="true"><i>↻</i></span><small>Reintentar</small></button></div>';
   else if(!historias.cargado)resto='<div class="hsit hsesq" aria-hidden="true"><span class="hsav"><i></i></span><small></small></div>'.repeat(2)+'<span class="hssr" role="status">Cargando historias…</span>';
@@ -2606,12 +2672,13 @@ async function hsUrl(h){
   }).finally(()=>{delete h.firma});
   return h.firma;
 }
-function hsVer(k){
+function hsVer(k,origen){
   const gs=hsGrupos();let gi=gs.findIndex(g=>g.k===k);if(gi<0)return hsCargar(true);
   const v0=hsVistas();let si=gs[gi].items.findIndex(h=>!v0.has(h.ruta));if(si<0)si=0;
   const d=document.createElement('dialog');d.className='hsig';d.setAttribute('aria-label','Historias');
   d.innerHTML='<div class="hsbox"><div class="hsbar"></div><header><span class="hsquien"></span><button class="hsborrar" hidden aria-label="Eliminar esta historia">🗑️</button><button class="hsmute" hidden aria-label="Sonido">🔇</button><button class="hscerrar" aria-label="Cerrar">×</button></header><div class="hsmedia"></div><div class="hsconf" hidden role="alertdialog" aria-label="Eliminar historia"><b>¿Eliminar esta historia?</b><p>Se borra para todos y no se puede recuperar.</p><button class="hsconfsi">Eliminar</button><button class="hsconfno">Cancelar</button></div></div><nav><button class="hsprev" aria-label="Anterior">‹</button><button class="hsnext" aria-label="Siguiente">›</button></nav>';
   document.body.append(d);d.showModal();
+  const quieto=hsQuieto();let dirAutor=0,cerrando=false;
   const box=d.querySelector('.hsbox'),bar=d.querySelector('.hsbar'),caja=d.querySelector('.hsmedia'),quien=d.querySelector('.hsquien'),mute=d.querySelector('.hsmute'),borrar=d.querySelector('.hsborrar'),conf=d.querySelector('.hsconf');
   let confAbierto=false,turno=0,raf=0,dur=5000,trans=0,inicio=0,pausa=true,cargando=true,el=null,retenido=false,pd=null,holdT=0;
   const esVideo=h=>/\.(mp4|webm)$/i.test(h.ruta);
@@ -2642,32 +2709,42 @@ function hsVer(k){
       await new Promise((ok,no)=>{m[vid?'onloadedmetadata':'onload']=ok;m.onerror=no;m.src=url});
       if(!d.open||t!==turno)return;
       caja.replaceChildren(m);el=m;cargando=false;
+      if(dirAutor&&!quieto){const a=[{transform:`translateX(${dirAutor*28}%) scale(.94)`,opacity:0},{transform:'none',opacity:1}];caja.animate(a,{duration:300,easing:'cubic-bezier(.2,.8,.2,1)'});quien.animate(a,{duration:300,easing:'cubic-bezier(.2,.8,.2,1)'})}dirAutor=0;
       if(vid){mute.hidden=false;mute.textContent=m.muted?'🔇':'🔊';
         if(!retenido&&!document.hidden)try{await m.play()}catch{m.muted=hsMudo=true;mute.textContent='🔇';m.play().catch(()=>{})}}
       if(t===turno)pausar(false);precargar();
     }catch{if(d.open&&t===turno){caja.innerHTML='<p class="hserr">No se pudo cargar esta historia.</p>';cargando=false;dur=2500;pausar(false)}}
   }
-  function irGrupo(n){gi=n;const v=hsVistas();si=gs[gi].items.findIndex(h=>!v.has(h.ruta));if(si<0)si=0;mostrar()}
-  function siguiente(){if(si<gs[gi].items.length-1){si++;mostrar()}else if(gi<gs.length-1)irGrupo(gi+1);else d.close()}
-  function anterior(){if(si>0){si--;mostrar()}else if(gi>0){gi--;si=0;mostrar()}else mostrar()}
-  function sigAutor(){gi<gs.length-1?irGrupo(gi+1):d.close()}
-  function antAutor(){if(gi>0){gi--;si=0}else si=0;mostrar()}
+  function circulo(k){const a=document.querySelector('#historias [data-hs-ver="'+CSS.escape(k)+'"] .hsav');if(!a)return null;const r=a.getBoundingClientRect();return r.width&&r.bottom>0&&r.top<innerHeight?r:null}
+  function zoom(r,inv){const b=box.getBoundingClientRect(),s=r.width/b.width,dx=r.left+r.width/2-(b.left+b.width/2),dy=r.top+r.height/2-(b.top+b.height/2),R=Math.hypot(b.width,b.height)/2+2;
+    const k1={transform:`translate(${dx}px,${dy}px) scale(${s})`,clipPath:`circle(${b.width/2}px at 50% 50%)`,opacity:.35},k2={transform:'none',clipPath:`circle(${R}px at 50% 50%)`,opacity:1};
+    return box.animate(inv?[k2,k1]:[k1,k2],{duration:inv?280:360,easing:inv?'cubic-bezier(.5,0,.75,.3)':'cubic-bezier(.16,.9,.25,1)',fill:inv?'forwards':'none'})}
+  function cerrar(abajo){if(cerrando||!d.open)return;cerrando=true;pausar(true);const fin=()=>d.close();if(quieto)return fin();
+    d.animate([{backgroundColor:'rgb(0,0,0)'},{backgroundColor:'rgba(0,0,0,0)'}],{duration:280,fill:'forwards'});
+    const r=abajo?null:circulo(gs[gi]?.k);
+    (r?zoom(r,true):box.animate([{transform:box.style.transform||'none',opacity:1},{transform:'translateY(60%) scale(.8)',opacity:0}],{duration:240,easing:'ease-in',fill:'forwards'})).finished.then(fin,fin)}
+  d.addEventListener('cancel',e=>{e.preventDefault();cerrar()});
+  function irGrupo(n){dirAutor=n>gi?1:-1;gi=n;const v=hsVistas();si=gs[gi].items.findIndex(h=>!v.has(h.ruta));if(si<0)si=0;mostrar()}
+  function siguiente(){if(si<gs[gi].items.length-1){si++;mostrar()}else if(gi<gs.length-1)irGrupo(gi+1);else cerrar()}
+  function anterior(){if(si>0){si--;mostrar()}else if(gi>0){dirAutor=-1;gi--;si=0;mostrar()}else mostrar()}
+  function sigAutor(){gi<gs.length-1?irGrupo(gi+1):cerrar()}
+  function antAutor(){if(gi>0){dirAutor=-1;gi--;si=0}else si=0;mostrar()}
   box.addEventListener('pointerdown',e=>{if(e.target.closest('button')||e.button>0)return;
-    pd={x:e.clientX,y:e.clientY};box.setPointerCapture?.(e.pointerId);
+    pd={x:e.clientX,y:e.clientY};try{box.setPointerCapture(e.pointerId)}catch(x){}
     holdT=setTimeout(()=>{retenido=true;pausar(true);d.classList.add('hsret')},200)});
   box.addEventListener('pointermove',e=>{if(!pd)return;const dx=e.clientX-pd.x,dy=e.clientY-pd.y;
     if(Math.abs(dx)>8||Math.abs(dy)>8)clearTimeout(holdT);
     if(dy>0&&dy>Math.abs(dx)){box.classList.add('arr');box.style.transform='translateY('+dy+'px) scale('+Math.max(.86,1-dy/1400)+')'}});
   const fin=e=>{if(!pd)return;clearTimeout(holdT);
     const dx=e.clientX-pd.x,dy=e.clientY-pd.y,era=retenido;pd=null;retenido=false;d.classList.remove('hsret');box.classList.remove('arr');
-    if(dy>100&&dy>Math.abs(dx)){box.style.transform='translateY(100%)';box.style.opacity='0';setTimeout(()=>d.close(),180);return}
+    if(dy>100&&dy>Math.abs(dx)){cerrar(true);return}
     box.style.transform='';
     if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){dx<0?sigAutor():antAutor();return}
     if(era||e.type==='pointercancel'){pausar(false);return}
     const r=box.getBoundingClientRect();e.clientX-r.left<r.width*.3?anterior():siguiente()};
   box.addEventListener('pointerup',fin);box.addEventListener('pointercancel',fin);
   box.addEventListener('contextmenu',e=>e.preventDefault());
-  d.querySelector('.hscerrar').onclick=()=>d.close();
+  d.querySelector('.hscerrar').onclick=()=>cerrar();
   const si0=conf.querySelector('.hsconfsi'),cerrarConf=()=>{confAbierto=false;conf.hidden=true;si0.disabled=false;si0.textContent='Eliminar'};
   conf.addEventListener('pointerdown',e=>e.stopPropagation());conf.addEventListener('pointerup',e=>e.stopPropagation());
   borrar.onclick=()=>{confAbierto=true;pausar(true);conf.hidden=false;conf.querySelector('.hsconfno').focus()};
@@ -2676,7 +2753,7 @@ function hsVer(k){
     const g=gs[gi],h=g.items[si];if(!h||si0.disabled)return;si0.disabled=true;si0.textContent='Eliminando…';
     try{const r=await q(sb.storage.from('historias').remove([h.ruta]));if(!r||!r.length)throw Error('No se pudo eliminar la historia. Probá de nuevo.');
       historias.lista=historias.lista.filter(x=>x.ruta!==h.ruta);g.items.splice(si,1);cerrarConf();toast('Historia eliminada');
-      if(!g.items.length){gs.splice(gi,1);if(gi>=gs.length)return d.close();si=0;irGrupo(gi)}
+      if(!g.items.length){gs.splice(gi,1);if(gi>=gs.length)return cerrar(true);si=0;dirAutor=1;mostrar()}
       else{if(si>=g.items.length)si=g.items.length-1;mostrar()}
       hsActualizar();
     }catch(e){si0.disabled=false;si0.textContent='Eliminar';toast(errTxt(e))}
@@ -2687,29 +2764,184 @@ function hsVer(k){
     else if(e.key===' '){e.preventDefault();pausa?pausar(false):pausar(true)}});
   const vis=()=>document.hidden?pausar(true):pausar(false);document.addEventListener('visibilitychange',vis);
   d.addEventListener('close',()=>{turno++;cancelAnimationFrame(raf);if(el?.tagName==='VIDEO')el.pause();document.removeEventListener('visibilitychange',vis);d.remove();hsActualizar()},{once:true});
+  if(!quieto){d.animate([{backgroundColor:'rgba(0,0,0,0)'},{backgroundColor:'rgb(0,0,0)'}],{duration:320});
+    const r0=origen?.querySelector?.('.hsav')?.getBoundingClientRect();if(r0&&r0.width)zoom(r0,false);else box.animate([{transform:'scale(.92)',opacity:0},{transform:'none',opacity:1}],{duration:260,easing:'ease-out'})}
   mostrar();raf=requestAnimationFrame(tick);
 }
 function hsElegir(){
-  const input=document.createElement('input');input.type='file';input.accept=Object.keys(historiaTipos).join(',');
-  input.onchange=()=>{
-    const file=input.files[0];if(!file)return;
-    const ext=historiaTipos[file.type];if(!ext||!file.size||file.size>50*1048576)return toast('Elegí una foto o un video MP4 o WebM de hasta 50 MB.');
-    const socio=me()?.id;if(!socio)return;
-    const d=hsDialogo('Visible para todos los socios'),url=URL.createObjectURL(file);
-    hsMedio(d,url,file.type.startsWith('video/'));d.addEventListener('close',()=>URL.revokeObjectURL(url),{once:true});
-    d.querySelector('footer').innerHTML='<button>Publicar por 24 horas</button>';
-    const btn=d.querySelector('footer button');btn.onclick=async()=>{
-      if(historias.subiendo)return;historias.subiendo=true;btn.disabled=true;btn.textContent='Subiendo…';hsActualizar();
-      try{await q(sb.storage.from('historias').upload(socio+'/'+crypto.randomUUID()+'.'+ext,file,{contentType:file.type,cacheControl:'600',upsert:false}));
-        if(d.open)d.close();await hsCargar(true);toast('Historia publicada')}
-      catch(e){toast(errTxt(e));btn.disabled=false;btn.textContent='Reintentar publicación'}
-      finally{historias.subiendo=false;hsActualizar()}
-    };
-  };input.click();
+  if(historias.subiendo)return toast('Esperá a que termine de subirse tu historia.');
+  const input=document.createElement('input');input.type='file';input.accept='image/*,video/mp4,video/webm';
+  input.onchange=()=>{const file=input.files[0];if(!file)return;
+    if(file.type.startsWith('video/'))return hsVideo(file);
+    if(file.type&&!file.type.startsWith('image/'))return toast('Elegí una foto o un video MP4 o WebM.');
+    hsEditor(file)};
+  input.click();
+}
+const hsQuieto=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* la foto o el video "vuela" hasta el círculo de Tu historia */
+function hsVolar(cv,r){
+  const dest=document.querySelector('#historias .hsit .hsav');if(!dest||hsQuieto()||!r||!r.width)return;
+  const t=dest.getBoundingClientRect();if(!t.width)return;
+  let url;try{url=cv.toDataURL('image/jpeg',.55)}catch(e){return}
+  const g=document.createElement('img');g.className='hsghost';g.alt='';g.src=url;document.body.append(g);
+  g.animate([{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'14px',opacity:1},
+    {left:t.left+'px',top:t.top+'px',width:t.width+'px',height:t.height+'px',borderRadius:'50%',opacity:.5}],
+    {duration:560,easing:'cubic-bezier(.6,0,.25,1)',fill:'forwards'}).finished.finally(()=>g.remove());
+}
+function hsPop(){const a=document.querySelector('#historias .hsit .hsav');if(a&&!hsQuieto())a.animate([{transform:'scale(1)'},{transform:'scale(1.18)'},{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:520,easing:'ease-out'})}
+async function hsPublicar(blob,ext,tipo){
+  const socio=me()?.id;if(!socio||historias.subiendo)return;
+  historias.subiendo=true;historias.fallo=null;hsActualizar();
+  try{await q(sb.storage.from('historias').upload(socio+'/'+crypto.randomUUID()+'.'+ext,blob,{contentType:tipo,cacheControl:'600',upsert:false}));
+    historias.subiendo=false;await hsCargar(true);hsPop();toast('Tu historia se publicó')}
+  catch(e){historias.subiendo=false;historias.fallo={blob,ext,tipo};hsActualizar();toast(errTxt(e)+' Tocá el círculo rojo para reintentar.')}
+}
+function hsVideo(file){
+  const ext=historiaTipos[file.type];if(!ext||!file.size||file.size>50*1048576)return toast('El video tiene que ser MP4 o WebM de hasta 50 MB.');
+  const d=hsDialogo('Visible para todos los socios'),url=URL.createObjectURL(file);
+  const v=hsMedio(d,url,true);d.addEventListener('close',()=>URL.revokeObjectURL(url),{once:true});
+  d.querySelector('footer').innerHTML='<button class="hsshare">Tu historia <span aria-hidden="true">›</span></button>';
+  d.querySelector('footer button').onclick=()=>{if(historias.subiendo)return;
+    const cv=document.createElement('canvas'),r=v.getBoundingClientRect();
+    try{cv.width=v.videoWidth||9;cv.height=v.videoHeight||16;cv.getContext('2d').drawImage(v,0,0,cv.width,cv.height)}catch(e){}
+    v.pause();hsVolar(cv,r);d.close();hsPublicar(file,ext,file.type)};
+}
+const HS_COLORES=['#ffffff','#000000','#ed4956','#f77737','#fdcb5c','#78c257','#2ec4b6','#3897f0','#a356e8','#ff5cad'];
+const HS_FORMATOS=[['completa','Completa',9/16],['vertical','4:5',4/5],['cuadrada','1:1',1],['original','Original',0]];
+const HS_PINCELES=[['pincel','✎','Pincel'],['marcador','▬','Marcador'],['neon','✦','Neón'],['borrador','⌫','Borrador']];
+function hsEditor(file){
+  const url=URL.createObjectURL(file),img=new Image();img.decoding='async';
+  img.onerror=()=>{URL.revokeObjectURL(url);toast('No se pudo abrir esa foto. Probá con otra (JPG, PNG, HEIC o WebP).')};
+  img.onload=()=>{URL.revokeObjectURL(url);try{hsEditorAbrir(img)}catch(e){console.error(e);toast('No se pudo abrir el editor con esa foto.')}};
+  img.src=url;
+}
+function hsRR(c,x,y,w,h,r){c.beginPath();if(c.roundRect)c.roundRect(x,y,w,h,r);else{c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}}
+function hsEditorAbrir(img){
+  const W=1080,H=1920;
+  const k=Math.min(1,2400/Math.max(img.naturalWidth,img.naturalHeight)),src=document.createElement('canvas');
+  src.width=Math.max(1,Math.round(img.naturalWidth*k));src.height=Math.max(1,Math.round(img.naturalHeight*k));src.getContext('2d').drawImage(img,0,0,src.width,src.height);
+  let c1='#1b1b1b',c2='#000';
+  try{const mi=document.createElement('canvas');mi.width=1;mi.height=2;const mc=mi.getContext('2d');mc.drawImage(src,0,0,1,2);const px=mc.getImageData(0,0,1,2).data;
+    c1=`rgb(${px[0]},${px[1]},${px[2]})`;c2=`rgb(${px[4]>>1},${px[5]>>1},${px[6]>>1})`}catch(e){}
+  const st={fmt:src.width/src.height<.7?'completa':'original',zoom:1,ox:0,oy:0,trazos:[],textos:[],hist:[],herr:null,pincel:'pincel',color:'#ffffff',grosor:14,editando:null,nuevo:false};
+  const d=document.createElement('dialog');d.className='hsig hsedd';d.setAttribute('aria-label','Editar tu historia');
+  d.innerHTML=`<div class="hsbox hsed"><canvas class="hscv" role="img" aria-label="Vista previa de tu historia"></canvas>
+    <div class="hsedtop"><button class="hsedb" data-e="cerrar" aria-label="Descartar">×</button><span class="hsedsp"></span>
+      <button class="hsedb" data-e="deshacer" aria-label="Deshacer" disabled>↶</button>
+      <button class="hsedb hsaa" data-e="texto" aria-label="Agregar texto">Aa</button>
+      <button class="hsedb" data-e="pincel" aria-label="Dibujar" aria-pressed="false">✎</button></div>
+    <div class="hsedpin" hidden><div class="hstipos" role="radiogroup" aria-label="Tipo de pincel">${HS_PINCELES.map(([k,i,n])=>`<button role="radio" data-tipo="${k}" aria-checked="${k==='pincel'}" aria-label="${n}"><i aria-hidden="true">${i}</i><small>${n}</small></button>`).join('')}</div>
+      <label class="hsgros"><span>Grosor</span><input type="range" min="4" max="60" value="14" aria-label="Grosor del pincel"></label></div>
+    <div class="hspal" hidden role="radiogroup" aria-label="Color">${HS_COLORES.map(c=>`<button role="radio" data-col="${c}" aria-checked="${c==='#ffffff'}" aria-label="Color ${c}" style="--c:${c}"></button>`).join('')}</div>
+    <div class="hsedbot"><div class="hsfmts" role="radiogroup" aria-label="Formato de la foto">${HS_FORMATOS.map(([k,n])=>`<button role="radio" data-fmt="${k}" aria-checked="false">${n}</button>`).join('')}</div>
+      <button class="hsshare" data-e="compartir">Tu historia <span aria-hidden="true">›</span></button></div>
+    <div class="hstxt" hidden><div class="hstxtbar"><button class="hsedb hstxtfondo" aria-label="Texto con fondo" aria-pressed="false">A</button><span class="hsedsp"></span><button class="hstxtlisto">Listo</button></div>
+      <textarea class="hstxta" rows="2" maxlength="140" aria-label="Escribí tu texto" placeholder="Escribí algo…"></textarea></div>
+    <div class="hsdel" aria-hidden="true">🗑️</div>
+    <div class="hsconf" hidden role="alertdialog" aria-label="Descartar historia"><b>¿Descartar esta historia?</b><p>Si salís ahora, se pierden los cambios.</p><button class="hsconfsi">Descartar</button><button class="hsconfno">Seguir editando</button></div></div>`;
+  document.body.append(d);d.showModal();
+  const $e=x=>d.querySelector(x),box=$e('.hsbox'),cv=$e('.hscv'),ctx=cv.getContext('2d'),pin=$e('.hsedpin'),pal=$e('.hspal'),txt=$e('.hstxt'),ta=$e('.hstxta'),del=$e('.hsdel'),conf=$e('.hsconf');
+  cv.width=W;cv.height=H;
+  if(!hsQuieto())box.animate([{transform:'translateY(6%) scale(.96)',opacity:0},{transform:'none',opacity:1}],{duration:320,easing:'cubic-bezier(.2,.8,.2,1)'});
+  const capa=document.createElement('canvas');capa.width=W;capa.height=H;const cc=capa.getContext('2d');
+  const tmp=document.createElement('canvas');tmp.width=W;tmp.height=H;const tc=tmp.getContext('2d');
+  let cur=null,pend=0,gesto=null;const pts=new Map();
+  function marco(){const f=HS_FORMATOS.find(x=>x[0]===st.fmt),a=src.width/src.height;
+    if(f[0]==='completa')return {x:0,y:0,w:W,h:H,r:0};
+    let w=W-80,h;if(f[0]==='original'){h=w/a;if(h>H-380){h=H-380;w=h*a}}else h=w/f[2];
+    return {x:(W-w)/2,y:(H-h)/2,w,h,r:30}}
+  function foto(c){const m=marco(),a=src.width/src.height;let w=m.w,h=w/a;if(h<m.h){h=m.h;w=h*a}w*=st.zoom;h*=st.zoom;
+    const mx=Math.max(0,(w-m.w)/2),my=Math.max(0,(h-m.h)/2);st.ox=Math.max(-mx,Math.min(mx,st.ox));st.oy=Math.max(-my,Math.min(my,st.oy));
+    if(m.r){c.save();c.shadowColor='rgba(0,0,0,.45)';c.shadowBlur=60;c.shadowOffsetY=16;c.fillStyle='#000';hsRR(c,m.x,m.y,m.w,m.h,m.r);c.fill();c.restore()}
+    c.save();hsRR(c,m.x,m.y,m.w,m.h,m.r);c.clip();c.drawImage(src,m.x+(m.w-w)/2+st.ox,m.y+(m.h-h)/2+st.oy,w,h);c.restore()}
+  function trazo(c,t){if(!t.p.length)return;c.save();c.lineCap='round';c.lineJoin='round';c.lineWidth=t.g;
+    if(t.tipo==='borrador'){c.globalCompositeOperation='destination-out';c.strokeStyle='#000'}
+    else{c.strokeStyle=t.c;if(t.tipo==='marcador'){c.globalAlpha=.5;c.lineCap='butt';c.lineWidth=t.g*2.4}if(t.tipo==='neon'){c.shadowColor=t.c;c.shadowBlur=t.g*1.8}}
+    const p=t.p;c.beginPath();c.moveTo(p[0][0],p[0][1]);if(p.length===1)c.lineTo(p[0][0]+.1,p[0][1]+.1);
+    for(let i=1;i<p.length-1;i++)c.quadraticCurveTo(p[i][0],p[i][1],(p[i][0]+p[i+1][0])/2,(p[i][1]+p[i+1][1])/2);
+    if(p.length>1)c.lineTo(p[p.length-1][0],p[p.length-1][1]);c.stroke();
+    if(t.tipo==='neon'){c.shadowBlur=0;c.strokeStyle='#fff';c.globalAlpha=.85;c.lineWidth=Math.max(2,t.g*.35);c.stroke()}
+    c.restore()}
+  function rehacer(){cc.clearRect(0,0,W,H);st.trazos.forEach(t=>trazo(cc,t))}
+  const contraste=h=>{const n=parseInt(h.slice(1),16);return ((n>>16)*299+((n>>8)&255)*587+(n&255)*114)/1000>150?'#000':'#fff'};
+  function medir(c,t){c.font=`800 ${t.s}px system-ui,-apple-system,"Segoe UI",sans-serif`;const l=t.t.split('\n');return {l,w:Math.max(...l.map(x=>c.measureText(x).width)),h:l.length*t.s*1.2}}
+  function texto(c,t){const m=medir(c,t);c.save();c.translate(t.x,t.y);c.textAlign='center';c.textBaseline='middle';
+    if(t.fondo){const p=t.s*.38;c.fillStyle=t.c;hsRR(c,-m.w/2-p,-m.h/2-p*.55,m.w+p*2,m.h+p*1.1,t.s*.3);c.fill();c.fillStyle=contraste(t.c)}
+    else{c.fillStyle=t.c;c.shadowColor='rgba(0,0,0,.45)';c.shadowBlur=14}
+    m.l.forEach((x,i)=>c.fillText(x,0,-m.h/2+t.s*.6+i*t.s*1.2));c.restore()}
+  function dibujar(c){const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,c1);g.addColorStop(1,c2);c.fillStyle=g;c.fillRect(0,0,W,H);foto(c);
+    if(cur){tc.clearRect(0,0,W,H);tc.drawImage(capa,0,0);trazo(tc,cur);c.drawImage(tmp,0,0)}else c.drawImage(capa,0,0);
+    st.textos.forEach(t=>{if(t!==st.editando)texto(c,t)})}
+  const pintar=()=>{if(!pend)pend=requestAnimationFrame(()=>{pend=0;dibujar(ctx)})};
+  const sinCambios=()=>!st.trazos.length&&!st.textos.length;
+  function botones(){$e('[data-e="deshacer"]').disabled=!st.hist.length;$e('[data-e="pincel"]').setAttribute('aria-pressed',st.herr==='pincel');
+    pin.hidden=st.herr!=='pincel';pal.hidden=!(st.herr==='pincel'||st.editando);box.classList.toggle('hspinta',st.herr==='pincel');
+    d.querySelectorAll('[data-fmt]').forEach(b=>b.setAttribute('aria-checked',b.dataset.fmt===st.fmt));
+    d.querySelectorAll('[data-tipo]').forEach(b=>b.setAttribute('aria-checked',b.dataset.tipo===st.pincel));
+    const col=st.editando?st.editando.c:st.color;d.querySelectorAll('[data-col]').forEach(b=>b.setAttribute('aria-checked',b.dataset.col===col))}
+  const aCv=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
+  const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1])||1;
+  function textoEn(p){for(let i=st.textos.length-1;i>=0;i--){const t=st.textos[i],m=medir(ctx,t);if(Math.abs(p[0]-t.x)<m.w/2+40&&Math.abs(p[1]-t.y)<m.h/2+40)return t}return null}
+  function tacho(on,p){del.classList.toggle('ver',on);const sobre=!!(p&&Math.hypot(p[0]-W/2,p[1]-(H-150))<170);del.classList.toggle('sobre',on&&sobre);return sobre}
+  const oculto=on=>box.classList.toggle('hsedoc',on);
+  cv.addEventListener('pointerdown',e=>{if(st.editando||!conf.hidden)return;try{cv.setPointerCapture(e.pointerId)}catch(x){}const p=aCv(e);pts.set(e.pointerId,p);
+    if(st.herr==='pincel'){if(pts.size>1)return;cur={tipo:st.pincel,c:st.color,g:st.grosor*(st.pincel==='borrador'?2.2:1),p:[p]};oculto(true);pintar();return}
+    if(pts.size===2){const [a,b]=[...pts.values()];gesto=gesto&&gesto.tipo==='texto'?{tipo:'pinch',t:gesto.t,s0:gesto.t.s,d0:dist(a,b)}:{tipo:'pinch',z0:st.zoom,d0:dist(a,b)};return}
+    const t=textoEn(p);gesto=t?{tipo:'texto',t,p0:p,x0:t.x,y0:t.y,mov:false}:{tipo:'foto',p0:p,ox:st.ox,oy:st.oy,mov:false}});
+  cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;const p=aCv(e);pts.set(e.pointerId,p);
+    if(cur){const u=cur.p[cur.p.length-1];if(dist(p,u)>2.5){cur.p.push(p);pintar()}return}
+    if(!gesto)return;
+    if(gesto.tipo==='pinch'){if(pts.size<2)return;const [a,b]=[...pts.values()],f=dist(a,b)/gesto.d0;
+      if(gesto.t)gesto.t.s=Math.max(30,Math.min(280,gesto.s0*f));else st.zoom=Math.max(1,Math.min(5,gesto.z0*f));pintar();return}
+    const dx=p[0]-gesto.p0[0],dy=p[1]-gesto.p0[1];if(!gesto.mov&&Math.hypot(dx,dy)>14){gesto.mov=true;oculto(true)}if(!gesto.mov)return;
+    if(gesto.tipo==='texto'){gesto.t.x=gesto.x0+dx;gesto.t.y=gesto.y0+dy;tacho(true,p)}else{st.ox=gesto.ox+dx;st.oy=gesto.oy+dy}
+    pintar()});
+  const soltar=e=>{if(!pts.has(e.pointerId))return;const p=aCv(e);pts.delete(e.pointerId);
+    if(cur){if(e.type!=='pointercancel'){st.trazos.push(cur);st.hist.push('trazo');trazo(cc,cur)}cur=null;oculto(false);pintar();botones();return}
+    if(!gesto)return;const g=gesto;gesto=null;oculto(false);
+    if(g.tipo==='texto'){const sobre=tacho(false,p);
+      if(g.mov&&sobre){st.textos=st.textos.filter(x=>x!==g.t);st.hist=st.hist.filter(x=>x!==g.t);if(navigator.vibrate)navigator.vibrate(15)}
+      else if(!g.mov)editar(g.t)}
+    pintar();botones()};
+  cv.addEventListener('pointerup',soltar);cv.addEventListener('pointercancel',soltar);
+  cv.addEventListener('wheel',e=>{e.preventDefault();st.zoom=Math.max(1,Math.min(5,st.zoom*(e.deltaY<0?1.08:1/1.08)));pintar()},{passive:false});
+  function editar(t){st.nuevo=!t;st.editando=t||{t:'',c:st.color==='#000000'?'#000000':'#ffffff',x:W/2,y:H*.42,s:96,fondo:false};
+    ta.value=st.editando.t;estiloTa();txt.hidden=false;box.classList.add('hstexto');crecer();st.herr=null;botones();pintar();setTimeout(()=>ta.focus(),60)}
+  function estiloTa(){const t=st.editando;if(!t)return;ta.style.color=t.fondo?contraste(t.c):t.c;ta.style.background=t.fondo?t.c:'transparent';$e('.hstxtfondo').setAttribute('aria-pressed',!!t.fondo)}
+  function listoTexto(){const t=st.editando;if(!t)return;t.t=ta.value.replace(/\s+$/,'').slice(0,140);st.editando=null;txt.hidden=true;box.classList.remove('hstexto');
+    if(t.t.trim()){if(st.nuevo){st.textos.push(t);st.hist.push(t)}}else{st.textos=st.textos.filter(x=>x!==t);st.hist=st.hist.filter(x=>x!==t)}
+    ta.blur();botones();pintar()}
+  $e('.hstxtlisto').onclick=listoTexto;
+  const crecer=()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,innerHeight*.5)+'px'};ta.addEventListener('input',crecer);
+  txt.addEventListener('pointerdown',e=>{if(e.target===txt)listoTexto()});
+  $e('.hstxtfondo').onclick=()=>{if(st.editando){st.editando.fondo=!st.editando.fondo;estiloTa()}};
+  ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&matchMedia('(hover:hover)').matches){e.preventDefault();listoTexto()}});
+  pal.addEventListener('click',e=>{const b=e.target.closest('[data-col]');if(!b)return;if(st.editando){st.editando.c=b.dataset.col;estiloTa()}else st.color=b.dataset.col;botones()});
+  pin.addEventListener('click',e=>{const b=e.target.closest('[data-tipo]');if(b){st.pincel=b.dataset.tipo;botones()}});
+  $e('.hsgros input').addEventListener('input',e=>{st.grosor=+e.target.value});
+  d.querySelector('.hsfmts').addEventListener('click',e=>{const b=e.target.closest('[data-fmt]');if(!b||b.dataset.fmt===st.fmt)return;st.fmt=b.dataset.fmt;st.zoom=1;st.ox=st.oy=0;botones();
+    if(!hsQuieto())cv.animate([{transform:'scale(.97)',opacity:.6},{transform:'none',opacity:1}],{duration:240,easing:'ease-out'});pintar()});
+  let saliendo=false;
+  function salir(){if(saliendo)return;saliendo=true;if(hsQuieto())return d.close();
+    box.animate([{transform:'none',opacity:1},{transform:'translateY(8%) scale(.95)',opacity:0}],{duration:220,easing:'ease-in',fill:'forwards'}).finished.then(()=>d.close(),()=>d.close())}
+  const pedirSalir=()=>{if(st.editando)return listoTexto();if(sinCambios())return salir();conf.hidden=false;conf.querySelector('.hsconfno').focus()};
+  conf.querySelector('.hsconfsi').onclick=salir;conf.querySelector('.hsconfno').onclick=()=>{conf.hidden=true};
+  d.addEventListener('cancel',e=>{e.preventDefault();pedirSalir()});
+  d.querySelector('.hsedtop').addEventListener('click',e=>{const b=e.target.closest('[data-e]');if(!b)return;const a=b.dataset.e;
+    if(a==='cerrar')pedirSalir();
+    else if(a==='deshacer'){const h=st.hist.pop();if(h==='trazo'){st.trazos.pop();rehacer()}else if(h)st.textos=st.textos.filter(x=>x!==h);botones();pintar()}
+    else if(a==='texto')editar(null);
+    else if(a==='pincel'){st.herr=st.herr==='pincel'?null:'pincel';botones()}});
+  $e('[data-e="compartir"]').onclick=e=>{const b=e.currentTarget;if(b.disabled)return;if(historias.subiendo)return toast('Esperá a que termine de subirse tu historia.');
+    b.disabled=true;if(st.editando)listoTexto();st.herr=null;dibujar(ctx);
+    cv.toBlob(blob=>{if(!blob){b.disabled=false;return toast('No se pudo preparar la foto. Probá de nuevo.')}
+      hsVolar(cv,cv.getBoundingClientRect());saliendo=true;d.close();hsPublicar(blob,'jpg','image/jpeg')},'image/jpeg',.9)};
+  d.addEventListener('close',()=>{cancelAnimationFrame(pend);d.remove()},{once:true});
+  botones();dibujar(ctx);
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest?.('#historias button');if(!b||!CLOUD||S.view!=='socio'||!me()?.id)return;
-  if(b.hasAttribute('data-hs-add'))hsElegir();else if(b.hasAttribute('data-hs-retry'))hsCargar(true);else if(b.dataset.hsVer)hsVer(b.dataset.hsVer);
+  if(b.hasAttribute('data-hs-add'))hsElegir();else if(b.hasAttribute('data-hs-reint')){const f=historias.fallo;if(f)hsPublicar(f.blob,f.ext,f.tipo)}else if(b.hasAttribute('data-hs-retry'))hsCargar(true);else if(b.dataset.hsVer)hsVer(b.dataset.hsVer,b);
 });
 
 function screenInicio(){
@@ -3938,8 +4170,8 @@ function renderFicha(s){
   const rut=`<section class="panel">
     <div class="panelhead"><h2>Rutina</h2><span class="dirty" id="dirty" ${S.dirty?'':'hidden'}>Cambios sin guardar</span>${c2RutTools(s)}</div>${c2CopiarDe(s)}${c2FunBox(s)}
     ${ED.length?`<div class="chips edays ${c2PuedeOrden()&&ED.length>1?'c2ordb':''}">${ED.map((d,i)=>`<button data-eday="${i}" aria-pressed="${i===S.eday}">${esc(d.d||'Día '+(i+1))}</button>`).join('')}<button id="addday">＋ Día</button></div>
-    <div class="dayf"><div class="field"><label>Nombre del día</label><input class="inp" data-rf="d" value="${esc(day.d)}"></div>
-      <div class="field grow"><label>Foco</label><input class="inp" data-rf="t" value="${esc(day.t)}" placeholder="Ej: Tren superior"></div>
+    <div class="dayf"><div class="field"><label>Nombre del día</label><input class="inp" data-rf="d" aria-label="Nombre del día" value="${esc(day.d)}"></div>
+      <div class="field grow"><label>Foco</label><input class="inp" data-rf="t" aria-label="Qué se trabaja ese día" value="${esc(day.t)}" placeholder="Ej: Tren superior"></div>
       ${c2MvBtns(ED.length)}<button class="mini" id="delday">Borrar día</button></div>
     <div class="extable"><div class="exh"><span>Ejercicio</span><span>Series</span><span>Reps</span><span title="Repeticiones en reserva: cuántas le quedan antes del fallo">RIR</span><span>Descanso</span><span></span></div>
       ${day.ex.map((x,j)=>x&&x.run?runEdRow(x,j):`<div class="exr"><div class="z42ex"><div class="anim z42mini ${x[0]?'':'z42vacio'}" data-anim="${esc(x[0]?animKey(x[0]):'')}" aria-hidden="true"><svg viewBox="0 0 100 100"></svg></div><input class="inp" list="exl" data-ri="${j}" data-rc="0" value="${esc(x[0])}" placeholder="Ejercicio" aria-label="Ejercicio"></div>
@@ -4198,7 +4430,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
-  {v:'1.1.40',t:'Historias arriba y se pueden borrar',items:[['⭕','Las historias ahora están arriba, entre el logo y tu perfil, en todas las pantallas.'],['🗑️','Cada socio puede eliminar sus historias antes de las 24 horas.']]},{v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
+  {v:'1.1.41',t:'Editor de historias y app más pulida',items:[['🎨','Antes de subir una historia, los socios pueden dibujar con pincel, marcador o neón, escribir texto y elegir el formato de la foto.'],['✨','Las historias se abren y se cierran con animación, y la foto vuela al círculo al publicarla.'],['📷','En el chat, el botón para mandar fotos ahora tiene una cámara.'],['🛠️','Arreglos generales: aviso de sin conexión, sin zoom molesto en iPhone al escribir y botones más fáciles de tocar.']]},{v:'1.1.40',t:'Historias arriba y se pueden borrar',items:[['⭕','Las historias ahora están arriba, entre el logo y tu perfil, en todas las pantallas.'],['🗑️','Cada socio puede eliminar sus historias antes de las 24 horas.']]},{v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
   {v:'1.1.36',t:'Bienvenida con desenfoque localizado',items:[['👋','El desenfoque aparece solo detrás del saludo.']]},
   {v:'1.1.35',t:'Forge Studio y nueva bienvenida',items:[['✦','Los logos de Forge Studio acompañan a Training Club.'],['👋','La bienvenida desenfoca la pantalla durante el saludo.']]},
   {v:'1.1.34',t:'Los socios pueden pausar o dar de baja su cuota',items:[
@@ -5210,7 +5442,7 @@ document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#g
 
 /* ---------- lote 43: fotos y videos en el chat ---------- */
 const CH_MAX_MB=50, CHURL={};
-const ICO_ADJ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10.5" r="1.8"/><path d="M21 15.5l-5-5L7 19"/></svg>';
+const ICO_ADJ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.6A2.6 2.6 0 0 1 5.6 6h1.9l1.4-2.1h6.2L16.5 6h1.9A2.6 2.6 0 0 1 21 8.6v8.8a2.6 2.6 0 0 1-2.6 2.6H5.6A2.6 2.6 0 0 1 3 17.4z"/><circle cx="12" cy="12.8" r="3.7"/></svg>';
 const chAdjHtml=()=>`<button type="button" class="chadj" data-chadj aria-label="Mandar foto o video" title="Foto o video">${ICO_ADJ}</button><input type="file" class="chfile" accept="image/*,video/*" hidden tabindex="-1" aria-hidden="true">`;
 const chResumen=m=>m.borrado?'🚫 Mensaje eliminado':m.texto||(m.media?(m.media.t==='vid'?'🎥 Video':m.media.t==='aud'?'🎤 Audio'+(m.media.d?' ('+chDur(m.media.d)+')':''):'📷 Foto'):'');
 function chMediaSrc(m){ const d=m.media; if(!d) return ''; if(d.u) return d.u; const c=CHURL[d.p]; return c&&c.exp>Date.now()?c.u:'' }
@@ -5451,6 +5683,16 @@ document.addEventListener('click',e=>{ const t=e.target.closest&&e.target.closes
   if(d.y47baja!=null){ const on=d.y47baja==='1';
     return y46Rpc('socio_baja',{p_on:on},s=>{ if(on){ s.baja=mk(Y,s.pagos[mk(Y,M)]?M+1:M) } else if(s.baja) y47Reactivar(s) },on?'Listo: diste de baja tu cuota. '+P1+' lo va a ver.':'¡Bienvenido de vuelta! Tu cuota está activa.') }
 },true);
+/* v50 · aviso de sin conexión y errores de red que nadie atrapó */
+(function(){
+  const montar=()=>{if(document.getElementById('offbar'))return;const b=document.createElement('div');b.id='offbar';b.setAttribute('role','status');b.hidden=navigator.onLine;
+    b.innerHTML='<span aria-hidden="true">📡</span> Sin conexión a internet';document.body.append(b);
+    addEventListener('offline',()=>{b.hidden=false});
+    addEventListener('online',()=>{b.hidden=true;toast('Volvió la conexión');try{if(CLOUD&&S.ready&&typeof loadAll==='function')loadAll().then(()=>render(true)).catch(()=>{})}catch(e){}})};
+  document.body?montar():addEventListener('DOMContentLoaded',montar);
+  addEventListener('unhandledrejection',e=>{const m=String(e.reason&&(e.reason.message||e.reason)||'');
+    if(/Failed to fetch|NetworkError|Load failed|network|fetch/i.test(m)){e.preventDefault();toast(navigator.onLine?'No se pudo conectar. Probá de nuevo en un momento.':'Sin conexión. Probá cuando vuelva internet.')}});
+})();
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
