@@ -1516,6 +1516,25 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .mdebe.y46pb.on i{background:#a9b6ff}
 .mdebe.y46no:hover{color:var(--bad);border-color:rgba(239,90,90,.5)}
 @media (prefers-reduced-motion:reduce){.y46pan,.y46esp,.y46rel{transition:none!important;animation:none!important}}
+/* lote 47 · baja */
+.legend span{white-space:nowrap}
+.pill.baja{background:rgba(255,255,255,.08)!important;color:var(--muted)!important}
+.status.baja{background:var(--sunk);border-color:var(--line)}.status.baja .lab{color:var(--muted)}
+.y47{display:flex;flex-direction:column;gap:6px}
+.y47 .ttl span{color:var(--muted);font-size:13px}
+.y47 .y46{margin:4px 0 0}
+.y47t{margin:0;font-size:14px;line-height:1.5;color:var(--ink);opacity:.86}
+.y47btn{margin-top:8px;justify-content:center}
+.y47pz{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(140,160,255,.10);border:1px solid rgba(140,160,255,.3);color:#c9d1ff;font-size:13.5px;font-weight:600}
+.y47bz{color:var(--muted)!important}
+.y46ops .y47si{background:#2a1414;color:#ff8a80;border-color:rgba(239,90,90,.45)}
+.y47ir{display:block;margin-top:12px;font-size:13px;color:var(--muted)}
+.y47re{margin-top:12px}
+.y47flash{animation:y47Fl 1.1s var(--ease)}
+@keyframes y47Fl{0%,100%{box-shadow:0 0 0 0 rgba(36,201,167,0)}30%{box-shadow:0 0 0 3px rgba(36,201,167,.55)}}
+.y47ban{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--sunk);border:1px dashed var(--line);margin-bottom:10px}
+.y47ban>span:first-child{font-size:22px}.y47ban>span:nth-child(2){flex:1;display:flex;flex-direction:column;gap:2px}.y47ban small{color:var(--muted);font-size:12.5px}
+@media (prefers-reduced-motion:reduce){.y47flash{animation:none}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2271,6 +2290,7 @@ function estado(s){
   const pago=s.pagos[mk(Y,M)];
   const vd=venceDia(s,Y,M); const venceEste=new Date(Y,M,vd);
   if(pago){const n=new Date(Y,M+1,venceDia(s,Y,M+1));return {c:'ok',t:'Al día',v:p2(n.getDate())+'/'+p2(n.getMonth()+1),days:Math.round((n-TODAY)/864e5),pago}}
+  if(y47Baja(s,M)) return {c:'baja',t:'De baja',v:'—',days:99};
   if(y46Aviso(s,M)) return {c:'pend',t:'Avisó que pagó',v:p2(vd)+'/'+p2(M+1),days:Math.round((venceEste-TODAY)/864e5),aviso:y46Aviso(s,M)};
   if(y46Pausa(s,M)) return {c:'pause',t:'En pausa',v:'—',days:99};
   const days=Math.round((venceEste-TODAY)/864e5);
@@ -2280,6 +2300,7 @@ function estado(s){
 /* Meses de este año: na (antes de tener cuota) / paid / owed / due (mes actual sin vencer) / future */
 function mesEstado(s,i){
   if(s.pagos[mk(Y,i)]) return 'paid';
+  if(!esFam(s)&&s.plan&&y47Baja(s,i)) return 'baja';
   if(!esFam(s)&&s.plan&&y46Aviso(s,i)) return 'pend';
   if(!esFam(s)&&s.plan&&y46Pausa(s,i)) return 'paused';
   if(!esFam(s)&&s.plan&&(s.debe||[]).includes(mk(Y,i))) return 'owed';
@@ -2297,7 +2318,7 @@ const montoMes=(s,i)=>Math.round((s.precio||0)*(vencido(s,i)?1+RECARGO:1));
 const deudaMonto=s=>s.plan?MES.reduce((n,_,i)=>n+(mesEstado(s,i)==='owed'?montoMes(s,i):0),0):0;
 /* Avisos de pago: solo dos por mes, igual que el push de la nube: el 5 (está por vencer) y el 10 (ya venció). El plan familiar no paga. */
 function aviso(s){
-  if(!s||!s.plan||esFam(s)||(s.pagos||{})[mk(Y,M)]||y46Aviso(s,M)||y46Pausa(s,M)) return null;
+  if(!s||!s.plan||esFam(s)||(s.pagos||{})[mk(Y,M)]||y46Aviso(s,M)||y46Pausa(s,M)||y47Baja(s,M)) return null;
   const v=venceDia(s,Y,M), m=MES[M].toLowerCase(), p=fmt(s.precio);
   const A={};
   if(v>=5) A[5]={t:'Tu cuota está por vencer',b:`La cuota de ${m} (${p}) vence el ${v}. Pagala a tiempo.`};
@@ -2435,7 +2456,7 @@ function screenInicio(){
     return `<div class="${cerrado(d)?'cerr':''}" style="--i:${i}">${l}<i class="${on?'on':''} ${esHoy?'today':''} ${boom?'boom':''} ${sale?'sale':''} num">${d.getDate()}${boom?'<b class="spark" aria-hidden="true">'+'<s></s>'.repeat(8)+'</b>':''}</i></div>`}).join('');
   const justIn=S.justIn===iso(TODAY); S.justIn=null; S.justOut=null;
   const r=s.rutina&&s.rutina[S.day]?s.rutina[S.day]:(s.rutina&&s.rutina[0]);
-  const pleg=cuotaPlegada(), resu=e.c==='none'?'Elegí tu cuota':e.c==='fam'?'Pase libre':e.c==='ok'?'Vence '+e.v:e.c==='pend'?'Esperando confirmación':e.c==='pause'?'En pausa':fmt(e.c==='bad'?montoMes(s,M):s.precio);
+  const pleg=cuotaPlegada(), resu=e.c==='none'?'Elegí tu cuota':e.c==='fam'?'Pase libre':e.c==='ok'?(y47Baja(s,M+1)?'Último mes':'Vence '+e.v):e.c==='pend'?'Esperando confirmación':e.c==='pause'?'En pausa':e.c==='baja'?'Dada de baja':fmt(e.c==='bad'?montoMes(s,M):s.precio);
   const head=pill=>`<button class="strow sttog" id="sttog" aria-expanded="${!pleg}" aria-controls="stbody"><span class="lab">Cuota de ${MES[M].toLowerCase()}<em class="stres num">${resu}</em></span><span class="stder">${pill}<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>`;
   const hoyS=(s.sens||{})[iso(TODAY)];
   const sensH=cerrado(TODAY)&&!hoyS?'':`<section class="card sens"><div class="ttl"><b>¿Cómo te sentiste hoy?</b><span id="senok">${hoyS?'✓ Tu profe lo ve':'Contale a tu profe'}</span></div>
@@ -2451,16 +2472,20 @@ function screenInicio(){
     :e.c==='pend'
     ?`<section class="status pend ${pleg?'pleg':''}">${head('<span class="pill pend">Pago avisado</span>')}<div class="stbody" id="stbody"><div class="stin">
        <span class="big num">${fmt(s.precio)}</span>${y46Espera(s,M)}</div></div></section>${pedir}`
+    :e.c==='baja'
+    ?`<section class="status baja ${pleg?'pleg':''}">${head('<span class="pill baja">De baja</span>')}<div class="stbody" id="stbody"><div class="stin">
+       <span class="big">Cuota dada de baja</span><span class="sub">Desde ${MES[y47Mes(s.baja)].toLowerCase()} no se te cobra más. Si querés volver, la activás cuando quieras.</span>
+       <button type="button" class="y46re y47re" data-y47baja="0">↺ Volver a activar mi cuota</button></div></div></section>${pedir}`
     :e.c==='pause'
     ?`<section class="status pause ${pleg?'pleg':''}">${head('<span class="pill pause">En pausa</span>')}<div class="stbody" id="stbody"><div class="stin">
        <span class="big">Mes en pausa <span aria-hidden="true">⏸</span></span><span class="sub">Este mes no pagás la cuota ni te queda debiendo. En ${MES[(M+1)%12].toLowerCase()} sigue normal.</span>
-       <button type="button" class="y46re" data-y46pausa="${M}" data-on="0">▶ Reanudar ${MES[M].toLowerCase()}</button></div></div></section>${pedir}`
+       <button type="button" class="y46re" data-y46pausa="${M}" data-on="0">▶ Reanudar ${MES[M].toLowerCase()}</button>${y47Link(s)}</div></div></section>${pedir}`
     :`<section class="status ${e.c==='ok'?'ok':e.c==='bad'?'bad':'warn'} ${pleg?'pleg':''}">
     ${head(`<span class="pill ${e.c}">${e.c==='ok'?'Pagada':e.t}</span>`)}<div class="stbody" id="stbody"><div class="stin">
-    ${e.c==='ok'?`<div class="ccrow"><span class="big num">Vence ${e.v}</span><button class="ccbtn" id="ccambiar" aria-expanded="${!!S.ccOpen}">⇄ Cambiar de cuota</button></div>`:`<span class="big num">${fmt(e.c==='bad'?montoMes(s,M):s.precio)}</span>`}
-    <span class="sub num">${e.c==='ok'?`Pagaste el ${e.pago.fecha} con ${e.pago.medio}. Te quedan ${e.days} días.`:e.c==='bad'?`Venció el ${e.v}.`:`Vence el ${e.v}${e.days===0?', hoy':`, en ${e.days} día${e.days===1?'':'s'}`}.`}</span>
+    ${e.c==='ok'?`<div class="ccrow"><span class="big num">${y47Baja(s,M+1)?'Último mes':'Vence '+e.v}</span><button class="ccbtn" id="ccambiar" aria-expanded="${!!S.ccOpen}">⇄ Cambiar de cuota</button></div>`:`<span class="big num">${fmt(e.c==='bad'?montoMes(s,M):s.precio)}</span>`}
+    <span class="sub num">${e.c==='ok'?`Pagaste el ${e.pago.fecha} con ${e.pago.medio}.${y47Baja(s,M+1)?' Diste de baja tu cuota: desde '+MES[(M+1)%12].toLowerCase()+' no se te cobra más.':' Te quedan '+e.days+' días.'}`:e.c==='bad'?`Venció el ${e.v}.`:`Vence el ${e.v}${e.days===0?', hoy':`, en ${e.days} día${e.days===1?'':'s'}`}.`}</span>
     ${e.c==='ok'?'':y46Acc(s,M)}
-    ${e.c==='ok'?(S.ccOpen?`<div class="ccwrap"><p class="ccsub">Tocá la cuota que querés. Este mes ya está pago: el cambio corre desde la próxima.</p>${planesHtml(s)}${x42PlanNota(s)}</div>`:''):`${planesHtml(s)}<div class="payrow">${comoPagarHtml(e.c==='bad'?montoMes(s,M):s.precio)}${uniHtml}</div>`}</div></div></section>${pedir}`;
+    ${e.c==='ok'?(S.ccOpen?`<div class="ccwrap"><p class="ccsub">Tocá la cuota que querés. Este mes ya está pago: el cambio corre desde la próxima.</p>${planesHtml(s)}${x42PlanNota(s)}</div>`:''):`${planesHtml(s)}<div class="payrow">${comoPagarHtml(e.c==='bad'?montoMes(s,M):s.precio)}${uniHtml}</div>`}${y47Link(s)}</div></div></section>${pedir}`;
   const best=Object.entries(s.prog||{}).map(([n,a])=>[n,Math.max(0,...a.map(x=>+x.kg||0))]).sort((a,b)=>b[1]-a[1])[0];
   return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div>${miniRank()}</div>
   ${st}
@@ -2718,19 +2743,20 @@ function screenCuotas(){
   if(esFam(s)) return `<h2>Cuotas ${Y}</h2><section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Plan familiar</b>
     <p>Pase libre ilimitado. Nunca tenés que pagar la cuota.</p><p class="famjoke">${famChiste()}</p></section>`;
   if(!s.plan) return `<h2>Cuotas ${Y}</h2>${empty(ICONS.cuotas,'Todavía no hay cuotas','Cuando tu gimnasio te asigne el plan, acá vas a ver qué meses pagaste y cuáles te faltan.')}`;
-  const cells=MES.map((m,i)=>{const c=mesEstado(s,i);const t={paid:'Pagado',owed:'Adeuda',due:'A pagar',future:'Próximo',na:'—',pend:'Avisado',paused:'En pausa'}[c];
-    return `<button class="m ${c==='due'?'future due':c==='na'?'future na':c}" data-m="${i}" aria-pressed="${i===S.selMonth}"><b>${m.slice(0,3)}</b><span>${t}</span></button>`}).join('');
+  const cells=MES.map((m,i)=>{const c=mesEstado(s,i);const t={paid:'Pagado',owed:'Adeuda',due:'A pagar',future:'Próximo',na:'—',pend:'Avisado',paused:'En pausa',baja:'De baja'}[c];
+    return `<button class="m ${c==='due'?'future due':c==='na'||c==='baja'?'future na '+c:c}" data-m="${i}" aria-pressed="${i===S.selMonth}"><b>${m.slice(0,3)}</b><span>${t}</span></button>`}).join('');
   const i=S.selMonth; const c=mesEstado(s,i); const p=s.pagos[mk(Y,i)];
   const venc=`${p2(venceDia(s,Y,i))}/${p2(i+1)}/${Y}`;
   const det=c==='paid'?`<div><span>Estado</span><span class="pill ok">Pagado</span></div><div><span>Fecha de pago</span><span class="num">${p.fecha}/${Y}</span></div><div><span>Medio</span><span>${esc(p.medio)}</span></div><div><span>Monto</span><span class="num">${fmt(p.monto)}</span></div>`
     : c==='owed'?`<div><span>Estado</span><span class="pill bad">Adeuda</span></div><div><span>Venció</span><span class="num">${venc}</span></div><div><span>Monto</span><b class="num">${fmt(s.precio)}</b></div>`
     : c==='due'?`<div><span>Estado</span><span class="pill warn">A pagar</span></div><div><span>Vence</span><span class="num">${venc}</span></div><div><span>Monto</span><span class="num">${fmt(s.precio)}</span></div>`
     : c==='pend'?`<div><span>Estado</span><span class="pill pend">Pago avisado</span></div><div><span>Avisaste</span><span class="num">${y46Fecha(y46Aviso(s,i))}</span></div><div><span>Medio</span><span>${esc(y46Aviso(s,i).medio)}</span></div><div><span>Monto</span><span class="num">${fmt(s.precio)}</span></div>`
+    : c==='baja'?`<div><span>Estado</span><span class="pill baja">De baja</span></div><div><span>Cuota</span><span>Ya no se cobra</span></div>`
     : c==='paused'?`<div><span>Estado</span><span class="pill pause">En pausa</span></div><div><span>Cuota</span><span>Este mes no se cobra</span></div>`
     : c==='na'?`<div><span>Estado</span><span>No tenías cuota este mes</span></div>`
     : `<div><span>Estado</span><span class="pill warn">Todavía no vence</span></div><div><span>Vence</span><span class="num">${venc}</span></div><div><span>Monto</span><span class="num">${fmt(s.precio)}</span></div>`;
   const pagados=MES.filter((_,k)=>mesEstado(s,k)==='paid').length;
-  return `<div class="yearhead"><h2>Cuotas ${Y}</h2><span class="num" style="color:var(--muted);font-size:13px">${pagados} pago${pagados===1?'':'s'} · ${esc(s.plan)} ${fmt(s.precio)}</span></div>
+  return `${y47Card(s)}<div class="yearhead"><h2>Cuotas ${Y}</h2><span class="num" style="color:var(--muted);font-size:13px">${pagados} pago${pagados===1?'':'s'} · ${esc(s.plan)} ${fmt(s.precio)}</span></div>
   <div class="legend"><span><i style="background:var(--ok)"></i>Pagado</span><span><i style="background:var(--bad)"></i>Adeuda</span><span><i style="background:var(--teal)"></i>Avisado</span><span><i style="background:#a9b6ff"></i>En pausa</span><span><i style="background:var(--muted)"></i>Próximo</span></div>
   <div class="months">${cells}</div>
   <div class="detail"><strong style="font-size:15px">${MES[i]} ${Y}</strong>${det}</div>
@@ -3471,8 +3497,8 @@ function renderDuenio(){
   S.a14d=asist; const a14anim=!document.querySelector('#app .a14');
   const cob=[...venc.map(x=>({...x,n:deudaMonto(x.s),t:'Vencida '+(x.e.days===-1?'ayer':'hace '+(-x.e.days)+' días')})),
     ...por.map(x=>({...x,n:montoMes(x.s,M),t:x.e.days===0?'Vence hoy':'Vence en '+x.e.days+' día'+(x.e.days===1?'':'s')}))];
-  const F=[['todos','Todos'],['avisaron','Avisaron pago'],['vencidos','Vencidos'],['por','Por vencer'],['al','Al día'],['pausa','En pausa'],['sincuota','Sin cuota'],['sinrut','Sin rutina'],['funcional','Funcional']];
-  const list=est.filter(({s,e})=>S.filter==='todos'||(S.filter==='avisaron'&&y46Avisos(s).length>0)||(S.filter==='pausa'&&e.c==='pause')||(S.filter==='vencidos'&&e.c==='bad')||(S.filter==='por'&&e.c==='warn'&&e.days<=7)||(S.filter==='al'&&e.c==='ok')||(S.filter==='sincuota'&&e.c==='none')||(S.filter==='sinrut'&&!s.rutina&&!s.funcional)||(S.filter==='funcional'&&!!s.funcional));
+  const F=[['todos','Todos'],['avisaron','Avisaron pago'],['vencidos','Vencidos'],['por','Por vencer'],['al','Al día'],['pausa','En pausa'],['baja','De baja'],['sincuota','Sin cuota'],['sinrut','Sin rutina'],['funcional','Funcional']];
+  const list=est.filter(({s,e})=>S.filter==='todos'||(S.filter==='avisaron'&&y46Avisos(s).length>0)||(S.filter==='pausa'&&e.c==='pause')||(S.filter==='baja'&&e.c==='baja')||(S.filter==='vencidos'&&e.c==='bad')||(S.filter==='por'&&e.c==='warn'&&e.days<=7)||(S.filter==='al'&&e.c==='ok')||(S.filter==='sincuota'&&e.c==='none')||(S.filter==='sinrut'&&!s.rutina&&!s.funcional)||(S.filter==='funcional'&&!!s.funcional));
   const addForm=`<form class="addsocio" id="addsocio"><input class="inp num" id="ndni" inputmode="numeric" placeholder="DNI" aria-label="DNI" maxlength="10"><input class="inp" id="nname" placeholder="Nombre y apellido" aria-label="Nombre y apellido"><button class="btn sm" type="submit">Agregar socio</button></form>`;
   $('#app').innerHTML=`<div class="owner enter">${proBar()}${c2PendHtml()}
   <div class="kpis">
@@ -3547,14 +3573,14 @@ function renderFicha(s){
       <span class="pinfo num"><b>${fmt(p.monto)}</b> · ${esc(p.medio||'')} · ${esc(p.fecha||'')}</span>
       <button class="mini" data-pedit="${i}" aria-label="Editar pago de ${m}">Editar</button></div>`;
     const sel=MS.set.includes(i);
-    const pill=esFam(s)&&c!=='paid'?'<span class="pill fam">Familiar</span>':c==='paid'?'<span class="pill ok">Pagado</span>':c==='pend'?`<span class="pill pend" title="Avisó el ${y46Fecha(y46Aviso(s,i))}">Avisó · ${esc(y46Aviso(s,i).medio)}</span>`:c==='paused'?'<span class="pill pause">En pausa</span>':c==='owed'?'<span class="pill bad">Adeuda</span>':c==='due'?'<span class="pill warn">A pagar</span>':c==='na'?'<span class="pill">Sin cuota</span>':'<span class="pill">Próximo</span>';
-    return `<div class="mrow ${c} ${p?'editing':''} ${sel?'sel':''} ${((s.debe||[]).includes(mk(Y,i))||c==='paused')&&!p?'d44man':''}">${p?'':`<label class="mchk" title="Seleccionar ${m}"><input type="checkbox" data-msel="${i}" ${sel?'checked':''} aria-label="Seleccionar ${m} para registrar"><i></i></label>`}<span class="mname">${m}</span>${pill}${d44Btn(s,i,c)}${y46PBtn(s,i,c)}
+    const pill=esFam(s)&&c!=='paid'?'<span class="pill fam">Familiar</span>':c==='paid'?'<span class="pill ok">Pagado</span>':c==='pend'?`<span class="pill pend" title="Avisó el ${y46Fecha(y46Aviso(s,i))}">Avisó · ${esc(y46Aviso(s,i).medio)}</span>`:c==='paused'?'<span class="pill pause">En pausa</span>':c==='baja'?'<span class="pill baja">De baja</span>':c==='owed'?'<span class="pill bad">Adeuda</span>':c==='due'?'<span class="pill warn">A pagar</span>':c==='na'?'<span class="pill">Sin cuota</span>':'<span class="pill">Próximo</span>';
+    return `<div class="mrow ${c} ${p?'editing':''} ${sel?'sel':''} ${((s.debe||[]).includes(mk(Y,i))||c==='paused'||c==='baja')&&!p?'d44man':''}">${p?'':`<label class="mchk" title="Seleccionar ${m}"><input type="checkbox" data-msel="${i}" ${sel?'checked':''} aria-label="Seleccionar ${m} para registrar"><i></i></label>`}<span class="mname">${m}</span>${pill}${d44Btn(s,i,c)}${y46PBtn(s,i,c)}
       <select class="inp sm" id="medio${i}" aria-label="Medio de pago de ${m}">${MEDIOS.map(x=>`<option ${(p?p.medio===x:c==='pend'&&y46Aviso(s,i).medio===x)?'selected':''}>${x}</option>`).join('')}</select>
       <input class="inp sm num" id="monto${i}" value="${p?p.monto:(c==='na'||c==='future'?s.precio:montoMes(s,i))}" inputmode="numeric" aria-label="Monto de ${m}" style="width:86px">
       <input class="inp sm num" id="fecha${i}" value="${p?p.fecha:ddmm(iso(TODAY))}" aria-label="Fecha de pago de ${m}" style="width:62px" maxlength="5">
       ${p?'':`<button class="mini pay" data-pay="${i}">Registrar pago</button>`}${p?`<button class="mini danger" data-unpay="${i}">Anular</button><button class="mini" data-pcancel="${i}">Cancelar</button>`:''}</div>`}).join(''):'';
   const mtot=MS.set.reduce((n,i)=>n+montoMes(s,i),0);
-  const mbar=`${d44Resumen(s)}<div class="mtools">${adeuda.length?`<button class="mini" id="mseladeu">Seleccionar adeudados (${adeuda.length})</button>`:''}<span class="muted">Tildá varios meses para registrarlos juntos.</span></div>
+  const mbar=`${y47Banner(s)}${d44Resumen(s)}<div class="mtools">${adeuda.length?`<button class="mini" id="mseladeu">Seleccionar adeudados (${adeuda.length})</button>`:''}<span class="muted">Tildá varios meses para registrarlos juntos.</span></div>
     <div class="mbar ${MS.set.length?'on':''}" id="mbar" aria-live="polite"><div class="mbin">
       <b id="mbtxt">${mbTxt(MS.set.length,mtot)}</b>
       <select class="inp sm" id="mbmedio" aria-label="Medio de pago">${MEDIOS.map(x=>`<option>${x}</option>`).join('')}</select>
@@ -3645,7 +3671,7 @@ function norm(db){
 }
 function buildDB(rows){
   const db={socios:{}}, byId={};
-  for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,debe:Array.isArray(r.debe)?r.debe:[],pausas:Array.isArray(r.pausas)?r.pausas:[],avisos:r.avisos&&typeof r.avisos==='object'&&!Array.isArray(r.avisos)?r.avisos:{},rutina:r.rutina,photo:r.foto,nac:r.nacimiento||null,motiv:r.motivacion!==false,aprobado:r.aprobado!==false,funcional:!!r.funcional,rutinaProfe:r.rutina_profe||null,pagos:{},att:{},prog:{},medidas:[],sens:{},runs:{}};db.socios[r.dni]=s;byId[r.id]=s}
+  for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,debe:Array.isArray(r.debe)?r.debe:[],pausas:Array.isArray(r.pausas)?r.pausas:[],baja:r.baja||null,avisos:r.avisos&&typeof r.avisos==='object'&&!Array.isArray(r.avisos)?r.avisos:{},rutina:r.rutina,photo:r.foto,nac:r.nacimiento||null,motiv:r.motivacion!==false,aprobado:r.aprobado!==false,funcional:!!r.funcional,rutinaProfe:r.rutina_profe||null,pagos:{},att:{},prog:{},medidas:[],sens:{},runs:{}};db.socios[r.dni]=s;byId[r.id]=s}
   for(const p of rows.pagos){const s=byId[p.socio_id]; if(s) s.pagos[p.periodo]={fecha:p.fecha,medio:p.medio,monto:p.monto}}
   for(const a of rows.asis){const s=byId[a.socio_id]; if(!s) continue; const [y,m,d]=a.fecha.split('-').map(Number); const k=mk(y,m-1); (s.att[k]=s.att[k]||[]).push(d)}
   for(const x of rows.runs||[]){const s=byId[x.socio_id]; if(s&&x.datos&&x.clave) (s.runs[x.clave]=s.runs[x.clave]||{})[x.fecha]=x.datos}
@@ -3781,6 +3807,10 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.34',t:'Los socios pueden pausar o dar de baja su cuota',items:[
+    ['🚪','Desde la app, en Cuotas (o con «Pausar o dar de baja mi cuota» en Inicio), el socio puede dar de baja su cuota si no va a venir más: desde ese mes no se le cobra. Lo ves en su ficha como «Dio de baja su cuota» y en el filtro «De baja».'],
+    ['↺','Si vuelve, la reactiva él mismo o la reactivás vos con «Reactivar». Los meses que estuvo de baja quedan en pausa, no como deuda.'],
+    ['⏸','La pausa ahora también se encuentra aunque el mes ya esté pago: se pausa el mes que viene.']]},
   {v:'1.1.33',t:'Avisos de pago, pausa y sin recargo',items:[
     ['✅','Los socios pueden tocar «Ya pagué» y elegir si fue por transferencia o en efectivo. Te aparece como «Avisó que pagó» en la lista, en la ficha y en «Para tener en cuenta»: confirmalo con «Registrar pago» (ya viene elegido el medio) o tocá «No llegó».'],
     ['⏸','Botón de pausar: el socio puede pausar este mes o el que viene si no va a poder ir. Ese mes no se cobra ni queda como deuda. Vos también podés pausar cualquier mes desde la ficha.'],
@@ -4954,15 +4984,15 @@ function y46Panel(box,cual){ box.querySelectorAll('.y46pan').forEach(p=>{ const 
   box.querySelectorAll('[data-y46abrir]').forEach(b=>b.setAttribute('aria-expanded',!!box.querySelector('.y46pick.on')));
   box.querySelectorAll('[data-y46pz]').forEach(b=>b.setAttribute('aria-expanded',!!box.querySelector('.y46conf.on'))) }
 async function y46Rpc(fn,args,aplicar,okTxt){ const s=me(); if(!s) return;
-  const antes={avisos:Object.assign({},s.avisos||{}),pausas:(s.pausas||[]).slice()}; aplicar(s); render();
+  const antes={avisos:Object.assign({},s.avisos||{}),pausas:(s.pausas||[]).slice(),baja:s.baja||null}; aplicar(s); render();
   if(!CLOUD){ saveDB(); if(okTxt) toast(okTxt); return }
   try{ const r=await sb.rpc(fn,args); if(r.error) throw r.error; if(okTxt) toast(okTxt) }
-  catch(e){ s.avisos=antes.avisos; s.pausas=antes.pausas; render(); toast(errTxt(e)||'No se pudo guardar. Probá de nuevo.') } }
+  catch(e){ s.avisos=antes.avisos; s.pausas=antes.pausas; s.baja=antes.baja; render(); toast(errTxt(e)||'No se pudo guardar. Probá de nuevo.') } }
 async function y46Profe(fn,args,aplicar,okTxt){ const s=DB.socios[S.sel]; if(!s) return; if(!puedeP('dinero')) return toast('No tenés permiso para manejar cuotas');
-  const antes={avisos:Object.assign({},s.avisos||{}),pausas:(s.pausas||[]).slice()}; aplicar(s); render(true);
+  const antes={avisos:Object.assign({},s.avisos||{}),pausas:(s.pausas||[]).slice(),baja:s.baja||null}; aplicar(s); render(true);
   if(!CLOUD){ saveDB(); if(okTxt) toast(okTxt); return }
   try{ const r=await sb.rpc(fn,Object.assign({p_socio:s.id},args)); if(r.error) throw r.error; if(okTxt) toast(okTxt) }
-  catch(e){ s.avisos=antes.avisos; s.pausas=antes.pausas; render(true); toast(errTxt(e)||'No se pudo guardar. Probá de nuevo.') } }
+  catch(e){ s.avisos=antes.avisos; s.pausas=antes.pausas; s.baja=antes.baja; render(true); toast(errTxt(e)||'No se pudo guardar. Probá de nuevo.') } }
 document.addEventListener('click',e=>{ const t=e.target.closest&&e.target.closest('[data-y46abrir],[data-y46pz],[data-y46cerrar],[data-y46medio],[data-y46cancel],[data-y46pausa],[data-y46rech],[data-y46p],[data-ui43task="avisos"]'); if(!t) return;
   e.preventDefault(); e.stopImmediatePropagation(); const box=t.closest('.y46'), d=t.dataset, P1=PROFE.split(' ')[0];
   if(d.ui43task==='avisos'){ S.y46Filtro='avisaron'; ui43Go('socios'); return }
@@ -4984,8 +5014,41 @@ document.addEventListener('click',e=>{ const t=e.target.closest&&e.target.closes
 },true);
 function y46PBtn(s,i,c){ if(esFam(s)||!s.plan) return ''; const on=y46Pausa(s,i);
   if(!s.pagos[mk(Y,i)]&&c==='pend') return `<button type="button" class="mdebe y46pb y46no" data-y46rech="${i}" title="El pago no llegó: se borra el aviso y vuelve a figurar sin pagar">No llegó</button>`;
-  if(s.pagos[mk(Y,i)]||c==='na') return '<span class="mdebe y46pb ph" aria-hidden="true">Pausa</span>';
+  if(s.pagos[mk(Y,i)]||c==='na'||c==='baja') return '<span class="mdebe y46pb ph" aria-hidden="true">Pausa</span>';
   return `<button type="button" class="mdebe y46pb ${on?'on':''}" data-y46p="${i}" aria-pressed="${on}" title="${on?'Sacar la pausa':'Pausar '+MES[i].toLowerCase()+' (no se cobra)'}"><i aria-hidden="true"></i>Pausa</button>` }
+/* ---------- lote 47: dar de baja la cuota ---------- */
+const y47Num=k=>{ const [y,m]=String(k||'').split('-').map(Number); return y*12+m };
+const y47Mes=k=>+String(k||'').split('-')[1]||0;
+const y47Baja=(s,i)=>!!(s&&s.baja)&&Y*12+i>=y47Num(s.baja);
+const y47PausaMes=s=>[M,M+1].find(i=>i<12&&!s.pagos[mk(Y,i)]&&!y46Pausa(s,i)&&!y47Baja(s,i)&&!y46Aviso(s,i));
+function y47Link(s){ if(!s||!s.plan||esFam(s)) return ''; return `<button type="button" class="linkb y47ir" data-y47ir="1">${s.baja?'Ver mi cuota':'Pausar o dar de baja mi cuota'} ›</button>` }
+function y47Card(s){ if(!s||!s.plan||esFam(s)) return ''; const P1=PROFE.split(' ')[0];
+  if(s.baja) return `<section class="card y47 baja" id="y47"><div class="ttl"><b>Tu cuota</b><span class="pill baja">De baja</span></div>
+    <p class="y47t">Diste de baja tu cuota desde <b>${MES[y47Mes(s.baja)].toLowerCase()}</b>: no se te cobra más.${d44Lista(s).length?' Los meses que quedaron sin pagar siguen figurando.':''}</p>
+    <button type="button" class="btn y47btn" data-y47baja="0">↺ Volver a activar mi cuota</button></section>`;
+  const pz=y47PausaMes(s), enP=[M,M+1].filter(i=>i<12&&y46Pausa(s,i)), desde=s.pagos[mk(Y,M)]?M+1:M, nomP=pz===M?'este mes':pz!=null?MES[pz].toLowerCase():'';
+  return `<section class="card y47" id="y47"><div class="ttl"><b>Tu cuota</b><span>${esc(s.plan)} · ${fmt(s.precio)}</span></div>
+    ${enP.map(i=>`<div class="y47pz"><span><span aria-hidden="true">⏸</span> ${i===M?'Este mes':MES[i]} está en pausa: no se cobra.</span><button type="button" class="linkb" data-y46pausa="${i}" data-on="0">Reanudar</button></div>`).join('')}
+    <div class="y46 y47box"><div class="y46top">
+      ${pz!=null?`<button type="button" class="y46pz" data-y46pz="${pz}" aria-expanded="false"><span aria-hidden="true">⏸</span> Pausar ${nomP}</button>`:''}
+      <button type="button" class="y46pz y47bz" data-y47bz="1" aria-expanded="false"><span aria-hidden="true">🚪</span> Dar de baja mi cuota</button></div>
+    ${pz!=null?`<div class="y46pan y46conf" aria-hidden="true"><div class="y46in"><p class="y46q">¿Pausar ${nomP}?</p><small class="y46h">Si no vas a poder venir, ${pz===M?'este mes':'ese mes'} no pagás la cuota ni te queda debiendo. ${MES[(pz+1)%12]} sigue normal.</small>
+      <div class="y46ops"><button type="button" class="y46si" data-y46pausa="${pz}" data-on="1" tabindex="-1">Sí, pausar</button><button type="button" data-y46cerrar="1" tabindex="-1">No</button></div></div></div>`:''}
+    <div class="y46pan y47conf" aria-hidden="true"><div class="y46in"><p class="y46q">¿Dar de baja tu cuota?</p>
+      <small class="y46h">Si no vas a venir más, desde <b>${MES[desde%12].toLowerCase()}</b> no se te cobra la cuota.${d44Lista(s).length?' Los meses que debés siguen figurando.':''} Si después querés volver, la activás desde acá. ${esc(P1)} lo va a ver en el panel.</small>
+      <div class="y46ops"><button type="button" class="y47si" data-y47baja="1" tabindex="-1">Sí, dar de baja</button><button type="button" data-y46cerrar="1" tabindex="-1">No</button></div></div></div></div></section>` }
+function y47Banner(s){ if(!s||!s.baja||!s.plan||esFam(s)) return '';
+  return `<div class="y47ban" role="status"><span aria-hidden="true">🚪</span><span><b>Dio de baja su cuota</b><small>Desde ${MES[y47Mes(s.baja)].toLowerCase()} no se le cobra. Lo hizo desde la app.</small></span><button type="button" class="mini" data-y47rea="1">Reactivar</button></div>` }
+/* al volver a activar: los meses que estuvo de baja quedan en pausa (no se cobran) */
+function y47Reactivar(s){ const L=(s.pausas||[]).slice(); for(let n=y47Num(s.baja);n<Y*12+M;n++){ const k=Math.floor(n/12)+'-'+(n%12); if(!L.includes(k)) L.push(k) } s.pausas=L; s.baja=null }
+document.addEventListener('click',e=>{ const t=e.target.closest&&e.target.closest('[data-y47ir],[data-y47bz],[data-y47baja],[data-y47rea]'); if(!t) return;
+  e.preventDefault(); e.stopImmediatePropagation(); const d=t.dataset, P1=PROFE.split(' ')[0];
+  if(d.y47ir){ S.selMonth=M; if(S.tab==='cuotas') render(); else goTab('cuotas'); setTimeout(()=>{ const c=document.getElementById('y47'); if(c){ c.scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'}); c.classList.remove('y47flash'); void c.offsetWidth; c.classList.add('y47flash') } },reduceMotion?30:380); return }
+  if(d.y47bz){ const box=t.closest('.y46'); if(box) y46Panel(box,'y47conf'); return }
+  if(d.y47rea){ return y46Profe('profe_baja',{p_on:false},s=>{ y47Reactivar(s) },'Cuota reactivada') }
+  if(d.y47baja!=null){ const on=d.y47baja==='1';
+    return y46Rpc('socio_baja',{p_on:on},s=>{ if(on){ s.baja=mk(Y,s.pagos[mk(Y,M)]?M+1:M) } else if(s.baja) y47Reactivar(s) },on?'Listo: diste de baja tu cuota. '+P1+' lo va a ver.':'¡Bienvenido de vuelta! Tu cuota está activa.') }
+},true);
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
