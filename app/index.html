@@ -1691,6 +1691,40 @@ dialog[open]:not(.hsig):not(.hsvisor)::backdrop{animation:bdin .25s ease}
 .hsdel.sobre{transform:scale(1.3);background:#ed4956}
 @keyframes hsbaja{from{opacity:0;transform:translateY(-10px)}}
 @media (prefers-reduced-motion:reduce){.hsedpin,.hspal,.hstxt,#offbar,dialog[open]{animation:none!important}}
+/* v51 · Perfil sin scroll lateral (iOS: el campo de fecha tiene un ancho mínimo propio) */
+.pfopc>*,.field{min-width:0}
+input[type=date].inp,input[type=time].inp,input[type=month].inp{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;min-height:46px;text-align:left}
+input[type=date].inp::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type=date].inp::-webkit-calendar-picker-indicator{margin-left:auto}
+.screen{overflow-x:hidden;overscroll-behavior-x:none}
+html,body{overflow-x:hidden;max-width:100%}
+/* v51 · mensajes del plan familiar (panel) */
+.famlay{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;align-items:start}
+@media (max-width:860px){.famlay{grid-template-columns:minmax(0,1fr)}}
+.famlist{display:grid;gap:8px}
+.famrow{display:flex;align-items:center;gap:8px;animation:rise .35s var(--ease) both;animation-delay:calc(var(--k)*30ms)}
+.famrow .inp{flex:1;min-width:0}
+.famn{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--sunk);color:var(--muted);font-size:12px;font-weight:700}
+.famrow.famnew{animation:famin .35s cubic-bezier(.2,.9,.3,1.3) both}
+.famrow.famsale{transition:opacity .18s,transform .18s;opacity:0;transform:translateX(16px)}
+@keyframes famin{from{opacity:0;transform:translateY(-6px) scale(.97)}}
+.fampv{display:grid;gap:8px;position:sticky;top:12px}
+.famprev{margin:0}
+/* v51 · presencia en el chat */
+.chhead .chav,.chc .chav{position:relative;flex:none;display:inline-grid}
+.prdot{opacity:0;transform:scale(.4);transition:opacity .25s,transform .3s cubic-bezier(.2,.9,.3,1.4)}
+.prdot.on{opacity:1;transform:none}
+.prsub,.prprev{transition:color .2s}
+.prsub.pron{color:#2fd47a}
+.prsub.pract,.prprev.pract{color:#2fd47a;font-weight:700}
+.prpts{display:inline-flex;gap:2px;margin-left:3px;vertical-align:middle}
+.prpts b{width:3.5px;height:3.5px;border-radius:50%;background:currentColor;animation:prpt 1.2s infinite ease-in-out}
+.prpts b:nth-child(2){animation-delay:.15s}.prpts b:nth-child(3){animation-delay:.3s}
+@keyframes prpt{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-2px)}}
+.chhead .prtit{display:flex;flex-direction:column;min-width:0;flex:1}
+.chhead .prtit small{font-size:12px;color:var(--muted)}
+.chhead .prtit small.pron,.chhead .prtit small.pract{color:#2fd47a}
+@media (prefers-reduced-motion:reduce){.prpts b,.famrow{animation:none}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2405,7 +2439,8 @@ const planDe=n=>PLANES.find(x=>x.n===n);
 /* Plan familiar: solo lo asigna el profe desde el panel; no aparece para elegir, no paga nunca, pase libre ilimitado */
 const FAMILIAR='Plan familiar'; const esFam=s=>!!(s&&s.plan===FAMILIAR);
 const FAM_CHISTE=['Eso sí: ponete a limpiar el gimnasio 🧹','Tu cuota se paga pasando el trapo por las máquinas 🧽','Los discos no se guardan solos, ¿eh? 🏋️','Pase libre a cambio de dejar todo ordenadito 😎','Vos no pagás… pero el lampazo te espera 🪣'];
-const famChiste=()=>FAM_CHISTE[(TODAY.getDate()+TODAY.getMonth())%FAM_CHISTE.length];
+function famMsgs(){const g=gymInfo(),L=Array.isArray(g.fam_msgs)?g.fam_msgs.map(x=>String(x||'').trim()).filter(Boolean):[];return L.length?L:FAM_CHISTE}
+const famChiste=()=>{const L=famMsgs();return esc(L[(TODAY.getDate()+TODAY.getMonth())%L.length])};
 /* las cuotas las edita el profe (pestaña Cuotas del panel). En la nube vienen de la tabla planes; en el prototipo, de la base local */
 const planTxt=v=>String(v==null?'':v).trim().replace(/\s+/g,' ').replace(/[<>"]/g,'');
 const planLimpio=x=>{const o={n:planTxt(x.n),p:Math.max(0,parseInt(String(x.p).replace(/\D/g,''))||0),d:planTxt(x.d)}; if(planTxt(x.top)) o.top=planTxt(x.top); return o};
@@ -3799,10 +3834,10 @@ function renderMensajes(){ const byK={}, c1v=c1xChatFn(); Object.values(DB.socio
   const vista=S.chVista==='sug'&&esAdmin()?'sug':'chat', nsug=esAdmin()?SUGS.filter(x=>!x.leida).length:0, sel=S.chSel, ss=sel&&byK[sel], L=sel?(conv[sel]||[]):[];
   if(vista==='chat'&&sel) setTimeout(()=>{chAbajo(); chMarcarLeido(sel,'profe')},30);
   const sinConv=Object.values(DB.socios).filter(s=>!conv[chK(s)]&&byK[chK(s)]).sort((a,b)=>a.name.localeCompare(b.name,'es'));
-  const conversaciones=`<div class="chconv">${lista.length?lista.map((x,i)=>`<button class="chc ${x.k===sel&&vista==='chat'?'on':''} ${x.nl?'nl':''}" data-chsel="${esc(x.k)}" style="--k:${i}">${avatar('sm',x.s.photo||null,x.s.name)}<span class="chct"><b>${esc(x.s.name)}</b><small>${x.u.de==='profe'?'Vos: ':''}${esc(chResumen(x.u).slice(0,60))}</small></span><span class="chcm"><small>${chHora(x.u.creado)}</small>${x.nl?`<i>${x.nl}</i>`:''}</span></button>`).join(''):'<p class="muted chnada">Todavía no hay mensajes. Cuando un socio te escriba desde la app, aparece acá.</p>'}
+  const conversaciones=`<div class="chconv">${lista.length?lista.map((x,i)=>`<button class="chc ${x.k===sel&&vista==='chat'?'on':''} ${x.nl?'nl':''}" data-chsel="${esc(x.k)}" style="--k:${i}"><span class="chav">${avatar('sm',x.s.photo||null,x.s.name)}<i class="chon prdot ${PR.socios.has(x.k)?'on':''}" data-prdot="${esc(x.k)}" aria-hidden="true"></i></span><span class="chct"><b>${esc(x.s.name)}</b><small class="prprev" data-prlista="${esc(x.k)}" data-prbase="${esc((x.u.de==='profe'?'Vos: ':'')+chResumen(x.u).slice(0,60))}">${prTexto('lista',x.k)||esc((x.u.de==='profe'?'Vos: ':'')+chResumen(x.u).slice(0,60))}</small></span><span class="chcm"><small>${chHora(x.u.creado)}</small>${x.nl?`<i>${x.nl}</i>`:''}</span></button>`).join(''):'<p class="muted chnada">Todavía no hay mensajes. Cuando un socio te escriba desde la app, aparece acá.</p>'}
     ${sinConv.length?`<label class="chnew"><span>Escribirle a un socio</span><select class="inp" id="chnuevo"><option value="">Elegí un socio…</option>${sinConv.map(s=>`<option value="${esc(chK(s))}">${esc(s.name)}</option>`).join('')}</select></label>`:''}</div>`;
   const hilo=vista==='sug'?`<div class="chsug"><div class="chhead"><b>Sugerencias anónimas</b><span class="muted">No se sabe quién las manda</span></div>${SUGS.length?SUGS.map((x,i)=>`<div class="sugi ${x.leida?'':'nl'}" style="--k:${i}"><p>${esc(x.texto).replace(/\n/g,'<br>')}</p><small>${chHora(x.creado)}</small><span class="sugac">${x.leida?'':`<button class="mini" data-sugleida="${x.id}">Marcar leída</button>`}<button class="mini danger" data-sugborrar="${x.id}">Borrar</button></span></div>`).join(''):'<p class="muted chnada">Todavía no llegó ninguna. Los socios las mandan desde la sección Gimnasio.</p>'}</div>`
-    :ss?`<div class="chthread"><div class="chhead">${avatar('sm',ss.photo||null,ss.name)}<b>${esc(ss.name)}</b><button class="linkb" data-chficha="${esc(ss.dni)}">Ver ficha ›</button></div>
+    :ss?`<div class="chthread"><div class="chhead"><span class="chav">${avatar('sm',ss.photo||null,ss.name)}<i class="chon prdot ${PR.socios.has(sel)?'on':''}" data-prdot="${esc(sel)}" aria-hidden="true"></i></span><span class="chtit prtit"><b>${esc(ss.name)}</b><small class="prsub" data-prsocio="${esc(sel)}" data-prbase="">${prTexto('profe',sel)}</small></span><button class="linkb" data-chficha="${esc(ss.dni)}">Ver ficha ›</button></div>
       <div class="chlist chpanel" id="chatlist">${L.length?chBurbujas(L.map(m=>Object.assign({},m,{nuevo:false})),'profe'):'<div class="chvacio"><span aria-hidden="true">💬</span><b>Empezá la charla</b><p>Lo que escribas le llega al socio en la app (y como notificación si las activó).</p></div>'}</div>
       <form class="chbar" id="chatpf" autocomplete="off">${chAdjHtml()}<textarea id="chatpin" rows="1" placeholder="Escribile a ${esc(ss.name.split(' ')[0])}…" maxlength="1000" aria-label="Respuesta">${esc((S.chDraft||{})[sel]||'')}</textarea><button class="chsend ${((S.chDraft||{})[sel]||'').trim()?'':'mic'}" aria-label="Enviar">${ICO_SEND}</button></form></div>`
     :'<div class="chthread chempty"><p class="muted">Elegí una conversación.</p></div>';
@@ -3890,8 +3925,37 @@ function renderCuotas(){
       <div class="cuoacts"><button type="button" class="mini" id="padd">＋ Agregar cuota</button><span class="muted" style="font-size:12.5px">El 🎓 10% universitario se calcula solo sobre el precio de cada cuota.</span></div></div>
       <aside class="cuoprev" aria-label="Vista previa de la app"><div class="pvbox"><span class="pvt">Así lo ven los socios</span><span class="pvbig">Elegí tu cuota</span><div id="pvplanes" inert><div class="planes">${L.map(pvPlan).join('')}</div></div></div></aside></div>
     <p class="hint" style="max-width:none;margin:0">Cuando cambiás algo aparece «Guardar todo» abajo. Al guardar, la app de los socios se actualiza al instante.</p>
-  </section></div>`;
+  </section>${famEditorHtml()}</div>`;
 }
+/* v51 · mensajes del plan familiar: el profe los escribe; el socio ve uno distinto cada día */
+function famDraft(){ if(!S.famD) S.famD=famMsgs().slice(); return S.famD }
+function famDirty(){ return !!S.famD&&JSON.stringify(S.famD.map(x=>x.trim()).filter(Boolean))!==JSON.stringify(famMsgs()) }
+function famHoy(L){ L=L.map(x=>x.trim()).filter(Boolean); return L.length?L[(TODAY.getDate()+TODAY.getMonth())%L.length]:'' }
+function famFila(x,i){ return `<div class="famrow" data-fami="${i}" style="--k:${i}"><span class="famn num" aria-hidden="true">${i+1}</span><input class="inp" data-famt="${i}" maxlength="140" value="${esc(x)}" placeholder="Ej: Vos no pagás… pero el lampazo te espera 🪣" aria-label="Mensaje ${i+1}"><button type="button" class="del" data-famdel="${i}" aria-label="Borrar el mensaje ${i+1}" title="Borrar">×</button></div>` }
+function famEditorHtml(){ const L=famDraft();
+  return `<section class="panel fampanel" id="fampanel"><div class="panelhead"><div class="cuohd"><h2>🏠 Mensajes del plan familiar</h2><p class="muted">Los socios con plan familiar ven uno de estos mensajes en Inicio y en Cuotas. Cambia solo cada día.</p></div><span class="muted num" id="famcnt">${L.length} mensaje${L.length===1?'':'s'}</span></div>
+    <div class="famlay"><div class="famlist" id="famlist">${L.map(famFila).join('')}</div>
+      <aside class="fampv" aria-label="Vista previa"><span class="pvt">Hoy lo ve así</span><div class="famcard famprev"><div class="famico" aria-hidden="true">🧹</div><b>Plan familiar</b><p>No pagás cuota. <span id="famhoy">${esc(famHoy(L))||'<i>(sin mensaje)</i>'}</span></p></div></aside></div>
+    <div class="cuoacts"><button type="button" class="mini" id="famadd" ${L.length>=30?'disabled':''}>＋ Agregar mensaje</button><button type="button" class="linkb" id="famej">Volver a los de ejemplo</button><span class="muted" style="font-size:12.5px">Podés usar emojis. Hasta 30 mensajes.</span></div>
+  </section>` }
+function famPintarLista(foco){ const box=document.getElementById('famlist'); if(!box) return; const L=famDraft();
+  box.innerHTML=L.map(famFila).join(''); const c=document.getElementById('famcnt'); if(c) c.textContent=L.length+' mensaje'+(L.length===1?'':'s');
+  const a=document.getElementById('famadd'); if(a) a.disabled=L.length>=30; famPrev();
+  if(foco!=null){ const i=box.querySelector('[data-famt="'+foco+'"]'); if(i){ i.focus(); const r=i.closest('.famrow'); if(r&&!reduceMotion) r.classList.add('famnew') } } }
+function famPrev(){ const h=document.getElementById('famhoy'); if(h){ const t=famHoy(famDraft()); h.innerHTML=t?esc(t):'<i>(sin mensaje)</i>' } }
+document.addEventListener('input',e=>{ const t=e.target; if(!t||!t.dataset||t.dataset.famt==null) return; famDraft()[+t.dataset.famt]=t.value; famPrev(); gsUpd() });
+document.addEventListener('click',e=>{ const b=e.target.closest('#famadd,#famej,[data-famdel]'); if(!b||S.view!=='duenio') return; const L=famDraft();
+  if(b.id==='famadd'){ if(L.length>=30) return; L.push(''); famPintarLista(L.length-1) }
+  else if(b.id==='famej'){ S.famD=FAM_CHISTE.slice(); famPintarLista() }
+  else{ const i=+b.dataset.famdel, r=b.closest('.famrow'); const fin=()=>{ L.splice(i,1); famPintarLista(); gsUpd() };
+    if(r&&!reduceMotion){ r.classList.add('famsale'); setTimeout(fin,180) } else fin() }
+  gsUpd() });
+function famSave(){ if(!famDirty()) return true; const L=S.famD.map(x=>x.trim().slice(0,140)).filter(Boolean);
+  const antes=gymInfo().fam_msgs, v=L.length?L:null;
+  if(CLOUD){ GYM=Object.assign({},GYM||{},{fam_msgs:v});
+    q(sb.from('gym_info').upsert({id:1,fam_msgs:v,updated_at:new Date().toISOString()})).catch(e=>{ GYM=Object.assign({},GYM||{},{fam_msgs:antes}); toast('No se pudieron guardar los mensajes: '+errTxt(e)); render(true) }) }
+  else{ DB.gym=Object.assign({},DB.gym||{},{id:1,fam_msgs:v}); saveDB() }
+  S.famD=null; return true }
 /* al tipear se actualiza solo lo que cambió (tarjeta y vista previa), sin redibujar la pantalla */
 function pdUpd(i,f){ const x=S.pd.L[i], c=document.querySelector('#app [data-pc="'+i+'"]'); if(!x||!c) return;
   const b=document.querySelector('#pvplanes [data-pv="'+i+'"]');
@@ -4430,7 +4494,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
-  {v:'1.1.41',t:'Editor de historias y app más pulida',items:[['🎨','Antes de subir una historia, los socios pueden dibujar con pincel, marcador o neón, escribir texto y elegir el formato de la foto.'],['✨','Las historias se abren y se cierran con animación, y la foto vuela al círculo al publicarla.'],['📷','En el chat, el botón para mandar fotos ahora tiene una cámara.'],['🛠️','Arreglos generales: aviso de sin conexión, sin zoom molesto en iPhone al escribir y botones más fáciles de tocar.']]},{v:'1.1.40',t:'Historias arriba y se pueden borrar',items:[['⭕','Las historias ahora están arriba, entre el logo y tu perfil, en todas las pantallas.'],['🗑️','Cada socio puede eliminar sus historias antes de las 24 horas.']]},{v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
+  {v:'1.1.42',t:'Chat como WhatsApp y mensajes del plan familiar',items:[['🟢','En el chat ves cuándo el socio está en línea, escribiendo o grabando un audio (y él ve lo mismo de vos).'],['🏠','En Cuotas podés escribir los mensajes que ven los socios con plan familiar. Cambian solos cada día.'],['📱','Arreglado: en el Perfil del celular la pantalla ya no se mueve hacia los costados.']]},{v:'1.1.41',t:'Editor de historias y app más pulida',items:[['🎨','Antes de subir una historia, los socios pueden dibujar con pincel, marcador o neón, escribir texto y elegir el formato de la foto.'],['✨','Las historias se abren y se cierran con animación, y la foto vuela al círculo al publicarla.'],['📷','En el chat, el botón para mandar fotos ahora tiene una cámara.'],['🛠️','Arreglos generales: aviso de sin conexión, sin zoom molesto en iPhone al escribir y botones más fáciles de tocar.']]},{v:'1.1.40',t:'Historias arriba y se pueden borrar',items:[['⭕','Las historias ahora están arriba, entre el logo y tu perfil, en todas las pantallas.'],['🗑️','Cada socio puede eliminar sus historias antes de las 24 horas.']]},{v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
   {v:'1.1.36',t:'Bienvenida con desenfoque localizado',items:[['👋','El desenfoque aparece solo detrás del saludo.']]},
   {v:'1.1.35',t:'Forge Studio y nueva bienvenida',items:[['✦','Los logos de Forge Studio acompañan a Training Club.'],['👋','La bienvenida desenfoca la pantalla durante el saludo.']]},
   {v:'1.1.34',t:'Los socios pueden pausar o dar de baja su cuota',items:[
@@ -5550,13 +5614,13 @@ async function chRecEmpezar(form){ if(CHREC||!form) return;
   let rec; try{ rec=new MediaRecorder(st,mt?{mimeType:mt}:undefined) }catch(e){ st.getTracks().forEach(t=>t.stop()); toast('No se pudo empezar a grabar'); return }
   const partes=[]; rec.ondataavailable=ev=>{ if(ev.data&&ev.data.size) partes.push(ev.data) };
   CHREC={rec,st,partes,t0:Date.now(),form:form.id,k,yo:form.id==='chatf'?'socio':'profe',mt:rec.mimeType||mt};
-  rec.start(250); chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
+  rec.start(250); chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); try{ prEstado('audio') }catch(x){} try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
 function chRecPintar(){ if(!CHREC) return; const f=document.getElementById(CHREC.form); if(!f) return chRecParar(false);
   let o=document.getElementById('chrec');
   if(!o){ document.body.insertAdjacentHTML('beforeend',`<div class="chrec" id="chrec" role="status" aria-label="Grabando audio"><button type="button" class="chrecx" aria-label="Borrar audio">${ICO_TRASH}</button><span class="chrecdot" aria-hidden="true"></span><span class="chrect num">0:00</span><span class="chrecw" aria-hidden="true">${'<i></i>'.repeat(16)}</span><button type="button" class="chrecok" aria-label="Enviar audio">${ICO_SEND}</button></div>`); o=document.getElementById('chrec') }
   const r=f.getBoundingClientRect(); o.style.left=r.left+'px'; o.style.top=r.top+'px'; o.style.width=r.width+'px'; o.style.height=r.height+'px';
   const sg=Math.floor((Date.now()-CHREC.t0)/1000); o.querySelector('.chrect').textContent=chDur(sg); if(sg>=300){ toast('Llegaste a 5 minutos: se manda el audio'); chRecParar(true) } }
-function chRecParar(enviar){ const c=CHREC; if(!c) return; CHREC=null; clearInterval(c.iv);
+function chRecParar(enviar){ const c=CHREC; if(!c) return; CHREC=null; clearInterval(c.iv); try{ prEstado(null) }catch(x){}
   const o=document.getElementById('chrec'); if(o){ o.classList.add('fuera'); setTimeout(()=>o.remove(),200) }
   const secs=Math.max(1,Math.round((Date.now()-c.t0)/1000));
   c.rec.onstop=()=>{ c.st.getTracks().forEach(t=>t.stop()); if(!enviar) return;
@@ -5693,6 +5757,62 @@ document.addEventListener('click',e=>{ const t=e.target.closest&&e.target.closes
   addEventListener('unhandledrejection',e=>{const m=String(e.reason&&(e.reason.message||e.reason)||'');
     if(/Failed to fetch|NetworkError|Load failed|network|fetch/i.test(m)){e.preventDefault();toast(navigator.onLine?'No se pudo conectar. Probá de nuevo en un momento.':'Sin conexión. Probá cuando vuelva internet.')}});
 })();
+/* v51 · presencia del chat como WhatsApp: en línea, escribiendo… y grabando audio…
+   un canal de Realtime: presence (quién tiene la app abierta) + broadcast (qué está haciendo). No viaja texto de mensajes. */
+const PR={ch:null,sig:'',socios:new Set(),profes:0,profeNom:{},est:new Map(),yo:null,rol:null,mio:null,mioT:0,mioK:null,tiempo:0};
+function prTexto(lado,k){ if(!k) return '';
+  const e=PR.est.get((lado==='socio'?'p:':'s:')+k), vivo=e&&e.hasta>Date.now();
+  if(vivo){ const que=e.estado==='audio'?'grabando audio…':'escribiendo…';
+    if(lado==='socio'&&e.n){ const cab=(document.querySelector('.chtop .chtit b')||{}).textContent||''; if(!cab.toLowerCase().startsWith(String(e.n).toLowerCase().split(' ')[0])) return esc(String(e.n).split(' ')[0])+' está '+que }
+    return que }
+  if(lado==='socio') return PR.profes>0?'en línea':'';
+  if(lado==='profe') return PR.socios.has(k)?'en línea':'';
+  return '' }
+function prPintar(){
+  document.querySelectorAll('.prsub[data-prsocio]').forEach(el=>{ const k=el.dataset.prsocio, lado=el.closest('.chtop')?'socio':'profe', t=prTexto(lado,k)||el.dataset.prbase||'';
+    const activo=/escribiendo|grabando/.test(t), h=activo?t+'<i class="prpts" aria-hidden="true"><b></b><b></b><b></b></i>':t; if(el.innerHTML!==h) el.innerHTML=h;
+    el.classList.toggle('pract',activo); el.classList.toggle('pron',t==='en línea') });
+  document.querySelectorAll('.prprev[data-prlista]').forEach(el=>{ const t=prTexto('lista',el.dataset.prlista), b=el.dataset.prbase||'';
+    const nuevo=t||esc(b); if(el.innerHTML!==nuevo) el.innerHTML=nuevo; el.classList.toggle('pract',!!t) });
+  document.querySelectorAll('.prdot[data-prdot]').forEach(el=>{ const k=el.dataset.prdot; el.classList.toggle('on',k==='profe'?PR.profes>0:PR.socios.has(k)) }) }
+function prConectar(){
+  if(!CLOUD||typeof sb==='undefined'||!sb||!S.ready) return;
+  const yo=S.view==='socio'&&me()?me().id:null, soyProfe=S.view==='duenio'&&!!S.pro&&!!PRO;
+  const sig=yo?'s:'+yo:soyProfe?'p':''; if(sig===PR.sig) return;
+  if(PR.ch){ try{sb.removeChannel(PR.ch)}catch(e){} PR.ch=null; PR.socios=new Set(); PR.profes=0 }
+  PR.sig=sig; PR.yo=yo; PR.rol=yo?'socio':soyProfe?'profe':null; if(!sig) return;
+  const ch=sb.channel('tc-presencia',{config:{presence:{key:(yo?'s-':'p-')+Math.random().toString(36).slice(2)},broadcast:{self:false}}});
+  ch.on('presence',{event:'sync'},()=>{ const st=ch.presenceState(), so=new Set(); let pf=0;
+    Object.values(st).forEach(L=>L.forEach(m=>{ if(m.rol==='socio'&&m.socio) so.add(m.socio); else if(m.rol==='profe') pf++ }));
+    PR.socios=so; PR.profes=pf; prPintar() });
+  ch.on('broadcast',{event:'estado'},({payload:p})=>{ if(!p||!p.socio) return;
+    if(PR.rol==='socio'&&(p.de!=='profe'||p.socio!==PR.yo)) return;
+    if(PR.rol==='profe'&&p.de!=='socio') return;
+    const key=(p.de==='profe'?'p:':'s:')+p.socio;
+    if(p.estado) PR.est.set(key,{estado:p.estado,n:p.n||'',hasta:Date.now()+6000}); else PR.est.delete(key);
+    prPintar() });
+  ch.subscribe(st=>{ if(st==='SUBSCRIBED'&&!document.hidden) prTrack() });
+  PR.ch=ch }
+function prTrack(){ if(!PR.ch) return; try{ PR.ch.track({rol:PR.rol,socio:PR.yo||null}) }catch(e){} }
+document.addEventListener('visibilitychange',()=>{ if(!PR.ch) return; if(document.hidden){ prEstado(null); try{PR.ch.untrack()}catch(e){} } else prTrack() });
+setInterval(()=>{ let cambio=false; PR.est.forEach((v,k)=>{ if(v.hasta<=Date.now()){ PR.est.delete(k); cambio=true } }); if(cambio) prPintar();
+  if(PR.mio&&Date.now()-PR.mioT>2500) prMandar() },1000);
+/* lo que estoy haciendo yo: 'escribe' | 'audio' | null, en la charla k (para el profe, la del socio elegido) */
+function prEstado(estado,k){ if(!PR.ch||!PR.rol) return; k=k||(PR.rol==='socio'?PR.yo:S.chSel); if(!k) return;
+  if(estado===PR.mio&&k===PR.mioK&&Date.now()-PR.mioT<2500) return;
+  const antes=PR.mio, antesK=PR.mioK; PR.mio=estado; PR.mioK=k;
+  if(!estado&&!antes) return; if(antesK&&antesK!==k&&antes) prMandar(antesK,null);
+  prMandar() }
+function prMandar(k,estado){ if(!PR.ch) return; k=k||PR.mioK; if(estado===undefined) estado=PR.mio; PR.mioT=Date.now();
+  const n=PR.rol==='profe'&&PRO?String((PRO.nombre||'')+' '+(PRO.apellido||'')).trim():'';
+  try{ PR.ch.send({type:'broadcast',event:'estado',payload:{socio:k,de:PR.rol,estado,n}}) }catch(e){} }
+let prTipeoT=0;
+document.addEventListener('input',e=>{ const id=e.target&&e.target.id; if(id!=='chatin'&&id!=='chatpin') return;
+  const v=e.target.value.trim(); clearTimeout(prTipeoT);
+  if(!v){ if(PR.mio==='escribe') prEstado(null); return }
+  if(!CHREC) prEstado('escribe'); prTipeoT=setTimeout(()=>{ if(PR.mio==='escribe') prEstado(null) },4000) });
+document.addEventListener('submit',e=>{ if(e.target&&(e.target.id==='chatf'||e.target.id==='chatpf')){ clearTimeout(prTipeoT); setTimeout(()=>{ if(PR.mio==='escribe') prEstado(null) },50) } },true);
+document.addEventListener('focusout',e=>{ const id=e.target&&e.target.id; if((id==='chatin'||id==='chatpin')&&PR.mio==='escribe') setTimeout(()=>{ const a=document.activeElement; if(!a||(a.id!=='chatin'&&a.id!=='chatpin')) prEstado(null) },300) });
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
@@ -5705,6 +5825,7 @@ function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return
   $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio'); gsUpd();
   cerrarIntro();
   if(S.view==='socio') bnvSocio(); else if(S.view==='duenio'&&S.pro) bnvProfe();
+  try{ prConectar(); prPintar() }catch(e){}
 }
 
 async function elegirPlan(n){
@@ -5875,8 +5996,8 @@ function chatSocioUI(modo){ const k=chK(me()), L=MSGS.filter(m=>m.k===k).map(m=>
   setTimeout(()=>{chAbajo(); chMarcarLeido(k,'socio')},30);
   return `<div class="chwrap ${modo}">
   <div class="chtop">${modo==='full'?`<button class="back" data-tab="${S.chBack||'inicio'}" aria-label="Volver">‹</button>`:'<span class="chgrab" aria-hidden="true"></span>'}
-    <span class="chav">${avatar('md',c1xCab(L).f,c1xCab(L).n)}<i class="chon" aria-hidden="true"></i></span>
-    <span class="chtit"><b>${esc(c1xCab(L).n)}</b><small>Tu profe · te responde por acá</small></span>
+    <span class="chav">${avatar('md',c1xCab(L).f,c1xCab(L).n)}<i class="chon prdot ${PR.profes>0?'on':''}" data-prdot="profe" aria-hidden="true"></i></span>
+    <span class="chtit"><b>${esc(c1xCab(L).n)}</b><small class="prsub" data-prsocio="${esc(k||'')}" data-prbase="Tu profe · te responde por acá">${prTexto('socio',k)||'Tu profe · te responde por acá'}</small></span>
     ${modo==='sheet'?`<button class="chfull" data-tab="chat" aria-label="Abrir en pantalla completa" title="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button><button class="chx" id="chsheetx" aria-label="Cerrar">×</button>`:''}</div>
   <div class="chlist" id="chatlist">${L.length?chBurbujas(L,'socio'):`<div class="chvacio"><span class="chola" aria-hidden="true">👋</span><b>¡Hola! Soy ${esc(pn)}</b><p>Preguntame lo que necesites: tu rutina, una molestia, si no podés venir o la cuota. Te respondo acá y te llega una notificación.</p></div>`}</div>
   <div class="chchips" id="chchips" ${dr?'hidden':''} role="group" aria-label="Mensajes rápidos">${CHIPS.map(([e,c],i)=>`<button type="button" data-chip="${esc(c)}" style="--k:${i}"><span aria-hidden="true">${e}</span>${esc(c)}</button>`).join('')}</div>
@@ -6254,7 +6375,7 @@ function gsTrack(t){ if(!gsEl(t)) return; if(!S.fd||S.fd.dni!==S.sel) S.fd={dni:
 function gsApply(){ const v=gsV();
   document.querySelectorAll('#datosf [id],#cuotaf [id],.mrow.editing [id]').forEach(el=>{ if(!gsEl(el)) return; el.dataset.o=gsVal(el);
     if(el.id in v){ if(el.type==='checkbox') el.checked=v[el.id]==='1'; else el.value=v[el.id] } }) }
-function gsQue(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdDirty()?['cuotas']:[]; if(S.view==='duenio'&&S.ptabP==='profes'&&!S.sel) return y42GymDirty()?['la info del gimnasio']:[]; const k=Object.keys(gsV()), q=[];
+function gsQue(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return [].concat(pdDirty()?['cuotas']:[],famDirty()?['los mensajes del plan familiar']:[]); if(S.view==='duenio'&&S.ptabP==='profes'&&!S.sel) return y42GymDirty()?['la info del gimnasio']:[]; const k=Object.keys(gsV()), q=[];
   if(k.some(x=>/^(fname|fdni|falta|fnac)$/.test(x))) q.push('datos'); if(k.some(x=>/^(cplan|cprecio|cuni|cvence)$/.test(x))) q.push('cuota');
   if(k.some(x=>GS_PAGO.test(x))) q.push('pagos'); if(S.dirty&&S.edit&&S.edit.dni===S.sel) q.push('rutina'); return q }
 const gsDirty=()=>S.view==='duenio'&&(!!S.sel||S.ptabP==='cuotas'||S.ptabP==='profes')&&gsQue().length>0;
@@ -6269,7 +6390,7 @@ function gsUpd(){ let b=$('#gsbar');
   if(on&&tx.innerHTML!==html){ const era=tx.innerHTML; tx.innerHTML=html; if(era&&b.classList.contains('on')){tx.classList.remove('bump'); void tx.offsetWidth; tx.classList.add('bump')} }
   if(b.classList.contains('on')!==on){ b.classList.toggle('on',on); b.inert=!on }
   document.body.classList.toggle('gson',on) }
-function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdSave(); if(S.view==='duenio'&&S.ptabP==='profes'&&!S.sel) return y42GymSave(); const s=DB.socios[S.sel]; if(!s) return false;
+function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel){ if(!pdSave()) return false; const soloFam=!pdDirty()&&famDirty(); famSave(); if(soloFam) toast('Mensajes del plan familiar guardados'); return true } if(S.view==='duenio'&&S.ptabP==='profes'&&!S.sel) return y42GymSave(); const s=DB.socios[S.sel]; if(!s) return false;
   const v=gsV(), q=gsQue(); if(!q.length) return true;
   const g=(id,def)=>id in v?v[id]:def;
   const bad=(t,el)=>{toast(t); if(typeof el==='string') el=document.getElementById(el); if(el){el.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'}); el.focus({preventScroll:true})} return false};
@@ -6309,14 +6430,14 @@ function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdSa
   const b=$('#gsbar'); if(b&&b.classList.contains('on')&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; b.classList.add('ok'); document.body.classList.remove('gson');
     clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{b.classList.remove('ok'); gsUpd()},950) } else gsUpd();
   return true }
-function gsDescartar(){ S.gymDraft=null; S.svDraft=null; S.pd=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
+function gsDescartar(){ S.gymDraft=null; S.svDraft=null; S.pd=null; S.famD=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
 /* salir con cambios sin guardar: guardar y salir / salir sin guardar / seguir editando */
 function gsLeave(go){ if(!gsDirty()) return go();
   let m=$('#gsm');
   if(!m){ m=document.createElement('div'); m.id='gsm'; m.className='gsm'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true'); m.setAttribute('aria-labelledby','gsmt'); m.inert=true;
     m.innerHTML='<div class="gsmc"><b id="gsmt">Tenés cambios sin guardar</b><p id="gsmp"></p><div class="gsma"><button class="btn sm" id="gsmsave" type="button">Guardar y salir</button><button class="mini danger" id="gsmdrop" type="button">Salir sin guardar</button><button class="mini" id="gsmstay" type="button">Seguir editando</button></div></div>';
     document.body.appendChild(m) }
-  const s=DB.socios[S.sel]; $('#gsmp').textContent=S.sel?'En la ficha de '+(s?s.name:'este socio')+': '+gsLista(gsQue())+'.':S.ptabP==='profes'?'En la info del gimnasio (dirección, redes, sobre el profe o servicios).':'En las cuotas del gimnasio (precios, nombres o descripciones).';
+  const s=DB.socios[S.sel]; $('#gsmp').textContent=S.sel?'En la ficha de '+(s?s.name:'este socio')+': '+gsLista(gsQue())+'.':S.ptabP==='profes'?'En la info del gimnasio (dirección, redes, sobre el profe o servicios).':'En las cuotas del gimnasio (precios, nombres, descripciones o los mensajes del plan familiar).';
   gsLeave.go=go; m.inert=false; m.classList.add('on'); setTimeout(()=>{const x=$('#gsmsave'); if(x) x.focus()},30) }
 function gsCerrar(){const m=$('#gsm'); if(m){m.classList.remove('on'); m.inert=true} gsLeave.go=null}
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('button');
