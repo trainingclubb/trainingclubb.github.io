@@ -1280,6 +1280,81 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .c2rc{display:inline-flex;align-items:center;gap:5px;flex-wrap:nowrap;min-width:116px;white-space:nowrap}
 .c2rc .pill,.fnck,.fncell .mini{white-space:nowrap}
 .c2fmini{padding-left:7px!important;padding-right:7px!important;animation:bmIn .3s var(--spring)}
+/* lote 42x: app del socio */
+#bnvx .bnvcard,#bnvx .bnvglow{animation-duration:2.6s}#bnvx .bnvbar{animation-duration:2.2s}
+.x42fun .ttl span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.x42ftop{display:flex;align-items:center;gap:12px;margin:2px 0 12px}
+.x42fico{flex:none;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:linear-gradient(135deg,var(--c2fun,#FF8A3D),#FCE024);box-shadow:0 10px 22px -10px var(--c2fun,#FF8A3D);animation:pop .6s var(--spring) both}
+.x42ftx{display:flex;flex-direction:column;gap:2px;min-width:0}.x42ftx b{font-size:15.5px}.x42ftx small{font-size:13px;font-weight:700;color:var(--muted)}.x42ftx small.x42hoy{color:var(--accent)}
+.x42fw{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.x42fw span{height:34px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:12.5px;background:var(--sunk);border:1px solid var(--line);color:var(--muted);animation:pop .45s var(--spring) both;animation-delay:calc(var(--k)*45ms + 120ms)}
+.x42fw span.on{background:linear-gradient(160deg,var(--c2fun,#FF8A3D),color-mix(in srgb,var(--c2fun,#FF8A3D) 70%,#FCE024));border-color:transparent;color:#1a0b04}
+.x42fw span.hoy{outline:2px solid var(--ink);outline-offset:2px}
+.x42pln{display:flex;align-items:center;gap:7px;height:22px;margin:10px 0 0;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x42pln b{color:var(--ink);overflow:hidden;text-overflow:ellipsis}.x42plk{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;background:var(--sunk);color:var(--muted)}
+.x42pln.on{color:var(--accent)}.x42pln.on .x42plk{background:var(--accent);color:#06110e;animation:pop .45s var(--spring) both}
+.x42ses{container-type:inline-size;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:38px;flex-wrap:nowrap}
+.x42ses .tcb-ses{min-width:0;flex:0 1 auto;white-space:nowrap;overflow:hidden;animation:none}
+.x42ses .tcb-ses>span:not(.live){overflow:hidden;text-overflow:ellipsis}
+.x42ses.x42cambio .tcb-ses{animation:x42SesIn .45s var(--spring) both}
+@keyframes x42SesIn{from{opacity:.35;transform:scale(.94)}to{opacity:1;transform:none}}
+.tcb-ses.x42idle{opacity:.62}.tcb-ses.x42idle .live{background:var(--muted);animation:none;box-shadow:none}.tcb-ses.x42idle b{font-weight:600;color:var(--muted)}
+.x42fin{flex:none;white-space:nowrap;transition:opacity .3s var(--ease),transform .35s var(--spring)}
+.x42fin:disabled{visibility:hidden;opacity:0;transform:scale(.9)}
+.x42fin.x42hot{animation:x42Hot 1.8s ease-in-out infinite}
+@keyframes x42Hot{0%,100%{box-shadow:0 0 0 0 rgba(36,201,167,.45)}50%{box-shadow:0 0 0 7px rgba(36,201,167,0)}}
+@container (max-width:400px){.x42fx{display:none}}
+.pgwrap.x42lock{overflow-y:auto!important;overflow-x:hidden!important;align-content:flex-start;overscroll-behavior:contain;scrollbar-width:thin}
+.tcb-exs .x42xtra{border-style:dashed;animation:x42Chip .3s var(--spring) both;animation-delay:calc(var(--k)*25ms)}
+@keyframes x42Chip{from{opacity:0;transform:scale(.85)}}
+.x42nada{font-size:12.5px;color:var(--muted);padding:7px 2px;white-space:nowrap}
+.x42sola{min-height:36px}
+.x42cnt{display:inline-block;text-align:right}
+.pod.p2 .avatar{animation:x42Plata 2.8s ease-in-out infinite}
+@keyframes x42Plata{0%,100%{box-shadow:0 0 0 3px var(--surface),0 0 0 5px #C0C7CF,0 0 0 0 rgba(192,199,207,0)}50%{box-shadow:0 0 0 3px var(--surface),0 0 0 5px #DDE3E8,0 0 18px 5px rgba(192,199,207,.5)}}
+.pod.p2 .med{animation:x42Gira 3.4s cubic-bezier(.45,0,.2,1) .4s infinite}
+@keyframes x42Gira{0%,52%{transform:perspective(160px) rotateY(0) scale(1);filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}72%{transform:perspective(160px) rotateY(200deg) scale(1.18);filter:drop-shadow(0 0 8px rgba(225,232,238,.95)) brightness(1.35)}86%,100%{transform:perspective(160px) rotateY(360deg) scale(1);filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}}
+.pod.p3 .avatar{animation:x42Bronce 2.2s ease-in-out .3s infinite}
+@keyframes x42Bronce{0%,100%{box-shadow:0 0 0 3px var(--surface),0 0 0 5px #CD7F32,0 0 0 0 rgba(205,127,50,.5)}45%{box-shadow:0 0 0 3px var(--surface),0 0 0 5px #E3A35F,0 0 0 9px rgba(205,127,50,0)}}
+.pod.p3 .med{transform-origin:50% 100%;animation:x42Bote 2.2s var(--ease) .3s infinite}
+@keyframes x42Bote{0%,55%,100%{transform:translateY(0) scale(1)}64%{transform:translateY(-10px) scale(.94,1.08)}74%{transform:translateY(0) scale(1.14,.88)}82%{transform:translateY(-4px) scale(.98,1.03)}90%{transform:translateY(0) scale(1)}}
+[data-theme="light"] .pod.p2 .med{filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+@media (prefers-reduced-motion:reduce){.x42fico,.x42fw span,.x42pln.on .x42plk,.x42ses .tcb-ses,.x42fin,.tcb-exs .x42xtra{animation:none!important;transition:none!important}}
+/* lote 42 z: dibujito del ejercicio en el editor de rutina del panel (ancho fijo, no mueve la tabla) */
+.z42ex{display:flex;align-items:center;gap:7px;min-width:0}
+.z42ex>.inp{flex:1 1 auto;min-width:0;width:auto}
+.anim.z42mini{width:40px;height:40px;min-width:40px;flex:0 0 40px;box-sizing:border-box;border-radius:10px;transition:opacity .3s var(--ease),transform .35s var(--spring)}
+.anim.z42mini svg{filter:none}
+.anim.z42mini .bone{stroke-width:3.4}.anim.z42mini .skull{stroke-width:2.6}
+.anim.z42mini.z42vacio{opacity:.35}
+.anim.z42mini.z42pop{animation:z42pop .42s var(--spring)}
+@keyframes z42pop{from{transform:scale(.78)}to{transform:none}}
+@media (max-width:640px){.exr>.z42ex{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){.anim.z42mini.z42pop{animation:none}}
+/* v42y: textos que cambian sin cambiar el tamaño (los dos apilados, se ve uno) */
+.y42sw{display:inline-grid;justify-items:center;align-items:center;vertical-align:bottom}
+.y42sw>*{grid-area:1/1;white-space:nowrap;transition:opacity .25s var(--ease),transform .35s var(--spring),visibility .25s}
+.y42sw>.y42alt,.y42sw.y42on>:not(.y42alt){opacity:0;visibility:hidden;transform:translateY(3px)}
+.y42sw.y42on>.y42alt{opacity:1;visibility:visible;transform:none}
+.c2fst.y42sw{justify-items:start;vertical-align:baseline}
+.y42off{visibility:hidden;pointer-events:none}
+.gnchk.y42gnoff{opacity:.5;cursor:default}
+/* "Cambios sin guardar" de la ficha: siempre ocupa su lugar, aparece con un fundido */
+#dirty{white-space:nowrap;transition:opacity .3s var(--ease),visibility .3s}
+#dirty[hidden]{display:inline-block!important;visibility:hidden;opacity:0}
+/* contador de Sugerencias: superpuesto, no ensancha el botón */
+.chvis .cnt.y42scnt{position:absolute;top:-7px;right:-4px;font-size:10px;font-weight:800;line-height:1;padding:3px 6px;min-width:18px;text-align:center;border-radius:999px;background:var(--warn);color:#070807;box-shadow:0 0 0 2px var(--surface);animation:cntpop .5s var(--spring);pointer-events:none}
+.chvis .cnt.y42scnt[hidden]{display:none}
+/* contadores de las pestañas viejas (.pnav fuera del menú lateral): superpuestos también en escritorio */
+.owner .pnav:not(.ui43-sidebar .pnav) button{position:relative}
+.owner .pnav:not(.ui43-sidebar .pnav) .cnt{position:absolute;top:2px;right:4px;font-size:10px;padding:2px 5px;min-width:16px;text-align:center}
+/* el tilde Funcional de la lista: el input oculto queda dentro del tilde, así tocarlo no hace saltar la página */
+.fnck{position:relative}
+/* asistencias 14 días en tema claro */
+[data-theme="light"] .a14avg{border-top-color:rgba(20,26,22,.5)}
+[data-theme="light"] .a14line{border-top-color:rgba(20,26,22,.38)}
+[data-theme="light"] .a14d.ce .a14t{background:repeating-linear-gradient(135deg,rgba(20,26,22,.075) 0 4px,transparent 4px 8px)}
+@media (prefers-reduced-motion:reduce){.y42sw>*,#dirty{transition:none}.chvis .cnt.y42scnt{animation:none}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2054,16 +2129,13 @@ function mesEstado(s,i){
 const vencido=(s,i)=>i<M||(i===M&&D>venceDia(s,Y,i));
 const montoMes=(s,i)=>Math.round((s.precio||0)*(vencido(s,i)?1+RECARGO:1));
 const deudaMonto=s=>s.plan?MES.reduce((n,_,i)=>n+(mesEstado(s,i)==='owed'?montoMes(s,i):0),0):0;
-/* Avisos de pago: días 1, 3, 6, el día antes del vencimiento y el día del vencimiento */
+/* Avisos de pago: solo dos por mes, igual que el push de la nube: el 5 (está por vencer) y el 10 (ya venció). El plan familiar no paga. */
 function aviso(s){
-  if(!s||!s.plan||s.pagos[mk(Y,M)]) return null;
-  const v=venceDia(s,Y,M), m=MES[M].toLowerCase(), p=fmt(s.precio), q=v-D;
+  if(!s||!s.plan||esFam(s)||(s.pagos||{})[mk(Y,M)]) return null;
+  const v=venceDia(s,Y,M), m=MES[M].toLowerCase(), p=fmt(s.precio);
   const A={};
-  A[1]={t:'Ya podés pagar la cuota de '+m,b:`Tenés tiempo hasta el ${v} para pagar ${p}. Pasado el ${v} se cobra un 10% de recargo.`};
-  A[3]={t:'Recordatorio: cuota de '+m,b:`Te quedan ${q} días para pagarla sin recargo (hasta el ${v}). Después se suma un 10%.`};
-  A[6]={t:'Te quedan '+q+' días para pagar la cuota',b:`La cuota de ${m} se paga hasta el ${v}. Después del ${v} hay un recargo del 10%.`};
-  A[v-1]={t:'Mañana vence tu cuota',b:`Tenés hasta mañana ${v} para pagar sin recargo. Si no podés pagar la cuota, acercate a hablar con Ezequiel.`};
-  A[v]={t:'Hoy vence tu cuota',b:`Pagá hoy y evitá el recargo del 10% que se suma desde mañana.`};
+  if(v>=5) A[5]={t:'Tu cuota está por vencer',b:`La cuota de ${m} (${p}) vence el ${v}. Pagala a tiempo y evitá el recargo.`};
+  if(v<=10) A[10]={t:'Tu cuota venció',b:'Si tenés algún problema, no dudes en contactarte con Ezequiel.'};
   return A[D]?Object.assign({k:mk(Y,M)+'-'+D},A[D]):null;
 }
 const notifOK=()=>typeof Notification!=='undefined';
@@ -2214,7 +2286,7 @@ function screenInicio(){
     ${head(`<span class="pill ${e.c}">${e.c==='ok'?'Pagada':e.t}</span>`)}<div class="stbody" id="stbody"><div class="stin">
     ${e.c==='ok'?`<div class="ccrow"><span class="big num">Vence ${e.v}</span><button class="ccbtn" id="ccambiar" aria-expanded="${!!S.ccOpen}">⇄ Cambiar de cuota</button></div>`:`<span class="big num">${fmt(e.c==='bad'?montoMes(s,M):s.precio)}</span>`}
     <span class="sub num">${e.c==='ok'?`Pagaste el ${e.pago.fecha} con ${e.pago.medio}. Te quedan ${e.days} días.`:e.c==='bad'?`Venció el ${e.v}. Incluye el 10% de recargo.`:`Hasta el ${e.v} sin recargo${e.days===0?', hoy':`, en ${e.days} día${e.days===1?'':'s'}`}.`}</span>
-    ${e.c==='ok'?(S.ccOpen?`<div class="ccwrap"><p class="ccsub">Tocá la cuota que querés. Este mes ya está pago: el cambio corre desde la próxima.</p>${planesHtml(s)}</div>`:''):`${planesHtml(s)}<div class="payrow">${comoPagarHtml(e.c==='bad'?montoMes(s,M):s.precio)}${uniHtml}</div>`}</div></div></section>${pedir}`;
+    ${e.c==='ok'?(S.ccOpen?`<div class="ccwrap"><p class="ccsub">Tocá la cuota que querés. Este mes ya está pago: el cambio corre desde la próxima.</p>${planesHtml(s)}${x42PlanNota(s)}</div>`:''):`${planesHtml(s)}<div class="payrow">${comoPagarHtml(e.c==='bad'?montoMes(s,M):s.precio)}${uniHtml}</div>`}</div></div></section>${pedir}`;
   const best=Object.entries(s.prog||{}).map(([n,a])=>[n,Math.max(0,...a.map(x=>+x.kg||0))]).sort((a,b)=>b[1]-a[1])[0];
   return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div>${miniRank()}</div>
   ${st}
@@ -2229,7 +2301,7 @@ function screenInicio(){
     <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
     <div>${r.ex.slice(0,3).map(x=>`<div class="mini-ex"><span>${esc(exNm(x))}</span><span class="num">${exMeta(x)}</span></div>`).join('')}</div>
     <button class="link" data-tab="rutina">Ver rutina completa →</button></section>`
-  :`<section class="card soft"><div class="ttl"><b>Tu rutina</b></div><p class="muted">Todavía no tenés rutina. ${PROFE} te la arma y te aparece acá.</p></section>`}
+  :s.funcional?x42FunCard():`<section class="card soft"><div class="ttl"><b>Tu rutina</b></div><p class="muted">Todavía no tenés rutina. ${PROFE} te la arma y te aparece acá.</p></section>`}
   <div class="row2">
     <div class="tile"><div class="k">Visitas en ${MES[M].toLowerCase()}</div><div class="v num" data-count="${att.length}">${att.length}</div></div>
     <button class="tile tbtn" data-tab="rutina" data-rsubgo="prog"><div class="k">Mejor marca</div><div class="v num">${best&&best[1]?best[1]+'<span class="of"> kg</span>':'—'}</div><div class="s">${best&&best[1]?esc(best[0]):'Anotá tus pesos'}</div></button>
@@ -2256,9 +2328,9 @@ function screenPerfil(){
   </div>
   <div class="list">
     <div><span>DNI</span><span class="num">${fmtDNI(S.user.dni)}</span></div>
-    <div><span>Plan</span><span>${s.plan?esc(s.plan)+' · '+fmt(s.precio):'Sin asignar'}</span></div>
+    <div><span>Plan</span><span>${s.plan?esc(s.plan)+(esFam(s)?' · sin cuota':' · '+fmt(s.precio)):'Sin asignar'}</span></div>
     <div><span>Socio desde</span><span class="num">${ddmm(s.alta)}/${s.alta.slice(0,4)}</span></div>
-    <div><span>Profe</span><span>${PROFE}</span></div>
+    <div><span>Profe</span><span>${esc(profeNom(s))}</span></div>
     <div><span>Cuota</span><span class="pill ${e.c}">${e.t}</span></div>
     <div><span>Notificaciones</span>${!notifOK()?'<span class="muted" style="font-size:13px;text-align:right">Instalá la app en tu inicio para recibirlos</span>':Notification.permission==='granted'?'<span class="pill ok">Activados</span>':Notification.permission==='denied'?'<span class="muted" style="font-size:13px">Bloqueados en el celu</span>':'<button class="mini pay" id="avisos">Activar</button>'}</div>
   </div>
@@ -2337,7 +2409,7 @@ function screenRutina(){
   const r=R[S.day]; const n=r.ex.length; const d=[...S.done].filter(k=>k.startsWith(S.day+'-')).length;
   const hechos=new Set(R.map((x,i)=>rdHecho(R,i)?i:-1).filter(i=>i>=0)), rdNuevo=new Set(S.rdVisto?[...hechos].filter(i=>!S.rdVisto.has(i)):[]); S.rdVisto=hechos;
   return `${timerCard()}
-  <div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${PROFE}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
+  <div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${esc(profeNom(s))}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
   ${R.length>1?`<div class="days hscroll" role="group" aria-label="Día">${R.map((x,i)=>`<button data-day="${i}" aria-pressed="${i===S.day}" class="${rdHecho(R,i)?'rdok':''} ${rdNuevo.has(i)?'rdnew':''}">${rdHecho(R,i)?'<b class="rdtic" aria-label="completo">✓</b>':''}${esc(x.d)}<small>${esc(x.t||'')}</small></button>`).join('')}</div>`:''}
   <div class="prog"><i style="width:${n?d/n*100:0}%"></i></div>
   <div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k); const RN=runOf(e); if(RN) return runCard(RN,k,on);
@@ -2346,7 +2418,7 @@ function screenRutina(){
       <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${exMeta(e)}</span>
         ${e[3]?`<button class="restbtn" data-rest="${restSecs(e[3])}">⏱ Descanso ${esc(e[3])}</button>`:''}</div>
       <button class="chk" data-ex="${k}" aria-pressed="${on}" aria-label="Marcar ${esc(e[0])} como hecho">✓</button></div>`}).join('')}</div>
-  ${n&&d===n?`<div class="rdfin ${rdNuevo.has(S.day)?'rdnew':''}"><span class="rdfico" aria-hidden="true">🏁</span><div><b>¡${esc(r.d)} completo!</b><small>Queda en verde toda la semana. El lunes se reinicia para volver a marcarlo.</small></div></div>${TCB.sesT0?'<button class="btn" id="fin">Terminar entrenamiento</button>':''}`:''}`;
+  ${n&&d===n?`<div class="rdfin ${rdNuevo.has(S.day)?'rdnew':''}"><span class="rdfico" aria-hidden="true">🏁</span><div><b>¡${esc(r.d)} completo!</b><small>Queda en verde toda la semana. El lunes se reinicia para volver a marcarlo.</small></div></div>`:''}`;
 }
 /* nombres parecidos usan la misma animación (ej. "press de banca" → Press banca) */
 const sinTilde=t=>String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
@@ -2354,7 +2426,7 @@ const ALIAS=[[/apertura|pec ?deck|peck|mariposa/,'Apertura en máquina'],[/press
   [/inclinad/,'Press inclinado'],[/frances|rompecraneos|skull/,'Press francés'],[/tras ?nuca|copa|sobre la cabeza|overhead/,'Tríceps tras nuca'],
   [/tricep|extension.*polea|push ?down/,'Tríceps en polea'],[/vuelo|elevacion(es)? lateral|laterales/,'Vuelos laterales'],[/posterior|face ?pull|pajaro/,'Posteriores en polea'],
   [/dominada.*asist/,'Dominadas asistidas'],[/dominada|pull ?up|chin ?up/,'Dominadas'],[/jalon.*(unilat|un brazo|1 brazo)/,'Jalón unilateral'],[/jalon.*(cerrad|neutr|v\b|triangulo)/,'Jalón toma cerrada'],[/jalon|polea al pecho|lat ?pull/,'Jalón al pecho'],
-  [/scott|predicador|curl.*banco|banco.*curl/,'Curl en banco Scott'],[/isometric|\biso\b/,'Curl isométrico'],[/concentrad/,'Curl concentrado'],[/martillo|hammer/,'Curl martillo'],[/curl.*barra|barra.*curl/,'Curl con barra'],[/curl|bicep/,'Curl bíceps'],
+  [/scott|predicador|curl.*banco|banco.*curl/,'Curl en banco Scott'],[/(curl|bicep).*(isometric|\biso\b)|(isometric|\biso\b).*(curl|bicep)/,'Curl isométrico'],[/concentrad/,'Curl concentrado'],[/martillo|hammer/,'Curl martillo'],[/curl.*barra|barra.*curl/,'Curl con barra'],[/curl|bicep/,'Curl bíceps'],
   [/bulgar/,'Estocada búlgara'],[/estocada|zancada|lunge/,'Estocadas'],[/sentadilla|squat/,'Sentadilla'],[/rumano|rdl/,'Peso muerto rumano'],[/peso muerto|deadlift/,'Peso muerto'],
   [/hip ?t[hr]*[ru]*st|empuje de cadera|puente/,'Hip thrust'],[/remo.*manc|traccion.*banco|serrucho/,'Remo con mancuerna'],[/remo|traccion/,'Remo con barra'],
   [/paralela|fondo|dips/,'Fondos'],[/press militar|militar|hombro|press arnold/,'Press militar'],[/press (plano|banca)|banca|plano/,'Press banca'],[/prensa/,'Prensa'],[/gemelo|pantorrilla/,'Gemelos'],
@@ -2554,7 +2626,7 @@ function screenAsist(){
   const isCur=y===Y&&m===M; const weeks=Math.max(1,(isCur?D:n)/7);
   const total=Object.values(s.att).reduce((a,b)=>a+b.length,0);
   return `<h2>Asistencia</h2>${asSeg()}
-  <div class="row2"><div class="tile"><div class="k">${MES[m]}</div><div class="v num"><span class="cnt" data-to="${days.length}">${days.length}</span> <span style="font-size:16px">visita${days.length===1?'':'s'}</span></div></div>
+  <div class="row2"><div class="tile"><div class="k">${MES[m]}</div><div class="v num"><span class="cnt x42cnt" data-count="${days.length}" data-ck="x42as${Y}-${m}" style="min-width:${String(days.length).length}ch">${days.length}</span> <span style="font-size:16px">visita${days.length===1?'':'s'}</span></div></div>
   <div class="tile"><div class="k">${total?'Por semana':'En total'}</div><div class="v num">${total?(days.length/weeks).toFixed(1).replace('.',','):'0'}</div></div></div>
   <div class="calhead"><button id="prevM" aria-label="Mes anterior" ${prevOk?'':'disabled'}>‹</button><strong>${MES[m]} ${y}</strong><button id="nextM" aria-label="Mes siguiente" ${nextOk?'':'disabled'}>›</button></div>
   <div class="cal ${cdir?'slide-'+cdir:''}">${['L','M','M','J','V','S','D'].map(w=>`<span class="wd">${w}</span>`).join('')}${cells}</div>
@@ -2562,6 +2634,25 @@ function screenAsist(){
   <p style="margin:0;font-size:13px;color:var(--muted)">${total?'Los días marcados son los que viniste al gym.':'Todavía no registraste entradas. Tocá "Vine hoy al gym" en Inicio cuando llegues.'}</p>`;
 }
 
+const LEGAL_VERSION='1.0';
+function adforgeLegal(){
+  return `<div class="legal-login" style="display:grid;gap:8px;font-size:13px">
+    <details><summary>Términos y condiciones</summary>
+      <p>Versión ${LEGAL_VERSION} · Borrador para revisión</p>
+      <p>AdForge concede permiso para usar Training Club mientras tu acceso esté habilitado. La licencia de uso del software propio es personal, limitada y no transferible. La marca del gimnasio y los componentes de terceros conservan sus respectivos derechos y licencias.</p>
+      <p>Usá tu propia cuenta. No accedas a información ajena ni compartas mensajes privados sin autorización. El gimnasio administra las membresías, las cuotas y las rutinas. Esta aplicación sirve para organizar el entrenamiento. Las condiciones de uso respetan los derechos que te reconoce la ley.</p>
+    </details>
+    <details><summary>Política de privacidad</summary>
+      <p>Versión ${LEGAL_VERSION} · Borrador para revisión</p>
+      <p>El DNI y el nombre se usan para identificar tu ficha y habilitar el acceso. La app registra, según las funciones que uses, rutinas, asistencias, cuotas, marcas de entrenamiento, datos de perfil, mensajes y notificaciones. El gimnasio y su personal autorizado usan esta información para gestionar tu cuenta y acompañar el entrenamiento.</p>
+      <p>El ranking muestra una versión abreviada del nombre y el número de asistencias a otros socios. Los mensajes se comparten con el personal autorizado. Supabase presta el servicio de almacenamiento y autenticación. Evitá incluir información médica en los mensajes.</p>
+      <p>Podés solicitar acceso, rectificación o supresión de tus datos. Pendiente para la versión definitiva: identidad, domicilio y contacto del responsable, responsables por gimnasio, plazos de conservación y destinos de transferencia.</p>
+    </details>
+    <label><input type="checkbox" id="legal-terms" required ${S.legalRegistro?'checked':''}> Acepto los términos y condiciones</label>
+    <label><input type="checkbox" id="legal-privacy" required ${S.legalRegistro?'checked':''}> Acepto la política de privacidad</label>
+    <small>Software propio bajo licencia de uso de AdForge</small>
+  </div>`;
+}
 function screenLogin(logo){
   const m=S.lmode==='crear'?'crear':'dni', d=S.ldni||'';
   const T={dni:['Entrá con tu DNI','Con tu DNI encontramos tu ficha, tus cuotas y tu rutina.'],
@@ -2577,7 +2668,7 @@ function screenLogin(logo){
     <div class="lstep" data-m="${m}">
       <h1 class="ltitle">${T[0]}</h1>
       <p class="lsub">${T[1]}</p>
-      <form id="loginf" class="lform" novalidate>${body}
+      <form id="loginf" class="lform" novalidate>${body}${adforgeLegal()}
         <p class="lerr" id="lerr" role="alert" hidden></p>
         <button class="btn" type="submit">${btn}</button>
       </form>
@@ -2586,8 +2677,12 @@ function screenLogin(logo){
   </div>`;
 }
 // Entra con el DNI. Si no existe y no hay nombre → {nuevo:true} (hay que pedir el nombre). Con nombre → crea la cuenta.
-async function socioEntrar(dni,name){
-  if(CLOUD) return await q(sb.rpc('entrar_socio',{p_dni:dni,p_nombre:name||null}));
+async function socioEntrar(dni,name,aceptacion){
+  if(!aceptacion.terminos||!aceptacion.privacidad) throw new Error('Aceptá ambos documentos para continuar.');
+  if(CLOUD) return await q(sb.rpc('adforge_entrar_socio',{
+    p_dni:dni,p_nombre:name||null,p_version:LEGAL_VERSION,
+    p_terminos:aceptacion.terminos,p_privacidad:aceptacion.privacidad
+  }));
   const ex=DB.socios[dni]; if(ex) return {nombre:ex.name};
   if(!name) return {nuevo:true};
   const s=ensureSocio(dni,name); s.aprobado=false; s.c2reg=new Date().toISOString(); saveDB(); return {nombre:s.name,creado:true,pendiente:true};
@@ -2760,7 +2855,7 @@ const RUNA={A:fk({p:[48,61],tor:14,ua:-48,fa:35,ua2:58,fa2:150,th:52,sh:8,th2:-3
 const ln=(a,b,c='bone',w)=>`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" class="${c}"${w?` stroke-width="${w}"`:''}/>`;
 const ci=(p,r,c)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${r}" class="${c}"/>`;
 function drawSkel(a,t){
-  const P={}; for(const k in a.A){const A=a.A[k],B=a.B[k]||A;P[k]=[A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t]}
+  const P=a.F?a.F(t):{}; if(!a.F) for(const k in a.A){const A=a.A[k],B=a.B[k]||A;P[k]=[A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t]}
   let g=ln([4,94],[96,94],'floor')+`<ellipse cx="${P.p[0].toFixed(1)}" cy="94" rx="15" ry="2.2" class="shadow"/>`;
   for(const q of a.eq){
     if(q[0]==='bench') g+=ln([q[1],q[3]],[q[2],q[3]],'gear-s',5)+ln([q[1]+3,q[3]],[q[1]+3,94],'gear-s',2.5)+ln([q[2]-3,q[3]],[q[2]-3,94],'gear-s',2.5);
@@ -2769,6 +2864,7 @@ function drawSkel(a,t){
     if(q[0]==='cable') g+=ci([q[1],q[2]+3],3,'gear')+ln([q[1],q[2]+3],P.w,'cable');
     if(q[0]==='cablex') g+=ci([q[1],q[2]],3,'gear')+ci([q[3],q[4]],3,'gear')+ln([q[1],q[2]],P.w,'cable')+ln([q[3],q[4]],P.w2,'cable');
     if(q[0]==='legs') for(const L of q[1]) g+=ln(L,[L[0],94],'gear-s',2.5);
+    if(q[0]==='bg') g+=q[1](P,t);
   }
   const FR=a.eq.some(q=>q[0]==='front');
   if(P.k2) g+=ln(P.p,P.k2,FR?'bone':'bone dim')+ln(P.k2,P.f2,FR?'bone':'bone dim');
@@ -2792,6 +2888,7 @@ function drawSkel(a,t){
     if(q[0]==='rope') g+=ln(P.w,[P.w[0]-2,P.w[1]+5],'gear',2.4)+ln(P.w,[P.w[0]+2,P.w[1]+5],'gear',2.4);
     if(q[0]==='vbar') g+=`<polyline points="${P.w[0]-4},${P.w[1]+2} ${P.w[0]},${P.w[1]-2} ${P.w[0]+4},${P.w[1]+2}" class="gear" stroke-width="2.4"/>`;
     if(q[0]==='grip') g+=ci(P.w,2.6,'gearf');
+    if(q[0]==='fn') g+=q[1](P,t);
     if(q[0]==='pads') for(const [E,W] of [[P.e,P.w],[P.e2,P.w2]]) g+=ln(E,W,'gear',4.5);
     if(q[0]==='handle') g+=ln([P.w[0]-9,P.w[1]],[P.w[0]+9,P.w[1]],'gear',3);
     if(q[0]==='wheel') g+=ci([P.w[0],P.w[1]+4],5,'plate')+ci([P.w[0],P.w[1]+4],1.2,'gearf');
@@ -2819,7 +2916,7 @@ function animLoop(ts){
     const tm=document.getElementById('timer'); if(tm) tm.classList.toggle('ending',r<=5000&&r>0)}
   document.querySelectorAll('.anim').forEach(el=>{const a=el.dataset.anim==='__run'?RUNA:ANIM[el.dataset.anim]; if(!a) return;
     if(AIO){ if(!el.__io){el.__io=1; AIO.observe(el)} else if(AVIS.get(el)===false) return }
-    const dur=a.dur||2300; const ph=(ts%dur)/dur; const t=reduceMotion?(a.cyc?.5:1):a.cyc?.5-.5*Math.cos(ph*2*Math.PI):tempo(ph);
+    const dur=a.dur||2300; const ph=(ts%dur)/dur; const t=reduceMotion?(a.cyc?.5:1):a.lin?ph:a.cyc?.5-.5*Math.cos(ph*2*Math.PI):tempo(ph);
     el.firstElementChild.innerHTML=drawSkel(a,t)});
   if(reduceMotion) return;
   if(document.querySelector('.anim')||S.sw.run||S.rest.run) requestAnimationFrame(animLoop); else animDormir();   /* figuras y corredor de running (.anim); se despierta cuando cambia la pantalla */
@@ -2992,7 +3089,7 @@ function renderMensajes(){ const byK={}, c1v=c1xChatFn(); Object.values(DB.socio
   const conv={}; MSGS.forEach(m=>{(conv[m.k]=conv[m.k]||[]).push(m)});
   const lista=Object.entries(conv).filter(([k])=>byK[k]).map(([k,L])=>({k,s:byK[k],L,u:L[L.length-1],nl:L.filter(m=>m.de==='socio'&&!m.leido).length})).sort((a,b)=>String(b.u.creado).localeCompare(String(a.u.creado)));
   if(S.chSel&&!byK[S.chSel]) S.chSel=null; if(!S.chSel&&lista.length&&!S.chVista) S.chSel=lista[0].k;
-  const vista=S.chVista==='sug'?'sug':'chat', nsug=SUGS.filter(x=>!x.leida).length, sel=S.chSel, ss=sel&&byK[sel], L=sel?(conv[sel]||[]):[];
+  const vista=S.chVista==='sug'&&esAdmin()?'sug':'chat', nsug=esAdmin()?SUGS.filter(x=>!x.leida).length:0, sel=S.chSel, ss=sel&&byK[sel], L=sel?(conv[sel]||[]):[];
   if(vista==='chat'&&sel) setTimeout(()=>{chAbajo(); chMarcarLeido(sel,'profe')},30);
   const sinConv=Object.values(DB.socios).filter(s=>!conv[chK(s)]&&byK[chK(s)]).sort((a,b)=>a.name.localeCompare(b.name,'es'));
   const conversaciones=`<div class="chconv">${lista.length?lista.map((x,i)=>`<button class="chc ${x.k===sel&&vista==='chat'?'on':''} ${x.nl?'nl':''}" data-chsel="${esc(x.k)}" style="--k:${i}">${avatar('sm',x.s.photo||null,x.s.name)}<span class="chct"><b>${esc(x.s.name)}</b><small>${x.u.de==='profe'?'Vos: ':''}${esc(x.u.texto.slice(0,60))}</small></span><span class="chcm"><small>${chHora(x.u.creado)}</small>${x.nl?`<i>${x.nl}</i>`:''}</span></button>`).join(''):'<p class="muted chnada">Todavía no hay mensajes. Cuando un socio te escriba desde la app, aparece acá.</p>'}
@@ -3003,15 +3100,16 @@ function renderMensajes(){ const byK={}, c1v=c1xChatFn(); Object.values(DB.socio
       <form class="chbar" id="chatpf" autocomplete="off"><textarea id="chatpin" rows="1" placeholder="Escribile a ${esc(ss.name.split(' ')[0])}…" maxlength="1000" aria-label="Respuesta">${esc((S.chDraft||{})[sel]||'')}</textarea><button class="chsend" aria-label="Enviar">${ICO_SEND}</button></form></div>`
     :'<div class="chthread chempty"><p class="muted">Elegí una conversación.</p></div>';
   $('#app').innerHTML=`<div class="owner enter">${proBar()}<section class="panel chpanelw"><div class="panelhead"><h2>Mensajes</h2>
-    <div class="seg2 chvis" style="--m:${vista==='sug'?1:0}"><button data-chvista="chat" aria-pressed="${vista==='chat'}">Chats</button><button data-chvista="sug" aria-pressed="${vista==='sug'}">🕶️ Sugerencias${nsug?` <span class="cnt">${nsug}</span>`:''}</button></div></div>
+    ${esAdmin()?`<div class="seg2 chvis" style="--m:${vista==='sug'?1:0}"><button data-chvista="chat" aria-pressed="${vista==='chat'}">Chats</button><button data-chvista="sug" aria-pressed="${vista==='sug'}">🕶️ Sugerencias<span class="cnt y42scnt" ${nsug?'':'hidden'}>${nsug||''}</span></button></div>`:''}</div>
     <div class="chgrid ${vista==='sug'?'sug':''}">${vista==='chat'?conversaciones:''}${hilo}</div></section></div>`;
   }
 document.addEventListener('click',e=>{ const r=e.target.closest('[data-retry]'); if(r&&S.view==='duenio'){ e.stopPropagation(); chReintentar(r.dataset.retry) } },true);
 document.addEventListener('click',async e=>{ const b=e.target.closest('[data-chsel],[data-chvista],[data-sugleida],[data-sugborrar],[data-chficha]'); if(!b||S.view!=='duenio') return;
   if(b.dataset.chsel!=null){ S.chSel=b.dataset.chsel; S.chVista='chat'; return render(true) }
-  if(b.dataset.chvista){ S.chVista=b.dataset.chvista; return render(true) }
+  if(b.dataset.chvista){ if(b.dataset.chvista==='sug'&&!esAdmin()) return; S.chVista=b.dataset.chvista; return render(true) }
   if(b.dataset.chficha){ S.ptabP='socios'; S.sel=b.dataset.chficha; S.edit=null; return render() }
   const id=b.dataset.sugleida||b.dataset.sugborrar, x=SUGS.find(y=>String(y.id)===String(id)); if(!x) return;
+  if(!esAdmin()) return;
   if(b.dataset.sugborrar){ if(!confirm('¿Borrar esta sugerencia?')) return; SUGS=SUGS.filter(y=>y!==x); if(CLOUD) await sb.from('sugerencias').delete().eq('id',x.id) }
   else { x.leida=true; if(CLOUD) await sb.from('sugerencias').update({leida:true}).eq('id',x.id) }
   if(!CLOUD) chGuardarLocal(); render(true) });
@@ -3220,7 +3318,7 @@ function renderDuenio(){
       ${cob.length?`<div class="cobw"><table class="cobt"><tbody>${cob.map((x,k)=>`<tr data-open="${x.s.dni}" class="${x.e.c}" style="--k:${k}"><td><b>${esc(x.s.name)}</b><small>${x.t}</small></td><td class="num">${fmt(x.n)}</td></tr>`).join('')}</tbody></table></div>`
       :`<div class="cobok"><span class="cobic" aria-hidden="true">✓</span><b>Todo al día</b><span>Nadie debe ni vence esta semana.</span></div>`}</section>
   </div>`:''}
-  ${S.disp&&S.disp.length?`<section class="panel pendp"><h2>Celulares esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Alguien se registró con un DNI que ya tenía celular. Aprobalo solo si es esa persona (por ejemplo, cambió de teléfono).</p>
+  ${puedeP('aprobar')&&S.disp&&S.disp.length?`<section class="panel pendp"><h2>Celulares esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Alguien se registró con un DNI que ya tenía celular. Aprobalo solo si es esa persona (por ejemplo, cambió de teléfono).</p>
     <div class="duelist">${S.disp.map(x=>`<div><span><strong>${esc(x.s.name)}</strong> <span class="muted num">DNI ${fmtDNI(x.s.dni)}</span></span><span><button class="mini pay" data-dok="${x.uid}">Aprobar</button> <button class="mini danger" data-dno="${x.uid}">Rechazar</button></span></div>`).join('')}</div></section>`:''}
   <section class="panel">
     <div class="panelhead"><h2>Socios</h2>${all.length?`<label class="psearch ${S.q?'con':''}" title="Buscar socio (Ctrl+F)"><span class="pslupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg></span><input id="psq" type="search" autocomplete="off" spellcheck="false" placeholder="Buscar por nombre o DNI" aria-label="Buscar socio por nombre o DNI" value="${esc(S.q||'')}"><kbd aria-hidden="true">Ctrl F</kbd><button type="button" class="psx" id="psx" aria-label="Borrar búsqueda">×</button></label><span class="pscnt muted" id="pscnt" aria-live="polite"></span>`:''}${all.length?`<div class="chips" role="group" aria-label="Filtrar">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div>`:''}</div>
@@ -3248,7 +3346,7 @@ function renderFicha(s){
       <div class="field grow"><label>Foco</label><input class="inp" data-rf="t" value="${esc(day.t)}" placeholder="Ej: Tren superior"></div>
       ${c2MvBtns(ED.length)}<button class="mini" id="delday">Borrar día</button></div>
     <div class="extable"><div class="exh"><span>Ejercicio</span><span>Series</span><span>Reps</span><span title="Repeticiones en reserva: cuántas le quedan antes del fallo">RIR</span><span>Descanso</span><span></span></div>
-      ${day.ex.map((x,j)=>x&&x.run?runEdRow(x,j):`<div class="exr"><input class="inp" list="exl" data-ri="${j}" data-rc="0" value="${esc(x[0])}" placeholder="Ejercicio" aria-label="Ejercicio">
+      ${day.ex.map((x,j)=>x&&x.run?runEdRow(x,j):`<div class="exr"><div class="z42ex"><div class="anim z42mini ${x[0]?'':'z42vacio'}" data-anim="${esc(x[0]?animKey(x[0]):'')}" aria-hidden="true"><svg viewBox="0 0 100 100"></svg></div><input class="inp" list="exl" data-ri="${j}" data-rc="0" value="${esc(x[0])}" placeholder="Ejercicio" aria-label="Ejercicio"></div>
         <input class="inp num" data-ri="${j}" data-rc="1" value="${esc(x[1])}" placeholder="4" inputmode="numeric" maxlength="3" aria-label="Series">
         <input class="inp num" data-ri="${j}" data-rc="2" value="${esc(x[2])}" placeholder="10" aria-label="Repeticiones">
         <input class="inp num" data-ri="${j}" data-rc="3" value="${esc(x[3])}" placeholder="2" inputmode="numeric" maxlength="5" aria-label="RIR (repeticiones en reserva)">
@@ -3379,13 +3477,14 @@ function buildDB(rows){
 }
 async function q(p){const {data,error}=await p; if(error) throw error; return data}
 let EDITS=0;
-async function loadAll(){ const e0=EDITS; cargarGym(); cargarChat(); cargarNovedades();
+async function loadAll(){ const e0=EDITS; cargarGym(); cargarChat(); cargarNovedades(); const x42pp=x42CargarPub();
   const [so,pa,as,pr,me_,se,ru,pl]=await Promise.all([q(sb.from('socios').select('*')),q(sb.from('pagos').select('*')),q(sb.from('asistencias').select('*')),q(sb.from('progreso').select('*')),q(sb.from('medidas').select('*')),sb.from('sensaciones').select('*').then(r=>r.data||[]),sb.from('running_reg').select('*').then(r=>r.data||[]),sb.from('planes').select('*').order('orden').then(r=>r.error?null:r.data,()=>null)]);
   if(EDITS!==e0||pend){ reload(); return }   /* hubo un cambio mientras se bajaba: no pisarlo */
   DB=buildDB({socios:so,pagos:pa,asis:as,prog:pr,med:me_,sens:se,runs:ru}); S.planesNube=!!pl; if(pl) setPlanes(pl); SNAP=norm(DB);
   if(S.view==='duenio'&&S.pro){const d=await q(sb.from('dispositivos').select('uid,socio_id,aprobado,creado').eq('aprobado',false)); const byId={}; Object.values(DB.socios).forEach(s=>byId[s.id]=s);
     S.c2reg={}; d.forEach(x=>{S.c2reg[x.socio_id]=x.creado}); S.disp=d.map(x=>({uid:x.uid,s:byId[x.socio_id],creado:x.creado})).filter(x=>x.s&&x.s.aprobado!==false); await cargarProfes()}
   if(S.user){const s=DB.socios[S.user.dni]; if(s){S.name=s.name; if(s.photo!==undefined) S.photo=s.photo}}
+  if(x42pp) await x42pp;
 }
 function errTxt(e){const m=String(e&&e.message||e); return /fetch|network|Failed/i.test(m)?'Sin conexión. Revisá internet y probá de nuevo.':m}
 /* guarda solo lo que cambió (lo que la seguridad de la base permite a cada uno) */
@@ -3461,7 +3560,13 @@ async function bootCloud(){
     let {data:{session}}=await sb.auth.getSession();
     if(!session){const r=await sb.auth.signInAnonymously(); if(r.error) throw r.error}
     if(S.view==='duenio'){ S.hayProfe=await q(sb.rpc('hay_profe')); const p=await q(sb.rpc('profe_yo')); PRO=p; S.pro=!!p }
-    else if(S.user){ await checkDevice() }
+    else if(S.user){
+      if(await q(sb.rpc('adforge_legal_vigente'))) await checkDevice();
+      else {
+        S.ldni=S.user.dni; S.user=null; S.pendiente=false;
+        try{localStorage.removeItem('tc-sesion')}catch(e){}
+      }
+    }
     if(S.user&&!S.pendiente||S.pro) await loadAll();
     /* el tiempo real tiene que ir con la sesión del usuario (si no, la base lo trata como anónimo y no le manda nada) */
     {const {data:{session:ss}}=await sb.auth.getSession(); if(ss) sb.realtime.setAuth(ss.access_token)}
@@ -3497,6 +3602,12 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.29',t:'Más prolijo, más seguro y con más dibujos',items:[
+    ['💾','La info del gimnasio y los servicios ahora se guardan con «Guardar todo», como el resto.'],
+    ['🏋️','Cada ejercicio del editor de rutina muestra su dibujo animado, y hay 23 ejercicios nuevos dibujados.'],
+    ['🔒','Cada profe solo ve y cambia lo que le permiten sus permisos: celulares, sugerencias, cuotas y rutinas.'],
+    ['🧘','Botones y contadores que ya no se mueven al tocarlos, y el gráfico de asistencias se ve bien en tema claro.'],
+    ['📜','Los socios aceptan los términos y la política de privacidad al entrar.']]},
   {v:'1.1.28',t:'Una nueva interfaz para tu panel',items:[
     ['✨','Nuevo diseño con el logo y el degradado de Training Club, menú lateral y vista general del gimnasio.'],
     ['🛠️','Las herramientas siguen disponibles: socios, rutinas y Running, pagos, mensajes, novedades, perfiles y permisos.'],
@@ -3651,13 +3762,13 @@ function renderGN(){ if(!S.gnD) S.gnD=gnDraft(); const d=S.gnD, L=gnOrden(GNOV);
   $('#app').innerHTML=`<div class="owner enter">${proBar()}
   <section class="panel"><div class="panelhead"><div><h2>Novedades</h2><p class="muted" style="margin:6px 0 0">Lo que publiques lo ven todos los socios en la app: arriba en Inicio y en la sección Gimnasio.</p></div></div>
   <div class="gnlay"><form id="gnform" class="gnform ${d.id?'editando':''}" novalidate autocomplete="off">
-    <div class="gnfh"><b>${d.id?'Editar novedad':'Nueva novedad'}</b>${d.id?'<button type="button" class="linkb" id="gncancel">Cancelar edición</button>':''}</div>
+    <div class="gnfh"><b>${d.id?'Editar novedad':'Nueva novedad'}</b><button type="button" class="linkb ${d.id?'':'y42off'}" id="gncancel" ${d.id?'':'tabindex="-1" aria-hidden="true"'}>Cancelar edición</button></div>
     <div class="field"><label for="gn_t">Título</label><input class="inp" id="gn_t" data-gnf="titulo" maxlength="120" placeholder="Ej: Asado de fin de año 🍖" value="${esc(d.titulo)}"></div>
     <div class="field"><label for="gn_x">Texto <span class="opc">opcional</span></label><textarea class="inp" id="gn_x" data-gnf="texto" maxlength="2000" rows="4" placeholder="Contá los detalles: horario, qué traer, días cerrados, cambios de horario…">${esc(d.texto)}</textarea></div>
     <div class="gnrow"><div class="field"><label for="gn_f">Fecha <span class="opc">opcional</span></label><input class="inp" type="date" id="gn_f" data-gnf="fecha" value="${esc(d.fecha)}"><small class="hint" style="margin:0;max-width:none">Si es un día especial, se destaca en el calendario.</small></div>
       <div class="field"><span class="gnlab">Imagen <span class="opc">opcional</span></span><label class="gnpick ${d.imagen?'con':''}" for="gn_i" id="gnpick">${d.imagen?`<img src="${esc(d.imagen)}" alt="Imagen elegida">`:'<span>📷 Elegir imagen</span>'}</label><input type="file" id="gn_i" accept="image/*" hidden>${d.imagen?'<button type="button" class="linkb" id="gnimgx" style="align-self:flex-start">Quitar imagen</button>':''}</div></div>
-    ${d.id?'':`<label class="gnchk"><input type="checkbox" id="gn_a" data-gnf="avisar" ${d.avisar?'checked':''}><span>Avisar al celular de los socios</span><small class="muted">${CLOUD?'Les llega una notificación con el título.':'En la demo no se manda nada.'}</small></label>`}
-    <div class="gnacts"><button class="btn sm" type="submit">${d.id?'Guardar cambios':'Publicar'}</button></div></form>
+    <label class="gnchk ${d.id?'y42gnoff':''}"><input type="checkbox" id="gn_a" data-gnf="avisar" ${d.id?'disabled':d.avisar?'checked':''}><span>Avisar al celular de los socios</span><small class="muted">${d.id?'Solo se avisa al publicar.':CLOUD?'Les llega una notificación con el título.':'En la demo no se manda nada.'}</small></label>
+    <div class="gnacts"><button class="btn sm" type="submit"><span class="y42sw ${d.id?'y42on':''}"><span>Publicar</span><span class="y42alt">Guardar cambios</span></span></button></div></form>
   <div class="gnplist"><h3>Publicadas${L.length?' · '+L.length:''}</h3>${L.length?L.map((n,i)=>`<div class="gnprow ${String(d.id)===String(n.id)?'on':''}" style="animation-delay:${Math.min(i,8)*.04}s">${n.imagen?`<img class="gnpth" src="${esc(n.imagen)}" alt="">`:`<span class="gnpth gnph">${GN_ICO}</span>`}<div class="gnptx"><b>${esc(n.titulo)}</b><small class="muted">${n.fecha?gnDiaTxt(n.fecha)+(gnPasada(n)?' (ya pasó)':'')+' · ':''}${n.creado?'publicada '+chDia(n.creado).toLowerCase():''}${n.autor?' por '+esc(n.autor):''}</small></div><button type="button" class="mini" data-gnedit="${esc(n.id)}">Editar</button><button type="button" class="mini gndel" data-gnborrar="${esc(n.id)}">Borrar</button></div>`).join('')
     :'<div class="gnvacio">Todavía no publicaste novedades. Contales a los socios de un día cerrado, el asado de fin de año o un cambio de horario.</div>'}</div></div></section></div>` }
 function gnComprimir(file){ return new Promise((ok,ko)=>{ if(!file||!/^image\//.test(file.type)) return ko(new Error('Elegí un archivo de imagen'));
@@ -3737,13 +3848,12 @@ document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closes
   const x=L[i], on=!x.dias.includes(d); x.dias=on?[...x.dias,d]:x.dias.filter(y=>y!==d); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on) });
 /* ---------- Bienvenida después de iniciar sesión (no pisa la intro: espera a que se vaya) ---------- */
 function bnvLanzar(nombre,rol,clave){ nombre=gTxt(nombre); if(!nombre) return;
-  try{ const k='tc-bnv-'+(clave||S.view); if(sessionStorage.getItem(k)) return; sessionStorage.setItem(k,'1') }catch(e){}
-  let t0=performance.now();
-  const go=()=>{ if(document.getElementById('intro')&&performance.now()-t0<8000) return setTimeout(go,150);
+  const k='tc-bnv-'+(clave||S.view); if(X42_BNV.has(k)) return; X42_BNV.add(k);
+  const go=()=>{ if(document.getElementById('intro')) return setTimeout(go,150);
     const v=document.getElementById('bnvx'); if(v) v.remove();
     const w=document.createElement('div'); w.id='bnvx'; w.setAttribute('role','status'); w.setAttribute('aria-live','polite');
     w.innerHTML=`<div class="bnvglow"></div><div class="bnvcard"><span class="bnvhi">¡Bienvenido,</span><b class="bnvnm">${esc(nombre)}!</b><span class="bnvrol ${rol==='Desarrollador'?'adm bnvdev':rol==='Dueño'?'adm':''}">${esc(rol)}</span><i class="bnvbar"></i></div>`;
-    document.body.appendChild(w); setTimeout(()=>w.remove(),reduceMotion?1300:1750) };
+    document.body.appendChild(w); setTimeout(()=>w.remove(),reduceMotion?2200:2700) };
   setTimeout(go,80) }
 const bnvProfe=()=>{ if(PRO) bnvLanzar(String(PRO.nombre||'').split(' ')[0],ROL_TXT[PRO.dev?'dev':esAdmin()?'dueno':'profe'],'p'+(PRO.dni||'')) };
 let bnvSocioEspera=0;
@@ -3753,9 +3863,8 @@ function bnvSocio(){
   if(S.view!=='socio'||S.pendiente||!socio||document.hidden) return;
   const nombre=gTxt(socio.name||S.name);
   if(!nombre) return;
-  const fecha=iso(new Date()), clave='tc-bnv-dia-'+socio.dni;
-  if(bnvSocioVisto.get(clave)===fecha) return;
-  try{ if(localStorage.getItem(clave)===fecha) return }catch(e){}
+  const clave='s'+socio.dni;
+  if(X42_BNV.has('tc-bnv-'+clave)) return;
   if(document.getElementById('intro')){
     if(!bnvSocioEspera) bnvSocioEspera=setTimeout(()=>{
       bnvSocioEspera=0;
@@ -3763,9 +3872,7 @@ function bnvSocio(){
     },100);
     return;
   }
-  bnvSocioVisto.set(clave,fecha);
-  try{ localStorage.setItem(clave,fecha) }catch(e){}
-  bnvLanzar(nombre.split(' ')[0],'Socio','s'+socio.dni+'-'+fecha);
+  bnvLanzar(nombre.split(' ')[0],'Socio',clave);
 }
 /* ---------- lote 38b: Rutina del socio — Progresos (RM/PR), cronómetro y estado que sobreviven al bloqueo ---------- */
 /* Todo se guarda por socio: tc-crono-<dni> (cronómetro + descanso, con marcas de tiempo) y tc-rutdia-<dni> (lo de HOY: día, tildados, sesión, pestaña, borradores, scroll). */
@@ -3840,8 +3947,8 @@ function tcbProgresos(){ const s=me(); s.prog=s.prog||{}; const names=tcbEjercic
   if(S.ptab==='cuerpo') return pgSeg()+screenCuerpo(s);
   const ex=S.tcbEx, st=ex?tcbStats(s.prog[ex]):null, cele=S.tcbCele&&S.tcbCele.ex===ex?S.tcbCele:null;
   const form=`<form class="tcb-form" id="tcbf" novalidate><div class="tcb-lab">Cargá una marca de hoy</div>
-    <div class="tcb-otrow pgin"><span class="pglupa" aria-hidden="true">✎</span><input class="inp" id="tcbotro" list="tcb-exl" value="${esc(S.tcbOtro?'':(S.tcbEx||''))}" placeholder="Escribí el ejercicio (ej: Press banca)" autocomplete="off" aria-label="Nombre del ejercicio"><datalist id="tcb-exl">${exOptions(s).map(n=>`<option value="${esc(n)}">`).join('')}</datalist></div>
-    ${names.length?`<div class="pgquick"><small>O tocá uno de tu rutina:</small><div class="chips pexs tcb-exs pgwrap" role="group" aria-label="Ejercicios de tu rutina">${names.map(n=>`<button type="button" data-tcbex="${esc(n)}" aria-pressed="${!S.tcbOtro&&n===S.tcbEx}">${esc(n)}</button>`).join('')}</div></div>`:''}
+    <div class="tcb-otrow pgin"><span class="pglupa" aria-hidden="true">✎</span><input class="inp" id="tcbotro" value="${esc(S.tcbOtro?'':(S.tcbEx||''))}" placeholder="Escribí el ejercicio (ej: Press banca)" autocomplete="off" aria-label="Nombre del ejercicio"></div>
+    ${names.length?`<div class="pgquick"><small>O tocá uno de tu rutina:</small><div class="chips pexs tcb-exs pgwrap" role="group" aria-label="Ejercicios de tu rutina">${names.map((n,i)=>`<button type="button" data-tcbex="${esc(n)}" data-x42i="${i}" aria-pressed="${!S.tcbOtro&&n===S.tcbEx}">${esc(n)}</button>`).join('')}<span class="x42nada" hidden>Ninguno coincide: se guarda como ejercicio nuevo</span></div></div>`:`<div class="pgquick"><small>Sugerencias:</small><div class="chips pexs tcb-exs pgwrap x42sola" role="group" aria-label="Ejercicios sugeridos"><span class="x42nada">Escribí y te sugerimos ejercicios</span></div></div>`}
     <div class="tcb-row"><label class="field"><span>Kilos</span><input class="inp num" id="tcbkg" inputmode="decimal" placeholder="${st?fmtKg(st.l[st.l.length-1].kg):'80'}" autocomplete="off"></label>
       <label class="field"><span>Reps</span><input class="inp num" id="tcbreps" inputmode="numeric" placeholder="1" autocomplete="off"></label>
       <button class="btn tcb-go" type="submit">Guardar</button></div>
@@ -3872,8 +3979,7 @@ screenRutina=function(){ const p=S.rsub==='prog'?1:0, prev=S.tcbPrev==null?p:S.t
   const seg=`<div class="seg2 tcb-seg" role="group" aria-label="Parte de la rutina" style="--m:${prev}" data-to="${p}"><button data-rsub="ent" aria-pressed="${!p}">Entrenar</button><button data-rsub="prog" aria-pressed="${!!p}">Progresos</button></div>`;
   if(p) return seg+tcbProgresos();
   let h=tcbScreenRutina.apply(this,arguments); const i=h.indexOf('<div class="prog">');
-  if(i>=0&&TCB.sesT0) h=h.slice(0,i)+`<div class="tcb-ses" id="tcbses"><span class="live"></span><span>Sesión de hoy</span><b class="num" id="tcbsest">${tcbDur(Date.now()-TCB.sesT0)}</b></div>`+h.slice(i);
-  else if(i>=0&&rsHoy()) h=h.slice(0,i)+`<div class="tcb-ses rsdone"><span aria-hidden="true">💪</span><span>Hoy estuviste entrenando</span><b class="num">${tcbDur(rsHoy())}</b></div>`+h.slice(i);
+  if(i>=0) h=h.slice(0,i)+x42SesHtml(h)+h.slice(i);
   return seg+h+rsSemanaHtml() };
 const tcbRenderSocio=renderSocio;
 renderSocio=function(){ if(S.user) tcbCargar(); tcbRenderSocio.apply(this,arguments); if(!S.user) return;
@@ -3916,14 +4022,14 @@ function c1xChatFn(){ if(!puedeP('chat')) return ()=>false; if(esAdmin()) return
   const ks=new Set(Object.values(DB.socios).filter(s=>PRO&&s.rutinaProfe===PRO.dni).map(chK)); return k=>ks.has(k) }
 function c1xAutor(m){ let a=String((m&&m.autor)||'').trim(); if(!a||a==='Tu profe') a=PROFE; return /^prof\.?\s/i.test(a)?a:'Prof. '+a }
 function c1xFoto(a){ const n=String(a||'').replace(/^prof\.?\s*/i,'').trim().toLowerCase(); if(!n) return null;
-  let L=S.profes&&S.profes.length?S.profes:[]; if(!L.length&&!CLOUD) L=profesLS();
+  let L=S.view==='socio'?profesPub():(S.profes&&S.profes.length?S.profes:[]); if(!L.length&&!CLOUD) L=profesLS();
   const p=L.find(x=>c1xNom(x).toLowerCase()===n)||L.find(x=>String(x.nombre||'').toLowerCase()===n); return p&&p.foto||null }
 function c1xBau(m,mio,prim,yo){ if(!prim) return '';
   if(!mio&&m.de==='profe') return `<b class="bau c1xbau">${esc(c1xAutor(m))} <span>te escribió</span></b>`;
   if(!mio) return m.autor?`<b class="bau">${esc(m.autor)}</b>`:'';
   if(yo==='profe'&&m.autor&&PRO&&![c1xYoAutor(),PRO.nombre,'Prof. '+PRO.nombre].includes(m.autor)) return `<b class="bau c1xbaum">${esc(c1xAutor(m))}</b>`;
   return '' }
-function c1xCab(L){ const m=L.filter(x=>x.de==='profe').pop(); return m?{n:c1xAutor(m),f:c1xFoto(m.autor)}:{n:PROFE,f:null} }
+function c1xCab(L){ const m=L.filter(x=>x.de==='profe').pop(); const p=profeChat(); return m?{n:c1xAutor(m),f:c1xFoto(m.autor)}:{n:p.nombre,f:p.foto} }
 function c1xFabPrev(n){ if(!n||S.chSheet) return ''; const k=chK(me()), m=MSGS.filter(x=>x.k===k&&x.de==='profe'&&!x.leido).pop(); if(!m) return '';
   const a=c1xAutor(m); return `<button type="button" class="c1xfabp" id="c1xfabp" aria-label="${esc(a)} te escribió. Abrir el chat">${avatar('xs',c1xFoto(m.autor),a)}<span><b>${esc(a)} <em>te escribió</em></b><small>${esc(String(m.texto||'').slice(0,90))}</small></span></button>` }
 document.addEventListener('click',e=>{ if(S.view==='socio'&&e.target.closest&&e.target.closest('#c1xfabp')){ e.stopPropagation(); chAbrirHoja() } },true);
@@ -4005,7 +4111,7 @@ function c1xCard(p,i,adm){ const nom=c1xNom(p), toca=adm&&puedeTocar(p), ed=toca
   const acts=!adm?(p.yo?`<label class="mini" for="pfoto">${p.foto?'Cambiar foto':'Subir foto'}</label>`:'')
     :p.aprobado?(p.yo?`<label class="mini" for="pfoto">${p.foto?'Cambiar foto':'Subir foto'}</label><span class="pill ok">Vos</span>`
       :!toca?`<span class="pill c1xprot" title="Solo el desarrollador puede cambiar a ${rolDe(p)==='dev'?'el desarrollador':'un dueño'}">🔒 Protegido</span>`
-      :`<button class="mini ${ed?'c1xon':''}" data-c1xed="${d}" aria-expanded="${ed}">${ed?'Listo':'⚙ Permisos'}</button>${cl?`<button class="mini" data-preclave="${d}" data-pn="${esc(nom)}">Reiniciar contraseña</button>`:''}<button class="mini danger" data-pquitar="${d}" data-pn="${esc(nom)}">Quitar</button>`)
+      :`<button class="mini ${ed?'c1xon':''}" data-c1xed="${d}" aria-expanded="${ed}"><span class="y42sw ${ed?'y42on':''}"><span>⚙ Permisos</span><span class="y42alt">Listo</span></span></button>${cl?`<button class="mini" data-preclave="${d}" data-pn="${esc(nom)}">Reiniciar contraseña</button>`:''}<button class="mini danger" data-pquitar="${d}" data-pn="${esc(nom)}">Quitar</button>`)
     :`<button class="mini pay" data-paprob="${d}">Aprobar</button><button class="mini danger" data-pquitar="${d}" data-pn="${esc(nom)}">Rechazar</button>`;
   return `<div class="profc c1xpc ${p.aprobado?'':'pend'} ${ed?'c1xed':''} ${S.c1xNuevo===p.dni?'c1xnew':''}" data-c1xp="${d}" style="animation-delay:${i*50}ms">${avatar('md',p.foto||null,nom)}
     <div class="pn"><strong>${esc(nom)}${p.aprobado?c1xRolTag(p):''}</strong><small class="num">DNI ${fmtDNI(p.dni)}${p.creado?' · '+(p.aprobado?'desde el ':'pidió entrar el ')+c1xFecha(p.creado):''}</small>
@@ -4113,22 +4219,22 @@ function c2DiasTxt(d){ const n=d.slice().sort((a,b)=>(a+6)%7-(b+6)%7).map((w,i)=
   return n.length>1?n.slice(0,-1).join(', ')+' y '+n[n.length-1]:n[0]||'' }
 function c2FunBox(s){ const on=!!s.funcional, can=c2PuedeAsig();
   return `<button type="button" class="c2fbox ${on?'on':''}" role="switch" aria-checked="${on}" data-c2fun="${esc(s.dni)}" ${can?'':'disabled title="No tenés permiso para asignar"'}>
-    <span class="c2fsw" aria-hidden="true"></span><span class="c2ft"><b>Entrenamiento funcional</b><small>${esc(c2DiasTxt(c2FunDias()))} · <span class="c2fst">${on?'Lo hace':'Tocá si viene a funcional'}</span></small></span><span class="c2fe" aria-hidden="true">🤸</span></button>` }
+    <span class="c2fsw" aria-hidden="true"></span><span class="c2ft"><b>Entrenamiento funcional</b><small>${esc(c2DiasTxt(c2FunDias()))} · <span class="c2fst y42sw ${on?'y42on':''}"><span>Tocá si viene a funcional</span><span class="y42alt">Lo hace</span></span></small></span><span class="c2fe" aria-hidden="true">🤸</span></button>` }
 function c2Funcional(dni){ const s=DB.socios[dni]; if(!s||!c2PuedeAsig()) return; s.funcional=!s.funcional; saveDB();
   const b=document.querySelector('#app [data-c2fun="'+dni+'"]');
-  if(b){ b.classList.toggle('on',s.funcional); b.setAttribute('aria-checked',s.funcional); const t=b.querySelector('.c2fst'); if(t) t.textContent=s.funcional?'Lo hace':'Tocá si viene a funcional' }
+  if(b){ b.classList.toggle('on',s.funcional); b.setAttribute('aria-checked',s.funcional); const t=b.querySelector('.c2fst'); if(t) t.classList.toggle('y42on',!!s.funcional) }
   toast(s.funcional?s.name.split(' ')[0]+' hace Entrenamiento funcional 🤸':s.name.split(' ')[0]+' ya no figura en funcional') }
 /* app del socio: hace funcional y todavía no tiene rutina de musculación */
 function c2FunVacio(){ const d=c2FunDias(), hoy=TODAY.getDay(); let k=1; while(k<8&&!d.includes((hoy+k)%7)) k++;
   const prox=d.includes(hoy)?'¡Hoy hay funcional! 💪':k===1?'Próxima clase: mañana':'Próxima clase: el '+DIAS[(hoy+k)%7].toLowerCase();
   return `<section class="c2fv" aria-label="Entrenamiento funcional"><div class="c2fvico" aria-hidden="true">🤸</div><small>Tu entrenamiento</small>
     <h2>Hacés Entrenamiento funcional</h2><p class="c2fvd">${esc(c2DiasTxt(d))}</p>
-    <div class="c2fvw">${[1,2,3,4,5,6,0].map((w,i)=>`<span class="${d.includes(w)?'on':''} ${w===hoy?'hoy':''}" style="--k:${i}" title="${DIAS[w]}${d.includes(w)?': funcional':''}">${DIAS[w][0]}</span>`).join('')}</div>
+    <div class="c2fvw">${[1,2,3,4,5,6,0].map((w,i)=>`<span class="${d.includes(w)?'on':''} ${w===hoy?'hoy':''}" style="--k:${i}" title="${DIAS[w]}${d.includes(w)?': funcional':''}">${SV_L[w]}</span>`).join('')}</div>
     <p class="c2fvt">${prox}</p><p class="c2fvn">Si además querés una rutina de musculación, pedísela a ${esc(PROFE.split(' ')[0])} y te aparece acá.</p></section>` }
 /* copiar / pegar rutinas entre socios (portapapeles interno) */
 function c2Clip(){ let c=S.c2clip; if(!c){ try{ c=JSON.parse(localStorage.getItem('tc-c2rut')||'null') }catch(e){} } return c&&Array.isArray(c.days)&&c.days.length?c:null }
 function c2RutTools(s){ if(!c2PuedeAsig()) return ''; const clip=c2Clip(), tiene=!!(S.edit&&S.edit.days.length), abierto=S.c2cd===s.dni;
-  return `<div class="c2rt">${tiene?'<button type="button" class="mini" data-c2copy title="Copiar esta rutina para pegársela a otro socio">📋 Copiar rutina</button>':''}${clip&&clip.dni!==s.dni?`<button type="button" class="mini c2paste" data-c2paste title="${esc(clip.days.length+' día'+(clip.days.length===1?'':'s')+': '+clip.days.map(d=>d.d).join(' · '))}">📥 Pegar rutina de ${esc(clip.nombre.split(' ')[0])}</button>`:''}<button type="button" class="mini" data-c2de aria-expanded="${abierto}">Copiar de…</button></div>` }
+  return `<div class="c2rt">${tiene?'<button type="button" class="mini" data-c2copy title="Copiar esta rutina para pegársela a otro socio"><span class="y42sw"><span>📋 Copiar rutina</span><span class="y42alt">✓ Copiada</span></span></button>':''}${clip&&clip.dni!==s.dni?`<button type="button" class="mini c2paste" data-c2paste title="${esc(clip.days.length+' día'+(clip.days.length===1?'':'s')+': '+clip.days.map(d=>d.d).join(' · '))}">📥 Pegar rutina de ${esc(clip.nombre.split(' ')[0])}</button>`:''}<button type="button" class="mini" data-c2de aria-expanded="${abierto}">Copiar de…</button></div>` }
 function c2CopiarDe(s){ if(S.c2cd!==s.dni||!c2PuedeAsig()) return '';
   const L=Object.values(DB.socios).filter(o=>o.dni!==s.dni&&o.aprobado!==false&&o.rutina&&o.rutina.length).sort((a,b)=>a.name.localeCompare(b.name,'es'));
   return `<div class="c2cd" id="c2cd"><div class="c2cdh"><input class="inp" id="c2cdq" type="search" autocomplete="off" spellcheck="false" placeholder="Buscar socio con rutina…" aria-label="Buscar socio para copiarle la rutina"><button type="button" class="del" data-c2cdx aria-label="Cerrar">×</button></div>
@@ -4138,7 +4244,7 @@ function c2Copiar(){ const s=DB.socios[S.sel]; if(!s||!S.edit) return;
   const days=rutDe(S.edit.days); if(!days.length) return toast('La rutina está vacía: cargale al menos un ejercicio');
   const c={dni:s.dni,nombre:s.name,days,t:Date.now()}; S.c2clip=c; try{ localStorage.setItem('tc-c2rut',JSON.stringify(c)) }catch(e){}
   toast('📋 Rutina de '+s.name.split(' ')[0]+' copiada ('+days.length+' día'+(days.length===1?'':'s')+'). Abrí otro socio y tocá «Pegar»');
-  const b=document.querySelector('#app [data-c2copy]'); if(b){ b.classList.add('c2ok'); b.textContent='✓ Copiada'; clearTimeout(c2Copiar.t); c2Copiar.t=setTimeout(()=>{ const x=document.querySelector('#app [data-c2copy]'); if(x){ x.classList.remove('c2ok'); x.textContent='📋 Copiar rutina' } },1600) } }
+  const b=document.querySelector('#app [data-c2copy]'); if(b){ b.classList.add('c2ok','y42on'); const w=b.querySelector('.y42sw'); if(w) w.classList.add('y42on'); else b.textContent='✓ Copiada'; clearTimeout(c2Copiar.t); c2Copiar.t=setTimeout(()=>{ const x=document.querySelector('#app [data-c2copy]'); if(x){ x.classList.remove('c2ok','y42on'); const w=x.querySelector('.y42sw'); if(w) w.classList.remove('y42on'); else x.textContent='📋 Copiar rutina' } },1600) } }
 function c2Poner(days,de){ const s=DB.socios[S.sel]; if(!s||!S.edit||!c2PuedeAsig()) return;
   if(S.edit.days.length&&!confirm('¿Reemplazar la rutina de '+s.name+' por la de '+de+'? La de ahora se pierde cuando toques «Guardar todo».')) return;
   S.edit.days=rutEd(days); S.eday=0; S.dirty=true; S.c2cd=null; render(true);
@@ -4229,7 +4335,7 @@ async function c2Revisar(manual){ if(!c2EsPend()||S.c2rev) return; S.c2rev=true;
     if(manual){ c2Nota('Todavía no te aprobaron. Apenas pase, la app se abre sola.',true); const x=$('#c2prev'); if(x&&!reduceMotion){ x.classList.remove('c2shake'); void x.offsetWidth; x.classList.add('c2shake') } }
   }catch(e){ if(manual) c2Nota(errTxt(e),true) }
   finally{ S.c2rev=false; const x=$('#c2prev'); if(x){ x.disabled=false; x.classList.remove('cargando'); x.textContent='Ya me aprobaron, revisar' } } }
-function c2Aprobado(){ S.tab='inicio'; S.lastTab=null; S.forceTop=true; render(); toast('¡Listo, te aprobaron! Bienvenido/a a Training Club 🎉'); try{ lanzarAviso() }catch(e){} if(CLOUD) try{ activarPush() }catch(e){} }
+function c2Aprobado(){ S.tab='inicio'; S.lastTab=null; S.forceTop=true; render(); bnvSocio(); toast('¡Listo, te aprobaron! 🎉'); try{ lanzarAviso() }catch(e){} if(CLOUD) try{ activarPush() }catch(e){} }
 setInterval(()=>{ if(document.visibilityState==='visible') c2Revisar(false) },20000);
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') c2Revisar(false) });
 window.addEventListener('focus',()=>c2Revisar(false));
@@ -4267,6 +4373,218 @@ document.addEventListener('input',e=>{ const t=e.target; if(t.id!=='tcbotro') re
   document.querySelectorAll('.pgwrap [data-tcbex]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tcbex.toLowerCase()===v)) });
 const rdRenderSocio=renderSocio;
 renderSocio=function(){ if(S.tab==='progreso'){ S.tab='rutina'; S.rsub='prog' } return rdRenderSocio.apply(this,arguments) };
+/* ---------- lote 42x: app del socio ---------- */
+/* bienvenida: una vez por apertura (carga de la página) y por persona; volver de segundo plano no la repite */
+const X42_BNV=new Set();
+/* profes públicos: nombre y foto (nube: RPC profes_publicos; demo: los profes guardados en este navegador) */
+function x42CargarPub(){ if(!CLOUD||!sb||(S.view==='duenio'&&S.pro)) return null; if(S.x42pubT&&Date.now()-S.x42pubT<10*60e3) return null;
+  return Promise.resolve(sb.rpc('profes_publicos')).then(r=>{ if(r&&!r.error&&Array.isArray(r.data)){ S.profesPub=r.data; S.x42pubT=Date.now() } },()=>{}) }
+function profesPub(){ if(!CLOUD) return profesLS().filter(p=>p&&p.aprobado!==false);
+  return S.profesPub&&S.profesPub.length?S.profesPub:(S.profes||[]) }
+function profeDe(dni){ if(!dni) return null; const p=profesPub().find(x=>x&&String(x.dni)===String(dni)); if(!p) return null;
+  const n=(String(p.nombre||'')+' '+String(p.apellido||'')).trim(); return {dni:p.dni,nombre:n||PROFE,foto:p.foto||null} }
+const x42Dueno=()=>{ const n=PROFE.toLowerCase(), p=profesPub().find(x=>x&&(String(x.nombre||'')+' '+String(x.apellido||'')).trim().toLowerCase()===n); return {dni:p&&p.dni||null,nombre:PROFE,foto:p&&p.foto||null} };
+const profeNom=s=>{ const p=s&&profeDe(s.rutinaProfe); return p?p.nombre:PROFE };
+const profeGym=s=>(s&&profeDe(s.rutinaProfe))||x42Dueno();
+/* con quién chatea el socio: el último profe que le escribió, si no el de su rutina, si no el dueño */
+function profeChat(){ const s=me(); let m=null; try{ const k=chK(s); m=MSGS.filter(x=>x.k===k&&x.de==='profe').pop() }catch(e){}
+  if(m&&m.autor){ const n=c1xAutor(m).replace(/^prof\.?\s*/i,'').trim(); return {nombre:n||PROFE,foto:c1xFoto(m.autor)} }
+  return profeGym(s) }
+/* Inicio: el que solo hace funcional ve sus días y la próxima clase */
+function x42FunCard(){ const d=c2FunDias(), hoy=TODAY.getDay(); let k=1; while(k<8&&!d.includes((hoy+k)%7)) k++;
+  const hay=d.includes(hoy)&&!cerrado(TODAY), prox=hay?'¡Hoy hay funcional! 💪':k===1?'Próxima clase: mañana':'Próxima clase: el '+DIAS[(hoy+k)%7].toLowerCase();
+  return `<section class="card x42fun"><div class="ttl"><b>Tu rutina</b><span>${esc(c2DiasTxt(d))}</span></div>
+    <div class="x42ftop"><span class="x42fico" aria-hidden="true">🤸</span><div class="x42ftx"><b>Entrenamiento funcional</b><small class="${hay?'x42hoy':''}">${prox}</small></div></div>
+    <div class="x42fw" role="list" aria-label="Días de funcional">${SV_ORD.map((w,i)=>`<span role="listitem" class="${d.includes(w)?'on':''} ${w===hoy?'hoy':''}" style="--k:${i}" title="${DIAS[w]}${d.includes(w)?': funcional':''}${w===hoy?' (hoy)':''}">${SV_L[w]}</span>`).join('')}</div>
+    <button class="link" data-tab="rutina">Ver en Rutina →</button></section>` }
+/* cambio de cuota: confirmación fija dentro de la tarjeta (mismo alto antes y después) */
+function x42PlanNota(s){ const n=S.x42pl&&s.plan===S.x42pl?S.x42pl:null;
+  return `<p class="x42pln ${n?'on':''}" aria-live="polite">${n?`<span class="x42plk" aria-hidden="true">✓</span>Desde la próxima cuota: <b>${esc(n)}</b>`:`<span class="x42plk" aria-hidden="true">•</span>Ahora: <b>${esc(s.plan||'sin cuota')}</b>`}</p>` }
+/* sesión de hoy: el chip siempre ocupa su lugar; "Terminar" aparece (sin mover nada) mientras haya una sesión en marcha */
+function x42SesHtml(h){ const run=!!TCB.sesT0, hoy=!run&&rsHoy(), st=run?'run':hoy?'hoy':'idle', cambio=TCB.x42st&&TCB.x42st!==st; TCB.x42st=st;
+  const completo=/class="rdfin/.test(h);
+  const chip=run?`<div class="tcb-ses" id="tcbses"><span class="live"></span><span>Sesión de hoy</span><b class="num" id="tcbsest">${tcbDur(Date.now()-TCB.sesT0)}</b></div>`
+    :hoy?`<div class="tcb-ses rsdone"><span aria-hidden="true">💪</span><span>Hoy estuviste entrenando</span><b class="num">${tcbDur(rsHoy())}</b></div>`
+    :`<div class="tcb-ses x42idle"><span class="live" aria-hidden="true"></span><span>Sesión de hoy</span><b>arrancá cuando quieras</b></div>`;
+  return `<div class="x42ses ${cambio?'x42cambio':''}">${chip}<button class="btn sm x42fin ${completo?'x42hot':''}" id="fin" type="button" title="Terminar entrenamiento" aria-label="Terminar entrenamiento" ${run?'':'tabindex="-1" aria-hidden="true" disabled'}>Terminar<span class="x42fx"> entrenamiento</span></button></div>` }
+/* Progresos: al escribir el ejercicio se filtran los chips (los que coinciden primero) y se suman los conocidos que coincidan */
+function x42Filtrar(inp){ const box=document.querySelector('.tcb-form .tcb-exs'); if(!box) return; const s=me(); if(!s) return;
+  if(!box.dataset.x42h){ box.dataset.x42h=1; box.style.height=box.getBoundingClientRect().height+'px'; box.classList.add('x42lock') }
+  const q=sinTilde(inp.value), partes=q.split(' ').filter(Boolean), ok=n=>{ const t=sinTilde(n); return partes.every(p=>t.includes(p)) }, pri=n=>sinTilde(n).startsWith(q)?0:1;
+  box.querySelectorAll('.x42xtra').forEach(b=>b.remove());
+  const base=[...box.querySelectorAll('[data-tcbex]')], nada=box.querySelector('.x42nada'), sola=box.classList.contains('x42sola');
+  if(!q){ base.sort((a,b)=>a.dataset.x42i-b.dataset.x42i).forEach(b=>{ b.hidden=false; box.insertBefore(b,nada) }); if(nada){ nada.hidden=!sola; if(sola) nada.textContent='Escribí y te sugerimos ejercicios' } box.scrollTop=0; return }
+  const si=base.filter(b=>ok(b.dataset.tcbex)).sort((a,b)=>pri(a.dataset.tcbex)-pri(b.dataset.tcbex)||a.dataset.x42i-b.dataset.x42i);
+  base.forEach(b=>{ b.hidden=!si.includes(b) }); si.forEach(b=>box.insertBefore(b,nada));
+  const ya=new Set(base.map(b=>sinTilde(b.dataset.tcbex)));
+  const extra=exOptions(s).filter(n=>!ya.has(sinTilde(n))&&ok(n)&&sinTilde(n)!==q).sort((a,b)=>pri(a)-pri(b)||a.localeCompare(b,'es')).slice(0,12);
+  extra.forEach((n,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='x42xtra'; b.dataset.x42ex=n; b.textContent=n; b.style.setProperty('--k',i); box.insertBefore(b,nada) });
+  if(nada){ nada.textContent='Ninguno coincide: se guarda como ejercicio nuevo'; nada.hidden=!!(si.length||extra.length) }
+  box.scrollTop=0 }
+document.addEventListener('input',e=>{ if(e.target&&e.target.id==='tcbotro') x42Filtrar(e.target) });
+document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('[data-x42ex]'); if(!b) return; e.preventDefault(); e.stopPropagation();
+  const i=document.getElementById('tcbotro'); if(!i) return; i.value=b.dataset.x42ex; i.dispatchEvent(new Event('input',{bubbles:true})); i.focus({preventScroll:true}); try{ const L=i.value.length; i.setSelectionRange(L,L) }catch(x){} },true);
+/* ---------- lote 42 z: más dibujos de ejercicios ---------- */
+const z42L=(a,b,t)=>a+(b-a)*t;
+function z42mix(A,B,t){const R={}; for(const k in A){const a=A[k],b=B[k]==null?a:B[k]; R[k]=Array.isArray(a)?[z42L(a[0],b[0],t),z42L(a[1],b[1],t)]:typeof a==='number'?z42L(a,b,t):a} return R}
+/* dos segmentos (muslo+pierna o brazo+antebrazo) que llegan a un punto: los huesos nunca cambian de largo */
+function z42ik(H,T,a,b,sg){const dx=T[0]-H[0],dy=T[1]-H[1],d0=Math.hypot(dx,dy)||.001,ux=dx/d0,uy=dy/d0, d=Math.min(a+b-.02,Math.max(Math.abs(a-b)+.05,d0));
+  const A=Math.acos(Math.max(-1,Math.min(1,(a*a+d*d-b*b)/(2*a*d))))*sg, c=Math.cos(A), s=Math.sin(A), K=[H[0]+(ux*c-uy*s)*a,H[1]+(ux*s+uy*c)*a];
+  return [K,[H[0]+ux*d,H[1]+uy*d]]}
+/* pose de perfil (mira a la derecha) por pelvis, inclinación del torso y adónde van pies y manos */
+function z42pose(c){const p=c.p, r=(c.tor||0)*Math.PI/180, dt=[Math.sin(r),-Math.cos(r)];
+  const n=[p[0]+dt[0]*30,p[1]+dt[1]*30], s=[n[0]-dt[0]*4,n[1]-dt[1]*4], h=[n[0]+dt[0]*7,n[1]+dt[1]*7], R={h,n,s,p};
+  let q=z42ik(p,c.f,17,16,c.ks||-1); R.k=q[0]; R.f=q[1]; R.t=AD(R.f,c.foot==null?90:c.foot,7);
+  if(c.f2){q=z42ik(p,c.f2,17,16,c.ks||-1); R.k2=q[0]; R.f2=q[1]}
+  q=z42ik(s,c.w,13,12,c.es||1); R.e=q[0]; R.w=q[1];
+  if(c.w2){q=z42ik(s,c.w2,13,12,c.es||1); R.s2=s; R.e2=q[0]; R.w2=q[1]}
+  return R}
+/* secuencia de poses con su parte del ciclo (burpees) */
+function z42seq(K,mk){const tot=K.slice(1).reduce((a,k)=>a+k.d,0);
+  return t=>{let x=Math.max(0,Math.min(1,t))*tot, i=1; while(i<K.length-1&&x>K[i].d){x-=K[i].d;i++}
+    const u=ez(Math.min(1,x/K[i].d)), c=z42mix(K[i-1].c,K[i].c,u);
+    if(K[i].hop){const hp=K[i].hop*Math.sin(Math.PI*u); c.f=[c.f[0],c.f[1]-hp]; if(c.f2) c.f2=[c.f2[0],c.f2[1]-hp]}
+    return mk(c)}}
+function z42def(name,a){ if(!a.A&&a.F){a.A=a.F(0);a.B=a.F(1)} a.B=o(a.A,a.B||{}); a.__m=1; ANIM[name]=a; return a }
+const z42F=(A,B,mk)=>t=>mk(z42mix(A,B,t));
+const z42pt=(P,Q,f)=>[P[0]+(Q[0]-P[0])*f,P[1]+(Q[1]-P[1])*f];
+/* rodillo acolchado sobre la pierna (sillón de cuádriceps / camilla femoral) con su palanca desde la rodilla */
+const z42rodillo=sg=>P=>{const dx=P.f[0]-P.k[0],dy=P.f[1]-P.k[1],m=Math.hypot(dx,dy)||1, b=z42pt(P.k,P.f,.86), c=[b[0]+sg*dy/m*3.4,b[1]-sg*dx/m*3.4];
+  return ln(P.k,c,'gear',1.8)+ci(c,3.1,'gearf')+ci(P.k,1.3,'gearf')};
+const z42colch=(x1,x2)=>()=>ln([x1,93.4],[x2,93.4],'gear dim',2.2);
+(()=>{
+  // extensión de cuádriceps (sillón): sentado, la pierna sube hasta quedar estirada
+  z42def('Extensión de cuádriceps',{F:z42F({p:[42,66],tor:-10,ua:12,fa:28,th:90,sh:2,foot:92},{sh:84,foot:172},fk),
+    eq:[['seat',[[31,37],[35,70],[61,70]]],['legs',[[38,70],[57,70]]],['fn',z42rodillo(1)]]});
+  // curl femoral (camilla): boca abajo, el talón va hacia la cola
+  z42def('Curl femoral',{F:z42F({p:[44,70],tor:90,ua:22,fa:62,th:-90,sh:-90,foot:0},{sh:-198,foot:-108},fk),
+    eq:[['bench',27,80,75],['fn',z42rodillo(-1)]]});
+  // abductores y aductores en máquina (de frente, sentado)
+  const ab0={p:[50,64],ua:16,fa:6,k:[55,67],f:[56,90],k2:[45,67],f2:[44,90]}, ab1={k:[66,63.5],f:[66.5,87],k2:[34,63.5],f2:[33.5,87]};
+  const silla=['bg',()=>ln([39,35],[39,70],'gear-s',3)+ln([61,35],[61,70],'gear-s',3)];
+  const almo=sg=>['fn',P=>ln([P.k[0]+sg*3.4,P.k[1]-5],[P.k[0]+sg*3.4,P.k[1]+5],'gear',4.2)+ln([P.k2[0]-sg*3.4,P.k2[1]-5],[P.k2[0]-sg*3.4,P.k2[1]+5],'gear',4.2)];
+  z42def('Abductores en máquina',{F:z42F(ab0,ab1,fr),eq:[silla,['seat',[[37,70],[63,70]]],['legs',[[41,70],[59,70]]],almo(1),['front']]});
+  z42def('Aductores en máquina',{F:z42F(o(ab0,ab1),{k:ab0.k,f:ab0.f,k2:ab0.k2,f2:ab0.f2},fr),eq:[silla,['seat',[[37,70],[63,70]]],['legs',[[41,70],[59,70]]],almo(-1),['front']]});
+  // crunch abdominal: acostado, rodillas flexionadas, sube los hombros con las manos en la nuca
+  z42def('Crunch abdominal',{F:z42F({p:[56,88.5],tor:-90,ua:-150,fa:-30,th:140,sh:10,foot:90},{tor:-60,ua:-120,fa:0},fk),eq:[['bg',z42colch(8,84)]]});
+  // elevación de piernas acostado (piernas estiradas hasta la vertical)
+  z42def('Elevación de piernas',{F:z42F({p:[58,88.5],tor:-90,ua:80,fa:90,th:84,sh:84,foot:174},{th:176,sh:176,foot:266},fk),eq:[['bg',z42colch(6,90)]]});
+  // elevación de rodillas colgado de la barra
+  z42def('Elevación de rodillas colgado',{F:z42F({p:[50,55],tor:0,ua:180,fa:180,th:0,sh:0,foot:30},{th:102,sh:2,foot:40},fk),eq:[['hbar',30,70,4]]});
+  // remo en polea baja (sentado, tira el agarre hacia la panza)
+  z42def('Remo en polea baja',{F:z42F({p:[36,80],tor:16,ua:80,fa:84,th:100,sh:78,foot:170},{tor:-8,ua:-30,fa:78},fk),
+    eq:[['bg',()=>ln([86,46],[86,94],'gear-s',3)+ln([72,70],[74,92],'gear-s',3.5)],['bench',20,50,84],['cable',82,58],['grip']]});
+  // pullover con mancuerna (acostado en el banco, los brazos van detrás de la cabeza)
+  z42def('Pullover',{F:z42F({p:[60,74],tor:-86,ua:180,fa:180,th:80,sh:0},{ua:246,fa:246},fk),eq:[['bench',18,70,78],['dbv']]});
+  // encogimientos de hombros (de frente: suben los hombros, los brazos quedan estirados)
+  const en0=fr({ua:3,fa:0}), en1={}; for(const k of ['s','s2','e','e2','w','w2']) en1[k]=[en0[k][0],en0[k][1]-4.2]; en1.n=[en0.n[0],en0.n[1]-1];
+  z42def('Encogimientos de hombros',{A:en0,B:en1,eq:[['db'],['front']],dur:1900});
+  // patada de glúteo en cuadrupedia
+  z42def('Patada de glúteo',{F:z42F({p:[38,75],tor:74.4,ua:0,fa:0,th:20,sh:-80,foot:-90,th2:0,sh2:-90},{th:-96,sh:-182},fk),eq:[['bg',z42colch(12,72)]]});
+  // step-up: sube al cajón y vuelve a bajar
+  const caja=['bg',()=>`<rect x="52" y="78" width="30" height="15.5" rx="2.5" class="gear-s" stroke-width="2.6"/>`];
+  z42def('Step-up',{F:t=>{const p=[z42L(44,61,t),z42L(62,44.5,t)], tor=z42L(12,3,t), r=tor*Math.PI/180, sx=p[0]+Math.sin(r)*26, sy=p[1]-Math.cos(r)*26;
+      return z42pose({p,tor,f:[62,77],f2:[40+18*t*t,92-15*ez(Math.min(1,t*1.5))],w:[sx+2.5,sy+24]})},eq:[caja,['db']]});
+  // burpees: baja, apoya las manos, patea atrás a plancha, vuelve y salta
+  const bS={p:[50,59],tor:2,f:[52,92],f2:[48,92],w:[53,57],foot:90}, bQ={p:[42,80],tor:62,f:[52,92],f2:[49,92],w:[65,92],foot:90},
+        bP={p:[41.6,78.4],tor:64,f:[15,88],f2:[13,88],w:[65,92],foot:50}, bJ={p:[50,53],tor:0,f:[52,86],f2:[48,86],w:[52,3],foot:40};
+  z42def('Burpees',{F:z42seq([{c:bS},{c:bQ,d:.13},{c:bP,d:.11,hop:5},{c:bP,d:.08},{c:bQ,d:.11,hop:5},{c:bJ,d:.15},{c:bS,d:.14},{c:bS,d:.28}],z42pose),eq:[],dur:3300,lin:1});
+  // mountain climbers: en plancha, las rodillas van al pecho alternadas
+  z42def('Mountain climbers',{F:z42F({p:[41,79],tor:62,f:[14,89],f2:[39,86],w:[64,91.8],foot:50},{f:[39,86],f2:[14,89]},z42pose),eq:[],dur:760,cyc:1});
+  // flexiones de brazos (cuerpo recto, baja el pecho al piso)
+  z42def('Flexiones de brazos',{F:t=>{const al=z42L(8,21,t)*Math.PI/180, d=[Math.cos(al),-Math.sin(al)], f=[16,89];
+      return z42pose({p:[f[0]+d[0]*32.9,f[1]+d[1]*32.9],tor:90-al*180/Math.PI,f,w:[68,92],foot:50})},eq:[['bg',z42colch(10,80)]]});
+  // remo al mentón (de frente, la barra sube pegada al cuerpo con los codos altos)
+  z42def('Remo al mentón',{A:fr({e:[56,46],w:[53.5,59]}),B:fr({e:[68,32],w:[56,37]}),
+    eq:[['fn',P=>ln([P.w2[0]-5,P.w2[1]],[P.w[0]+5,P.w[1]],'gear',2.6)+ci([P.w2[0]-6,P.w2[1]],2.8,'plate')+ci([P.w[0]+6,P.w[1]],2.8,'plate')],['front']]});
+  // elevaciones frontales (de perfil, brazo estirado hasta la altura del hombro)
+  z42def('Elevaciones frontales',{F:z42F({p:[50,59],tor:0,ua:6,fa:8,th:0,sh:0},{ua:94,fa:94},fk),eq:[['db']]});
+  // hiperextensiones / lumbares en banco a 45°
+  z42def('Hiperextensiones',{F:z42F({p:[44,52],tor:150,ua:-125,fa:10,th:-45,sh:-45,foot:45},{tor:45,ua:-20,fa:115},fk),
+    eq:[['bg',P=>{const k=z42pt(P.p,P.k,.8); return ln([P.p[0]+3.2,P.p[1]+3.2],[k[0]+3.2,k[1]+3.2],'gear-s',5)+ln([46,58],[52,93],'gear-s',2.6)+ln([P.f[0]-2.6,P.f[1]-2.6],[P.f[0]-2.6,P.f[1]-2.6],'gear-s',6)+ln([18,74],[16,93],'gear-s',2.6)+ln([14,93],[56,93],'gear-s',2.6)}]]});
+  // bicicleta fija: pedaleo continuo
+  const cr=[52,79];
+  z42def('Bicicleta fija',{F:t=>{const a=t*2*Math.PI, d=[Math.cos(a)*7,Math.sin(a)*7]; return z42pose({p:[42,56],tor:28,f:[cr[0]+d[0],cr[1]+d[1]],f2:[cr[0]-d[0],cr[1]-d[1]],w:[67,50],foot:96})},
+    eq:[['bg',P=>ln([36,59.5],[47,59.5],'gear-s',4)+ln([44,60],[cr[0],cr[1]],'gear-s',3)+ln([cr[0],cr[1]],[64,50],'gear-s',3)+ln([63,49],[70,50],'gear-s',3.4)+ci([71,80],8.5,'gear-s')+ln([71,80],[76,93],'gear-s',3)+ln(cr,[40,93],'gear-s',3)+ln([30,93],[84,93],'gear-s',3)+ln(cr,P.f2,'gear dim',2)],
+        ['fn',P=>ln(cr,P.f,'gear',2.2)+ci(cr,2.2,'gearf')]],dur:1050,lin:1});
+  // cinta: el corredor de running sobre la cinta que corre hacia atrás
+  z42def('Cinta',{A:RUNA.A,B:RUNA.B,eq:[['bg',()=>ln([12,94],[80,94],'gear-s',4.5)+`<line x1="14" y1="94" x2="78" y2="94" class="gear" stroke-width="1.3" stroke-dasharray="3 5" stroke-dashoffset="${reduceMotion?0:((performance.now()/16)%8).toFixed(2)}"/>`+ln([79,94],[85,54],'gear-s',3)+ln([62,61],[85,55],'gear-s',2.6)+ln([82,52],[90,50],'gear-s',4)]],dur:820,cyc:1});
+  // remo ergómetro: empuja con las piernas, se inclina atrás y lleva el agarre al pecho
+  const rc={p:[52,85],tor:24,f:[74,85],w:[76,80],foot:160}, rf={p:[41.5,85],tor:-24,f:[74,85],w:[36,64],foot:160};
+  z42def('Remo ergómetro',{F:t=>{const c=z42mix(rc,rf,t); c.w=z42mix(rc,rf,Math.pow(t,1.7)).w; return z42pose(c)},
+    eq:[['bg',()=>ln([16,90],[84,90],'gear-s',3)+ln([20,90],[18,94],'gear-s',2.6)+ln([80,90],[82,94],'gear-s',2.6)+ln([78,77],[76,91],'gear-s',4)+ci([88,80],6,'gear-s')],
+        ['fn',P=>ln([84,80],P.w,'cable')+ln([P.p[0]-5,P.p[1]+4.5],[P.p[0]+5,P.p[1]+4.5],'gear',3.4)+ln([P.w[0],P.w[1]-3],[P.w[0],P.w[1]+3],'gear',2.6)]],dur:2000});
+  // saltos a la soga (de frente; la soga pasa por debajo de los pies cuando está en el aire)
+  const soga=(P,t,adelante)=>{const a=t*2*Math.PI; if((Math.sin(a)<0)!==adelante) return ''; const my=52+43*Math.cos(a), cx=(P.w[0]+P.w2[0])/2, wy=(P.w[1]+P.w2[1])/2;
+    return `<path d="M${P.w2[0].toFixed(1)} ${P.w2[1].toFixed(1)} Q${cx.toFixed(1)} ${(2*my-wy).toFixed(1)} ${P.w[0].toFixed(1)} ${P.w[1].toFixed(1)}" class="gear${adelante?'':' dim'}" stroke-width="1.6"/>`};
+  z42def('Saltos a la soga',{F:t=>{const a=t*2*Math.PI, up=4*Math.pow(.5+.5*Math.cos(a),2), y=v=>v-up;
+      return fr({p:[50,y(59)],e:[57.5,y(46)],w:[63+1.2*Math.sin(a),y(55)+1.2*Math.cos(a)],k:[55,y(76)],f:[55.5,y(92)],k2:[45,y(76)],f2:[44.5,y(92)]})},
+    eq:[['bg',(P,t)=>soga(P,t,false)],['fn',(P,t)=>soga(P,t,true)+ci(P.w,1.9,'gearf')+ci(P.w2,1.9,'gearf')],['front']],dur:640,lin:1});
+  // jumping jacks (saltos de tijera)
+  z42def('Jumping jacks',{F:z42F({ua:14,fa:10,k:[55,76],f:[56,92],k2:[45,76],f2:[44,92]},{ua:160,fa:172,k:[59.5,75.5],f:[66,91],k2:[40.5,75.5],f2:[34,91]},fr),eq:[['front']],dur:900,cyc:1});
+})();
+/* alias de los nuevos (van antes que los viejos: "curl femoral" no es bíceps, "remo al mentón" no es remo con barra) */
+ALIAS.unshift(
+  [/rueda/,'Rueda abdominal'],[/plancha|planchas/,'Plancha'],
+  [/curl.*(femoral|pierna|isquio)|femoral|camilla|isquio|leg curl|flexion(es)? de (pierna|rodilla)/,'Curl femoral'],
+  [/extension(es)? de (cuadricep|pierna|rodilla)|sillon|cuadricep|leg extension/,'Extensión de cuádriceps'],
+  [/abduc/,'Abductores en máquina'],[/aduc/,'Aductores en máquina'],
+  [/(elevacion|rodilla|pierna).*(colgad|barra|paralela)|(colgad|barra|paralela).*(elevacion|rodilla|pierna)|hanging/,'Elevación de rodillas colgado'],
+  [/elevacion(es)? de (las )?piernas|leg raise|elevacion.*pierna/,'Elevación de piernas'],
+  [/encogimiento.*(hombro|trapecio)|trapecio|shrug/,'Encogimientos de hombros'],
+  [/crunch|abdominal|abdomen|\babs?\b|sit ?up|oblicuo|giro ruso|russian|encogimiento.*abdom/,'Crunch abdominal'],
+  [/^encogimiento/,'Encogimientos de hombros'],
+  [/remo al (menton|cuello)|remo alto|upright/,'Remo al mentón'],
+  [/maquina de remo|ergometro|remo cardio|rower|remo indoor/,'Remo ergómetro'],
+  [/remo.*polea|remo sentado|remo bajo|remo en maquina|gironda|seated row|polea baja/,'Remo en polea baja'],
+  [/pull ?over/,'Pullover'],[/cruce|cross ?over/,'Apertura en máquina'],
+  [/^(?!.*tricep).*(patada|kick ?back|donkey|extension de cadera|gluteo en (maquina|polea))/,'Patada de glúteo'],
+  [/step ?up|subida(s)? al (cajon|banco|step)|\bstep\b|cajon/,'Step-up'],
+  [/burpee|burpi/,'Burpees'],[/mountain|escalador|trepador/,'Mountain climbers'],
+  [/jumping ?jack|tijera|polichinela/,'Jumping jacks'],
+  [/^(?!.*tricep).*(soga|comba|jump ?rope|salt(o|os|ar) (a|con) la cuerda|saltar la cuerda)/,'Saltos a la soga'],
+  [/flexion(es)?|lagartija|push ?up/,'Flexiones de brazos'],
+  [/frontal(es)?/,'Elevaciones frontales'],
+  [/hiperextension|lumbar|espinal|extension(es)? de (espalda|tronco)|banco romano|back extension/,'Hiperextensiones'],
+  [/^(?!.*abdom)(.*\bbici|.*bicicleta|.*spinning|.*ciclismo|.*\bbike\b)/,'Bicicleta fija'],
+  [/^cinta\b|\ben (la )?cinta\b|cinta (de|para) (correr|caminar)|caminadora|trot|correr|corrida|caminat|caminar|treadmill|eliptic/,'Cinta'],
+  [/talon(es)?/,'Gemelos']);
+/* editor de rutina del panel: el dibujito cambia mientras escribís el nombre (sin re-render, no pierde el foco) */
+document.addEventListener('input',e=>{const t=e.target; if(!t||!t.matches||!t.matches('.exr input[data-rc="0"]')) return;
+  const a=t.parentNode&&t.parentNode.querySelector('.z42mini'); if(!a) return;
+  const k=t.value.trim()?animKey(t.value):''; if(a.dataset.anim===k) return;
+  a.dataset.anim=k; a.classList.toggle('z42vacio',!k);
+  if(!k){a.firstElementChild.innerHTML='';return}
+  if(reduceMotion) a.firstElementChild.innerHTML=drawSkel(ANIM[k],1);
+  else{a.classList.remove('z42pop'); void a.offsetWidth; a.classList.add('z42pop')}});
+/* v42y: la info del gimnasio (y sus servicios) se guarda con el «Guardar todo» general del panel */
+function y42GymDirty(){ if(!puedeP('gyminfo')) return false; const g=gymInfo(), d=S.gymDraft||{};
+  if(Object.keys(d).some(k=>gTxt(d[k])!==gTxt(g[k]))) return true;
+  if(!S.svDraft) return false;
+  const nrm=L=>JSON.stringify(L.map(x=>({n:gTxt(x.n).slice(0,60),d:gTxt(x.d).slice(0,200),dias:x.dias.slice().sort((a,b)=>a-b)})).filter(x=>x.n));
+  return nrm(S.svDraft)!==nrm(svLista()) }
+function y42GymSave(){ if(!y42GymDirty()) return true;
+  const g=Object.assign({},gymInfo(),S.gymDraft||{}), v={};
+  GYM_CAMPOS.forEach(k=>{v[k]=gTxt(g[k])||null}); v.servicios=svParaGuardar();
+  const bad=(t,id)=>{ toast(t); const el=document.getElementById(id); if(el){ el.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'}); el.focus({preventScroll:true}) } return false };
+  if(v.whatsapp&&!waLink(v.whatsapp)) return bad('Revisá el WhatsApp: poné el número con característica','g_whatsapp');
+  if(v.instagram&&!igLink(v.instagram)) return bad('Revisá el Instagram: poné el usuario, por ejemplo @trainingclub','g_instagram');
+  if(v.instagram) v.instagram='@'+igUser(v.instagram);
+  if(v.maps_url&&!/^https:\/\//i.test(mapsLink({maps_url:v.maps_url}))) return bad('Ese link de Maps no sirve: copialo desde «Compartir» en Google Maps','g_maps_url');
+  const r=Object.assign({id:1},v,{updated_at:new Date().toISOString()}), antes={g:S.gymDraft,s:S.svDraft,G:gymInfo()};
+  if(CLOUD){ GYM=Object.assign({},GYM||{},r);
+    q(sb.from('gym_info').upsert(r)).catch(e=>{ GYM=antes.G; S.gymDraft=antes.g; S.svDraft=antes.s; toast('No se pudo guardar la info del gimnasio: '+errTxt(e)); render(true) }) }
+  else { DB.gym=Object.assign({},DB.gym||{},r); saveDB() }
+  const gb=$('#gsbar'), era=!!(gb&&gb.classList.contains('on'));
+  S.gymDraft=null; S.svDraft=null; toast('Listo: los socios ya ven la info nueva');
+  if(gb&&era&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; gb.classList.add('ok'); document.body.classList.remove('gson');
+    clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{gb.classList.remove('ok'); gsUpd()},950) }
+  render(true);
+  const p=$('#gyminfo'); if(p&&!reduceMotion){ p.classList.add('flash'); setTimeout(()=>p.classList.remove('flash'),900) }
+  return true }
+/* la barra aparece apenas cambia algo de la info del gym (después de que los otros oyentes guardan el borrador) */
+document.addEventListener('input',e=>{ if(e.target.closest&&e.target.closest('#gymf')) setTimeout(gsUpd,0) });
+document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#gymf [data-svdia]')) setTimeout(gsUpd,0) });
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
@@ -4278,7 +4596,7 @@ function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
   $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio'); gsUpd();
   cerrarIntro();
-  if(S.view==='socio') bnvSocio();
+  if(S.view==='socio') bnvSocio(); else if(S.view==='duenio'&&S.pro) bnvProfe();
 }
 
 async function elegirPlan(n){
@@ -4286,7 +4604,7 @@ async function elegirPlan(n){
   document.querySelectorAll('.plan').forEach(x=>{const on=x.dataset.plan===n; x.classList.toggle('on',on); x.setAttribute('aria-checked',on)});
   if(CLOUD){ try{ await q(sb.rpc('elegir_plan',{p_plan:n})); await loadAll() }catch(e){ toast(errTxt(e)); return render() } }
   else{ const uni=esUni(s); if(!s.plan){s.desde=mk(Y,M);s.desdeDia=D} s.plan=n; s.precio=uni?conUni(p.p):p.p; s.vence=s.vence||10; saveDB() }
-  if(S.ccOpen){ S.ccOpen=false; toast('Listo: desde la próxima cuota pasás a '+n) }
+  if(S.ccOpen) S.x42pl=n;
   render(true);
 }
 /* ---------- Cómo pagar: alias y CVU/CBU para copiar y pegar en cualquier billetera o banco ---------- */
@@ -4351,7 +4669,7 @@ try{ if(!window.TC_CFG){ MSGS=JSON.parse(localStorage.getItem('tc-chat')||'[]');
 const chGuardarLocal=()=>{ try{ localStorage.setItem('tc-chat',JSON.stringify(MSGS)); localStorage.setItem('tc-sug',JSON.stringify(SUGS)) }catch(e){} };
 const chK=s=>s?(s.id||s.dni):null;
 const chNoLeidosSocio=()=>{const k=chK(me()); return MSGS.filter(m=>m.k===k&&m.de==='profe'&&!m.leido).length};
-const chNoLeidosProfe=()=>{ if(!puedeP('chat')) return 0; const v=c1xChatFn(); return MSGS.filter(m=>m.de==='socio'&&!m.leido&&v(m.k)).length+SUGS.filter(x=>!x.leida).length };
+const chNoLeidosProfe=()=>{ if(!puedeP('chat')) return 0; const v=c1xChatFn(); return MSGS.filter(m=>m.de==='socio'&&!m.leido&&v(m.k)).length+(esAdmin()?SUGS.filter(x=>!x.leida).length:0) };
 const chHora=t=>{const d=new Date(t), h=new Date(); return (d.toDateString()===h.toDateString()?'':p2(d.getDate())+'/'+p2(d.getMonth()+1)+' ')+p2(d.getHours())+':'+p2(d.getMinutes())};
 const chDia=t=>{const d=new Date(t); d.setHours(0,0,0,0); const n=Math.round((TODAY-d)/864e5); return n<=0?'Hoy':n===1?'Ayer':n<7?DIAS[d.getDay()]:d.getDate()+' de '+MES[d.getMonth()].toLowerCase()};
 const chHm=t=>{const d=new Date(t); return p2(d.getHours())+':'+p2(d.getMinutes())};
@@ -4368,7 +4686,7 @@ const chBurbujas=(L,yo)=>{ let out='', dia=null;
 const ICO_SEND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
 async function cargarChat(){ if(!CLOUD||!sb) return;
   try{ const r=await sb.from('mensajes').select('*').order('id').limit(3000); if(r.error) return;
-    let sg=SUGS; if(S.pro){ const q=await sb.from('sugerencias').select('*').order('id',{ascending:false}).limit(300); if(!q.error) sg=q.data.map(x=>({id:x.id,texto:x.texto,creado:x.creado,leida:x.leida})) }
+    let sg=SUGS; if(S.pro&&esAdmin()){ const q=await sb.from('sugerencias').select('*').order('id',{ascending:false}).limit(300); if(!q.error) sg=q.data.map(x=>({id:x.id,texto:x.texto,creado:x.creado,leida:x.leida})) }
     const viejos=new Set(MSGS.map(m=>m.id)), antes=JSON.stringify([MSGS,SUGS]);
     MSGS=r.data.map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,creado:m.creado,leido:m.leido,editado:m.editado||null,nuevo:viejos.size&&!viejos.has(m.id)}));
     SUGS=sg; if(antes!==JSON.stringify([MSGS,SUGS])) chRefrescar(true) }catch(e){} }
@@ -4472,8 +4790,8 @@ function chUpdBar(){ if(S.chEdit&&!document.getElementById(S.chEdit.form)) S.chE
 function chFabHtml(){ if(S.tab!=='inicio') return ''; const n=chNoLeidosSocio(), tip=!S.chTipDone&&!S.chSheet&&!n;
   if(tip&&!S.chTipT) S.chTipT=setTimeout(()=>{S.chTipDone=true; const t=document.querySelector('.chtip'); if(t) t.classList.add('fuera')},6500);
   return `<button class="chfab ${n?'hay':''} ${S.chSheet?'abierto':''}" id="chfab" aria-label="Escribile al profe${n?' ('+n+' sin leer)':''}">${ICO_CHAT}<i class="nbadge" data-chbadge ${n?'':'hidden'}>${n||''}</i></button>
-  ${c1xFabPrev(n)}${tip?`<span class="chtip" aria-hidden="true">¿Dudas? Escribile a ${esc(PROFE.split(' ')[0])} 👋</span>`:''}
-  ${S.chSheet?`<div class="chback ${S.chSheetAnim?'abre':''}" id="chback"></div><div class="chsheet ${S.chSheetAnim?'abre':''}" role="dialog" aria-label="Chat con ${esc(PROFE)}">${chatSocioUI('sheet')}</div>`:''}`}
+  ${c1xFabPrev(n)}${tip?`<span class="chtip" aria-hidden="true">¿Dudas? Escribile a ${esc(profeChat().nombre.split(' ')[0])} 👋</span>`:''}
+  ${S.chSheet?`<div class="chback ${S.chSheetAnim?'abre':''}" id="chback"></div><div class="chsheet ${S.chSheetAnim?'abre':''}" role="dialog" aria-label="Chat con ${esc(profeChat().nombre)}">${chatSocioUI('sheet')}</div>`:''}`}
 function chAbrirHoja(){ S.chSheet=true; S.chSheetAnim=true; S.chTipDone=true; render(); S.chSheetAnim=false; setTimeout(()=>{const t=$('#chatin'); if(t) t.focus({preventScroll:true})},380) }
 function chCerrarHoja(){ const h=document.querySelector('.chsheet'), b=document.getElementById('chback'); if(!h){S.chSheet=false;return}
   h.classList.add('cierra'); if(b) b.classList.add('cierra'); const a=document.activeElement; if(a&&a.blur) a.blur(); setTimeout(()=>{S.chSheet=false; render(true)},230) }
@@ -4483,7 +4801,7 @@ document.addEventListener('click',e=>{ if(S.view!=='socio') return;
   const r=e.target.closest('[data-retry]'); if(r){ e.stopPropagation(); return chReintentar(r.dataset.retry) }
   const c=e.target.closest('[data-chip]'); if(c){ e.stopPropagation(); const t=$('#chatin'); if(!t) return; t.value=c.dataset.chip; S.chatDraft=t.value; t.dispatchEvent(new Event('input',{bubbles:true})); t.focus(); const L=t.value.length; t.setSelectionRange(L,L) } },true);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.chSheet&&S.view==='socio') chCerrarHoja() });
-const chatCard=()=>{const n=chNoLeidosSocio(); return `<button class="card gymlink chatlink" data-tab="chat"><span class="gico">💬</span><span class="gtx"><b>Chat con el profe</b><small>${n?n+' mensaje'+(n===1?'':'s')+' sin leer':'Escribile a '+PROFE.split(' ')[0]+' directo desde la app'}</small></span><span class="chb" data-chbadge ${n?'':'hidden'}>${n||''}</span><span class="garr" aria-hidden="true">›</span></button>`};
+const chatCard=()=>{const n=chNoLeidosSocio(); return `<button class="card gymlink chatlink" data-tab="chat"><span class="gico">💬</span><span class="gtx"><b>Chat con el profe</b><small>${n?n+' mensaje'+(n===1?'':'s')+' sin leer':'Escribile a '+esc(profeChat().nombre.split(' ')[0])+' directo desde la app'}</small></span><span class="chb" data-chbadge ${n?'':'hidden'}>${n||''}</span><span class="garr" aria-hidden="true">›</span></button>`};
 const sugCard=()=>`<section class="card sugc" id="sugc"><div class="ttl"><b>¿Qué podemos mejorar del gimnasio?</b><span class="anon">🕶️ Anónimo</span></div>
   ${S.sugOk?`<div class="sugok"><span class="sugtick" aria-hidden="true">✓</span><b>¡Gracias! Ya nos llegó.</b><p>Lo leemos todo. <button class="linkb" id="sugotra" type="button">Mandar otra</button></p></div>`
   :`<p class="sugp">Es <b>100% anónimo</b>: no guardamos quién lo manda, ni siquiera los profes pueden saberlo. Contanos lo que quieras y mandalo.</p>
@@ -4497,7 +4815,7 @@ function screenGimnasio(){
   <div class="gymscr" style="display:contents">
   ${d||maps?`<section class="card gubic"><span class="gico">${GICO.pin}</span><span class="gtx"><small>Ubicación</small><b>${d?esc(d):'Training Club'}</b></span>${maps?`<a class="btn sm" href="${esc(maps)}" target="_blank" rel="noopener">Cómo llegar</a>`:''}</section>`:''}
   ${cont.length?`<section class="card"><div class="ttl"><b>Contacto</b></div><div class="glinks">${cont.join('')}</div></section>`:''}
-  <section class="card gprofe">${avatar('md',null,PROFE)}<span class="gtx"><small>Tu profe</small><b>${PROFE}</b><p>${esc(gTxt(g.profe_bio)||PROFE_BIO)}</p></span></section>
+  ${(p=>`<section class="card gprofe">${avatar('md',p.foto,p.nombre)}<span class="gtx"><small>Tu profe</small><b>${esc(p.nombre)}</b>`)(profeGym(s))}<p>${esc(gTxt(g.profe_bio)||PROFE_BIO)}</p></span></section>
   ${svHtml()}
   ${horariosHtml()}
   ${esFam(s)?`<section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Plan familiar</b><p>No pagás cuota. ${famChiste()}</p></section>`:`<section class="card">${comoPagarHtml(monto)}</section>`}
@@ -4516,7 +4834,7 @@ function gymEditorHtml(){ const g=Object.assign({},gymInfo(),S.gymDraft||{}), v=
   <form class="gymf" id="gymf" novalidate><div class="gymgrid">${F.map(([k,l,ph,t,mx])=>`<div class="field"><label for="g_${k}">${l}</label><input class="inp" id="g_${k}" name="${k}" type="${t}" maxlength="${mx}" placeholder="${esc(ph)}" value="${v(k)}" autocomplete="off"></div>`).join('')}</div>
     <div class="field"><label for="g_profe_bio">Sobre el profe</label><textarea class="inp" id="g_profe_bio" name="profe_bio" maxlength="300" placeholder="${esc(PROFE_BIO)}">${v('profe_bio')}</textarea><small class="hint" style="max-width:none">Si lo dejás vacío se muestra: ${esc(PROFE_BIO)}.</small></div>
     ${svEditorHtml()}
-    <div class="gymacts"><button class="btn sm" type="submit">Guardar info</button><small class="hint" style="margin:0;max-width:none;flex:1;min-width:200px">Lo que dejes vacío no se muestra. Los horarios y los alias de pago ya aparecen solos.</small></div></form></section>`}
+    <div class="gymacts"><small class="hint" style="margin:0;max-width:none;flex:1;min-width:200px">Lo que dejes vacío no se muestra. Los horarios y los alias de pago ya aparecen solos. Los cambios se guardan con «Guardar todo».</small></div></form></section>`}
 async function guardarGym(){ const f=$('#gymf'); if(!f) return; const v={};
   GYM_CAMPOS.forEach(k=>{const el=f.elements[k]; v[k]=gTxt(el&&el.value)||null});
   v.servicios=svParaGuardar();
@@ -4539,7 +4857,7 @@ document.addEventListener('submit',async e=>{ const f=e.target; if(f.id!=='chatf
 document.addEventListener('keydown',e=>{ const t=e.target; if(e.key==='Enter'&&!e.shiftKey&&t&&(t.id==='chatin'||t.id==='chatpin')){ e.preventDefault(); const f=t.form; if(f) f.requestSubmit() } });
 document.addEventListener('input',e=>{ const t=e.target; if(t.id==='chatin'||t.id==='chatpin'){ t.style.height='auto'; t.style.height=Math.min(120,t.scrollHeight)+'px'; chUpdBar(); if(t.id==='chatin') S.chatDraft=t.value; else {S.chDraft=S.chDraft||{}; S.chDraft[S.chSel]=t.value} } });
 document.addEventListener('click',e=>{ const b=e.target.closest('#sugotra'); if(b){ S.sugOk=false; const c=document.getElementById('sugc'); if(c) c.outerHTML=sugCard(); const t=$('#sugin'); if(t) t.focus() } });
-document.addEventListener('submit',e=>{ if(e.target.id!=='gymf') return; e.preventDefault(); e.stopImmediatePropagation(); guardarGym() },true);
+document.addEventListener('submit',e=>{ if(e.target.id!=='gymf') return; e.preventDefault(); e.stopImmediatePropagation(); gsSave() },true);
 document.addEventListener('input',e=>{ const f=e.target.closest&&e.target.closest('#gymf'); if(!f||!e.target.name) return; (S.gymDraft=S.gymDraft||{})[e.target.name]=e.target.value });
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('#gyminfob'); if(!b) return;
   const go=()=>{const el=$('#gyminfo'); if(!el) return; el.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'}); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),900)};
@@ -4653,6 +4971,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.pay){const s=DB.socios[S.sel];const i=+b.dataset.pay;const medio=$('#medio'+i).value;const monto=parseInt(($('#monto'+i).value||'').replace(/\D/g,''))||0;let fecha=($('#fecha'+i).value||'').trim();
     if(!/^\d{1,2}\/\d{1,2}$/.test(fecha)){toast('Fecha como dd/mm, ej: 05/11');return $('#fecha'+i).focus()} fecha=fecha.split('/').map(x=>x.padStart(2,'0')).join('/');
     const had=!!s.pagos[mk(Y,i)]; s.pagos[mk(Y,i)]={fecha,medio,monto};S.msel.set=S.msel.set.filter(x=>x!==i);S.msel.edit=null;saveDB();toast((had?'Pago de ':'Pago registrado: ')+MES[i].toLowerCase()+(had?' actualizado':''));render(true);flashMes(i,0);return}
+  if((b.dataset.dok||b.dataset.dno)&&!puedeP('aprobar')) return toast('No tenés permiso para aprobar celulares');
   if(b.dataset.dok){sb.from('dispositivos').update({aprobado:true}).eq('uid',b.dataset.dok).then(({error})=>{if(error)return toast(errTxt(error));toast('Celular aprobado');reload(true)});return}
   if(b.dataset.dno){sb.from('dispositivos').delete().eq('uid',b.dataset.dno).then(({error})=>{if(error)return toast(errTxt(error));toast('Rechazado');reload(true)});return}
   if(b.dataset.pnav){ if(b.dataset.pnav===S.ptabP||(!S.ptabP&&b.dataset.pnav==='socios')) {if(S.sel&&b.dataset.pnav==='socios') return gsLeave(()=>{S.sel=null;S.edit=null;S.fd=null;render()}); return}
@@ -4669,12 +4988,12 @@ document.addEventListener('click',e=>{
   if(b.dataset.paprob){profeAccion('aprobar',b.dataset.paprob);return}
   if(b.dataset.pquitar){const n=b.dataset.pn||'este profe'; if(!confirm('¿Quitar a '+n+' de los profes? No va a poder entrar más al panel.'))return; profeAccion('quitar',b.dataset.pquitar);return}
   if(b.id==='prtoggle'){const hay=CLOUD?S.hayProfe:profesLS().some(p=>p.aprobado); const reg=S.preg!=null?S.preg:!hay; S.preg=!reg; S.pmsg=null; return render()}
-  if(b.id==='lcambiar'){S.lmode='dni';return render()}
+  if(b.id==='lcambiar'){S.lmode='dni';S.legalRegistro=false;return render()}
   if(b.id==='prologout'){ if(gsDirty()) return gsLeave(()=>{const x=$('#prologout'); if(x) x.click()});try{sessionStorage.removeItem('tc-pro');sessionStorage.removeItem('tc-pro-dni')}catch(x){} if(CLOUD){sb.rpc('profe_salir');DB={socios:{}}} PRO=null;S.pro=false;S.sel=null;S.ptabP='socios';S.profes=[];return render()}
   if(b.id==='avisox'){const a=aviso(me()); try{localStorage.setItem('tc-avx-'+a.k,'1')}catch(x){} return render()}
   if(b.id==='avisos'){ if(!notifOK()) return toast('Instalá la app en tu pantalla de inicio para recibir avisos');
-    Notification.requestPermission().then(p=>{ if(p==='granted'){toast(CLOUD?'Listo: te avisamos aunque tengas la app cerrada':'Listo: te avisamos los días 1, 3, 6, 9 y 10');
-      const o={body:'Te vamos a recordar la cuota los días 1, 3, 6, 9 y 10 de cada mes.',icon:'icon-192.png',tag:'cuota-ok'};
+    Notification.requestPermission().then(p=>{ if(p==='granted'){toast(CLOUD?'Listo: te avisamos aunque tengas la app cerrada':'Listo: te avisamos el día 5 y el 10 si no pagaste');
+      const o={body:'Te vamos a recordar la cuota el día 5, antes de que venza, y el 10 si todavía no la pagaste.',icon:'icon-192.png',tag:'cuota-ok'};
       if(navigator.serviceWorker&&navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(r=>r.showNotification('Avisos activados',o)); else try{new Notification('Avisos activados',o)}catch(x){}
       lanzarAviso(); activarPush() } else toast('Sin permiso no podemos avisarte'); render() }); return }
   if(b.dataset.att){const s=DB.socios[S.sel];const k=mk(S.fc.y,S.fc.m);const a=s.att[k]=s.att[k]||[];const d=+b.dataset.att;const ix=a.indexOf(d);
@@ -4712,6 +5031,9 @@ document.addEventListener('submit',e=>{
     const bad=(t,el)=>{err.textContent=t;err.hidden=false;if(el)el.focus()};
     const busy=(on,t)=>{bt.disabled=on;bt.textContent=t};
     const busyL=(on,t)=>{busy(on,t);bt.classList.toggle('cargando',on)};
+    const terminos=$('#legal-terms'), privacidad=$('#legal-privacy');
+    if(!terminos.checked) return bad('Aceptá los términos y condiciones para continuar.',terminos);
+    if(!privacidad.checked) return bad('Aceptá la política de privacidad para continuar.',privacidad);
     const salir=(dni,r)=>{const st=f.closest('.lstep'); if(st&&!reduceMotion) st.classList.add('sale'); setTimeout(()=>{S.c2pendNext=!!(r&&r.pendiente); entrarSocio(dni,r.nombre,!!r.creado)},reduceMotion?0:240)};
     let dni, name=null;
     if(m==='dni'){ dni=$('#dni').value.replace(/\D/g,'');
@@ -4720,9 +5042,10 @@ document.addEventListener('submit',e=>{
     else { dni=S.ldni; name=$('#lname').value.trim().replace(/\s+/g,' ');
       if(name.length<3||!name.includes(' ')) return bad('Escribí tu nombre y tu apellido.',$('#lname'));
       err.hidden=true; busyL(true,'Creando tu cuenta'); }
-    socioEntrar(dni,name).then(r=>{
-      if(r&&r.nuevo&&!r.nombre){S.ldni=dni;S.lmode='crear';render();const i=$('#lname');if(i)i.focus();return}
+    socioEntrar(dni,name,{terminos:terminos.checked,privacidad:privacidad.checked}).then(r=>{
+      if(r&&r.nuevo&&!r.nombre){S.legalRegistro=true;S.ldni=dni;S.lmode='crear';render();const i=$('#lname');if(i)i.focus();return}
       if(!r||!r.nombre) throw new Error('No pudimos entrar. Probá de nuevo.');
+      S.legalRegistro=false;
       busy(true,r.creado?'¡Listo! Entrando…':'Entrando…'); bt.classList.remove('cargando'); salir(dni,r) })
       .catch(e=>{busyL(false,m==='crear'?'Crear cuenta':'Entrar');bad(errTxt(e))}); return
   }
@@ -4820,10 +5143,10 @@ function gsTrack(t){ if(!gsEl(t)) return; if(!S.fd||S.fd.dni!==S.sel) S.fd={dni:
 function gsApply(){ const v=gsV();
   document.querySelectorAll('#datosf [id],#cuotaf [id],.mrow.editing [id]').forEach(el=>{ if(!gsEl(el)) return; el.dataset.o=gsVal(el);
     if(el.id in v){ if(el.type==='checkbox') el.checked=v[el.id]==='1'; else el.value=v[el.id] } }) }
-function gsQue(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdDirty()?['cuotas']:[]; const k=Object.keys(gsV()), q=[];
+function gsQue(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdDirty()?['cuotas']:[]; if(S.view==='duenio'&&S.ptabP==='profes'&&!S.sel) return y42GymDirty()?['la info del gimnasio']:[]; const k=Object.keys(gsV()), q=[];
   if(k.some(x=>/^(fname|fdni|falta|fnac)$/.test(x))) q.push('datos'); if(k.some(x=>/^(cplan|cprecio|cuni|cvence)$/.test(x))) q.push('cuota');
   if(k.some(x=>GS_PAGO.test(x))) q.push('pagos'); if(S.dirty&&S.edit&&S.edit.dni===S.sel) q.push('rutina'); return q }
-const gsDirty=()=>S.view==='duenio'&&(!!S.sel||S.ptabP==='cuotas')&&gsQue().length>0;
+const gsDirty=()=>S.view==='duenio'&&(!!S.sel||S.ptabP==='cuotas'||S.ptabP==='profes')&&gsQue().length>0;
 const gsLista=q=>q.length>1?q.slice(0,-1).join(', ')+' y '+q[q.length-1]:q[0]||'';
 function gsUpd(){ let b=$('#gsbar');
   if(!b){ b=document.createElement('div'); b.id='gsbar'; b.className='gsbar'; b.setAttribute('role','status'); b.inert=true;
@@ -4835,7 +5158,7 @@ function gsUpd(){ let b=$('#gsbar');
   if(on&&tx.innerHTML!==html){ const era=tx.innerHTML; tx.innerHTML=html; if(era&&b.classList.contains('on')){tx.classList.remove('bump'); void tx.offsetWidth; tx.classList.add('bump')} }
   if(b.classList.contains('on')!==on){ b.classList.toggle('on',on); b.inert=!on }
   document.body.classList.toggle('gson',on) }
-function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdSave(); const s=DB.socios[S.sel]; if(!s) return false;
+function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdSave(); if(S.view==='duenio'&&S.ptabP==='profes'&&!S.sel) return y42GymSave(); const s=DB.socios[S.sel]; if(!s) return false;
   const v=gsV(), q=gsQue(); if(!q.length) return true;
   const g=(id,def)=>id in v?v[id]:def;
   const bad=(t,el)=>{toast(t); if(typeof el==='string') el=document.getElementById(el); if(el){el.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'}); el.focus({preventScroll:true})} return false};
@@ -4875,14 +5198,14 @@ function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel) return pdSa
   const b=$('#gsbar'); if(b&&b.classList.contains('on')&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; b.classList.add('ok'); document.body.classList.remove('gson');
     clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{b.classList.remove('ok'); gsUpd()},950) } else gsUpd();
   return true }
-function gsDescartar(){ S.pd=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
+function gsDescartar(){ S.gymDraft=null; S.svDraft=null; S.pd=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
 /* salir con cambios sin guardar: guardar y salir / salir sin guardar / seguir editando */
 function gsLeave(go){ if(!gsDirty()) return go();
   let m=$('#gsm');
   if(!m){ m=document.createElement('div'); m.id='gsm'; m.className='gsm'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true'); m.setAttribute('aria-labelledby','gsmt'); m.inert=true;
     m.innerHTML='<div class="gsmc"><b id="gsmt">Tenés cambios sin guardar</b><p id="gsmp"></p><div class="gsma"><button class="btn sm" id="gsmsave" type="button">Guardar y salir</button><button class="mini danger" id="gsmdrop" type="button">Salir sin guardar</button><button class="mini" id="gsmstay" type="button">Seguir editando</button></div></div>';
     document.body.appendChild(m) }
-  const s=DB.socios[S.sel]; $('#gsmp').textContent=S.sel?'En la ficha de '+(s?s.name:'este socio')+': '+gsLista(gsQue())+'.':'En las cuotas del gimnasio (precios, nombres o descripciones).';
+  const s=DB.socios[S.sel]; $('#gsmp').textContent=S.sel?'En la ficha de '+(s?s.name:'este socio')+': '+gsLista(gsQue())+'.':S.ptabP==='profes'?'En la info del gimnasio (dirección, redes, sobre el profe o servicios).':'En las cuotas del gimnasio (precios, nombres o descripciones).';
   gsLeave.go=go; m.inert=false; m.classList.add('on'); setTimeout(()=>{const x=$('#gsmsave'); if(x) x.focus()},30) }
 function gsCerrar(){const m=$('#gsm'); if(m){m.classList.remove('on'); m.inert=true} gsLeave.go=null}
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('button');
