@@ -1870,6 +1870,64 @@ html[data-theme="light"] .forge-signature[width="96"]{content:url(data:image/web
 .hsig,.hscam{outline:none}
 .hsig button:focus:not(:focus-visible),.hscam button:focus:not(:focus-visible){outline:none;box-shadow:none}
 @media (prefers-reduced-motion:reduce){.hscam[open]{animation:none}}
+/* v56: vista general personalizable */
+.dash{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;align-items:stretch;margin-bottom:18px}
+.dw{position:relative;grid-column:span var(--we,var(--w,12));min-width:0;display:flex;flex-direction:column;border-radius:16px}
+.dw[hidden]{display:none}
+.dw>.panel,.dw>.kpis{flex:1;margin:0!important;min-width:0}
+.dw>.hrsp{margin-top:0}
+.dw>.cobp{max-height:440px;overflow:auto}
+.ui43-content .dw>.ui43-tasks{display:block}
+.dw{container-type:inline-size}
+@container (max-width:620px){.dw>.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container (max-width:560px){.dwt .dwmv{display:none}}
+.ui43-enter .dash>.dw{animation:ui43In .35s var(--ease) both;animation-delay:calc(var(--k,0)*35ms)}
+.dash.dwya>.dw,.dash.dashed>.dw{animation:none!important}
+.dashedit{display:inline-flex;align-items:center;gap:6px}
+.dashedit svg,.dwt svg,.dashbar svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dwt svg circle{fill:currentColor;stroke:none}
+.dashedit svg circle{fill:var(--surface)}
+.dashedit[aria-pressed="true"]{background:var(--accent-soft);border-color:rgba(36,201,167,.45);color:var(--teal)}
+.dwt,.dwr{display:none}
+.dash.dashed .dw{outline:2px dashed rgba(36,201,167,.45);outline-offset:4px;cursor:grab;transition:outline-color .2s}
+.dash.dashed .dw:hover{outline-color:var(--teal)}
+.dash.dashed .dw>:not(.dwt):not(.dwr){pointer-events:none;user-select:none;opacity:.6;transition:opacity .25s}
+.dash.dashed .dwt{display:flex;position:absolute;top:8px;left:8px;right:8px;z-index:5;align-items:center;gap:3px;padding:5px;border-radius:12px;background:var(--surface);border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.28);animation:dwtIn .28s var(--spring) both}
+@keyframes dwtIn{from{opacity:0;transform:translateY(-6px) scale(.97)}}
+.dwt button{display:grid;place-items:center;height:28px;min-width:28px;padding:0 6px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:800 12px/1 var(--body);cursor:pointer;transition:background .15s,color .15s}
+.dwt button:hover{background:var(--sunk)}
+.dwt .dwh{cursor:grab;touch-action:none;color:var(--muted)}
+.dwn{flex:1;min-width:0;padding:0 4px;font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dws{display:flex;gap:2px;padding:2px;border-radius:9px;background:var(--sunk)}
+.dws button{min-width:32px;height:24px;font-size:12px;color:var(--muted)}
+.dws button[aria-pressed="true"]{background:var(--surface);color:var(--teal);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.dwt .dwx:hover{background:var(--bad-bg);color:var(--bad)}
+.dash.dashed .dwr{display:block;position:absolute;right:-11px;top:50%;width:14px;height:52px;margin-top:-26px;z-index:6;border-radius:8px;background:var(--surface);border:1px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:ew-resize;touch-action:none;transition:background .15s,transform .2s var(--spring)}
+.dwr::before{content:"";position:absolute;top:15px;bottom:15px;left:4px;right:4px;border-left:2px solid var(--muted);border-right:2px solid var(--muted)}
+.dwr:hover,.dw.dwrs .dwr{background:var(--accent-soft);transform:scaleY(1.12)}
+.dw.dwrs{outline-color:var(--teal)!important}
+.dw.dwdrag{z-index:30;pointer-events:none;cursor:grabbing;box-shadow:0 26px 60px rgba(0,0,0,.5);outline-color:var(--teal)!important}
+.dw.dwdrag>:not(.dwt):not(.dwr){opacity:.95}
+.dashbar{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:80;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px 8px 8px 16px;border-radius:16px;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.45);max-width:calc(100vw - 32px)}
+.dashbar[hidden]{display:none}
+.dashbar.in{animation:dashUp .38s var(--spring) both}
+@keyframes dashUp{from{opacity:0;transform:translate(-50%,24px)}}
+.dashbar>b{font-size:13px;white-space:nowrap;margin-right:6px}
+.dashbar .mini{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.dashbar .mini i{font-style:normal;font-size:11px;font-weight:800;color:var(--teal)}
+.dashtar{position:relative}
+.dashpop{position:absolute;bottom:calc(100% + 12px);left:0;min-width:250px;padding:8px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:0 18px 44px rgba(0,0,0,.45);animation:dwtIn .25s var(--spring) both}
+.dashpop[hidden]{display:none}
+.dashpop small{display:block;padding:4px 10px 8px;color:var(--muted);font-size:12px}
+.dashpop label{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer}
+.dashpop label:hover{background:var(--sunk)}
+.dashpop input{width:18px;height:18px;margin:0;accent-color:var(--teal);cursor:pointer}
+@media(max-width:1100px){.dw{grid-column:span var(--wme,var(--wm,12))}.dws [data-dww="4"],.dws [data-dww="8"]{display:none}}
+@media(max-width:760px){.dw{grid-column:1/-1!important}.dash{gap:14px}.ui43-headingactions .mini.dashedit{display:inline-flex;justify-content:center;width:38px;height:38px;min-height:38px;padding:0}.ui43-headingactions .dashedit span{display:none}.dws,.dash.dashed .dwr{display:none!important}
+ .dwt .dwmv{display:grid!important}
+ .dashbar{left:12px;right:12px;transform:none;justify-content:flex-end;gap:6px;padding:8px}.dashbar>b,.dashbar [data-dashtar]>span{display:none}.dashtar{margin-right:auto}.dashbar .mini{padding:9px 11px}
+ @keyframes dashUp{from{opacity:0;transform:translateY(24px)}}}
+@media (prefers-reduced-motion:reduce){.dash.dashed .dwt,.dashbar.in,.dashpop,.ui43-enter .dash>.dw{animation:none}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -4669,6 +4727,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.47',t:'Vista general a tu gusto',items:[['❤️','Las reacciones flotan al tocar el emoji y al abrir historias.'],['🧩','Tocá «Personalizar» en la Vista general: arrastrá las tarjetas para moverlas, cambiales el ancho desde el borde o con ⅓ ½ ⅔ Todo, y ocultá o mostrá las que quieras desde «Tarjetas». Se guarda para la web y la app.'],['💳','«Cuotas a cobrar» ahora está al lado de «Horarios con más gente».'],['🕐','«Horarios con más gente» se ve solo en la Vista general.'],['⏱️','La app de los socios ya no muestra el tiempo que llevan entrenando.']]},
   {v:'1.1.46',t:'Cámara de historias más prolija',items:[['📸','La cámara para subir una historia abre directo en pantalla completa, sin achicarse primero.'],['✨','La X del visor y de la cámara ya no aparece marcada al abrir.']]},
   {v:'1.1.45',t:'Horarios con más gente, historias al estilo Instagram y login más limpio',items:[['🕐','Nueva sección «Horarios con más gente» en la Vista general: hora pico, franja con más socios y un gráfico por hora, de hoy, los últimos 7 días o el mes.'],['✅','En la asistencia de hoy ves a qué hora entró cada socio.'],['📸','Historias en 9:16 con la foto de perfil de cada uno. Los socios reaccionan con me gusta o emojis y ven quién reaccionó; vos ves quién vio las historias del gym.'],['📱','En el celular, el login del panel ya no tiene la barra de arriba y no se mueve al escribir.']]},
   {v:'1.1.44',t:'Historias desde el panel, cargas con escala de Borg y horario de entrada',items:[['📸','Desde la Vista general del panel ves las historias de los socios y podés subir historias propias: los socios las ven como Training Club. También podés borrar cualquier historia.'],['🏋️','Las cargas de los socios ya no calculan un estimado: guardan el ejercicio, el peso, las repeticiones y cómo les costó (liviano, exigente o muy exigente), con fecha y hora.'],['🕒','Se ve a qué hora registró cada socio su entrada, en su app y en su ficha.'],['💬','El chat del panel desde el celular deja escribir bien y las fotos del chat se ven a la medida de la pantalla.']]},{v:'1.1.43',t:'Logo de Forge Studio sin fondo',items:[['✨','El logo de Forge Studio en el inicio, el login y el panel ahora es transparente, sin el recuadro negro, y se adapta al tema claro y oscuro.']]},{v:'1.1.42',t:'Chat como WhatsApp y mensajes del plan familiar',items:[['🟢','En el chat ves cuándo el socio está en línea, escribiendo o grabando un audio (y él ve lo mismo de vos).'],['🏠','En Cuotas podés escribir los mensajes que ven los socios con plan familiar. Cambian solos cada día.'],['📱','Arreglado: en el Perfil del celular la pantalla ya no se mueve hacia los costados.']]},{v:'1.1.41',t:'Editor de historias y app más pulida',items:[['🎨','Antes de subir una historia, los socios pueden dibujar con pincel, marcador o neón, escribir texto y elegir el formato de la foto.'],['✨','Las historias se abren y se cierran con animación, y la foto vuela al círculo al publicarla.'],['📷','En el chat, el botón para mandar fotos ahora tiene una cámara.'],['🛠️','Arreglos generales: aviso de sin conexión, sin zoom molesto en iPhone al escribir y botones más fáciles de tocar.']]},{v:'1.1.40',t:'Historias arriba y se pueden borrar',items:[['⭕','Las historias ahora están arriba, entre el logo y tu perfil, en todas las pantallas.'],['🗑️','Cada socio puede eliminar sus historias antes de las 24 horas.']]},{v:'1.1.38',t:'Historias como en Instagram',items:[['📸','Los socios ven las historias en círculos con anillo de color, a pantalla completa, con barras de progreso; tocan para pasar, mantienen para pausar y deslizan hacia abajo para cerrar.']]},{v:'1.1.37',t:'Pagos en un solo lugar',items:[['💳','Revisá las solicitudes de socios, registrá pagos y consultá lo cobrado desde Pagos.']]},
@@ -5076,8 +5135,7 @@ screenRutina=function(){ const p=S.rsub==='prog'?1:0, prev=S.tcbPrev==null?p:S.t
   const seg=`<div class="seg2 tcb-seg" role="group" aria-label="Parte de la rutina" style="--m:${prev}" data-to="${p}"><button data-rsub="ent" aria-pressed="${!p}">Entrenar</button><button data-rsub="prog" aria-pressed="${!!p}">Progresos</button></div>`;
   if(p) return seg+tcbProgresos();
   let h=tcbScreenRutina.apply(this,arguments); const i=h.indexOf('<div class="prog">');
-  if(i>=0) h=h.slice(0,i)+x42SesHtml(h)+h.slice(i);
-  return seg+h+rsSemanaHtml() };
+  return seg+h };
 const tcbRenderSocio=renderSocio;
 renderSocio=function(){ if(S.user) tcbCargar(); tcbRenderSocio.apply(this,arguments); if(!S.user) return;
   const scr=document.getElementById('scr-rutina');
@@ -6129,6 +6187,130 @@ function hrsHtml(){const p=S.hrsP||'semana',i=HRS_P.findIndex(x=>x[0]===p);
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-hrs]');if(!b)return;e.stopPropagation();if(S.hrsP===b.dataset.hrs)return;
   S.hrsP=b.dataset.hrs;const g=b.parentElement;g.style.setProperty('--i',HRS_P.findIndex(x=>x[0]===S.hrsP));g.querySelectorAll('[data-hrs]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
   const body=document.getElementById('hrsbody');if(body){body.innerHTML=hrsCuerpo(S.hrsP);body.classList.remove('hrsre');void body.offsetWidth;body.classList.add('hrsre')}},true);
+
+/* v56: Vista general personalizable, al estilo Shopify: se mueven, se agrandan y se ocultan las tarjetas.
+   El diseño es del gimnasio (gym_info.panel_layout) y se ve igual en la web y en la app de escritorio. */
+const DASH_W=[4,6,8,12], DASH_WT={4:'⅓',6:'½',8:'⅔',12:'Todo'}, DASH_WL={4:'Un tercio',6:'La mitad',8:'Dos tercios',12:'Todo el ancho'};
+const DASH_DEF=[{id:'kpis',w:12,on:true},{id:'asist',w:8,on:true},{id:'tareas',w:4,on:true},{id:'horarios',w:8,on:true},{id:'cobros',w:4,on:true},{id:'socios',w:12,on:true}];
+const DASH_N={kpis:'Resumen',asist:'Asistencias',tareas:'Para tener en cuenta',horarios:'Horarios con más gente',cobros:'Cuotas a cobrar',socios:'Tus socios'};
+const DASH_SVG={drag:'<circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/>',
+  up:'<path d="M12 19V5M6 11l6-6 6 6"/>',down:'<path d="M12 5v14M6 13l6 6 6-6"/>',
+  off:'<path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.4 5.2A9.8 9.8 0 0112 5c5 0 9 4.5 10 7-.4 1-1.2 2.3-2.4 3.5M6.2 6.3C4.2 7.6 2.8 9.6 2 12c1 2.5 5 7 10 7 1.6 0 3-.4 4.3-1"/>',
+  edit:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'};
+const dashIco=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${DASH_SVG[k]}</svg>`;
+function dashNorm(L){ const out=[],ya=new Set();
+  (Array.isArray(L)?L:[]).forEach(x=>{ if(x&&DASH_N[x.id]&&!ya.has(x.id)){ ya.add(x.id); out.push({id:x.id,w:DASH_W.includes(+x.w)?+x.w:12,on:x.on!==false}) } });
+  DASH_DEF.forEach(d=>{ if(!ya.has(d.id)) out.push(Object.assign({},d)) }); return out }
+function dashLS(v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem('tc-dash')||'null'); localStorage.setItem('tc-dash',JSON.stringify(v)) }catch(e){ return null } }
+function dashLayout(){ return S.dashEd||dashNorm(S.dashL||gymInfo().panel_layout||dashLS()||DASH_DEF) }
+const dashWm=w=>w<=6?6:12;   /* en pantallas medianas: mitad o todo el ancho */
+/* siempre prolijo: la última tarjeta de cada fila se estira hasta completar el ancho (no quedan huecos) */
+function dashFill(dash){ if(!dash) return; const ws=[...dash.children].filter(w=>!w.hidden);
+  [['--w','--we'],['--wm','--wme']].forEach(([k,o])=>{ let row=[],sum=0; const its=ws.map(w=>({w,v:+w.style.getPropertyValue(k)||12,e:0}));
+    const cerrar=()=>{ if(row.length) row[row.length-1].e+=12-sum; row=[]; sum=0 };
+    its.forEach(it=>{ if(sum+it.v>12) cerrar(); it.e=it.v; row.push(it); sum+=it.v }); cerrar(); its.forEach(it=>it.w.style.setProperty(o,it.e)) }) }
+function dashTools(x){ const n=DASH_N[x.id];
+  return `<div class="dwt" role="toolbar" aria-label="Editar ${n}"><button type="button" class="dwh" data-dwdrag aria-label="Mover ${n}" title="Arrastrá para mover">${dashIco('drag')}</button><span class="dwn">${n}</span>`+
+  `<div class="dws" role="group" aria-label="Ancho">${DASH_W.map(w=>`<button type="button" data-dww="${w}" aria-pressed="${x.w===w}" title="${DASH_WL[w]}" aria-label="${DASH_WL[w]}">${DASH_WT[w]}</button>`).join('')}</div>`+
+  `<button type="button" class="dwmv" data-dwmv="-1" aria-label="Mover antes" title="Mover antes">${dashIco('up')}</button><button type="button" class="dwmv" data-dwmv="1" aria-label="Mover después" title="Mover después">${dashIco('down')}</button>`+
+  `<button type="button" class="dwx" data-dwoff aria-label="Ocultar ${n}" title="Ocultar">${dashIco('off')}</button></div><span class="dwr" data-dwresize title="Arrastrá para cambiar el ancho" aria-hidden="true"></span>` }
+function dashMount(){
+  const owner=document.querySelector('#app .ui43-owner'), content=owner&&owner.querySelector('.ui43-content');
+  if(!content){ dashBar(); return }
+  const view=owner.dataset.ui43view;
+  if(view!=='overview'){ const h=content.querySelector('#hrs'); if(h) h.remove(); if(S.dashEd){ S.dashEd=null; S.dashOrig=null } dashBar(); return }
+  if(content.querySelector('#dash')){ dashBar(); return }
+  const grid=content.querySelector(':scope>.grid2');
+  const el={kpis:content.querySelector(':scope>.kpis'),asist:grid&&grid.querySelector('.a14p'),tareas:content.querySelector('.ui43-tasks'),
+    cobros:grid&&grid.querySelector('.cobp'),horarios:content.querySelector('#hrs'),socios:content.querySelector('.ui43-members')};
+  const ref=el.kpis||grid||el.socios; if(!ref){ dashBar(); return }
+  const dash=document.createElement('div'); dash.className='dash'+(S.dashEd?' dashed':''); dash.id='dash'; ref.before(dash);
+  dashLayout().forEach((x,k)=>{ const e=el[x.id]; if(!e) return; const w=document.createElement('div'); w.className='dw'; w.dataset.dw=x.id;
+    w.style.setProperty('--w',x.w); w.style.setProperty('--wm',dashWm(x.w)); w.style.setProperty('--k',k); w.hidden=!x.on; w.append(e); w.insertAdjacentHTML('beforeend',dashTools(x)); dash.append(w) });
+  dashFill(dash); if(grid&&!grid.querySelector('section')) grid.remove();
+  const acts=owner.querySelector('.ui43-headingactions');
+  if(acts&&!acts.querySelector('[data-dashedit]')) acts.insertAdjacentHTML('afterbegin',`<button type="button" class="mini dashedit" data-dashedit aria-pressed="${!!S.dashEd}">${dashIco('edit')}<span>Personalizar</span></button>`);
+  dashBar() }
+const ui43MountV55=ui43Mount;
+ui43Mount=function(){ ui43MountV55.apply(this,arguments); dashMount() };
+/* barra de abajo mientras se personaliza (flota: no mueve nada de la página) */
+function dashBar(){ let b=document.getElementById('dashbar');
+  const on=!!S.dashEd&&!!document.getElementById('dash');
+  if(!b){ if(!on) return; b=document.createElement('div'); b.id='dashbar'; b.className='dashbar'; b.setAttribute('role','region'); b.setAttribute('aria-label','Personalizar la vista general'); document.body.append(b) }
+  if(!on){ b.hidden=true; return }
+  const L=S.dashEd, ocultas=L.filter(x=>!x.on).length, abierto=b.querySelector('.dashpop:not([hidden])');
+  b.innerHTML=`<b>Personalizando la vista general</b><div class="dashtar"><button type="button" class="mini" data-dashtar aria-expanded="${!!abierto}">${dashIco('grid')}<span>Tarjetas</span>${ocultas?`<i class="num">${ocultas} oculta${ocultas===1?'':'s'}</i>`:''}</button>
+    <div class="dashpop" ${abierto?'':'hidden'}><small>Elegí qué tarjetas ver</small>${L.map(x=>`<label><input type="checkbox" data-dwon="${x.id}" ${x.on?'checked':''}><span>${DASH_N[x.id]}</span></label>`).join('')}</div></div>
+    <button type="button" class="mini" data-dashreset>Restablecer</button><button type="button" class="mini" data-dashno>Descartar</button><button type="button" class="btn sm" data-dashok>Guardar</button>`;
+  if(b.hidden){ b.hidden=false; b.classList.remove('in'); void b.offsetWidth; b.classList.add('in') } }
+/* animación FLIP: lo que cambia de lugar se desliza a su nuevo lugar */
+function dashFlip(fn,quieto){ const dash=document.getElementById('dash'); if(!dash) return fn();
+  const ws=[...dash.children], r0=new Map(ws.map(w=>[w,w.hidden?null:w.getBoundingClientRect()])); fn(); if(reduceMotion) return;
+  ws.forEach(w=>{ if(w===quieto||w.hidden) return; const a=r0.get(w), b=w.getBoundingClientRect();
+    if(!a){ w.animate([{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)'}); return }
+    const dx=a.left-b.left, dy=a.top-b.top; if(Math.abs(dx)<1&&Math.abs(dy)<1) return;
+    w.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:340,easing:'cubic-bezier(.2,.8,.2,1)'}) }) }
+function dashSync(quieto){ const dash=document.getElementById('dash'); if(!dash||!S.dashEd) return; dash.classList.add('dwya');
+  dashFlip(()=>{ S.dashEd.forEach((x,k)=>{ const w=dash.querySelector(`[data-dw="${x.id}"]`); if(!w) return; dash.append(w);
+    w.style.setProperty('--w',x.w); w.style.setProperty('--wm',dashWm(x.w)); w.hidden=!x.on;
+    w.querySelectorAll('[data-dww]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.dww===x.w))) }); dashFill(dash) },quieto); dashBar() }
+function dashItem(id){ return S.dashEd&&S.dashEd.find(x=>x.id===id) }
+function dashEditar(on){ const dash=document.getElementById('dash'); if(!dash) return;
+  if(on){ S.dashOrig=dashLayout().map(x=>Object.assign({},x)); S.dashEd=S.dashOrig.map(x=>Object.assign({},x)) } else { S.dashEd=null; S.dashOrig=null }
+  dash.classList.toggle('dashed',on); document.querySelectorAll('[data-dashedit]').forEach(b=>b.setAttribute('aria-pressed',String(on))); dashBar() }
+async function dashGuardar(){ const L=S.dashEd.map(x=>({id:x.id,w:x.w,on:x.on})); S.dashL=L; dashLS(L); dashEditar(false);
+  if(!CLOUD){ DB.gym=Object.assign({},DB.gym||{},{panel_layout:L}); saveDB(); return toast('Listo: la vista general queda así') }
+  if(!puedeP('gyminfo')) return toast('Listo: la vista general queda así en este dispositivo');
+  try{ await q(sb.from('gym_info').update({panel_layout:L,updated_at:new Date().toISOString()}).eq('id',1)); GYM=Object.assign({},GYM||{},{panel_layout:L});
+    toast('Listo: la vista general queda así en la web y en la app') }
+  catch(e){ toast('Quedó guardada en este dispositivo, pero no en la nube: '+errTxt(e)) } }
+document.addEventListener('click',e=>{ const t=e.target, b=t.closest&&t.closest('[data-dashedit],[data-dww],[data-dwmv],[data-dwoff],[data-dashtar],[data-dashreset],[data-dashno],[data-dashok]');
+  const pop=document.querySelector('.dashpop:not([hidden])'); if(pop&&!t.closest('.dashtar')){ pop.hidden=true; const tb=document.querySelector('[data-dashtar]'); if(tb) tb.setAttribute('aria-expanded','false') }
+  if(!b) return; e.preventDefault(); e.stopPropagation();
+  if(b.hasAttribute('data-dashedit')) return dashEditar(!S.dashEd);
+  if(!S.dashEd) return;
+  const w=b.closest('.dw'), it=w&&dashItem(w.dataset.dw);
+  if(b.dataset.dww&&it){ it.w=+b.dataset.dww; dashSync(); if(!reduceMotion) w.animate([{transform:'scale(.985)'},{transform:'none'}],{duration:260,easing:'cubic-bezier(.34,1.45,.5,1)'}); return }
+  if(b.dataset.dwmv&&it){ const L=S.dashEd, i=L.indexOf(it), j=i+(+b.dataset.dwmv); let k=j; while(L[k]&&!L[k].on) k+=+b.dataset.dwmv; if(k<0||k>=L.length) return;
+    L.splice(i,1); L.splice(k,0,it); dashSync(); const f=w.querySelector(`[data-dwmv="${b.dataset.dwmv}"]`); if(f) f.focus({preventScroll:true}); return }
+  if(b.hasAttribute('data-dwoff')&&it){ it.on=false; dashSync(); return }
+  if(b.hasAttribute('data-dashtar')){ const p=b.parentElement.querySelector('.dashpop'); p.hidden=!p.hidden; b.setAttribute('aria-expanded',String(!p.hidden)); return }
+  if(b.hasAttribute('data-dashreset')){ S.dashEd=DASH_DEF.map(x=>Object.assign({},x)); dashSync(); return }
+  if(b.hasAttribute('data-dashno')){ S.dashEd=S.dashOrig.map(x=>Object.assign({},x)); dashSync(); dashEditar(false); return }
+  if(b.hasAttribute('data-dashok')) return dashGuardar() },true);
+document.addEventListener('change',e=>{ const c=e.target; if(!c.dataset||!c.dataset.dwon||!S.dashEd) return; const it=dashItem(c.dataset.dwon); if(!it) return;
+  it.on=c.checked; const pop=c.closest('.dashpop'); dashSync(); const p=document.querySelector('#dashbar .dashpop'); if(p&&pop){ p.hidden=false; const tb=document.querySelector('[data-dashtar]'); if(tb) tb.setAttribute('aria-expanded','true') } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.dashEd&&document.getElementById('dash')){ const p=document.querySelector('.dashpop:not([hidden])'); if(p){ p.hidden=true; return } S.dashEd=S.dashOrig.map(x=>Object.assign({},x)); dashSync(); dashEditar(false) } });
+/* arrastrar para mover y para cambiar el ancho (mouse en toda la tarjeta; en el celu, desde la manija) */
+let dashDr=null;
+document.addEventListener('pointerdown',e=>{ const dash=e.target.closest&&e.target.closest('#dash.dashed'); if(!dash||e.button>0) return;
+  const w=e.target.closest('.dw'); if(!w||w.parentElement!==dash) return;
+  if(e.target.closest('[data-dwresize]')){ e.preventDefault(); dashDr={rs:true,w,dash,x0:e.clientX}; w.classList.add('dwrs'); return }
+  if(e.target.closest('.dwt button:not([data-dwdrag])')) return;
+  if(e.pointerType!=='mouse'&&!e.target.closest('[data-dwdrag]')) return;
+  e.preventDefault(); const dr=dash.getBoundingClientRect();
+  dashDr={w,dash,x0:e.clientX,y0:e.clientY,gx:e.clientX-(dr.left+w.offsetLeft),gy:e.clientY-(dr.top+w.offsetTop),on:false,last:''} },true);
+document.addEventListener('pointermove',e=>{ const d=dashDr; if(!d) return; if(!e.buttons){ dashSoltar(); return } e.preventDefault();
+  if(d.rs){ const r=d.w.getBoundingClientRect(), dr=d.dash.getBoundingClientRect(), it=dashItem(d.w.dataset.dw); if(!it) return;
+    const f=(e.clientX-r.left)/dr.width*12, n=DASH_W.reduce((a,b)=>Math.abs(b-f)<Math.abs(a-f)?b:a);
+    if(n!==it.w){ it.w=n; dashSync() } return }
+  if(!d.on){ if(Math.hypot(e.clientX-d.x0,e.clientY-d.y0)<6) return; d.on=true; d.w.classList.add('dwdrag') }
+  const y=e.clientY; if(y<70) scrollBy(0,-14); else if(y>innerHeight-70) scrollBy(0,14);
+  const el=document.elementFromPoint(e.clientX,e.clientY), t=el&&el.closest('.dw');
+  if(t&&t!==d.w&&t.parentElement===d.dash){ const r=t.getBoundingClientRect(), dr=d.dash.getBoundingClientRect();
+    const antes=r.width>dr.width*.9?y<r.top+r.height/2:e.clientX<r.left+r.width/2, key=t.dataset.dw+(antes?'<':'>');
+    if(key!==d.last){ d.last=key; dashFlip(()=>{ antes?t.before(d.w):t.after(d.w); dashFill(d.dash) },d.w) } }
+  const dr=d.dash.getBoundingClientRect();
+  d.w.style.transform=`translate(${e.clientX-d.gx-(dr.left+d.w.offsetLeft)}px,${e.clientY-d.gy-(dr.top+d.w.offsetTop)}px) rotate(.6deg)` },{passive:false});
+function dashSoltar(){ const d=dashDr; if(!d) return; dashDr=null;
+  if(d.rs){ d.w.classList.remove('dwrs'); return }
+  if(!d.on) return;
+  const tr=d.w.style.transform; d.w.style.transform=''; d.w.classList.remove('dwdrag');
+  if(!reduceMotion&&tr) d.w.animate([{transform:tr},{transform:'none'}],{duration:300,easing:'cubic-bezier(.34,1.3,.5,1)'});
+  const orden=[...d.dash.children].map(w=>w.dataset.dw); S.dashEd.sort((a,b)=>orden.indexOf(a.id)-orden.indexOf(b.id)); dashBar() }
+document.addEventListener('pointerup',dashSoltar); document.addEventListener('pointercancel',dashSoltar);
+
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
@@ -6392,7 +6574,7 @@ async function guardarGym(){ const f=$('#gymf'); if(!f) return; const v={};
   if(v.maps_url&&!/^https:\/\//i.test(mapsLink({maps_url:v.maps_url}))) return toast('Ese link de Maps no sirve: copialo desde «Compartir» en Google Maps');
   const bt=f.querySelector('button[type="submit"]'); if(bt){bt.disabled=true; bt.classList.add('cargando')}
   try{ const r=Object.assign({id:1},v,{updated_at:new Date().toISOString()});
-    if(CLOUD){ await q(sb.from('gym_info').upsert(r)); GYM=r } else { DB.gym=r; saveDB() }
+    if(CLOUD){ await q(sb.from('gym_info').upsert(r)); GYM=Object.assign({},GYM||{},r) } else { DB.gym=Object.assign({},DB.gym||{},r); saveDB() }
     S.gymDraft=null; S.svDraft=null; toast('Listo: los socios ya ven la info nueva'); render(true);
     const p=$('#gyminfo'); if(p){p.classList.add('flash'); setTimeout(()=>p.classList.remove('flash'),900)}
   }catch(e){ toast('No se pudo guardar: '+errTxt(e)); if(bt){bt.disabled=false; bt.classList.remove('cargando')} } }
