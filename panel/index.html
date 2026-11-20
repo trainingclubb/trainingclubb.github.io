@@ -1389,6 +1389,67 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .rkper button b,.rkper button small{transition:transform .35s var(--spring),color .3s}
 .rkper button[aria-pressed="true"] b{transform:scale(1.06)}
 @media (prefers-reduced-motion:reduce){.as43,.rk.rkswap,.rkcual.rkcx,.chvisor,.chvisor img,.bmed::after,.bmup i{animation:none!important}}
+
+/* lote 44: columna Funcional sobre los tildes y sin hueco */
+@media (min-width:761px){
+  html.ui43-panel .ui43-sociostable th:nth-child(1){width:auto}
+  html.ui43-panel .ui43-sociostable th:nth-child(7){width:224px}
+  html.ui43-panel .ui43-sociostable th.fnth{text-align:left!important}
+  html.ui43-panel .ui43-sociostable td:last-child{text-align:left!important}
+  html.ui43-panel .ui43-sociostable .fncell{justify-content:flex-start}
+}
+.d44p{white-space:nowrap}
+/* lote 44: deuda */
+.mdebe{display:inline-flex;align-items:center;gap:5px;min-width:70px;justify-content:center;height:28px;padding:0 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:700;cursor:pointer;flex:none;transition:background .25s,color .25s,border-color .25s,transform .3s var(--spring)}
+.mdebe i{width:12px;height:12px;border-radius:4px;border:2px solid currentColor;display:grid;place-items:center;transition:background .25s,border-color .25s}
+.mdebe i::after{content:'';width:3px;height:6px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) scale(0);margin-top:-1px;transition:transform .3s var(--spring)}
+.mdebe:hover{color:var(--bad);border-color:rgba(239,90,90,.5)}
+.mdebe.on{background:rgba(239,90,90,.14);color:var(--bad);border-color:rgba(239,90,90,.55)}
+.mdebe.on i{background:var(--bad);border-color:var(--bad)}.mdebe.on i::after{transform:rotate(45deg) scale(1)}
+.mdebe.ph{visibility:hidden}.mdebe.d44pop{animation:fnPop .45s var(--spring)}
+.mrow.d44man>select,.mrow.d44man>input,.mrow.d44man>.mini{display:none}
+.mrow.d44man:hover>select,.mrow.d44man:hover>input,.mrow.d44man:hover>.mini,.mrow.d44man:focus-within>select,.mrow.d44man:focus-within>input,.mrow.d44man:focus-within>.mini{display:inline-block;animation:a14fade .25s var(--ease) both}
+.mrow.owed{border-color:rgba(239,90,90,.35);background:rgba(239,90,90,.05)}
+.mrow.d44flash{animation:d44Fl .7s ease both}@keyframes d44Fl{30%{box-shadow:0 0 0 3px rgba(239,90,90,.25)}}
+.d44{display:flex;align-items:center;gap:12px;height:58px;box-sizing:border-box;padding:0 14px;margin:10px 0;border-radius:14px;border:1px solid var(--line);background:var(--sunk);transition:background .35s,border-color .35s}
+.d44i{font-size:20px;width:26px;text-align:center;flex:none}.d44t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.d44t b{font-size:14px}.d44t small{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d44m{font-size:17px;color:var(--bad);white-space:nowrap}
+.d44.ok .d44i{color:var(--ok)}.d44.uno{border-color:rgba(240,180,60,.45);background:rgba(240,180,60,.07)}
+.d44.deuda{border-color:rgba(239,90,90,.55);background:rgba(239,90,90,.09)}.d44.deuda .d44t b{color:var(--bad)}
+.d44.d44pulse{animation:d44Pu .5s var(--spring)}@keyframes d44Pu{40%{transform:scale(1.015)}}
+.d44s{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(239,90,90,.5);background:rgba(239,90,90,.08)}
+.d44s b{color:var(--bad)}.d44s p{margin:4px 0 0;font-size:13.5px;color:var(--ink)}.d44s p b{color:var(--ink)}
+/* lote 44: audios */
+.chsend.mic svg{display:none}
+.chsend.mic::before{content:'';width:22px;height:22px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Crect x='9' y='3' width='6' height='11' rx='3'/%3E%3Cpath d='M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Crect x='9' y='3' width='6' height='11' rx='3'/%3E%3Cpath d='M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21'/%3E%3C/svg%3E") center/contain no-repeat}
+.chsend.mic{animation:none}.chsend:disabled.mic{opacity:1}
+.bmed.aud{width:min(250px,64vw);aspect-ratio:auto;height:46px;max-height:none;display:flex;align-items:center;gap:9px;padding:0 4px 0 0;margin:0 -2px 4px;background:transparent;cursor:default;overflow:visible}
+.bmed.aud::after{display:none}
+.bap{width:38px;height:38px;flex:none;border-radius:50%;border:0;display:grid;place-items:center;background:var(--grad);color:#06110e;cursor:pointer;padding:0;transition:transform .25s var(--spring)}
+.bap svg{width:18px;height:18px}.bap:active{transform:scale(.9)}
+.bub.mio .bap{background:#06110e;color:#e8f0ec}
+.bawave{flex:1;height:28px;display:flex;align-items:center;gap:2px;cursor:pointer;min-width:0}
+.bawave i{flex:1;min-width:2px;border-radius:2px;background:currentColor;opacity:.32;transition:opacity .15s,transform .2s}
+.bawave i.on{opacity:1}
+.bmed.aud.sonando .bawave i.on:last-of-type{transform:scaleY(1.15)}
+.bat{font-size:11.5px;opacity:.75;min-width:30px;text-align:right}
+.bmed.aud audio{display:none}
+.bmed.aud .bmup{position:static;width:20px;height:20px}.bmed.aud .bmup i{width:16px;height:16px;border-width:2px;border-color:rgba(127,127,127,.35);border-top-color:currentColor}
+.chrec{position:fixed;z-index:120;display:flex;align-items:center;gap:10px;padding:0 10px;box-sizing:border-box;background:var(--bg);border-radius:16px;animation:chrIn .25s var(--spring) both}
+.chrec.fuera{animation:chrOut .2s ease both}
+.chrecx{width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--bad);display:grid;place-items:center;cursor:pointer;padding:0}
+.chrecx svg{width:20px;height:20px}
+.chrecdot{width:10px;height:10px;border-radius:50%;background:#ef4444;flex:none;animation:chrDot 1s ease-in-out infinite}
+.chrect{font-weight:800;font-size:15px;min-width:42px}
+.chrecw{flex:1;display:flex;align-items:center;gap:3px;height:26px;min-width:0;overflow:hidden}
+.chrecw i{flex:1;min-width:2px;max-width:5px;height:30%;border-radius:2px;background:var(--accent);animation:chrW .9s ease-in-out infinite}
+.chrecw i:nth-child(3n){animation-delay:.15s}.chrecw i:nth-child(3n+1){animation-delay:.32s}.chrecw i:nth-child(4n){animation-delay:.5s}.chrecw i:nth-child(5n){animation-delay:.08s}
+.chrecok{width:44px;height:44px;flex:none;border-radius:50%;border:0;background:var(--grad);color:#06110e;display:grid;place-items:center;cursor:pointer;padding:0}
+.chrecok svg{width:20px;height:20px}
+@keyframes chrIn{from{opacity:0;transform:translateY(6px)}}@keyframes chrOut{to{opacity:0;transform:translateY(6px)}}
+@keyframes chrDot{50%{opacity:.25}}@keyframes chrW{50%{height:95%}}
+@media (prefers-reduced-motion:reduce){.chrec,.chrecdot,.chrecw i,.d44,.mrow.d44flash,.mdebe{animation:none!important}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2114,6 +2175,7 @@ function estado(s){
 /* Meses de este año: na (antes de tener cuota) / paid / owed / due (mes actual sin vencer) / future */
 function mesEstado(s,i){
   if(s.pagos[mk(Y,i)]) return 'paid';
+  if(!esFam(s)&&s.plan&&(s.debe||[]).includes(mk(Y,i))) return 'owed';
   if(esFam(s)) return 'na';
   if(!s.plan||!s.desde) return 'na';
   const [dy,dm]=s.desde.split('-').map(Number);
@@ -2287,6 +2349,7 @@ function screenInicio(){
   const best=Object.entries(s.prog||{}).map(([n,a])=>[n,Math.max(0,...a.map(x=>+x.kg||0))]).sort((a,b)=>b[1]-a[1])[0];
   return `${avHtml}<div class="hi"><div><p class="eyebrow">${DIAS[TODAY.getDay()]} ${D} de ${MES[M].toLowerCase()}</p><h1>Hola, ${esc(first())}</h1></div>${miniRank()}</div>
   ${st}
+  ${d44SocioHtml(s)}
   ${gnInicioHtml()}
   ${r?`<section class="card">
     <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
@@ -3096,7 +3159,7 @@ function renderMensajes(){ const byK={}, c1v=c1xChatFn(); Object.values(DB.socio
   const hilo=vista==='sug'?`<div class="chsug"><div class="chhead"><b>Sugerencias anónimas</b><span class="muted">No se sabe quién las manda</span></div>${SUGS.length?SUGS.map((x,i)=>`<div class="sugi ${x.leida?'':'nl'}" style="--k:${i}"><p>${esc(x.texto).replace(/\n/g,'<br>')}</p><small>${chHora(x.creado)}</small><span class="sugac">${x.leida?'':`<button class="mini" data-sugleida="${x.id}">Marcar leída</button>`}<button class="mini danger" data-sugborrar="${x.id}">Borrar</button></span></div>`).join(''):'<p class="muted chnada">Todavía no llegó ninguna. Los socios las mandan desde la sección Gimnasio.</p>'}</div>`
     :ss?`<div class="chthread"><div class="chhead">${avatar('sm',ss.photo||null,ss.name)}<b>${esc(ss.name)}</b><button class="linkb" data-chficha="${esc(ss.dni)}">Ver ficha ›</button></div>
       <div class="chlist chpanel" id="chatlist">${L.length?chBurbujas(L.map(m=>Object.assign({},m,{nuevo:false})),'profe'):'<div class="chvacio"><span aria-hidden="true">💬</span><b>Empezá la charla</b><p>Lo que escribas le llega al socio en la app (y como notificación si las activó).</p></div>'}</div>
-      <form class="chbar" id="chatpf" autocomplete="off">${chAdjHtml()}<textarea id="chatpin" rows="1" placeholder="Escribile a ${esc(ss.name.split(' ')[0])}…" maxlength="1000" aria-label="Respuesta">${esc((S.chDraft||{})[sel]||'')}</textarea><button class="chsend" aria-label="Enviar">${ICO_SEND}</button></form></div>`
+      <form class="chbar" id="chatpf" autocomplete="off">${chAdjHtml()}<textarea id="chatpin" rows="1" placeholder="Escribile a ${esc(ss.name.split(' ')[0])}…" maxlength="1000" aria-label="Respuesta">${esc((S.chDraft||{})[sel]||'')}</textarea><button class="chsend ${((S.chDraft||{})[sel]||'').trim()?'':'mic'}" aria-label="Enviar">${ICO_SEND}</button></form></div>`
     :'<div class="chthread chempty"><p class="muted">Elegí una conversación.</p></div>';
   $('#app').innerHTML=`<div class="owner enter">${proBar()}<section class="panel chpanelw"><div class="panelhead"><h2>Mensajes</h2>
     ${esAdmin()?`<div class="seg2 chvis" style="--m:${vista==='sug'?1:0}"><button data-chvista="chat" aria-pressed="${vista==='chat'}">Chats</button><button data-chvista="sug" aria-pressed="${vista==='sug'}">🕶️ Sugerencias<span class="cnt y42scnt" ${nsug?'':'hidden'}>${nsug||''}</span></button></div>`:''}</div>
@@ -3324,7 +3387,7 @@ function renderDuenio(){
     ${addForm}
     ${all.length?`<div class="tablewrap"><table><thead><tr><th>Socio</th><th>Plan</th><th>Vence</th><th>Estado</th><th>Cuotas ${Y}</th><th>Rutina</th><th class="fnth">Funcional</th></tr></thead><tbody>
     ${list.map(({s,e})=>`<tr class="rowlink" data-open="${s.dni}" data-q="${esc(psNorm(s.name)+' '+s.dni)}"><td><span class="who">${avatar('sm',s.photo,s.name)}<span><strong><span class="psn" data-n="${esc(s.name)}">${esc(s.name)}</span>${ultSens(s)}</strong><small class="num">DNI ${fmtDNI(s.dni)}</small></span></span></td>
-      <td>${s.plan?esc(s.plan):'<span class="muted">—</span>'}</td><td class="num">${e.v}</td><td><span class="pill ${e.c}">${e.t}</span></td><td>${dotsOf(s)}</td>
+      <td>${s.plan?esc(s.plan):'<span class="muted">—</span>'}</td><td class="num">${e.v}</td><td>${d44Pill(s,e)}</td><td>${dotsOf(s)}</td>
       <td>${c2RutCell(s)}</td>
       <td style="text-align:right"><span class="fncell"><label class="fnck ${s.funcional?'on':''}" title="Entrenamiento funcional"><input type="checkbox" data-fnck="${s.dni}" ${s.funcional?'checked':''} ${puedeP('asignar')||puedeP('rutinas')?'':'disabled'}><i aria-hidden="true"></i><span>Funcional</span></label><button class="mini" data-open="${s.dni}">Abrir ficha</button></span></td></tr>`).join('')||`<tr><td colspan="7" class="muted">Nadie en este filtro.</td></tr>`}
     <tr class="psnone" id="psnone" hidden><td colspan="7"><span class="psnico" aria-hidden="true">🔍</span><b id="psnotx"></b>${S.filter!=='todos'?'<button type="button" class="linkb" id="pstodos">Buscar en todos los socios</button>':''}</td></tr>
@@ -3368,13 +3431,13 @@ function renderFicha(s){
       <button class="mini" data-pedit="${i}" aria-label="Editar pago de ${m}">Editar</button></div>`;
     const sel=MS.set.includes(i);
     const pill=esFam(s)&&c!=='paid'?'<span class="pill fam">Familiar</span>':c==='paid'?'<span class="pill ok">Pagado</span>':c==='owed'?'<span class="pill bad">Adeuda</span>':c==='due'?'<span class="pill warn">A pagar</span>':c==='na'?'<span class="pill">Sin cuota</span>':'<span class="pill">Próximo</span>';
-    return `<div class="mrow ${c} ${p?'editing':''} ${sel?'sel':''}">${p?'':`<label class="mchk" title="Seleccionar ${m}"><input type="checkbox" data-msel="${i}" ${sel?'checked':''} aria-label="Seleccionar ${m} para registrar"><i></i></label>`}<span class="mname">${m}</span>${pill}
+    return `<div class="mrow ${c} ${p?'editing':''} ${sel?'sel':''} ${(s.debe||[]).includes(mk(Y,i))&&!p?'d44man':''}">${p?'':`<label class="mchk" title="Seleccionar ${m}"><input type="checkbox" data-msel="${i}" ${sel?'checked':''} aria-label="Seleccionar ${m} para registrar"><i></i></label>`}<span class="mname">${m}</span>${pill}${d44Btn(s,i,c)}
       <select class="inp sm" id="medio${i}" aria-label="Medio de pago de ${m}">${MEDIOS.map(x=>`<option ${p&&p.medio===x?'selected':''}>${x}</option>`).join('')}</select>
       <input class="inp sm num" id="monto${i}" value="${p?p.monto:(c==='na'||c==='future'?s.precio:montoMes(s,i))}" inputmode="numeric" aria-label="Monto de ${m}" style="width:86px">
       <input class="inp sm num" id="fecha${i}" value="${p?p.fecha:ddmm(iso(TODAY))}" aria-label="Fecha de pago de ${m}" style="width:62px" maxlength="5">
       ${p?'':`<button class="mini pay" data-pay="${i}">Registrar pago</button>`}${p?`<button class="mini danger" data-unpay="${i}">Anular</button><button class="mini" data-pcancel="${i}">Cancelar</button>`:''}</div>`}).join(''):'';
   const mtot=MS.set.reduce((n,i)=>n+montoMes(s,i),0);
-  const mbar=`<div class="mtools">${adeuda.length?`<button class="mini" id="mseladeu">Seleccionar adeudados (${adeuda.length})</button>`:''}<span class="muted">Tildá varios meses para registrarlos juntos.</span></div>
+  const mbar=`${d44Resumen(s)}<div class="mtools">${adeuda.length?`<button class="mini" id="mseladeu">Seleccionar adeudados (${adeuda.length})</button>`:''}<span class="muted">Tildá varios meses para registrarlos juntos.</span></div>
     <div class="mbar ${MS.set.length?'on':''}" id="mbar" aria-live="polite"><div class="mbin">
       <b id="mbtxt">${mbTxt(MS.set.length,mtot)}</b>
       <select class="inp sm" id="mbmedio" aria-label="Medio de pago">${MEDIOS.map(x=>`<option>${x}</option>`).join('')}</select>
@@ -3453,7 +3516,7 @@ function norm(db){
   PLANES.forEach((x,i)=>o.planes[x.n]={n:x.n,p:x.p,d:x.d||'',top:x.top||null,orden:i});
   const jo=x=>Object.fromEntries(Object.entries(x||{}).sort(([a],[b])=>a.length-b.length||(a<b?-1:a>b?1:0)));   /* mismo orden de claves que jsonb */
   for(const s of Object.values(db.socios)){ if(!s.id) continue;
-    o.socios[s.id]={id:s.id,dni:s.dni,nombre:s.name,alta:s.alta,plan:s.plan,precio:s.precio||0,vence:s.vence||10,desde:s.desde||null,desde_dia:s.desdeDia||null,rutina:s.rutina||null,foto:s.photo||null,nacimiento:s.nac||null,motivacion:s.motiv!==false,aprobado:s.aprobado!==false,funcional:!!s.funcional,rutina_profe:s.rutinaProfe||null};
+    o.socios[s.id]={id:s.id,dni:s.dni,nombre:s.name,alta:s.alta,plan:s.plan,precio:s.precio||0,vence:s.vence||10,desde:s.desde||null,desde_dia:s.desdeDia||null,debe:s.debe||[],rutina:s.rutina||null,foto:s.photo||null,nacimiento:s.nac||null,motivacion:s.motiv!==false,aprobado:s.aprobado!==false,funcional:!!s.funcional,rutina_profe:s.rutinaProfe||null};
     for(const [k,p] of Object.entries(s.pagos||{})) o.pagos[s.id+'|'+k]={socio_id:s.id,periodo:k,fecha:p.fecha,medio:p.medio,monto:p.monto||0};
     for(const [k,ds] of Object.entries(s.att||{})) for(const d of ds){const f=dISO(k,d);o.asis[s.id+'|'+f]={socio_id:s.id,fecha:f}}
     for(const x of (s.medidas||[])) o.med[x.id]={id:x.id,socio_id:s.id,fecha:x.fecha,grasa:x.grasa==null?null:+x.grasa,peso:x.peso==null?null:+x.peso};
@@ -3465,7 +3528,7 @@ function norm(db){
 }
 function buildDB(rows){
   const db={socios:{}}, byId={};
-  for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,rutina:r.rutina,photo:r.foto,nac:r.nacimiento||null,motiv:r.motivacion!==false,aprobado:r.aprobado!==false,funcional:!!r.funcional,rutinaProfe:r.rutina_profe||null,pagos:{},att:{},prog:{},medidas:[],sens:{},runs:{}};db.socios[r.dni]=s;byId[r.id]=s}
+  for(const r of rows.socios){const s={id:r.id,dni:r.dni,name:r.nombre,alta:r.alta,plan:r.plan,precio:r.precio,vence:r.vence,desde:r.desde,desdeDia:r.desde_dia,debe:Array.isArray(r.debe)?r.debe:[],rutina:r.rutina,photo:r.foto,nac:r.nacimiento||null,motiv:r.motivacion!==false,aprobado:r.aprobado!==false,funcional:!!r.funcional,rutinaProfe:r.rutina_profe||null,pagos:{},att:{},prog:{},medidas:[],sens:{},runs:{}};db.socios[r.dni]=s;byId[r.id]=s}
   for(const p of rows.pagos){const s=byId[p.socio_id]; if(s) s.pagos[p.periodo]={fecha:p.fecha,medio:p.medio,monto:p.monto}}
   for(const a of rows.asis){const s=byId[a.socio_id]; if(!s) continue; const [y,m,d]=a.fecha.split('-').map(Number); const k=mk(y,m-1); (s.att[k]=s.att[k]||[]).push(d)}
   for(const x of rows.runs||[]){const s=byId[x.socio_id]; if(s&&x.datos&&x.clave) (s.runs[x.clave]=s.runs[x.clave]||{})[x.fecha]=x.datos}
@@ -3601,6 +3664,10 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.31',t:'Audios en el chat y meses adeudados',items:[
+    ['🎤','Ahora se pueden mandar audios en el chat: cuando el cuadro está vacío, tocá el micrófono para grabar. Lo pueden hacer vos y tus alumnos.'],
+    ['🔴','En la ficha de cada socio podés marcar los meses que debe: se ven en rojo y, si debe más de uno, aparece el total de la deuda.'],
+    ['📋','La columna «Funcional» de la lista de socios ahora queda alineada con sus tildes, sin espacios de más.']]},
   {v:'1.1.30',t:'Fotos y videos en el chat',items:[
     ['📷','Ahora podés mandar fotos y videos en el chat con tus alumnos, y ellos a vos. Tocá el ícono de la imagen al lado del cuadro de texto.'],
     ['🔍','Tocá una foto para verla en grande. Los videos se reproducen ahí mismo.'],
@@ -4593,17 +4660,18 @@ document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#g
 const CH_MAX_MB=50, CHURL={};
 const ICO_ADJ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10.5" r="1.8"/><path d="M21 15.5l-5-5L7 19"/></svg>';
 const chAdjHtml=()=>`<button type="button" class="chadj" data-chadj aria-label="Mandar foto o video" title="Foto o video">${ICO_ADJ}</button><input type="file" class="chfile" accept="image/*,video/*" hidden tabindex="-1" aria-hidden="true">`;
-const chResumen=m=>m.texto||(m.media?(m.media.t==='vid'?'🎥 Video':'📷 Foto'):'');
+const chResumen=m=>m.texto||(m.media?(m.media.t==='vid'?'🎥 Video':m.media.t==='aud'?'🎤 Audio'+(m.media.d?' ('+chDur(m.media.d)+')':''):'📷 Foto'):'');
 function chMediaSrc(m){ const d=m.media; if(!d) return ''; if(d.u) return d.u; const c=CHURL[d.p]; return c&&c.exp>Date.now()?c.u:'' }
 let chUrlPend=new Set(), chUrlT=0;
 function chPedirUrls(){ if(!CLOUD||!sb||!chUrlPend.size) return; const L=[...chUrlPend]; chUrlPend=new Set();
   sb.storage.from('chat').createSignedUrls(L,3600*6).then(r=>{ (r.data||[]).forEach(x=>{ if(!x.signedUrl) return; CHURL[x.path]={u:x.signedUrl,exp:Date.now()+3600*6*1000-60e3};
     document.querySelectorAll('.bmed[data-mpath="'+CSS.escape(x.path)+'"]').forEach(el=>chMediaPoner(el,x.signedUrl)) }) }).catch(()=>{}) }
-function chMediaPoner(el,u){ const t=el.dataset.mt; if(el.querySelector('img,video')) return;
+function chMediaPoner(el,u){ const t=el.dataset.mt; if(t==='aud'){ const a=el.querySelector('audio'); if(a&&!a.getAttribute('src')) a.src=u; el.classList.add('lista'); return } if(el.querySelector('img,video')) return;
   el.insertAdjacentHTML('afterbegin',t==='vid'?`<video src="${esc(u)}" controls playsinline preload="metadata"></video>`:`<img src="${esc(u)}" alt="Foto" loading="lazy" decoding="async">`);
   const v=el.querySelector('img,video'); const ok=()=>el.classList.add('lista'); if(t==='vid') v.addEventListener('loadeddata',ok,{once:true}); else if(v.complete) ok(); else v.addEventListener('load',ok,{once:true}); setTimeout(ok,2500) }
 function chMediaHtml(m){ const d=m.media, w=+d.w||4, h=+d.h||3, ar=Math.min(1.9,Math.max(.56,w/h)), u=chMediaSrc(m);
   if(!u&&d.p){ chUrlPend.add(d.p); clearTimeout(chUrlT); chUrlT=setTimeout(chPedirUrls,30) }
+  if(d.t==='aud') return chAudHtml(m,u);
   const med=u?(d.t==='vid'?`<video src="${esc(u)}" controls playsinline preload="metadata"></video>`:`<img src="${esc(u)}" alt="Foto" decoding="async">`):'';
   return `<div class="bmed ${d.t} ${u?'lista':''} ${m.env?'subiendo':''}" data-mt="${d.t}" ${d.p?`data-mpath="${esc(d.p)}"`:''} style="--ar:${ar}">${med}${m.env?'<span class="bmup" aria-label="Enviando"><i></i></span>':''}${d.t==='vid'&&!u?'<span class="bmplay" aria-hidden="true">▶</span>':''}</div>` }
 function chImgProcesar(file){ return new Promise((res,rej)=>{ if(/gif$/i.test(file.type)){ const i=new Image(); i.onload=()=>res({blob:file,w:i.naturalWidth,h:i.naturalHeight,ext:'gif',type:'image/gif'}); i.onerror=rej; i.src=URL.createObjectURL(file); return }
@@ -4614,14 +4682,14 @@ function chImgProcesar(file){ return new Promise((res,rej)=>{ if(/gif$/i.test(fi
 function chVidProcesar(file){ return new Promise(res=>{ const v=document.createElement('video'); let listo=false; const fin=(w,h)=>{ if(listo) return; listo=true; URL.revokeObjectURL(v.src); res({blob:file,w:w||16,h:h||9,ext:(file.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'')||'mp4',type:file.type||'video/mp4'}) };
   v.preload='metadata'; v.muted=true; v.onloadedmetadata=()=>fin(v.videoWidth,v.videoHeight); v.onerror=()=>fin(); setTimeout(()=>fin(),4000); v.src=URL.createObjectURL(file) }) }
 const chALeer=b=>new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(b) });
-async function chEnviarMedia(file,k,yo,txt){ txt=String(txt||'').trim().slice(0,1000);
-  const esVid=/^video\//.test(file.type), esImg=/^image\//.test(file.type);
-  if(!esVid&&!esImg){ toast('Solo se pueden mandar fotos o videos'); return false }
+async function chEnviarMedia(file,k,yo,txt,pre){ txt=String(txt||'').trim().slice(0,1000);
+  const esAud=!!(pre&&pre.t==='aud'), esVid=!esAud&&/^video\//.test(file.type), esImg=!esAud&&/^image\//.test(file.type);
+  if(!esVid&&!esImg&&!esAud){ toast('Solo se pueden mandar fotos o videos'); return false }
   if(file.size>CH_MAX_MB*1048576){ toast(`${esVid?'El video':'La foto'} pesa demasiado (máximo ${CH_MAX_MB} MB). Probá con ${esVid?'uno más corto':'otra'}.`); return false }
-  let pr; try{ pr=esVid?await chVidProcesar(file):await chImgProcesar(file) }catch(e){ toast('No se pudo leer el archivo'); return false }
+  let pr; try{ pr=esAud?pre:esVid?await chVidProcesar(file):await chImgProcesar(file) }catch(e){ toast('No se pudo leer el archivo'); return false }
   const autor=yo==='socio'?(me()||{}).name:c1xYoAutor(); MSGS.forEach(x=>x.nuevo=false);
-  const media={t:esVid?'vid':'img',w:pr.w,h:pr.h};
-  const m={id:'t'+Date.now(),k,de:yo,autor,texto:txt,media:Object.assign({u:URL.createObjectURL(pr.blob)},media),file,creado:new Date().toISOString(),leido:false,env:true,nuevo:true}; MSGS.push(m);
+  const media=esAud?{t:'aud',d:pr.d}:{t:esVid?'vid':'img',w:pr.w,h:pr.h};
+  const m={id:'t'+Date.now(),k,de:yo,autor,texto:txt,media:Object.assign({u:URL.createObjectURL(pr.blob)},media),file,pre,creado:new Date().toISOString(),leido:false,env:true,nuevo:true}; MSGS.push(m);
   const pintar=()=>{ const lst=document.getElementById('chatlist'); if(lst&&chKAct()===k){ lst.innerHTML=chBurbujas(MSGS.filter(x=>x.k===k),yo); chAbajo(true) } };
   pintar();
   if(!CLOUD){ if(esVid&&file.size>8*1048576){ m.env=false; m.err=true; pintar(); toast('En la demo los videos tienen que pesar menos de 8 MB'); return false }
@@ -4644,6 +4712,73 @@ document.addEventListener('click',e=>{ const im=e.target.closest('.bmed.img img'
     document.body.insertAdjacentHTML('beforeend',`<div class="chvisor" id="chvisor" role="dialog" aria-label="Foto"><img src="${esc(im.src)}" alt="Foto"><button type="button" class="chvx" aria-label="Cerrar">×</button></div>`); return }
   const v=e.target.closest('#chvisor'); if(v){ e.stopPropagation(); v.classList.add('fuera'); setTimeout(()=>v.remove(),200) } },true);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ const v=document.getElementById('chvisor'); if(v){ e.stopImmediatePropagation(); v.remove() } } },true);
+
+/* ---------- lote 44: deuda por meses ---------- */
+const d44Lista=s=>s&&s.plan&&!esFam(s)?MES.map((_,i)=>i).filter(i=>mesEstado(s,i)==='owed'):[];
+function d44Btn(s,i,c){ if(esFam(s)||!s.plan) return ''; const man=(s.debe||[]).includes(mk(Y,i));
+  if(i>M||(c==='owed'&&!man)) return '<span class="mdebe ph" aria-hidden="true">Debe</span>';
+  return `<button type="button" class="mdebe ${man?'on':''}" data-debe="${i}" aria-pressed="${man}" title="${man?'Quitar de la deuda':'Anotar que debe '+MES[i].toLowerCase()}"><i aria-hidden="true"></i>Debe</button>` }
+function d44Resumen(s){ if(!s.plan||esFam(s)) return ''; const L=d44Lista(s), tot=L.reduce((n,i)=>n+montoMes(s,i),0), rec=L.some(i=>vencido(s,i));
+  return `<div class="d44 ${L.length>1?'deuda':L.length?'uno':'ok'}" id="d44" aria-live="polite"><span class="d44i" aria-hidden="true">${L.length>1?'💸':L.length?'⚠️':'✓'}</span><span class="d44t"><b>${L.length>1?'Deuda: '+L.length+' meses':L.length?'Debe 1 mes':'Sin deudas'}</b><small>${L.length?esc(L.map(i=>MES[i]).join(', '))+(rec?' · incluye 10% de recargo':''):'Tocá «Debe» en un mes para anotar que lo adeuda'}</small></span><b class="d44m num">${L.length?fmt(tot):''}</b></div>` }
+function d44Pill(s,e){ const n=d44Lista(s).length; return n>1?`<span class="pill bad d44p" title="${esc(d44Lista(s).map(i=>MES[i]).join(', '))}">Debe ${n} meses</span>`:`<span class="pill ${e.c}">${e.t}</span>` }
+function d44SocioHtml(s){ const L=d44Lista(s).filter(i=>i!==M); if(!L.length) return ''; const tot=L.reduce((n,i)=>n+montoMes(s,i),0);
+  return `<section class="card d44s" role="status"><span class="d44i" aria-hidden="true">💸</span><div><b>Tenés ${L.length===1?'una cuota adeudada':L.length+' cuotas adeudadas'}</b><p>${esc(L.map(i=>MES[i]).join(', '))} · <b class="num">${fmt(tot)}</b>. Si tenés algún problema, hablalo con ${esc(PROFE.split(' ')[0])}.</p></div></section>` }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-debe]'); if(!b) return; e.preventDefault(); e.stopPropagation();
+  const s=DB.socios[S.sel]; if(!s) return; if(!puedeP('dinero')) return toast('No tenés permiso para manejar cuotas');
+  const k=mk(Y,+b.dataset.debe), L=(s.debe||[]).slice(), j=L.indexOf(k); if(j>=0) L.splice(j,1); else L.push(k); s.debe=L; saveDB();
+  render(true); const r=document.querySelector(`[data-debe="${b.dataset.debe}"]`); if(r){ r.classList.add('d44pop'); const row=r.closest('.mrow'); if(row){ row.classList.remove('d44flash'); void row.offsetWidth; row.classList.add('d44flash') } }
+  const d=document.getElementById('d44'); if(d){ d.classList.remove('d44pulse'); void d.offsetWidth; d.classList.add('d44pulse') } },true);
+
+/* ---------- lote 44: audios en el chat ---------- */
+const ICO_PLAY='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
+const ICO_PAUSA='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="13.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg>';
+const ICO_TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
+const chDur=x=>{ x=Math.max(0,Math.round(+x||0)); return Math.floor(x/60)+':'+String(x%60).padStart(2,'0') };
+function chAudHtml(m,u){ const d=m.media, seed=String(d.p||m.id); let h=7; for(const c of seed) h=(h*31+c.charCodeAt(0))>>>0;
+  const bars=Array.from({length:28},()=>{ h=(Math.imul(h,1103515245)+12345)>>>0; return 22+((h>>>16)%78) }).map(v=>`<i style="height:${v}%"></i>`).join('');
+  return `<div class="bmed aud ${u?'lista':''} ${m.env?'subiendo':''}" data-mt="aud" ${d.p?`data-mpath="${esc(d.p)}"`:''}><button type="button" class="bap" aria-label="Reproducir audio">${ICO_PLAY}</button><span class="bawave">${bars}</span><span class="bat num" data-d="${+d.d||0}">${chDur(d.d)}</span><audio preload="metadata" ${u?`src="${esc(u)}"`:''}></audio>${m.env?'<span class="bmup"><i></i></span>':''}</div>` }
+function chAudPintar(a){ const el=a.closest('.bmed.aud'); if(!el) return; const dur=isFinite(a.duration)&&a.duration>0?a.duration:(+(el.querySelector('.bat').dataset.d)||0);
+  const p=dur?Math.min(1,a.currentTime/dur):0, bars=el.querySelectorAll('.bawave i'), n=Math.round(p*bars.length);
+  bars.forEach((b,i)=>b.classList.toggle('on',i<n)); const t=el.querySelector('.bat'); if(!a.paused||a.currentTime>0) t.textContent=chDur(a.currentTime); }
+document.addEventListener('click',e=>{ const b=e.target.closest('.bap'); if(b){ e.preventDefault(); e.stopPropagation(); const el=b.closest('.bmed.aud'), a=el&&el.querySelector('audio'); if(!a) return;
+    if(!a.getAttribute('src')){ toast('Cargando el audio…'); return }
+    document.querySelectorAll('.bmed.aud audio').forEach(x=>{ if(x!==a&&!x.paused) x.pause() });
+    if(a.paused){ a.play().catch(()=>toast('No se pudo reproducir el audio')) } else a.pause(); return }
+  const w=e.target.closest('.bmed.aud .bawave'); if(w){ e.stopPropagation(); const a=w.parentNode.querySelector('audio'); const dd=a&&(isFinite(a.duration)&&a.duration>0?a.duration:(+(w.parentNode.querySelector('.bat').dataset.d)||0)); if(a&&dd){ const r=w.getBoundingClientRect(); a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*dd; chAudPintar(a) } } },true);
+['play','pause','ended','timeupdate'].forEach(ev=>document.addEventListener(ev,e=>{ const a=e.target; if(!a||a.tagName!=='AUDIO') return; const el=a.closest('.bmed.aud'); if(!el) return;
+  if(ev==='play'){ el.classList.add('sonando'); el.querySelector('.bap').innerHTML=ICO_PAUSA; el.querySelector('.bap').setAttribute('aria-label','Pausar audio') }
+  if(ev==='pause'||ev==='ended'){ el.classList.remove('sonando'); el.querySelector('.bap').innerHTML=ICO_PLAY; el.querySelector('.bap').setAttribute('aria-label','Reproducir audio') }
+  if(ev==='ended'){ a.currentTime=0; el.querySelectorAll('.bawave i').forEach(b=>b.classList.remove('on')); const m=MSGS.find(x=>x.media&&(x.media.p===el.dataset.mpath)); el.querySelector('.bat').textContent=chDur(m&&m.media.d||a.duration); return }
+  chAudPintar(a) },true));
+/* grabar */
+let CHREC=null;
+async function chRecEmpezar(form){ if(CHREC||!form) return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){ toast('Este navegador no permite grabar audio'); return }
+  const k=form.id==='chatf'?chK(me()):S.chSel; if(!k) return;
+  let st; try{ st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}) }catch(e){ toast('Para grabar, permití el uso del micrófono'); return }
+  const tipos=['audio/webm;codecs=opus','audio/mp4','audio/webm','audio/ogg;codecs=opus'], mt=tipos.find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+  let rec; try{ rec=new MediaRecorder(st,mt?{mimeType:mt}:undefined) }catch(e){ st.getTracks().forEach(t=>t.stop()); toast('No se pudo empezar a grabar'); return }
+  const partes=[]; rec.ondataavailable=ev=>{ if(ev.data&&ev.data.size) partes.push(ev.data) };
+  CHREC={rec,st,partes,t0:Date.now(),form:form.id,k,yo:form.id==='chatf'?'socio':'profe',mt:rec.mimeType||mt};
+  rec.start(250); chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
+function chRecPintar(){ if(!CHREC) return; const f=document.getElementById(CHREC.form); if(!f) return chRecParar(false);
+  let o=document.getElementById('chrec');
+  if(!o){ document.body.insertAdjacentHTML('beforeend',`<div class="chrec" id="chrec" role="status" aria-label="Grabando audio"><button type="button" class="chrecx" aria-label="Borrar audio">${ICO_TRASH}</button><span class="chrecdot" aria-hidden="true"></span><span class="chrect num">0:00</span><span class="chrecw" aria-hidden="true">${'<i></i>'.repeat(16)}</span><button type="button" class="chrecok" aria-label="Enviar audio">${ICO_SEND}</button></div>`); o=document.getElementById('chrec') }
+  const r=f.getBoundingClientRect(); o.style.left=r.left+'px'; o.style.top=r.top+'px'; o.style.width=r.width+'px'; o.style.height=r.height+'px';
+  const sg=Math.floor((Date.now()-CHREC.t0)/1000); o.querySelector('.chrect').textContent=chDur(sg); if(sg>=300){ toast('Llegaste a 5 minutos: se manda el audio'); chRecParar(true) } }
+function chRecParar(enviar){ const c=CHREC; if(!c) return; CHREC=null; clearInterval(c.iv);
+  const o=document.getElementById('chrec'); if(o){ o.classList.add('fuera'); setTimeout(()=>o.remove(),200) }
+  const secs=Math.max(1,Math.round((Date.now()-c.t0)/1000));
+  c.rec.onstop=()=>{ c.st.getTracks().forEach(t=>t.stop()); if(!enviar) return;
+    const type=(c.mt||'audio/webm').split(';')[0], ext=/mp4|aac|m4a/.test(type)?'m4a':/ogg/.test(type)?'ogg':'webm', blob=new Blob(c.partes,{type});
+    if(blob.size<600){ toast('El audio quedó vacío. Probá de nuevo.'); return }
+    chEnviarMedia(new File([blob],'audio.'+ext,{type}),c.k,c.yo,'',{blob,type,ext,t:'aud',d:secs}) };
+  try{ c.rec.state!=='inactive'?c.rec.stop():c.rec.onstop() }catch(e){ c.st.getTracks().forEach(t=>t.stop()) } }
+document.addEventListener('click',e=>{ const b=e.target.closest('.chsend.mic'); if(b){ e.preventDefault(); e.stopPropagation(); chRecEmpezar(b.form); return }
+  if(e.target.closest('.chrecx')){ e.stopPropagation(); return chRecParar(false) }
+  if(e.target.closest('.chrecok')){ e.stopPropagation(); return chRecParar(true) } },true);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&CHREC){ e.stopImmediatePropagation(); chRecParar(false) } },true);
+addEventListener('resize',()=>{ if(CHREC) chRecPintar() });
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
   const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
   S.view==='socio'?renderSocio():renderDuenio();
@@ -4785,7 +4920,7 @@ function chAbrirMenu(b){ const m=MSGS.find(x=>String(x.id)===b.dataset.mid); if(
   const l=b.closest('.chlist'), arriba=l&&(b.offsetTop-l.scrollTop<70);
   const ed=chEditable(m,yo), viejo=m.de===yo&&typeof m.id==='number'&&!ed;
   b.classList.add('menu');
-  b.insertAdjacentHTML('beforeend',`<div class="bmenu ${arriba?'abajo':''}" role="menu">${ed?'<button type="button" data-bact="editar" role="menuitem">✏️ Editar</button>':''}${m.texto?'<button type="button" data-bact="copiar" role="menuitem">📋 Copiar</button>':''}${m.media&&chMediaSrc(m)?`<a class="bmdl" href="${esc(chMediaSrc(m))}" target="_blank" rel="noopener" download role="menuitem">⬇️ Guardar ${m.media.t==='vid'?'video':'foto'}</a>`:''}${viejo?`<span class="bmnote">Se edita hasta ${CH_EDIT_MIN} min después</span>`:''}</div>`);
+  b.insertAdjacentHTML('beforeend',`<div class="bmenu ${arriba?'abajo':''}" role="menu">${ed?'<button type="button" data-bact="editar" role="menuitem">✏️ Editar</button>':''}${m.texto?'<button type="button" data-bact="copiar" role="menuitem">📋 Copiar</button>':''}${m.media&&m.media.t!=='aud'&&chMediaSrc(m)?`<a class="bmdl" href="${esc(chMediaSrc(m))}" target="_blank" rel="noopener" download role="menuitem">⬇️ Guardar ${m.media.t==='vid'?'video':'foto'}</a>`:''}${viejo?`<span class="bmnote">Se edita hasta ${CH_EDIT_MIN} min después</span>`:''}</div>`);
   try{navigator.vibrate&&navigator.vibrate(12)}catch(x){} }
 function chEntrarEdit(m){ const t=$('#chatpin')||$('#chatin'); if(!t) return; const f=t.form;
   S.chEdit={id:m.id,form:f.id,antes:t.value}; f.classList.add('editmode');
@@ -4813,7 +4948,7 @@ document.addEventListener('contextmenu',e=>{ const b=e.target.closest('.chlist .
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.chEdit){ e.stopImmediatePropagation(); chSalirEdit(true) } },true);
 document.addEventListener('scroll',e=>{ if(e.target&&e.target.classList&&e.target.classList.contains('chlist')) chCerrarMenu() },true);
 async function chReintentar(id){ const i=MSGS.findIndex(x=>String(x.id)===String(id)); if(i<0) return; const m=MSGS[i]; MSGS.splice(i,1);
-  if(m.media&&m.file) return chEnviarMedia(m.file,m.k,m.de,m.texto); await chEnviar(m.texto,m.k,m.de) }
+  if(m.media&&m.file) return chEnviarMedia(m.file,m.k,m.de,m.texto,m.pre); await chEnviar(m.texto,m.k,m.de) }
 async function sugEnviar(txt){ txt=String(txt||'').trim(); if(txt.length<3){toast('Escribí un poco más');return false}
   if(!CLOUD){ SUGS.unshift({id:Date.now(),texto:txt.slice(0,800),creado:new Date().toISOString(),leida:false}); chGuardarLocal(); return true }
   try{ const r=await sb.rpc('enviar_sugerencia',{p_texto:txt}); if(r.error) throw r.error; return true }catch(e){ toast(errTxt(e)||'No se pudo mandar. Probá de nuevo.'); return false } }
@@ -4828,10 +4963,10 @@ function chatSocioUI(modo){ const k=chK(me()), L=MSGS.filter(m=>m.k===k).map(m=>
     ${modo==='sheet'?`<button class="chfull" data-tab="chat" aria-label="Abrir en pantalla completa" title="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button><button class="chx" id="chsheetx" aria-label="Cerrar">×</button>`:''}</div>
   <div class="chlist" id="chatlist">${L.length?chBurbujas(L,'socio'):`<div class="chvacio"><span class="chola" aria-hidden="true">👋</span><b>¡Hola! Soy ${esc(pn)}</b><p>Preguntame lo que necesites: tu rutina, una molestia, si no podés venir o la cuota. Te respondo acá y te llega una notificación.</p></div>`}</div>
   <div class="chchips" id="chchips" ${dr?'hidden':''} role="group" aria-label="Mensajes rápidos">${CHIPS.map(([e,c],i)=>`<button type="button" data-chip="${esc(c)}" style="--k:${i}"><span aria-hidden="true">${e}</span>${esc(c)}</button>`).join('')}</div>
-  <form class="chbar" id="chatf" autocomplete="off">${chAdjHtml()}<div class="chin"><textarea id="chatin" rows="1" placeholder="Escribile a ${esc(pn)}…" maxlength="1000" aria-label="Mensaje para ${esc(pn)}" enterkeyhint="send">${esc(dr)}</textarea><span class="chcnt" id="chcnt" aria-live="polite"></span></div><button class="chsend" aria-label="Enviar" ${dr.trim()?'':'disabled'}>${ICO_SEND}</button></form></div>`}
+  <form class="chbar" id="chatf" autocomplete="off">${chAdjHtml()}<div class="chin"><textarea id="chatin" rows="1" placeholder="Escribile a ${esc(pn)}…" maxlength="1000" aria-label="Mensaje para ${esc(pn)}" enterkeyhint="send">${esc(dr)}</textarea><span class="chcnt" id="chcnt" aria-live="polite"></span></div><button class="chsend ${dr.trim()?'':'mic'}" aria-label="${dr.trim()?'Enviar':'Grabar audio'}">${ICO_SEND}</button></form></div>`}
 function screenChat(){ if(S.lastTab&&S.lastTab!=='chat') S.chBack=S.lastTab; S.chSheet=false; return chatSocioUI('full') }
 function chUpdBar(){ if(S.chEdit&&!document.getElementById(S.chEdit.form)) S.chEdit=null; const t=document.getElementById('chatin'); if(!t) return; const v=t.value, b=t.form&&t.form.querySelector('.chsend'), c=document.getElementById('chchips'), n=document.getElementById('chcnt');
-  if(b) b.disabled=!v.trim(); if(c) c.hidden=!!v; if(n) n.textContent=v.length>800?(1000-v.length)+'':'' }
+  if(b){ const mic=!v.trim()&&!S.chEdit; b.disabled=false; b.classList.toggle('mic',mic); b.setAttribute('aria-label',mic?'Grabar audio':'Enviar') } if(c) c.hidden=!!v; if(n) n.textContent=v.length>800?(1000-v.length)+'':'' }
 /* teclado del celu */
 (function(){ const vv=window.visualViewport; if(!vv) return; let base=window.innerHeight, raf=0, era=false;
   const upd=()=>{ raf=0; base=Math.max(base,window.innerHeight); const kb=base-vv.height, a=document.activeElement, campo=a&&/TEXTAREA|INPUT/.test(a.tagName)&&a.type!=='checkbox';
