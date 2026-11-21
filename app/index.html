@@ -2656,6 +2656,27 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 .phone .chwrap .chday span{padding:3px 9px;font-size:10.5px;font-weight:600;border-radius:6px}
 /* CHAT44-END */
 
+/* v66 · menú lateral del panel: todo entra en el alto de la ventana (los tamaños siguen al alto) */
+html.ui43-panel .ui43-sidebar{overflow-y:hidden!important;padding-top:clamp(10px,2.6vh,28px);padding-bottom:clamp(8px,1.6vh,18px)}
+html.ui43-panel .ui43-brand{padding-bottom:clamp(6px,2.6vh,30px)}
+html.ui43-panel .ui43-brand img{width:clamp(34px,4.4vh,48px);height:clamp(32px,4vh,44px)}
+html.ui43-panel .ui43-brand>span{font-size:clamp(19px,2.5vh,25px)}
+html.ui43-panel .ui43-brand small{margin-top:clamp(3px,.8vh,8px)}
+html.ui43-panel .ui43-navlabel{margin:clamp(2px,.7vh,7px) 0 clamp(4px,1.2vh,13px)}
+html.ui43-panel .ui43-sidebar .ui43-nav{gap:clamp(1px,.45vh,5px);margin-top:clamp(0px,.5vh,5px)}
+html.ui43-panel .ui43-sidebar .ui43-navitem,html.ui43-panel .ui43-sidebar .pnav button.ui43-navitem{height:clamp(30px,4.3vh,46px);min-height:0}
+html.ui43-panel .ui43-sidebar .ui43-navitem[aria-current="page"]:after{top:50%;transform:translateY(-50%)}
+html.ui43-panel .ui43-sidebottom{padding-top:clamp(6px,2.4vh,30px)}
+html.ui43-panel .ui43-gymstate{padding:clamp(7px,1.2vh,13px) 13px;margin-bottom:clamp(4px,1.2vh,13px)}
+html.ui43-panel .ui43-gymstate small{margin-top:clamp(2px,.55vh,6px)}
+html.ui43-panel .ui43-account{padding-top:clamp(7px,1.8vh,19px);margin-top:clamp(4px,1.4vh,15px)}
+/* si aun así no entra (ventana muy bajita), se aprieta un poco más */
+.ui43-sidebar.lat-a1 .ui43-navitem{height:28px!important}
+.ui43-sidebar.lat-a1 .ui43-gymstate small,.ui43-sidebar.lat-a1 .ui43-navlabel{display:none}
+.ui43-sidebar.lat-a1 .ui43-brand{padding-bottom:4px}
+.ui43-sidebar.lat-a2 .ui43-gymstate{display:none}
+.ui43-sidebar.lat-a2 .ui43-brand small{display:none}
+
 /* v65 · barritas propias: finas, redondeadas y del color de la app (Windows no pone las suyas) */
 ::-webkit-scrollbar{width:10px;height:10px;background:transparent}
 ::-webkit-scrollbar-track{background:transparent}
@@ -4186,6 +4207,12 @@ document.addEventListener('touchmove',e=>{if(!SUBSW)return;const t=e.touches[0],
 function subSwFin(e){const s=SUBSW;SUBSW=null;if(!s||!s.dir||!s.btn)return;const dx=s.dx||0,rap=Math.abs(dx)>30&&Date.now()-s.t<300;
   if((Math.abs(dx)>55||rap)&&Math.sign(-dx)===s.dir){try{navigator.vibrate&&navigator.vibrate(8)}catch(x){}s.btn.click()}}
 document.addEventListener('touchend',subSwFin,{capture:true});document.addEventListener('touchcancel',()=>{SUBSW=null},{capture:true});
+
+/* v66 · el menú lateral del panel siempre entra entero: si no entra, se aprieta por escalones */
+(function(){let ult='';function ajLat(){const sb=document.querySelector('.ui43-sidebar');if(!sb||!sb.offsetParent&&getComputedStyle(sb).position!=='fixed')return;
+  const k=innerHeight+'|'+sb.childElementCount+'|'+sb.querySelectorAll('button').length;if(k===ult&&sb.dataset.lat)return;ult=k;
+  sb.classList.remove('lat-a1','lat-a2');if(sb.scrollHeight>sb.clientHeight+1)sb.classList.add('lat-a1');if(sb.scrollHeight>sb.clientHeight+1)sb.classList.add('lat-a2');sb.dataset.lat='1'}
+  addEventListener('resize',()=>{ult='';ajLat()});setInterval(ajLat,700);setTimeout(ajLat,50)})();
 /* ---------- Deslizar a izquierda/derecha para cambiar de sección ---------- */
 let SW=null;
 document.addEventListener('touchstart',e=>{
@@ -5208,6 +5235,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.57',t:'Menú lateral a medida',items:[['📐','En el panel el menú de la izquierda entra entero en la pantalla, sin tener que bajar.']]},
   {v:'1.1.56',t:'Más prolijo y más deslizable',items:[['🖱️','En la computadora las barras para bajar son finitas y del color de la app; en el panel solo queda la de la derecha.'],['👆','En el celu podés deslizar con el dedo para pasar de pestaña: Comentarios / Reacciones / Vistas en las historias, Entrenar / Progresos, Cronómetro / Temporizador y las demás.']]},
   {v:'1.1.55',t:'Chat más prolijo',items:[['⌨️','Al abrir el teclado la cajita para escribir queda pegada arriba del teclado, sin espacio de más y sin saltos al abrirlo o cerrarlo.'],['🖼️','En las fotos y videos la hora y los tildes van abajo, en el borde de la burbuja.'],['🙂','Las fotos de perfil del chat siempre se ven redondas.'],['🎨','Volvió el fondo de pantalla de siempre del chat.']]},
   {v:'1.1.54',t:'Chat como WhatsApp',items:[['💬','El chat con tu profe ahora se ve como WhatsApp: fondo con dibujitos, burbujas verdes y grises con su colita, y la hora con los tildes adentro de cada mensaje.'],['🎤','Los audios muestran la foto de quien lo mandó con el micrófono, el botón de play, la onda con el puntito que avanza y la duración.'],['📷','Abajo: el + para mandar fotos o videos, la cámara para sacar una al momento y el micrófono verde para grabar.'],['🏋️','Nuevas animaciones: patada lateral en polea y vuelos frontales.']]},
