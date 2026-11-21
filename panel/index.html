@@ -2038,6 +2038,7 @@ html:has(dialog.hsig[open]){overflow:hidden}
 .marca-dialog{margin:auto;width:min(90vw,340px);border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);padding:20px}.marca-dialog::backdrop{background:#0007}.marca-dialog form,.marca-dialog label{display:grid;gap:8px}.marca-dialog form{gap:12px}
 .legal-fila{display:grid;grid-template-columns:1fr auto;align-items:start;border-bottom:1px solid var(--line)}.legal-fila label,.legal-fila summary{padding:12px 5px;cursor:pointer}.legal-fila:has(details[open]){grid-template-columns:1fr}.legal-fila input{width:18px;height:18px;vertical-align:middle}
 .reloj-franja{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:6px 10px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.reloj-franja>span{flex:1}.reloj-franja .roll{display:inline-flex;font-variant-numeric:tabular-nums}
+.pasadas-vivo{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border-block:1px solid var(--line)}.pasadas-vivo>button,.pasadas-vivo>p,.pasadas-vivo>label{grid-column:1/-1}.pasadas-vivo [data-reloj-pasada]{font-variant-numeric:tabular-nums;font-size:24px}.run-km,.pasadas-vivo label{display:grid;gap:5px}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -4529,31 +4530,109 @@ const runHist=(s,id)=>Object.entries(((s&&s.runs)||{})[id]||{}).sort((a,b)=>a[0]
 function runBuscar(s,id){for(const d of (s&&s.rutina)||[]) for(const x of d.ex||[]){const R=runOf(x); if(R&&R.id===id) return R} return null}
 const runAvg=a=>a.length?a.reduce((n,x)=>n+x,0)/a.length:null;
 const runSum=d=>d.tipo==='pasadas'?`prom ${tFmt(d.prom)} · ${(d.ts||[]).filter(x=>x!=null).length}/${d.n} pasadas`:`${tFmt(d.t)} · ${tFmt(d.ritmo)} /km`;
-function runAvgTxt(ts,R){const a=runAvg(ts); return a?`Promedio <b>${tFmt(a)}</b> por pasada · ritmo <b>${tFmt(a/(R.m/1000))}</b> /km${ts.length>1?` · mejor <b>${tFmt(Math.min(...ts))}</b>`:''}`:'Anotá el tiempo de cada pasada (ej: 1:35).'}
+function runDiferencia(ts){
+ const parciales=ts.filter(t=>t>0);if(parciales.length<2)return '';
+ const delta=parciales[parciales.length-1]-parciales[0];
+ return delta?' · última '+tFmt(Math.abs(delta))+(delta<0?' más rápida':' más lenta')+' que la primera':' · primera y última iguales';
+}
+function runAvgTxt(ts,R){const a=runAvg(ts); return a?`${ts.length}/${R.n} completadas · promedio <b>${tFmt(a)}</b> por pasada · ritmo <b>${tFmt(a/(R.m/1000))}</b> /km${ts.length>1?` · mejor <b>${tFmt(Math.min(...ts))}</b>`:''}${runDiferencia(ts)}`:'Anotá el tiempo de cada pasada (ej: 1:35).'}
 function runFondoTxt(T,R,p){return T?`${nDec(R.km)} km en <b>${tFmt(T)}</b> · ritmo <b>${tFmt(p||T/R.km)}</b> /km · <b>${nDec(Math.round(R.km/(T/3600)*10)/10)}</b> km/h`:'Poné tu tiempo y el ritmo se calcula solo (lo podés corregir).'}
+const pasadaClave=(s,id)=>'tc-pasadas:'+s.dni+':'+id;
+const pasadaEnvios=new Set();
+let pasadaActiva=null;
+function pasadaLeer(s,id){const k=pasadaClave(s,id);try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function pasadaEscribir(s,id,estado){
+ localStorage.setItem(pasadaClave(s,id),JSON.stringify(estado));pasadaActiva={dni:s.dni,id};
+}
+function pasadaAviso(s){return localStorage.getItem('tc-aviso-pasadas:'+s.dni)||'sonido'}
+function pasadaZona(s,R,d){
+ const modo=pasadaAviso(s);
+ const aviso=`<label>Aviso al terminar el descanso <select class="inp sm" data-aviso-pasadas>${['sonido','vibración','silencio'].map(v=>`<option value="${v}" ${modo===v?'selected':''}>${v}</option>`).join('')}</select></label>`;
+ const ts=d?.ts||[], espera=d?.fase==='descanso'&&Date.now()<d.hasta;
+ const fase=d?.fase||'lista', i=ts.length+1;
+ if(d)pasadaActiva={dni:s.dni,id:R.id};
+ const accion=fase==='en_curso'?'terminar':fase==='guardar'?'guardar':'empezar';
+ const texto=accion==='terminar'?'Terminar pasada':accion==='guardar'?'Guardar resultado':'Empezar pasada '+i;
+ return `<section class="pasadas-vivo" data-serie-viva="${esc(R.id)}"><strong>${fase==='guardar'?'Resultado':espera?'Recuperación':'Pasada '+i+' de '+(d?.n||R.n)}</strong>
+ <b class="num" data-reloj-pasada>${fase==='en_curso'?tFmt((Date.now()-d.inicio)/1000):espera?tFmt(Math.ceil((d.hasta-Date.now())/1000)):'—'}</b>
+ <button type="button" class="btn sm" data-accion-pasada="${accion}" ${espera?'disabled':''}>${texto}</button>
+ ${ts.length&&fase!=='guardar'&&fase!=='en_curso'?'<button type="button" class="linkb" data-accion-pasada="cerrar">Finalizar con '+ts.length+' de '+d.n+'</button>':''}
+ ${ts.length?'<p class="num">'+ts.map((v,j)=>(j+1)+' · '+tFmt(v)).join('　')+'</p>':''}${aviso}</section>`;
+}
+async function pasadaGuardar(s,R,d,k){
+ const clave=pasadaClave(s,R.id);if(pasadaEnvios.has(clave))return;
+ pasadaEnvios.add(clave);
+ const prom=Math.round(runAvg(d.ts)), datos={tipo:'pasadas',m:d.m,n:d.n,ts:d.ts,prom,ritmo:Math.round(prom*1000/d.m)};
+ try{
+   if(CLOUD)await q(sb.from('running_reg').upsert({socio_id:s.id,clave:R.id,fecha:d.fecha,datos}));
+   const actual=me();if(actual?.dni!==s.dni)return;
+   actual.runs=actual.runs||{};(actual.runs[R.id]=actual.runs[R.id]||{})[d.fecha]=datos;
+   if(d.fecha===iso(TODAY)){if(d.ts.length===d.n)S.done.add(k);else S.done.delete(k)}
+   if(!CLOUD)saveDB();localStorage.removeItem(clave);pasadaActiva=null;
+   toast(d.ts.length+' de '+d.n+' pasadas guardadas');render(true);
+ }catch(e){toast('Resultado guardado en este celular. Tocá Guardar resultado para reintentar.');render(true)}
+ finally{pasadaEnvios.delete(clave)}
+}
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-accion-pasada]');if(!b)return;
+ const card=b.closest('[data-run]'), s=me(), R=runBuscar(s,card.dataset.run);if(!R)return;
+ const k=card.querySelector('[data-ex]').dataset.ex, ahora=Date.now();
+ const d=pasadaLeer(s,R.id)||{m:R.m,n:R.n,pausa:runPausa(R.desc),fecha:iso(TODAY),fase:'lista',ts:[]};
+ switch(b.dataset.accionPasada){
+ case 'empezar':
+   if(!['lista','descanso'].includes(d.fase)||d.hasta>ahora)return;
+   const otro=(s.rutina||[]).flatMap(dia=>dia.ex||[]).map(runOf).find(r=>r&&r.id!==R.id&&pasadaLeer(s,r.id));
+   if(otro)return toast('Primero terminá el otro bloque de pasadas');
+   if(pasadaAviso(s)==='sonido')acx();d.inicio=ahora;d.fase='en_curso';break;
+ case 'terminar':
+   if(d.fase!=='en_curso')return;
+   d.ts.push(Math.max(1,Math.round((ahora-d.inicio)/1000)));d.inicio=null;
+   d.fase=d.ts.length>=d.n?'guardar':d.pausa?'descanso':'lista';d.hasta=ahora+d.pausa*1000;break;
+ case 'cerrar': if(!d.ts.length||d.fase==='en_curso')return;d.fase='guardar';break;
+ case 'guardar':if(d.fase!=='guardar')return;break;
+ default:return;
+ }
+ try{pasadaEscribir(s,R.id,d)}catch(e){return toast('No hay espacio para guardar el parcial en el celular')}
+ if(d.fase==='guardar')return pasadaGuardar(s,R,d,k);render(true);
+});
+document.addEventListener('change',e=>{if(e.target.matches('[data-aviso-pasadas]')){localStorage.setItem('tc-aviso-pasadas:'+me().dni,e.target.value);if(e.target.value==='sonido')acx()}});
+function pasadaTick(){
+ if(!pasadaActiva||S.view!=='socio'||S.user?.dni!==pasadaActiva.dni)return;
+ const s=me();if(!s)return;
+ const id=pasadaActiva.id,d=pasadaLeer(s,id);if(!d){pasadaActiva=null;return}
+ const ahora=Date.now(), nodo=[...document.querySelectorAll('[data-serie-viva]')].find(el=>el.dataset.serieViva===id);
+ if(d.fase==='descanso'&&ahora>=d.hasta){d.fase='lista';pasadaEscribir(s,id,d);
+  const modo=pasadaAviso(s);if(modo==='sonido')campana('descanso');if(modo==='vibración')navigator.vibrate?.([120,80,120]);
+  if(nodo)render(true);return}
+ const reloj=nodo?.querySelector('[data-reloj-pasada]');
+ if(reloj&&(d.fase==='en_curso'||d.fase==='descanso'))reloj.textContent=tFmt(d.fase==='en_curso'?(ahora-d.inicio)/1000:Math.ceil((d.hasta-ahora)/1000));
+}
+setInterval(pasadaTick,500);document.addEventListener('visibilitychange',()=>{if(!document.hidden)pasadaTick()});
 function runCard(R,k,on){ const s=me(), P=R.run==='pasadas', hoyK=iso(TODAY), L=runHist(s,R.id), hoy=(L.find(([f])=>f===hoyK)||[])[1], prev=Object.values(s.runs||{}).flatMap(reg=>Object.entries(reg)).filter(([fecha,v])=>
     fecha<hoyK && v.tipo===R.run && (P ? +v.m===+R.m && +v.n===+R.n : +v.km===+R.km)).sort((a,b)=>b[0].localeCompare(a[0]))[0];
-  const pz=P?runPausa(R.desc):0;
+  const pz=P?runPausa(R.desc):0, guiado=P?pasadaLeer(s,R.id):null;
   const form=P?`<div class="runps">${[...Array(R.n)].map((_,i)=>`<label style="--i:${i}"><span>${i+1}</span><input class="inp num" data-rt="v" inputmode="decimal" placeholder="1:30" value="${hoy&&hoy.ts&&hoy.ts[i]!=null?tFmt(hoy.ts[i]):''}" aria-label="Tiempo de la pasada ${i+1}"></label>`).join('')}</div>
       <p class="runavg" aria-live="polite">${runAvgTxt(hoy?(hoy.ts||[]).filter(x=>x):[],R)}</p>`
     :`<div class="runin2"><label><span>Tiempo total</span><input class="inp num" data-rt="t" inputmode="decimal" placeholder="Ej: 55:30" value="${hoy?tFmt(hoy.t):''}" aria-label="Tiempo total que tardaste"></label>
       <label><span>Ritmo promedio <small>min/km</small></span><input class="inp num" data-rt="p" inputmode="decimal" placeholder="auto" value="${hoy?tFmt(hoy.ritmo):''}" ${hoy&&hoy.man?'data-man="1"':''} aria-label="Ritmo promedio en minutos por kilómetro"></label></div>
-      <p class="runavg" aria-live="polite">${runFondoTxt(hoy&&hoy.t,R,hoy&&hoy.ritmo)}</p>`;
+      <label class="run-km">Distancia realizada (km)<input class="inp num" data-rt="km" inputmode="decimal" value="${esc(hoy?.km??R.km)}"></label><p class="runavg" aria-live="polite">${runFondoTxt(hoy&&hoy.t,{km:hoy?.km??R.km},hoy&&hoy.ritmo)}</p>`;
   return `<div class="ex runc ${on?'done':''}" data-run="${esc(R.id)}"><div class="runtop">
       <div class="anim runa" data-anim="__run" aria-label="Animación: running"><svg viewBox="0 0 100 100" role="img"></svg></div>
       <div class="exinfo"><span class="runtag">Running · ${P?'Pasadas':'Fondo'}</span><span class="nm num">${esc(runTxt(R))}</span>
         <span class="meta num">${P?'Volumen total <b>'+fmtDist(R.m*R.n)+'</b>':'Cargá tu tiempo al terminar'}</span>
         ${R.obs?`<p class="runobs">“${esc(R.obs)}”</p>`:''}${pz?`<button class="restbtn" data-rest="${pz}">⏱ Pausa ${esc(R.desc)}</button>`:''}</div>
       <button class="chk" data-ex="${k}" aria-pressed="${on}" aria-label="Marcar el running como hecho">✓</button></div>
-    <form class="runf" data-runf="${esc(R.id)}" data-k="${k}" novalidate>${form}
+    ${P&&(!hoy||guiado)?pasadaZona(s,R,guiado):''}<form class="runf" ${guiado?'hidden style="display:none"':''} data-runf="${esc(R.id)}" data-k="${k}" novalidate>${form}
       <div class="runfa"><button class="btn sm" type="submit">${hoy?'Actualizar':'Guardar'}</button><span class="runok ${hoy?'ok':''}">${hoy?'✓ Guardado hoy, lo ve '+esc(PROFE.split(' ')[0]):prev?'Última vez ('+ddmm(prev[0])+'): '+runSum(prev[1]):'Cargá cómo te fue'}</span>${hoy?`<button type="button" class="linkb" data-rundel="${esc(R.id)}">Borrar</button>`:''}</div></form></div>`}
 function runLive(f,t){ const R=runBuscar(me(),f.dataset.runf); if(!R) return; const av=f.querySelector('.runavg');
   if(R.run==='pasadas'){ av.innerHTML=runAvgTxt([...f.querySelectorAll('[data-rt="v"]')].map(i=>tParse(i.value,'s')).filter(x=>x),R); return }
   const ti=f.querySelector('[data-rt="t"]'), pi=f.querySelector('[data-rt="p"]');
   if(t===pi){ if(pi.value.trim()) pi.dataset.man='1'; else delete pi.dataset.man }
   const T=tParse(ti.value,'min');
-  if(t===ti&&!pi.dataset.man){ const nv=T?tFmt(T/R.km):''; if(pi.value!==nv){ pi.value=nv; pi.classList.remove('sug'); void pi.offsetWidth; if(nv&&!reduceMotion) pi.classList.add('sug') } }
-  av.innerHTML=runFondoTxt(T,R,tParse(pi.value,'min'))}
+  const km=Number(f.querySelector('[data-rt="km"]').value.replace(',','.'));
+  if(t.dataset.rt==='km')delete pi.dataset.man;
+  if((t===ti||t.dataset.rt==='km')&&!pi.dataset.man){ const nv=T&&km>0?tFmt(T/km):''; if(pi.value!==nv){ pi.value=nv; pi.classList.remove('sug'); void pi.offsetWidth; if(nv&&!reduceMotion) pi.classList.add('sug') } }
+  av.innerHTML=km>0?runFondoTxt(T,{km},tParse(pi.value,'min')):'Ingresá la distancia realizada'}
 function runLeer(f,R){
   if(R.run==='pasadas'){ const ins=[...f.querySelectorAll('[data-rt="v"]')]; const ts=[];
     for(const i of ins){ const v=i.value.trim(); if(!v){ts.push(null);continue} const x=tParse(v,'s'); if(!x) return {err:'Revisá ese tiempo: escribilo como 1:35 o 95',el:i}; ts.push(x) }
@@ -4562,13 +4641,14 @@ function runLeer(f,R){
   const ti=f.querySelector('[data-rt="t"]'), pi=f.querySelector('[data-rt="p"]'); const T=tParse(ti.value,'min');
   if(!T) return {err:'Poné cuánto tardaste, ej: 55:30',el:ti};
   const pv=tParse(pi.value,'min'), man=!!(pi.dataset.man&&pv); if(pi.value.trim()&&!pv) return {err:'Revisá el ritmo: escribilo como 5:30',el:pi};
-  const v={tipo:'fondo',km:R.km,t:T,ritmo:man?pv:Math.round(T/R.km)}; if(man) v.man=1; return {v}}
+  const el=f.querySelector('[data-rt="km"]'),km=Number(el.value.trim().replace(',','.'));if(!(Number.isFinite(km)&&km>0))return {err:'Ingresá la distancia realizada en kilómetros',el};
+  const v={tipo:'fondo',km,kmPrevista:R.km,t:T,ritmo:man?pv:Math.round(T/km)}; if(man) v.man=1; return {v}}
 /* panel: lo último que cargó el socio en cada running */
 function runRow(f,d,ant){ const dif=ant&&ant.ritmo&&d.ritmo?ant.ritmo-d.ritmo:0;
   const tr=dif?`<span class="${dif>0?'runup':'rundn'}">${dif>0?'↑ '+tFmt(dif)+' más rápido':'↓ '+tFmt(-dif)+' más lento'}</span>`:'';
   return `<div class="runrw"><span class="num">${f===iso(TODAY)?'Hoy':ddmm(f)}</span>${d.tipo==='pasadas'
-    ?`<span class="num">prom <b>${tFmt(d.prom)}</b> · ${tFmt(d.ritmo)} /km</span>${tr}<span class="runts num">${(d.ts||[]).map(t=>`<i>${t==null?'—':tFmt(t)}</i>`).join('')}</span>`
-    :`<b class="num">${tFmt(d.t)}</b><span class="num">${tFmt(d.ritmo)} /km${d.man?' (lo corrigió)':''}</span>${tr}`}</div>`}
+    ?`<span class="num">${d.ts.filter(x=>x>0).length}/${d.n} completadas · prom <b>${tFmt(d.prom)}</b> · ${tFmt(d.ritmo)} /km${runDiferencia(d.ts)}</span>${tr}<span class="runts num">${(d.ts||[]).map(t=>`<i>${t==null?'—':tFmt(t)}</i>`).join('')}</span>`
+    :`<b class="num">${tFmt(d.t)}</b><span>${nDec(d.km)} km realizados de ${nDec(d.kmPrevista??d.km)} previstos</span><span class="num">${tFmt(d.ritmo)} /km${d.man?' (lo corrigió)':''}</span>${tr}`}</div>`}
 function runPanel(s){ const items=[];
   (s.rutina||[]).forEach(d=>(d.ex||[]).forEach(x=>{const R=runOf(x); if(R) items.push({R,dia:d.d})}));
   const ids=new Set(items.map(i=>i.R.id));
@@ -4604,10 +4684,11 @@ document.addEventListener('input',e=>{ const t=e.target; if(!t.dataset) return;
 document.addEventListener('submit',e=>{ const f=e.target; if(!f.dataset||!f.dataset.runf) return; e.preventDefault();
   const s=me(); const R=runBuscar(s,f.dataset.runf); if(!R) return; const r=runLeer(f,R);
   if(r.err){ toast(r.err); if(r.el) r.el.focus(); return }
-  const prev=runHist(s,R.id).find(([x])=>x!==iso(TODAY));
-  s.runs=s.runs||{}; (s.runs[R.id]=s.runs[R.id]||{})[iso(TODAY)]=r.v; S.done.add(f.dataset.k); saveDB();
+  const prev=Object.values(s.runs||{}).flatMap(Object.entries).filter(([fecha,v])=>fecha<iso(TODAY)&&v.tipo===r.v.tipo&&(v.tipo==='pasadas'?v.m===r.v.m&&v.n===r.v.n:v.km===r.v.km)).sort((a,b)=>b[0].localeCompare(a[0]))[0];
+  f.querySelectorAll('[data-rt]').forEach(i=>{delete TCB.drafts[tcbDraftKey(i)]});
+  s.runs=s.runs||{}; (s.runs[R.id]=s.runs[R.id]||{})[iso(TODAY)]=r.v; if(R.run!=='pasadas'||r.v.ts.filter(x=>x>0).length===R.n)S.done.add(f.dataset.k);else S.done.delete(f.dataset.k);saveDB();
   const dif=prev&&prev[1].ritmo?prev[1].ritmo-r.v.ritmo:0;
-  toast(dif>0?`¡Mejoraste tu ritmo ${tFmt(dif)} /km! 🔥`:R.run==='pasadas'?'Pasadas guardadas · promedio '+tFmt(r.v.prom)+' 🏃':`¡Bien! ${nDec(R.km)} km en ${tFmt(r.v.t)} (${tFmt(r.v.ritmo)} /km) 🏃`);
+  toast(dif>0?`¡Mejoraste tu ritmo ${tFmt(dif)} /km! 🔥`:R.run==='pasadas'?'Pasadas guardadas · promedio '+tFmt(r.v.prom)+' 🏃':`¡Bien! ${nDec(r.v.km)} km en ${tFmt(r.v.t)} (${tFmt(r.v.ritmo)} /km) 🏃`);
   if(document.activeElement) document.activeElement.blur(); render(true);
   const c=document.querySelector(`.runc[data-run="${R.id}"]`); if(c&&!reduceMotion) c.classList.add('saved');
 });
@@ -5314,6 +5395,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.60',t:'Resultados de Running',items:[['🏃','Pasadas cronometradas con parciales y recuperación. En Fondo se ve la distancia realizada y la prevista.']]},
   {v:'1.1.59',t:'Feriados y asistencia',items:[['📅','En Info del gimnasio podés cargar feriados y cierres.'],['📱','Aprobá cada celular por separado.']]},
   {v:'1.1.58',t:'Celulares y solicitudes de pago',items:[['📱','Los celulares nuevos quedan pendientes de aprobación.'],['✓','Cada decisión de pago guarda quién la tomó y cuándo.']]},
   {v:'1.1.57',t:'Menú lateral a medida',items:[['📐','En el panel el menú de la izquierda entra entero en la pantalla, sin tener que bajar.']]},
@@ -5742,7 +5824,7 @@ screenRutina=function(){ const p=S.rsub==='prog'?1:0, prev=S.tcbPrev==null?p:S.t
 const tcbRenderSocio=renderSocio;
 renderSocio=function(){ if(S.user) tcbCargar(); tcbRenderSocio.apply(this,arguments); if(!S.user) return;
   const scr=document.getElementById('scr-rutina');
-  if(scr){ scr.querySelectorAll('input').forEach(i=>{ const k=tcbDraftKey(i); if(k&&TCB.drafts[k]!=null&&!i.value){ i.value=TCB.drafts[k]; i.dispatchEvent(new Event('input',{bubbles:true})) } });
+  if(scr){ scr.querySelectorAll('input').forEach(i=>{ const k=tcbDraftKey(i); if(k&&TCB.drafts[k]!=null&&(!i.value||i.dataset.rt==='km'&&i.value===i.defaultValue)){ i.value=TCB.drafts[k]; i.dispatchEvent(new Event('input',{bubbles:true})) } });
     if(TCB.scrollPend){ TCB.scrollPend=false; const y=TCB.scroll; scr.scrollTop=y; requestAnimationFrame(()=>{ scr.scrollTop=y }) }
     if(S.tcbCele){ S.tcbCele=null; setTimeout(()=>{ const r=document.querySelector('.tcb-ribbon'); if(r) r.classList.add('tcb-out') },3200) } }
   if(TCB.avisar&&!document.hidden){ const t=TCB.avisar; TCB.avisar=0; setTimeout(()=>toast('Tu temporizador terminó '+tcbHace(t)),500) }
