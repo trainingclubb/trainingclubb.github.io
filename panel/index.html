@@ -2036,6 +2036,8 @@ html:has(dialog.hsig[open]){overflow:hidden}
  @keyframes dashUp{from{opacity:0;transform:translateY(24px)}}}
 @media (prefers-reduced-motion:reduce){.dash.dashed .dwt,.dashbar.in,.dashpop,.ui43-enter .dash>.dw{animation:none}}
 .marca-dialog{margin:auto;width:min(90vw,340px);border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);padding:20px}.marca-dialog::backdrop{background:#0007}.marca-dialog form,.marca-dialog label{display:grid;gap:8px}.marca-dialog form{gap:12px}
+.legal-fila{display:grid;grid-template-columns:1fr auto;align-items:start;border-bottom:1px solid var(--line)}.legal-fila label,.legal-fila summary{padding:12px 5px;cursor:pointer}.legal-fila:has(details[open]){grid-template-columns:1fr}.legal-fila input{width:18px;height:18px;vertical-align:middle}
+.reloj-franja{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:6px 10px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.reloj-franja>span{flex:1}.reloj-franja .roll{display:inline-flex;font-variant-numeric:tabular-nums}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2831,8 +2833,9 @@ html.kbon .chwrap .chlist{overscroll-behavior:none}
 const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const TODAY=new Date(); TODAY.setHours(0,0,0,0);
-const cerrado=dt=>dt.getDay()===0||dt.getDay()===6;      /* el gimnasio no abre sábados ni domingos */
-const Y=TODAY.getFullYear(), M=TODAY.getMonth(), D=TODAY.getDate();
+const cierreEspecial=dt=>(gymInfo().cierres||[]).includes(iso(dt));
+const cerrado=dt=>dt.getDay()===0||dt.getDay()===6||cierreEspecial(dt);      /* el gimnasio no abre sábados ni domingos */
+let Y=TODAY.getFullYear(), M=TODAY.getMonth(), D=TODAY.getDate();
 const fmt=n=>'$'+Math.round(n||0).toLocaleString('es-AR');
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -3101,7 +3104,7 @@ ICONS.gimnasio='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 const TABS=[['inicio','Inicio'],['rutina','Rutina'],['cuotas','Cuotas'],['asist','Asistencia'],['gimnasio','Gimnasio']];
 const TABKEYS=TABS.map(t=>t[0]);
 
-const attMonth=(s,y,m)=>(s&&s.att[mk(y,m)])||[];
+const attMonth=(s,y,m)=>((s&&s.att[mk(y,m)])||[]).filter(d=>!cerrado(new Date(y,m,d)));
 function initials(n){return String(n||'?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('')||'?'}
 function avatar(cls='',photo=S.photo,name=S.name){return `<span class="avatar ${cls}">${photo?`<img src="${photo}" alt="">`:esc(initials(name))}</span>`}
 const first=()=>S.name.split(' ')[0];
@@ -3113,15 +3116,15 @@ const HORARIO={1:[['08:00','11:00'],['15:00','20:00']],2:[['08:00','11:00'],['16
   4:[['08:00','11:00'],['16:30','18:00'],['19:00','22:00']],5:[['08:00','11:00'],['15:00','20:00']],6:[],0:[]};
 const hm=t=>{const [a,b]=t.split(':');return +a*60+ +b};
 const hhmm=t=>t.replace(/^0/,'');
-function gymAhora(d){d=d||new Date(); const dw=d.getDay(), m=d.getHours()*60+d.getMinutes(), hoy=HORARIO[dw]||[];
+function gymAhora(d){d=d||new Date(); const dw=d.getDay(), m=d.getHours()*60+d.getMinutes(), hoy=cerrado(d)?[]:HORARIO[dw]||[];
   const en=hoy.find(([a,b])=>m>=hm(a)&&m<hm(b));
   if(en){const falta=hm(en[1])-m; return {abierto:true,txt:'Abierto ahora',sub:`Cierra a las ${hhmm(en[1])}`+(falta<=45?` · quedan ${falta} min`:''),pronto:falta<=45}}
   const prox=hoy.find(([a])=>hm(a)>m);
   if(prox){const falta=hm(prox[0])-m; const pausa=hoy.some(([,b])=>hm(b)<=m);
     return {abierto:false,txt:pausa?'Cerrado por ahora':'Todavía cerrado',sub:`Abre a las ${hhmm(prox[0])}`+(falta<=60?` · en ${falta} min`:''),pronto:falta<=60}}
-  for(let i=1;i<=7;i++){const dd=(dw+i)%7; if((HORARIO[dd]||[]).length) return {abierto:false,txt:'Cerrado',sub:`Abre ${i===1?'mañana':'el '+DIAS[dd].toLowerCase()} a las ${hhmm(HORARIO[dd][0][0])}`}}
+  for(let i=1;i<=366;i++){const siguiente=new Date(d);siguiente.setDate(d.getDate()+i);const dd=siguiente.getDay(); if(!cerrado(siguiente)&&(HORARIO[dd]||[]).length) return {abierto:false,txt:'Cerrado',sub:`Abre ${i===1?'mañana':'el '+DIAS[dd].toLowerCase()} a las ${hhmm(HORARIO[dd][0][0])}`}}
   return {abierto:false,txt:'Cerrado',sub:''}}
-function horariosHtml(){const d=new Date(), dw=d.getDay(), hoy=HORARIO[dw]||[], g=gymAhora(d), abierta=(()=>{try{return localStorage.getItem('tc-horarios-semana')==='1'}catch(e){return false}})();
+function horariosHtml(){const d=new Date(), dw=d.getDay(), hoy=cerrado(d)?[]:HORARIO[dw]||[], g=gymAhora(d), abierta=(()=>{try{return localStorage.getItem('tc-horarios-semana')==='1'}catch(e){return false}})();
   const I=420, F=1380, pc=m=>((Math.min(F,Math.max(I,m))-I)/(F-I)*100).toFixed(2), now=d.getHours()*60+d.getMinutes();
   const linea=hoy.length?`<div class="hline" aria-hidden="true">${hoy.map(([a,b],i)=>`<i style="left:${pc(hm(a))}%;width:${(pc(hm(b))-pc(hm(a))).toFixed(2)}%;--i:${i}" class="${now>=hm(a)&&now<hm(b)?'on':''}"></i>`).join('')}
       ${hoy.slice(1).map(([a],i)=>hm(a)-hm(hoy[i][1])>0&&hm(a)-hm(hoy[i][1])<=60?`<b class="hgap" style="left:${pc(hm(hoy[i][1]))}%;width:${(pc(hm(a))-pc(hm(hoy[i][1]))).toFixed(2)}%"></b>`:'').join('')}
@@ -3696,7 +3699,7 @@ function screenInicio(){
   <section class="card">
     <div class="ttl"><b>Esta semana</b><span class="num">${semana} entrenamiento${semana===1?'':'s'}</span></div>
     <div class="week">${wk}</div>
-    ${att.includes(D)?'<div class="donerow'+(justIn?' nuevo':'')+'"><p class="done-msg"><svg class="tick2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7 12.5l3.2 3.2L17.2 8.7"/></svg><span class="dtx">Ya registraste tu entrada de hoy'+asHoraTxt(s)+'.</span></p><button class="mini" id="uncheckin" title="Solo se puede quitar la entrada del mismo día">Quitar</button></div>':cerrado(TODAY)?'<p class="closed-msg"><span aria-hidden="true">🔒</span> Sábados y domingos el gimnasio está cerrado. ¡Nos vemos el lunes!</p>':`<button class="btn ghost" id="checkin">Vine hoy al gym</button>`}
+    ${att.includes(D)?'<div class="donerow'+(justIn?' nuevo':'')+'"><p class="done-msg"><svg class="tick2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7 12.5l3.2 3.2L17.2 8.7"/></svg><span class="dtx">Ya registraste tu entrada de hoy'+asHoraTxt(s)+'.</span></p><button class="mini" id="uncheckin" title="Solo se puede quitar la entrada del mismo día">Quitar</button></div>':cerrado(TODAY)?'<p class="closed-msg"><span aria-hidden="true">🔒</span> Hoy el gimnasio está cerrado. La asistencia vuelve a habilitarse el próximo día de apertura.</p>':`<button class="btn ghost" id="checkin">Vine hoy al gym</button>`}
   </section>
   ${sensH}
   <div class="row2">
@@ -3810,6 +3813,10 @@ const fmtR=ms=>{const s=Math.ceil(ms/1000);return `${Math.floor(s/60)}:${p2(s%60
 const restSecs=txt=>{const n=parseFloat(txt);return /min/.test(txt)?n*60:n};
 
 function timerCard(){
+  if(!S.relojGrande){
+    const descanso=S.tmode==='rest', tiempo=descanso?fmtR(restNow()):fmtSW(swNow()), corriendo=descanso?S.rest.run:S.sw.run;
+    return `<section class="reloj-franja" id="timer"><span>${descanso?'Descanso':'Cronómetro'} <b class="num roll" id="${descanso?'resttime':'swtime'}" data-v="${tiempo}">${rollHTML(tiempo,descanso?0:2)}</b></span><button class="mini" id="${descanso?'restgo':'swgo'}">${corriendo?'Pausar':'Iniciar'}</button><button class="linkb" data-reloj-mas aria-label="Opciones del reloj">Opciones</button></section>`;
+  }
   const c=S.tmode==='crono'; const prevM=S.tmPrev==null?(c?0:1):S.tmPrev; S.tmPrev=c?0:1;
   const sw=`<div class="tface"><div class="tbig num roll" id="swtime" data-fast="2" data-v="${fmtSW(swNow())}">${rollHTML(fmtSW(swNow()),2)}</div>
       <div class="tsub">${S.sw.run?'<span class="live"></span>En marcha':swNow()?'En pausa':'Listo para arrancar'}</div></div>
@@ -3824,7 +3831,7 @@ function timerCard(){
     <div class="presets" role="group" aria-label="Tiempo del temporizador">${[30,60,90,120,180].map(x=>`<button data-preset="${x}" aria-pressed="${S.rest.total===x*1000}">${x<60?x+' s':x%60?'1:30':x/60+' min'}</button>`).join('')}</div>
     <div class="tbtns"><button class="tb main ${S.rest.run?'running':''}" id="restgo">${S.rest.run?'Pausar':(r<S.rest.total&&r>0?'Seguir':'Iniciar')}</button>
     <button class="tb" id="restplus">+15 s</button><button class="tb" id="restreset">Reiniciar</button></div>`;
-  return `<section class="timer ${S.sw.run&&c||S.rest.run&&!c?'run':''}" id="timer">
+  return `<section class="timer ${S.sw.run&&c||S.rest.run&&!c?'run':''}" id="timer"><button class="linkb" data-reloj-mas>Compactar reloj</button>
     <div class="tmodes" role="group" aria-label="Modo" style="--m:${prevM}" data-to="${c?0:1}"><button data-tmode="crono" aria-pressed="${c}">Cronómetro</button><button data-tmode="rest" aria-pressed="${!c}">Temporizador</button></div>
     <div class="tbody ${prevM!==(c?0:1)?(c?'froml':'fromr'):''}">${c?sw:rs}</div></section>`;
 }
@@ -3834,10 +3841,43 @@ const serN=e=>{const m=/^\s*(\d{1,2})\s*[x×*]/i.exec(String(Array.isArray(e)&&e
 function serHtml(e,k,on){const n=serN(e);if(!n)return '';const a=on?Array(n).fill(true):((S.ser||{})[k]||[]),h=Array.from({length:n},(_,j)=>!!a[j]).filter(Boolean).length;
   return `<div class="sers" role="group" aria-label="Series de ${esc(e[0])}: ${h} de ${n}">${Array.from({length:n},(_,j)=>{const x=!!a[j];
     return `<button type="button" class="ser ${x?'on':''} ${S.serJust===k+':'+j?'sjust':''}" data-ser="${k}" data-sj="${j}" data-sn="${n}" aria-pressed="${x}" aria-label="Serie ${j+1}">${j+1}</button>`}).join('')}</div>`}
+const enviandoMarcas=new Set();
+function pendientesDe(s){
+ if(!s?.id||!CLOUD)return [];
+ const pref='tc-marca:'+s.id+':', lista=[];
+ for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith(pref)){try{const row=JSON.parse(localStorage.getItem(k));if(row?.socio_id===s.id)lista.push(row)}catch(e){}}}
+ return lista;
+}
+async function enviarMarcas(){
+ if(!CLOUD||S.view!=='socio'||!S.user||S.pendiente||!sb)return;
+ const s=me(); if(!s?.id||!navigator.onLine)return;
+ for(const fila of pendientesDe(s)){
+   if(enviandoMarcas.has(fila.id)||me()?.id!==s.id)continue;
+   enviandoMarcas.add(fila.id);
+   try{await q(sb.from('progreso').upsert(fila,{onConflict:'id'}));
+     localStorage.removeItem('tc-marca:'+fila.socio_id+':'+fila.id);
+     const actual=me();if(actual?.id===s.id){
+       actual.prog=actual.prog||{};const lista=actual.prog[fila.ejercicio]=actual.prog[fila.ejercicio]||[];
+       if(!lista.some(x=>x.id===fila.id))lista.push(fila);
+       if(SNAP)SNAP={...SNAP,prog:{...SNAP.prog,[fila.id]:fila}};
+       toast('Marca sincronizada');if(!document.querySelector('dialog[open]')&&!document.activeElement?.matches('input,textarea,select'))render(true);
+     }
+   }catch(e){return}finally{enviandoMarcas.delete(fila.id)}
+ }
+}
+function guardarMarcaLocal(s,n,rec){
+ if(!CLOUD){s.prog=s.prog||{};(s.prog[n]=s.prog[n]||[]).push(rec);saveDB();return true}
+ const fila={...rec,socio_id:s.id,ejercicio:n};
+ try{localStorage.setItem('tc-marca:'+s.id+':'+rec.id,JSON.stringify(fila))}
+ catch(e){toast('Falta espacio para guardar esta marca en el celular');return false}
+ toast('Marca guardada en este celular · pendiente de sincronizar');enviarMarcas();return true;
+}
+window.addEventListener('online',enviarMarcas);
 function marcaEnEjercicio(s,n){
   const key=tcbKey(s,n)||n, records=s.prog?.[key]||[];
   const last=tcbStats(records)?.l.slice(-1)[0];
-  return `<button type="button" class="restbtn" data-anotar-marca="${esc(n)}">${last?'Última: '+fmtKg(last.kg)+' kg × '+(last.reps||1)+' · Anotar':'Anotar marca'}</button>`;
+  const pendiente=pendientesDe(s).some(x=>x.ejercicio===key);
+  return `${pendiente?'<small role="status">Marca pendiente de sincronizar</small>':''}<button type="button" class="restbtn" data-anotar-marca="${esc(n)}">${last?'Última: '+fmtKg(last.kg)+' kg × '+(last.reps||1)+' · Anotar':'Anotar marca'}</button>`;
 }
 document.addEventListener('click',ev=>{
   const boton=ev.target.closest('[data-anotar-marca]'); if(!boton)return;
@@ -3851,8 +3891,8 @@ document.addEventListener('click',ev=>{
     <button class="btn">Guardar marca</button><button type="button" class="linkb">Cancelar</button></form>`;
   const f=dialog.querySelector('form');
   f.onsubmit=e=>{e.preventDefault();e.stopPropagation();const actual=me();if(!actual||actual.dni!==s.dni)return dialog.close();
-    const fecha=new Date();actual.prog=actual.prog||{};(actual.prog[key]=actual.prog[key]||[]).push({id:fecha.getTime().toString(36),fecha:iso(fecha),kg:Number(f.elements.kg.value),reps:Number(f.elements.reps.value),series:null,borg:f.elements.borg.value,hora:fecha.toISOString()});
-    saveDB();dialog.close();render(true);toast('Marca guardada')};
+    const fecha=new Date();if(!guardarMarcaLocal(actual,key,{id:crypto.randomUUID(),fecha:iso(fecha),kg:Number(f.elements.kg.value),reps:Number(f.elements.reps.value),series:null,borg:f.elements.borg.value,hora:fecha.toISOString()}))return;
+    dialog.close();render(true);if(!CLOUD)toast('Marca guardada')};
   dialog.querySelector('.linkb').onclick=()=>dialog.close();dialog.onclose=()=>dialog.remove();document.body.append(dialog);dialog.showModal();
 },true);
 function screenRutina(){
@@ -3862,11 +3902,10 @@ function screenRutina(){
   if(S.day>=R.length) S.day=0;
   const r=R[S.day]; const n=r.ex.length; const d=[...S.done].filter(k=>k.startsWith(S.day+'-')).length;
   const hechos=new Set(R.map((x,i)=>rdHecho(R,i)?i:-1).filter(i=>i>=0)), rdNuevo=new Set(S.rdVisto?[...hechos].filter(i=>!S.rdVisto.has(i)):[]); S.rdVisto=hechos;
-  return `${timerCard()}
-  <div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${esc(profeNom(s))}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
+  return `<div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${esc(profeNom(s))}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
   ${R.length>1?`<div class="days hscroll" role="group" aria-label="Día">${R.map((x,i)=>`<button data-day="${i}" aria-pressed="${i===S.day}" class="${rdHecho(R,i)?'rdok':''} ${rdNuevo.has(i)?'rdnew':''}">${rdHecho(R,i)?'<b class="rdtic" aria-label="completo">✓</b>':''}${esc(x.d)}<small>${esc(x.t||'')}</small></button>`).join('')}</div>`:''}
   <div class="prog"><i style="width:${n?d/n*100:0}%"></i></div>
-  <div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k); const RN=runOf(e); if(RN) return runCard(RN,k,on);
+  ${timerCard()}<div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k); const RN=runOf(e); if(RN) return runCard(RN,k,on);
     return `<div class="ex ${on?'done':''}">
       <div class="anim" data-anim="${esc(animKey(e[0]))}" aria-label="Animación: ${esc(e[0])}"><svg viewBox="0 0 100 100" role="img"></svg></div>
       <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${exMeta(e)}</span>${serHtml(e,k,on)}${marcaEnEjercicio(s,e[0])}
@@ -4022,7 +4061,7 @@ const rkRango=p=>{ if(p==='anio') return [Y+'-01-01',Y+'-12-31']; const n=new Da
 const rkNombre=n=>{const w=String(n||'').trim().split(/\s+/); return (w[0]||'?')+(w[1]?' '+w[1][0].toUpperCase()+'.':'')};
 function rkPos(L){ let pos=0,prev=null; L.forEach((x,i)=>{ if(x.visitas!==prev){pos=i+1;prev=x.visitas} x.pos=pos }); return L }
 function rkLocal(p){ const [a,b]=rkRango(p);
-  const L=Object.values(DB.socios).filter(s=>s.aprobado!==false).map(s=>{let n=0; for(const [k,ds] of Object.entries(s.att||{})){const [y,m]=k.split('-').map(Number); for(const d of ds){const f=y+'-'+p2(m+1)+'-'+p2(d); if(f>=a&&f<=b) n++}}
+  const L=Object.values(DB.socios).filter(s=>s.aprobado!==false).map(s=>{let n=0; for(const [k,ds] of Object.entries(s.att||{})){const [y,m]=k.split('-').map(Number); for(const d of ds){const f=y+'-'+p2(m+1)+'-'+p2(d); if(f>=a&&f<=b&&!cerrado(new Date(y,m,d))) n++}}
     return {nombre:rkNombre(s.name),visitas:n,yo:!!(S.user&&s.dni===S.user.dni),foto:s.photo||null}}).filter(x=>x.visitas>0)
     .sort((x,y)=>y.visitas-x.visitas||x.nombre.localeCompare(y.nombre,'es'));
   return rkPos(L).filter((x,i)=>i<10||x.yo) }
@@ -4080,10 +4119,10 @@ function screenAsist(){
   const lead=(f.getDay()+6)%7; let cells=''; const cdir=S.calDir||''; S.calDir=null;
   for(let i=0;i<lead;i++) cells+='<span class="d e"></span>';
   for(let d=1;d<=n;d++){const dt=new Date(y,m,d);const fut=dt>TODAY;const isT=dt.getTime()===TODAY.getTime();
-    cells+=`<span class="d num ${days.includes(d)?'went':''} ${fut?'fut':''} ${isT?'today':''} ${cerrado(dt)&&!days.includes(d)?'cerr desc':''}" style="--d:${d};--w:${Math.floor((lead+d-1)/7)};--c:${(lead+d-1)%7}">${d}${cerrado(dt)&&!days.includes(d)?'<small>Descanso</small>':''}</span>`}
+    cells+=`<span class="d num ${days.includes(d)?'went':''} ${fut?'fut':''} ${isT?'today':''} ${cerrado(dt)&&!days.includes(d)?'cerr desc':''}" style="--d:${d};--w:${Math.floor((lead+d-1)/7)};--c:${(lead+d-1)%7}">${d}${cerrado(dt)&&!days.includes(d)?(cierreEspecial(dt)?'<small>Cierre</small>':'<small>Descanso</small>'):''}</span>`}
   const alta=new Date(s.alta+'T00:00'); const prevOk=(y*12+m)>(alta.getFullYear()*12+alta.getMonth()), nextOk=(y*12+m)<(Y*12+M);
   const isCur=y===Y&&m===M; const weeks=Math.max(1,(isCur?D:n)/7);
-  const total=Object.values(s.att).reduce((a,b)=>a+b.length,0);
+  const total=Object.keys(s.att).reduce((a,k)=>a+attMonth(s,...k.split('-').map(Number)).length,0);
   return `<i class="as43m ${asd||''}" hidden></i><h2>Asistencia</h2>${asSeg()}
   <div class="row2"><div class="tile"><div class="k">${MES[m]}</div><div class="v num"><span class="cnt x42cnt" data-count="${days.length}" data-ck="x42as${Y}-${m}" style="min-width:${String(days.length).length}ch">${days.length}</span> <span style="font-size:16px">visita${days.length===1?'':'s'}</span></div></div>
   <div class="tile"><div class="k">${total?'Por semana':'En total'}</div><div class="v num">${total?(days.length/weeks).toFixed(1).replace('.',','):'0'}</div></div></div>
@@ -4096,19 +4135,19 @@ function screenAsist(){
 const LEGAL_VERSION='1.0';
 function forgeStudioLegal(){
   return `<div class="legal-login" style="display:grid;gap:8px;font-size:13px">
-    <details><summary>Términos y condiciones</summary>
+    <div class="legal-fila"><label><input type="checkbox" id="legal-terms" required ${S.legalRegistro?'checked':''}> Acepto los términos y condiciones</label><details><summary aria-label="Leer Términos y condiciones">Leer</summary>
       <p>Versión ${LEGAL_VERSION} · Borrador para revisión</p>
       <p>Forge Studio concede permiso para usar Training Club mientras tu acceso esté habilitado. La licencia de uso del software propio es personal, limitada y no transferible. La marca del gimnasio y los componentes de terceros conservan sus respectivos derechos y licencias.</p>
       <p>Usá tu propia cuenta. No accedas a información ajena ni compartas mensajes privados sin autorización. El gimnasio administra las membresías, las cuotas y las rutinas. Esta aplicación sirve para organizar el entrenamiento. Las condiciones de uso respetan los derechos que te reconoce la ley.</p>
-    </details>
-    <details><summary>Política de privacidad</summary>
+    </details></div>
+    <div class="legal-fila"><label><input type="checkbox" id="legal-privacy" required ${S.legalRegistro?'checked':''}> Acepto la política de privacidad</label><details><summary aria-label="Leer Política de privacidad">Leer</summary>
       <p>Versión ${LEGAL_VERSION} · Borrador para revisión</p>
       <p>El DNI y el nombre se usan para identificar tu ficha y habilitar el acceso. La app registra, según las funciones que uses, rutinas, asistencias, cuotas, marcas de entrenamiento, datos de perfil, mensajes y notificaciones. El gimnasio y su personal autorizado usan esta información para gestionar tu cuenta y acompañar el entrenamiento.</p>
       <p>El ranking muestra una versión abreviada del nombre y el número de asistencias a otros socios. Los mensajes se comparten con el personal autorizado. Supabase presta el servicio de almacenamiento y autenticación. Evitá incluir información médica en los mensajes.</p>
       <p>Podés solicitar acceso, rectificación o supresión de tus datos. Pendiente para la versión definitiva: identidad, domicilio y contacto del responsable, responsables por gimnasio, plazos de conservación y destinos de transferencia.</p>
-    </details>
-    <label><input type="checkbox" id="legal-terms" required ${S.legalRegistro?'checked':''}> Acepto los términos y condiciones</label>
-    <label><input type="checkbox" id="legal-privacy" required ${S.legalRegistro?'checked':''}> Acepto la política de privacidad</label>
+    </details></div>
+
+
     <small>Software propio bajo licencia de uso de Forge Studio</small>
   </div>`;
 }
@@ -4120,7 +4159,7 @@ function screenLogin(logo){
   const body=m==='dni'?`<div class="field"><label for="dni">DNI</label><input class="inp num" id="dni" inputmode="numeric" autocomplete="username" placeholder="Ej: 38.456.789" maxlength="10" value="${d?fmtDNI(d):''}"></div>`
     :`${dniBox}<div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" autocapitalize="words" placeholder="Ej: Juan Pérez"></div>`;
   const btn={dni:'Entrar',crear:'Crear cuenta'}[m];
-  const pie=m==='dni'?'¿Es tu primera vez? Poné tu DNI y te pedimos el nombre para crear tu cuenta.':'';
+  const pie=m==='dni'?'Si es tu primer ingreso desde este celular, el gimnasio va a revisar la solicitud.':'';
   return `<div class="login">
     <img class="lmark" src="${logo}" alt="Training Club">
     <div class="wm big"><b>Training</b><span>CLUB</span></div>
@@ -4821,14 +4860,14 @@ function renderPagos(){
   $('#app').innerHTML=`<div class="owner">${proBar()}<div class="panel-pagos">
     <section class="panel pago-bloque">
       <div class="panelhead"><h2>Avisos de pago</h2><span class="pill warn">${solicitudes.length} para confirmar</span></div>
-      <p class="pago-ayuda">Cuando un socio avisa desde la app que pagó, aparece acá. Si te llegó, tocá <b>Llegó</b> y se le registra el pago de ese mes. Si no, tocá <b>No llegó</b>: el mes le vuelve a quedar en deuda y le avisamos.</p>
+      ${S.ultimaDecision?`<p role="status" class="pago-fila">${esc(S.ultimaDecision.socio)} · ${panelPagoMes(S.ultimaDecision.periodo)} · ${S.ultimaDecision.registrado?'Pago registrado':'Transferencia no recibida'} · ${esc(S.ultimaDecision.autor)} · ${esc(S.ultimaDecision.hora)}</p>`:''}<p class="pago-ayuda">Cuando un socio avisa desde la app que pagó, aparece acá. Si te llegó, tocá <b>Confirmar pago</b> y se le registra el pago de ese mes. Si no, tocá <b>Transferencia no recibida</b>: el mes le vuelve a quedar en deuda y le avisamos.</p>
       ${solicitudes.length?solicitudes.map(({socio,periodo,aviso})=>`<form class="pago-fila" data-pago-solicitud="${periodo}" data-socio="${esc(socio.dni)}">
         <div class="pago-datos"><b>${esc(socio.name)}</b><span>${panelPagoMes(periodo)} · ${esc(aviso.medio||'Sin medio informado')}${aviso.fecha&&!isNaN(Date.parse(aviso.fecha))?' · avisó hace '+actHace(aviso.fecha):''}</span></div>
         <fieldset class="pago-controles" style="margin:0;padding:0;border:0;min-width:0" ${panelPagoEnCurso?'disabled':''}>
           <label>Importe ($)<input class="inp sm pago-monto" name="monto" type="number" min="1" max="2147483647" required value="${Number(socio.precio)||''}"></label>
           <label>Fecha (dd/mm)<input class="inp sm pago-fecha" name="fecha" maxlength="5" required value="${ddmm(iso(TODAY))}"></label>
-          <button class="btn sm pago-si" type="submit" value="registrar">✓ Llegó</button>
-          <button class="mini danger pago-no" type="submit" value="rechazar" formnovalidate>✕ No llegó</button>
+          <button class="btn sm pago-si" type="submit" value="registrar">✓ Confirmar pago</button>
+          <button class="mini danger pago-no" type="submit" value="rechazar" formnovalidate>✕ Transferencia no recibida</button>
         </fieldset></form>`).join(''):'<p>No hay solicitudes para revisar.</p>'}
     </section>
     <section class="panel pago-bloque">
@@ -4888,6 +4927,10 @@ async function panelPagoResolver(form,rechazar){
       saveDB();
       if(S.ptabP==='pagos')render(true);
     }
+    S.ultimaDecision={socio:socio.name,periodo,registrado:!rechazar,autor:[PRO?.nombre,PRO?.apellido].filter(Boolean).join(' ')||'Profesor',hora:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})};
+    if(CLOUD){const {data}=await sb.from('pago_decisiones').select('profesor,resuelto').eq('socio_id',socio.id).eq('periodo',periodo).order('id',{ascending:false}).limit(1);
+      if(data?.length){S.ultimaDecision.autor=data[0].profesor;S.ultimaDecision.hora=new Date(data[0].resuelto).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}}
+    if(S.ptabP==='pagos')render(true);
     toast(rechazar?'Listo: el mes le vuelve a quedar en deuda y le avisamos.':'Pago registrado ✓');
   }catch(error){
     toast(error.code==='23505'?'Ese mes ya figura pagado.':errTxt(error));
@@ -4968,7 +5011,7 @@ function renderDuenio(){
       :`<div class="cobok"><span class="cobic" aria-hidden="true">✓</span><b>Todo al día</b><span>Nadie debe ni vence esta semana.</span></div>`}</section>
   </div>${hrsHtml()}`:''}
   ${puedeP('aprobar')&&S.disp&&S.disp.length?`<section class="panel pendp"><h2>Celulares esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Alguien se registró con un DNI que ya tenía celular. Aprobalo solo si es esa persona (por ejemplo, cambió de teléfono).</p>
-    <div class="duelist">${S.disp.map(x=>`<div><span><strong>${esc(x.s.name)}</strong> <span class="muted num">DNI ${fmtDNI(x.s.dni)}</span></span><span><button class="mini pay" data-dok="${x.uid}">Aprobar</button> <button class="mini danger" data-dno="${x.uid}">Rechazar</button></span></div>`).join('')}</div></section>`:''}
+    <div class="duelist">${S.disp.map(x=>`<div><span><strong>${esc(x.s.name)}</strong> <span class="muted num">DNI ${fmtDNI(x.s.dni)} · ${esc(new Date(x.creado).toLocaleString('es-AR'))}</span></span><span><button class="mini pay" data-dok="${x.uid}">Aprobar</button> <button class="mini danger" data-dno="${x.uid}">Rechazar</button></span></div>`).join('')}</div></section>`:''}
   <section class="panel">
     <div class="panelhead"><h2>Socios</h2>${all.length?`<label class="psearch ${S.q?'con':''}" title="Buscar socio (Ctrl+F)"><span class="pslupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg></span><input id="psq" type="search" autocomplete="off" spellcheck="false" placeholder="Buscar por nombre o DNI" aria-label="Buscar socio por nombre o DNI" value="${esc(S.q||'')}"><kbd aria-hidden="true">Ctrl F</kbd><button type="button" class="psx" id="psx" aria-label="Borrar búsqueda">×</button></label><span class="pscnt muted" id="pscnt" aria-live="polite"></span>`:''}${all.length?`<div class="chips" role="group" aria-label="Filtrar">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div>`:''}</div>
     ${addForm}
@@ -5150,7 +5193,7 @@ async function loadAll(){ const e0=EDITS; cargarGym(); cargarChat(); cargarNoved
   if(S.view==='duenio'&&S.pro){const d=await q(sb.from('dispositivos').select('uid,socio_id,aprobado,creado').eq('aprobado',false)); const byId={}; Object.values(DB.socios).forEach(s=>byId[s.id]=s);
     S.c2reg={}; d.forEach(x=>{S.c2reg[x.socio_id]=x.creado}); S.disp=d.map(x=>({uid:x.uid,s:byId[x.socio_id],creado:x.creado})).filter(x=>x.s&&x.s.aprobado!==false); await cargarProfes()}
   if(S.user){const s=DB.socios[S.user.dni]; if(s){S.name=s.name; if(s.photo!==undefined) S.photo=s.photo}}
-  if(x42pp) await x42pp; ultimaCargaCompleta=Date.now();
+  if(x42pp) await x42pp; ultimaCargaCompleta=Date.now();enviarMarcas();
 }
 function errTxt(e){const m=String(e&&e.message||e); return /fetch|network|Failed/i.test(m)?'Sin conexión. Revisá internet y probá de nuevo.':m}
 /* guarda solo lo que cambió (lo que la seguridad de la base permite a cada uno) */
@@ -5271,6 +5314,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.59',t:'Feriados y asistencia',items:[['📅','En Info del gimnasio podés cargar feriados y cierres.'],['📱','Aprobá cada celular por separado.']]},
   {v:'1.1.58',t:'Celulares y solicitudes de pago',items:[['📱','Los celulares nuevos quedan pendientes de aprobación.'],['✓','Cada decisión de pago guarda quién la tomó y cuándo.']]},
   {v:'1.1.57',t:'Menú lateral a medida',items:[['📐','En el panel el menú de la izquierda entra entero en la pantalla, sin tener que bajar.']]},
   {v:'1.1.56',t:'Más prolijo y más deslizable',items:[['🖱️','En la computadora las barras para bajar son finitas y del color de la app; en el panel solo queda la de la derecha.'],['👆','En el celu podés deslizar con el dedo para pasar de pestaña: Comentarios / Reacciones / Vistas en las historias, Entrenar / Progresos, Cronómetro / Temporizador y las demás.']]},
@@ -5601,7 +5645,10 @@ function tcbCargar(){ const dni=S.user&&S.user.dni; if(!dni||TCB.dni===dni) retu
     TCB.sesT0=Date.now()-(+r.ses||0)<10*3600e3?+r.ses||0:0; TCB.drafts=r.drafts||{}; TCB.scroll=+r.scroll||0;
     if(TCB.boot&&r.tab==='rutina'&&Date.now()-(+r.ts||0)<6*3600e3){ S.tab='rutina'; S.lastTab='rutina'; TCB.scrollPend=TCB.scroll>0 } }
   else S.day=0;
-  if(r&&r.fecha!==iso(TODAY)&&r.semana===rdSemana()){ (r.done||[]).forEach(k=>S.done.add(k)); S.day=+r.day||0 }
+  if(r&&r.fecha!==iso(TODAY)){
+    if(r.semana===rdSemana()){(r.done||[]).forEach(k=>S.done.add(k)); S.ser=r.ser||{}; S.day=+r.day||0}
+    if(r.ses&&Date.now()-r.ses<10*3600e3)TCB.sesT0=r.ses;
+  }
   S.rdVisto=null; TCB.boot=false }
 function tcbGuardar(force){ const dni=S.user&&S.user.dni; if(!dni||TCB.dni!==dni) return;
   const c={sw:S.sw,rest:S.rest,tmode:S.tmode}, r={fecha:iso(TODAY),semana:rdSemana(),day:S.day,done:[...S.done],ser:S.ser||{},rsub:S.rsub||'ent',ex:S.tcbEx||null,otro:!!S.tcbOtro,ses:TCB.sesT0||0,drafts:TCB.drafts,scroll:TCB.scroll,tab:S.tab};
@@ -5678,10 +5725,10 @@ function tcbGuardarMarca(){ const s=me(); if(!s) return; s.prog=s.prog||{};
   if(!(reps>=1&&reps<=50)){ toast('Las reps van de 1 a 50'); return $('#tcbreps').focus() }
   if(!TCB_BORG[S.tcbBorg]){ toast('Marcá cómo te costó: liviano, exigente o muy exigente'); const g=document.querySelector('.tcb-borg'); if(g){ g.classList.remove('tcb-pide'); void g.offsetWidth; g.classList.add('tcb-pide') } return }
   const k=tcbKey(s,n)||n.charAt(0).toUpperCase()+n.slice(1), st=tcbStats(s.prog[k]);
-  const rec={id:Date.now().toString(36),fecha:iso(TODAY),kg:Math.round(kg*100)/100,reps,series:null,borg:S.tcbBorg,hora:new Date().toISOString()}; (s.prog[k]=s.prog[k]||[]).push(rec); S.tcbBorg=null; saveDB();
+  const rec={id:crypto.randomUUID(),fecha:iso(TODAY),kg:Math.round(kg*100)/100,reps,series:null,borg:S.tcbBorg,hora:new Date().toISOString()}; if(!guardarMarcaLocal(s,k,rec))return; S.tcbBorg=null;
   const v=tcbRM(rec); S.tcbEx=k; S.tcbOtro=false; delete TCB.drafts.tcbkg; delete TCB.drafts.tcbreps; delete TCB.drafts.tcbotro;
   if(st&&v>st.pr.v){ S.tcbCele={ex:k,v,dif:v-st.pr.v}; try{navigator.vibrate&&navigator.vibrate([30,60,30,60,140])}catch(e){} }
-  else toast(st?'Marca guardada · tu PR sigue en '+fmtKg(st.pr.v)+' kg':'¡Primera marca de '+k+'! Desde acá medimos tu progreso');
+  else if(!CLOUD)toast(st?'Marca guardada · tu PR sigue en '+fmtKg(st.pr.v)+' kg':'¡Primera marca de '+k+'! Desde acá medimos tu progreso');
   if(document.activeElement) document.activeElement.blur(); render(); tcbGuardar() }
 const tcbDraftKey=i=>{ if(i.dataset&&i.dataset.rt){ const f=i.closest('.runf'); return f?'run:'+f.dataset.runf+':'+[...f.querySelectorAll('[data-rt]')].indexOf(i):null } return /^tcb(kg|reps|otro)$/.test(i.id)?i.id:null };
 
@@ -5913,7 +5960,7 @@ async function c2Aprobar(dni,ok){ const s=DB.socios[dni]; if(!s||s.aprobado!==fa
     if(ok){ s.aprobado=true; if(CLOUD&&SNAP&&SNAP.socios&&SNAP.socios[s.id]) SNAP.socios[s.id].aprobado=true }
     else { delete DB.socios[dni]; if(CLOUD&&SNAP&&SNAP.socios) delete SNAP.socios[s.id] }
     if(!CLOUD) saveDB();
-    toast(ok?'✓ '+s.name.split(' ')[0]+' ya puede usar la app':'Listo, se rechazó el registro de '+s.name.split(' ')[0]);
+    if(ok&&CLOUD)reload(true);toast(ok?(CLOUD?'Ficha aprobada. Elegí el celular que querés habilitar.':'Ficha aprobada'):'Listo, se rechazó el registro de '+s.name.split(' ')[0]);
     render(true);
     if(ok){ const r=document.querySelector('#app tr.rowlink[data-open="'+dni+'"]'); if(r&&!reduceMotion){ r.classList.add('c2flash'); r.scrollIntoView({block:'nearest',behavior:'smooth'}) } }
     if(CLOUD) reload(true) };
@@ -6051,6 +6098,18 @@ setInterval(()=>{ if(document.visibilityState==='visible') c2Revisar(false) },20
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') c2Revisar(false) });
 window.addEventListener('focus',()=>c2Revisar(false));
 /* ---------- v40: días completos de la semana, tiempos de entrenamiento y atajos ---------- */
+function actualizarDia(ahora=new Date()){
+ if(iso(ahora)===iso(TODAY))return;
+ const semana=rdSemana(), anteriorY=Y, anteriorM=M;
+ TODAY.setTime(ahora.getTime());TODAY.setHours(0,0,0,0);Y=TODAY.getFullYear();M=TODAY.getMonth();D=TODAY.getDate();
+ if(semana!==rdSemana()){S.done=new Set();S.ser={};S.rdVisto=null;S.day=0}
+ if(S.calY===anteriorY&&S.calM===anteriorM){S.calY=Y;S.calM=M}
+ S.rkC={};S.mrkSig=null;S.justIn=null;S.justOut=null;
+ if(S.user)tcbGuardar();render(true);
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){actualizarDia();enviarMarcas()}});
+window.addEventListener('pageshow',()=>actualizarDia());
+setInterval(()=>{if(!document.hidden)actualizarDia()},15000);
 function rdSemana(){ const l=new Date(TODAY); l.setDate(TODAY.getDate()-((TODAY.getDay()+6)%7)); return iso(l) }
 function rdHecho(R,i){ const d=R&&R[i]; if(!d||!d.ex||!d.ex.length) return false; for(let j=0;j<d.ex.length;j++) if(!S.done.has(i+'-'+j)) return false; return true }
 function rsLista(){ const dni=S.user&&S.user.dni; return dni?(tcbLS('tc-ses-'+dni)||[]):[] }
@@ -6275,23 +6334,24 @@ document.addEventListener('input',e=>{const t=e.target; if(!t||!t.matches||!t.ma
   if(reduceMotion) a.firstElementChild.innerHTML=drawSkel(ANIM[k],1);
   else{a.classList.remove('z42pop'); void a.offsetWidth; a.classList.add('z42pop')}});
 /* v42y: la info del gimnasio (y sus servicios) se guarda con el «Guardar todo» general del panel */
-function y42GymDirty(){ if(!puedeP('gyminfo')) return false; const g=gymInfo(), d=S.gymDraft||{};
+function y42GymDirty(){ if(!puedeP('gyminfo')) return false; const g=gymInfo(), d=S.gymDraft||{};if(S.cierresDraft&&JSON.stringify(S.cierresDraft)!==JSON.stringify(g.cierres||[]))return true;
   if(Object.keys(d).some(k=>gTxt(d[k])!==gTxt(g[k]))) return true;
   if(!S.svDraft) return false;
   const nrm=L=>JSON.stringify(L.map(x=>({n:gTxt(x.n).slice(0,60),d:gTxt(x.d).slice(0,200),dias:x.dias.slice().sort((a,b)=>a-b)})).filter(x=>x.n));
   return nrm(S.svDraft)!==nrm(svLista()) }
-function y42GymSave(){ if(!y42GymDirty()) return true;
+async function y42GymSave(){ if(!y42GymDirty()) return true;
   const g=Object.assign({},gymInfo(),S.gymDraft||{}), v={};
-  GYM_CAMPOS.forEach(k=>{v[k]=gTxt(g[k])||null}); v.servicios=svParaGuardar();
+  GYM_CAMPOS.forEach(k=>{v[k]=gTxt(g[k])||null}); v.servicios=svParaGuardar(); if(S.cierresDraft)v.cierres=S.cierresDraft.slice();
   const bad=(t,id)=>{ toast(t); const el=document.getElementById(id); if(el){ el.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'}); el.focus({preventScroll:true}) } return false };
   if(v.whatsapp&&!waLink(v.whatsapp)) return bad('Revisá el WhatsApp: poné el número con característica','g_whatsapp');
   if(v.instagram&&!igLink(v.instagram)) return bad('Revisá el Instagram: poné el usuario, por ejemplo @trainingclub','g_instagram');
   if(v.instagram) v.instagram='@'+igUser(v.instagram);
   if(v.maps_url&&!/^https:\/\//i.test(mapsLink({maps_url:v.maps_url}))) return bad('Ese link de Maps no sirve: copialo desde «Compartir» en Google Maps','g_maps_url');
   const r=Object.assign({id:1},v,{updated_at:new Date().toISOString()}), antes={g:S.gymDraft,s:S.svDraft,G:gymInfo()};
-  if(CLOUD){ GYM=Object.assign({},GYM||{},r);
-    q(sb.from('gym_info').upsert(r)).catch(e=>{ GYM=antes.G; S.gymDraft=antes.g; S.svDraft=antes.s; toast('No se pudo guardar la info del gimnasio: '+errTxt(e)); render(true) }) }
-  else { DB.gym=Object.assign({},DB.gym||{},r); saveDB() }
+  if(CLOUD){try{let consulta=sb.from('gym_info').update(r).eq('id',1);if(v.cierres)consulta=consulta.eq('cierres','{'+(S.cierresBase||[]).join(',')+'}');const fila=await q(consulta.select('*').maybeSingle());if(!fila){await cargarGym();S.cierresDraft=null;render(true);throw Error('Las fechas cambiaron. Revisá el calendario actualizado.')}GYM=fila}
+    catch(e){toast('No se pudo guardar: '+errTxt(e));return false}}
+  else {DB.gym=Object.assign({},DB.gym||{},r);saveDB()}
+  S.cierresDraft=null;S.rkC={};S.mrkSig=null;if(CLOUD)reload(true);
   const gb=$('#gsbar'), era=!!(gb&&gb.classList.contains('on'));
   S.gymDraft=null; S.svDraft=null; toast('Listo: los socios ya ven la info nueva');
   if(gb&&era&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; gb.classList.add('ok'); document.body.classList.remove('gson');
@@ -6787,7 +6847,7 @@ async function hsCamara(){
 const HRS_P=[['dia','Hoy'],['semana','7 días'],['mes','Este mes']];
 function hrsDatos(p){const hoy=TODAY,desde=new Date(hoy);if(p==='semana')desde.setDate(hoy.getDate()-6);else if(p==='mes')desde.setDate(1);
   const c=Array(24).fill(0);let n=0,dias=0;const vistos=new Set();
-  for(const s of Object.values(DB.socios)){if(s.aprobado===false)continue;for(const [f,t] of Object.entries(s.attH||{})){const dd=new Date(f+'T00:00');if(dd<desde||dd>hoy)continue;
+  for(const s of Object.values(DB.socios)){if(s.aprobado===false)continue;for(const [f,t] of Object.entries(s.attH||{})){const dd=new Date(f+'T00:00');if(dd<desde||dd>hoy||cerrado(dd))continue;
     const h=new Date(t).getHours();if(isNaN(h))continue;c[h]++;n++;vistos.add(f)}}
   return {c,n,dias:vistos.size}}
 function hrsCuerpo(p){const {c,n}=hrsDatos(p);let a=6,b=22;c.forEach((v,h)=>{if(v){a=Math.min(a,h);b=Math.max(b,h)}});
@@ -7175,9 +7235,22 @@ function screenGimnasio(){
 /* nube: se baja junto con el resto (loadAll) y si cambió se refresca la pantalla sin saltos */
 async function cargarGym(){ if(!CLOUD||!sb) return;
   try{ const {data,error}=await sb.from('gym_info').select('*').eq('id',1).maybeSingle(); if(error) return;
-    const n=data||{}, antes=JSON.stringify(GYM); GYM=n;
+    const n=data||{}, antes=JSON.stringify(GYM); if(JSON.stringify(n.cierres)!==JSON.stringify(GYM?.cierres)){S.rkC={};S.mrkSig=null} GYM=n;
     if(antes!==JSON.stringify(n)&&S.ready){ const a=document.activeElement; if(!a||!/INPUT|SELECT|TEXTAREA/.test(a.tagName)) render(true) } }catch(e){} }
 /* panel: editor de la info del gimnasio (en la sección Profes) */
+function cierresEditor(){
+ const fechas=S.cierresDraft||gymInfo().cierres||[];
+ return `<fieldset class="field"><legend>Feriados y cierres</legend><small>Las fechas cerradas quedan fuera de las asistencias y del ranking. Si reabrís una fecha, vuelven a contar sus entradas anteriores.</small><label>Fecha de cierre<input type="date" class="inp" id="fecha-cierre"></label><button type="button" class="mini" data-cierre-add>Agregar fecha</button><div>${fechas.map(f=>`<button type="button" class="mini" data-cierre-quitar="${esc(f)}" aria-label="Reabrir ${esc(f)}">${esc(f.split('-').reverse().join('/'))} ×</button>`).join(' ')}</div></fieldset>`;
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-cierre-add],[data-cierre-quitar]');if(!b||!puedeP('gyminfo'))return;
+ const fechas=S.cierresDraft||gymInfo().cierres||[], f=b.dataset.cierreQuitar||$('#fecha-cierre').value;
+ if(!f)return $('#fecha-cierre').focus();
+ if(!b.dataset.cierreQuitar&&[0,6].includes(new Date(f+'T12:00').getDay()))return toast('Los fines de semana ya están cerrados');
+ if(!S.cierresDraft)S.cierresBase=(gymInfo().cierres||[]).slice();
+ S.cierresDraft=b.dataset.cierreQuitar?fechas.filter(x=>x!==f):[...new Set([...fechas,f])].sort();
+ b.closest('fieldset').outerHTML=cierresEditor();gsUpd();
+});
 function gymEditorHtml(){ const g=Object.assign({},gymInfo(),S.gymDraft||{}), v=k=>esc(g[k]==null?'':g[k]);
   const F=[['direccion','Dirección','Ej: Calle 15 N° 1234, ciudad','text',200],['maps_url','Link de Google Maps <span class="opc">opcional</span>','Pegá el link de «Compartir» en Maps','url',500],
     ['instagram','Instagram','@usuario o link del perfil','text',100],['whatsapp','WhatsApp','Con característica, sin 0 ni 15: 2302 123456','tel',30],
@@ -7185,7 +7258,7 @@ function gymEditorHtml(){ const g=Object.assign({},gymInfo(),S.gymDraft||{}), v=
   return `<section class="panel" id="gyminfo"><div class="panelhead"><h2>Info del gimnasio</h2><span class="muted">La ven los socios en la sección Gimnasio</span></div>
   <form class="gymf" id="gymf" novalidate><div class="gymgrid">${F.map(([k,l,ph,t,mx])=>`<div class="field"><label for="g_${k}">${l}</label><input class="inp" id="g_${k}" name="${k}" type="${t}" maxlength="${mx}" placeholder="${esc(ph)}" value="${v(k)}" autocomplete="off"></div>`).join('')}</div>
     <div class="field"><label for="g_profe_bio">Sobre el profe</label><textarea class="inp" id="g_profe_bio" name="profe_bio" maxlength="300" placeholder="${esc(PROFE_BIO)}">${v('profe_bio')}</textarea><small class="hint" style="max-width:none">Si lo dejás vacío se muestra: ${esc(PROFE_BIO)}.</small></div>
-    ${svEditorHtml()}
+    ${svEditorHtml()}${cierresEditor()}
     <div class="gymacts"><small class="hint" style="margin:0;max-width:none;flex:1;min-width:200px">Lo que dejes vacío no se muestra. Los horarios y los alias de pago ya aparecen solos. Los cambios se guardan con «Guardar todo».</small></div></form></section>`}
 async function guardarGym(){ const f=$('#gymf'); if(!f) return; const v={};
   GYM_CAMPOS.forEach(k=>{const el=f.elements[k]; v[k]=gTxt(el&&el.value)||null});
@@ -7258,7 +7331,7 @@ document.addEventListener('click',e=>{
   if(b.id==='quitar'){S.photo=null;savePerfil();toast('Foto quitada');return render()}
   if(b.id==='logout'){if(CLOUD) desactivarPush(); S.ldni=S.user&&S.user.dni; S.lmode=null; try{localStorage.removeItem('tc-sesion')}catch(e){} S.pendiente=false; if(CLOUD) DB={socios:{}}; S.user=null;S.tab='inicio';S.lastTab=null;return render()}
   if(b.id==='checkin'){const s=me();
-    if(cerrado(TODAY)) return toast('Sábados y domingos el gimnasio está cerrado');
+    if(cerrado(TODAY)) return toast('Hoy el gimnasio está cerrado');
     if(estado(s).c==='bad') return toast('Entrada bloqueada: la cuota está vencida');
     const a=s.att[mk(Y,M)]=s.att[mk(Y,M)]||[]; if(a.includes(D)) return toast('Ya registraste tu entrada de hoy');
     a.push(D); (s.attH=s.attH||{})[iso(TODAY)]=new Date().toISOString(); saveDB(); S.justIn=iso(TODAY); S.rkC={}; S.mrkSig=null; try{navigator.vibrate&&navigator.vibrate([18,40,28])}catch(x){} toast('Entrada registrada. ¡A entrenar!'); return render(true);}
@@ -7271,8 +7344,11 @@ document.addEventListener('click',e=>{
     const a=S.done.has(k)?Array(n).fill(true):Array.from({length:n},(_,i)=>!!(S.ser[k]||[])[i]);a[j]=!a[j];
     if(a.every(Boolean)){S.done.add(k);delete S.ser[k];try{navigator.vibrate&&navigator.vibrate([18,40,28])}catch(x){}}
     else{S.done.delete(k);if(a.some(Boolean))S.ser[k]=a;else delete S.ser[k];try{navigator.vibrate&&navigator.vibrate(12)}catch(x){}}
+    if(a[j]&&!a.every(Boolean)){const [dia,indice]=k.split('-').map(Number), espera=restSecs(me()?.rutina?.[dia]?.ex?.[indice]?.[3]||'');
+      if(espera>0){const ms=espera*1000;S.rest={run:true,end:Date.now()+ms,left:ms,total:ms};S.tmode='rest';S.relojGrande=false}}
     S.serJust=k+':'+j;setTimeout(()=>{S.serJust=null},500);return render()}
   if(b.dataset.ex){if(S.ser)delete S.ser[b.dataset.ex];S.done.has(b.dataset.ex)?S.done.delete(b.dataset.ex):S.done.add(b.dataset.ex);return render()}
+  if(b.hasAttribute('data-reloj-mas')){S.relojGrande=!S.relojGrande;return render(true)}
   if(b.dataset.tmode){S.tmode=b.dataset.tmode;return render()}
   if(b.id==='swgo'){const s=S.sw; if(s.run){s.acc+=Date.now()-s.t0;s.run=false}else{s.t0=Date.now();s.run=true} return render()}
   if(b.id==='swlap'){S.sw.laps.push(swNow());S.newLap=true;return render()}
@@ -7282,7 +7358,7 @@ document.addEventListener('click',e=>{
   if(b.id==='restplus'){const r=S.rest; if(r.run) r.end+=15000; else r.left+=15000; r.total=Math.max(r.total,restNow()); return render()}
   if(b.id==='restreset'){S.rest.run=false;S.rest.left=S.rest.total;return render()}
   if(b.dataset.rest){const ms=+b.dataset.rest*1000;S.rest={run:true,end:Date.now()+ms,left:ms,total:ms};S.tmode='rest';
-    S.forceTop=true;toast('Temporizador de '+fmtR(ms)+' en marcha');return render()}
+    S.relojGrande=false;toast('Temporizador de '+fmtR(ms)+' en marcha');return render()}
   if(b.id==='fin'){return render()}
   if(b.dataset.m){S.selMonth=+b.dataset.m;return render()}
   if(b.dataset.mrk!=null){ S.asView='rank'; S.rkP=S.mrkCara||'mes'; S.rkSig=null; S.tab='asist'; S.forceTop=true; return render() }
@@ -7354,7 +7430,7 @@ document.addEventListener('click',e=>{
       if(navigator.serviceWorker&&navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(r=>r.showNotification('Avisos activados',o)); else try{new Notification('Avisos activados',o)}catch(x){}
       lanzarAviso(); activarPush() } else toast('Sin permiso no podemos avisarte'); render() }); return }
   if(b.dataset.att){const s=DB.socios[S.sel];const k=mk(S.fc.y,S.fc.m);const a=s.att[k]=s.att[k]||[];const d=+b.dataset.att;const ix=a.indexOf(d);
-    const fx=iso(new Date(S.fc.y,S.fc.m,d)); s.attH=s.attH||{}; if(ix>=0){a.splice(ix,1);delete s.attH[fx]}else{a.push(d);a.sort((x,y)=>x-y);if(fx===iso(TODAY))s.attH[fx]=new Date().toISOString()} saveDB();return render()}
+    if(cerrado(new Date(S.fc.y,S.fc.m,d)))return toast('El gimnasio está cerrado ese día'); const fx=iso(new Date(S.fc.y,S.fc.m,d)); s.attH=s.attH||{}; if(ix>=0){a.splice(ix,1);delete s.attH[fx]}else{a.push(d);a.sort((x,y)=>x-y);if(fx===iso(TODAY))s.attH[fx]=new Date().toISOString()} saveDB();return render()}
   if(b.dataset.fcal){S.fc.m+=+b.dataset.fcal;if(S.fc.m<0){S.fc.m=11;S.fc.y--}if(S.fc.m>11){S.fc.m=0;S.fc.y++}return render()}
   if(b.dataset.pdel){const s=DB.socios[S.sel];const [n,id]=b.dataset.pdel.split('|');s.prog[n]=s.prog[n].filter(x=>x.id!==id);saveDB();return render()}
   if(b.dataset.pexdel){const s=DB.socios[S.sel];if(!confirm('¿Quitar '+b.dataset.pexdel+' y sus marcas?'))return;delete s.prog[b.dataset.pexdel];saveDB();return render()}
@@ -7555,7 +7631,7 @@ function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel){ if(!pdSave
   const b=$('#gsbar'); if(b&&b.classList.contains('on')&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; b.classList.add('ok'); document.body.classList.remove('gson');
     clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{b.classList.remove('ok'); gsUpd()},950) } else gsUpd();
   return true }
-function gsDescartar(){ S.gymDraft=null; S.svDraft=null; S.pd=null; S.famD=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
+function gsDescartar(){ S.cierresDraft=null; S.gymDraft=null; S.svDraft=null; S.pd=null; S.famD=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
 /* salir con cambios sin guardar: guardar y salir / salir sin guardar / seguir editando */
 function gsLeave(go){ if(!gsDirty()) return go();
   let m=$('#gsm');
@@ -7565,14 +7641,14 @@ function gsLeave(go){ if(!gsDirty()) return go();
   const s=DB.socios[S.sel]; $('#gsmp').textContent=S.sel?'En la ficha de '+(s?s.name:'este socio')+': '+gsLista(gsQue())+'.':S.ptabP==='profes'?'En la info del gimnasio (dirección, redes, sobre el profe o servicios).':'En las cuotas del gimnasio (precios, nombres, descripciones o los mensajes del plan familiar).';
   gsLeave.go=go; m.inert=false; m.classList.add('on'); setTimeout(()=>{const x=$('#gsmsave'); if(x) x.focus()},30) }
 function gsCerrar(){const m=$('#gsm'); if(m){m.classList.remove('on'); m.inert=true} gsLeave.go=null}
-document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('button');
+document.addEventListener('click',async e=>{ const b=e.target.closest&&e.target.closest('button');
   if(e.target.id==='gsm') return gsCerrar();
   if(!b) return;
   if(b.id==='gsgo'){ gsSave(); return }
   if(b.id==='gsdesc'){ if(!confirm('¿Descartar los cambios sin guardar?')) return; gsDescartar(); render(true); toast('Cambios descartados'); return }
   if(b.id==='gsmstay') return gsCerrar();
   if(b.id==='gsmsave'||b.id==='gsmdrop'){ const go=gsLeave.go; gsCerrar();
-    if(b.id==='gsmsave'){ if(!gsSave()) return } else gsDescartar();
+    if(b.id==='gsmsave'){ if(!await gsSave()) return } else gsDescartar();
     if(go) go(); else render() }
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&$('#gsm.on')) gsCerrar() });
