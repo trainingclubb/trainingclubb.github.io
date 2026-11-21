@@ -2035,6 +2035,7 @@ html:has(dialog.hsig[open]){overflow:hidden}
  .dashbar{left:12px;right:12px;transform:none;justify-content:flex-end;gap:6px;padding:8px}.dashbar>b,.dashbar [data-dashtar]>span{display:none}.dashtar{margin-right:auto}.dashbar .mini{padding:9px 11px}
  @keyframes dashUp{from{opacity:0;transform:translateY(24px)}}}
 @media (prefers-reduced-motion:reduce){.dash.dashed .dwt,.dashbar.in,.dashpop,.ui43-enter .dash>.dw{animation:none}}
+.marca-dialog{margin:auto;width:min(90vw,340px);border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);padding:20px}.marca-dialog::backdrop{background:#0007}.marca-dialog form,.marca-dialog label{display:grid;gap:8px}.marca-dialog form{gap:12px}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -3230,11 +3231,12 @@ function historiasFila(){
   else if(!historias.cargado)resto='<div class="hsit hsesq" aria-hidden="true"><span class="hsav"><i></i></span><small></small></div>'.repeat(2)+'<span class="hssr" role="status">Cargando historias…</span>';
   else resto=otros.map(g=>`<div class="hsit" role="listitem"><button class="hsbt" data-hs-ver="${esc(g.k)}" aria-label="Historia de ${esc(g.autor)}${g.visto?'':', sin ver'}">${hsAvatar(g,g.visto?'visto':'nuevo')}<small>${esc(g.autor)}</small></button></div>`).join('')
     +(otros.length?'':'<p class="hsvac">'+(hsPanel()?'Todavía no hay historias de los socios.':'Todavía no hay historias de otros socios. ¡Subí la primera!')+'</p>');
-  return `<div class="hsfila" role="list" aria-label="Historias de las últimas 24 horas">${tu}${resto}</div>`;
+  return `<div class="hsfila" role="list" aria-label="Historias de las últimas 24 horas">${tu}${historias.fallo&&!historias.subiendo?'<button class="linkb" data-hs-descartar>Descartar pendiente</button>':''}${resto}</div>`;
 }
 function hsActualizar(){const el=document.getElementById('historias');if(el)el.innerHTML=historiasFila()}
 async function hsCargar(force=false){
   const socio=hsYo();if(!socio||!CLOUD)return;
+  hsRestaurar();
   if(historias.socio!==socio)Object.assign(historias,{lista:[],socio,consulta:0,error:false,cargado:false});
   if(!force&&Date.now()-historias.consulta<30000)return;
   const consulta=historias.consulta=Date.now();
@@ -3494,12 +3496,36 @@ function hsVolar(cv,r){
     {duration:560,easing:'cubic-bezier(.6,0,.25,1)',fill:'forwards'}).finished.finally(()=>g.remove());
 }
 function hsPop(){const a=document.querySelector('#historias .hsit .hsav');if(a&&!hsQuieto())a.animate([{transform:'scale(1)'},{transform:'scale(1.18)'},{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:520,easing:'ease-out'})}
-async function hsPublicar(blob,ext,tipo){
+const hsCuenta=()=>hsYo()&&(hsPanel()?'profe:'+PRO.dni:'socio:'+hsYo());
+function hsBorrador(cuenta,accion,dato){
+  return new Promise((resolve,reject)=>{
+    const open=indexedDB.open('tc-historias-pendientes',1);
+    open.onupgradeneeded=()=>open.result.createObjectStore('archivos');
+    open.onerror=()=>reject(open.error);
+    open.onsuccess=()=>{const db=open.result, tx=db.transaction('archivos',accion==='get'?'readonly':'readwrite'), store=tx.objectStore('archivos');
+      const req=accion==='add'?store.add(dato,cuenta):accion==='get'?store.get(cuenta):store.delete(cuenta);
+      tx.oncomplete=()=>{db.close();resolve(req.result)};tx.onabort=()=>{db.close();reject(tx.error)}};
+  });
+}
+async function hsRestaurar(){
+  const cuenta=hsCuenta();if(!cuenta||historias.cuenta===cuenta)return;
+  historias.cuenta=cuenta;historias.fallo=null;
+  try{const f=await hsBorrador(cuenta,'get');if(hsCuenta()===cuenta&&!historias.subiendo){historias.fallo=f;hsActualizar()}}catch(e){}
+}
+async function hsPublicar(blob,ext,tipo,reintento=false){
   const socio=hsYo();if(!socio||historias.subiendo)return;
-  historias.subiendo=true;historias.fallo=null;hsActualizar();
-  try{await q(sb.storage.from('historias').upload(socio+'/'+crypto.randomUUID()+'.'+ext,blob,{contentType:tipo,cacheControl:'600',upsert:false}));
-    historias.subiendo=false;await hsCargar(true);hsPop();toast('Tu historia se publicó')}
-  catch(e){historias.subiendo=false;historias.fallo={blob,ext,tipo};hsActualizar();toast(errTxt(e)+' Tocá el círculo rojo para reintentar.')}
+  const cuenta=hsCuenta(), f=reintento?historias.fallo:{blob,ext,tipo,path:socio+'/'+crypto.randomUUID()+'.'+ext};
+  if(!f)return;
+  historias.subiendo=true;hsActualizar();
+  try{
+    if(!reintento) await hsBorrador(cuenta,'add',f);
+    if(hsCuenta()!==cuenta)return;
+    const {error}=await sb.storage.from('historias').upload(f.path,f.blob,{contentType:f.tipo,cacheControl:'600',upsert:false});
+    if(error&&!(reintento&&(error.statusCode==='409'||/already exists|duplicate/i.test(error.message))))throw error;
+    await hsBorrador(cuenta,'delete');
+    if(hsCuenta()===cuenta){historias.fallo=null;await hsCargar(true);hsPop();toast('Tu historia se publicó')}
+  }catch(e){if(hsCuenta()===cuenta){historias.fallo=await hsBorrador(cuenta,'get').catch(()=>null);toast(historias.fallo?'Historia pendiente. Podés reintentar o descartarla.':'No se pudo guardar la historia en este dispositivo.')}}
+  finally{historias.subiendo=false;hsActualizar()}
 }
 function hsVideo(file){
   const ext=historiaTipos[file.type];if(!ext||!file.size||file.size>50*1048576)return toast('El video tiene que ser MP4 o WebM de hasta 50 MB.');
@@ -3646,7 +3672,8 @@ function hsEditorAbrir(img){
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest?.('#historias button');if(!b||!CLOUD||!hsYo())return;
-  if(b.hasAttribute('data-hs-add'))hsCamara();else if(b.hasAttribute('data-hs-reint')){const f=historias.fallo;if(f)hsPublicar(f.blob,f.ext,f.tipo)}else if(b.hasAttribute('data-hs-retry'))hsCargar(true);else if(b.dataset.hsVer)hsVer(b.dataset.hsVer,b);
+  if(b.hasAttribute('data-hs-descartar')){const c=hsCuenta();hsBorrador(c,'delete').then(()=>{if(hsCuenta()===c){historias.fallo=null;hsActualizar()}}).catch(()=>toast('No se pudo descartar'))}
+  else if(b.hasAttribute('data-hs-add')){if(historias.fallo)return toast('Reintentá o descartá tu historia pendiente');hsCamara()}else if(b.hasAttribute('data-hs-reint')){const f=historias.fallo;if(f)hsPublicar(f.blob,f.ext,f.tipo,true)}else if(b.hasAttribute('data-hs-retry'))hsCargar(true);else if(b.dataset.hsVer)hsVer(b.dataset.hsVer,b);
 });
 
 function screenInicio(){
@@ -3844,6 +3871,27 @@ const serN=e=>{const m=/^\s*(\d{1,2})\s*[x×*]/i.exec(String(Array.isArray(e)&&e
 function serHtml(e,k,on){const n=serN(e);if(!n)return '';const a=on?Array(n).fill(true):((S.ser||{})[k]||[]),h=Array.from({length:n},(_,j)=>!!a[j]).filter(Boolean).length;
   return `<div class="sers" role="group" aria-label="Series de ${esc(e[0])}: ${h} de ${n}">${Array.from({length:n},(_,j)=>{const x=!!a[j];
     return `<button type="button" class="ser ${x?'on':''} ${S.serJust===k+':'+j?'sjust':''}" data-ser="${k}" data-sj="${j}" data-sn="${n}" aria-pressed="${x}" aria-label="Serie ${j+1}">${j+1}</button>`}).join('')}</div>`}
+function marcaEnEjercicio(s,n){
+  const key=tcbKey(s,n)||n, records=s.prog?.[key]||[];
+  const last=tcbStats(records)?.l.slice(-1)[0];
+  return `<button type="button" class="restbtn" data-anotar-marca="${esc(n)}">${last?'Última: '+fmtKg(last.kg)+' kg × '+(last.reps||1)+' · Anotar':'Anotar marca'}</button>`;
+}
+document.addEventListener('click',ev=>{
+  const boton=ev.target.closest('[data-anotar-marca]'); if(!boton)return;
+  ev.preventDefault(); ev.stopImmediatePropagation();
+  const s=me(), n=boton.dataset.anotarMarca, key=tcbKey(s,n)||n, last=tcbStats(s.prog?.[key])?.l.slice(-1)[0];
+  const dialog=document.createElement('dialog'); dialog.className='marca-dialog';
+  dialog.innerHTML=`<form><h3>${esc(n)}</h3>${last?'<p>Última marca · '+ddmm(last.fecha)+'</p>':''}
+    <label>Kilos<input class="inp" name="kg" type="number" min=".01" max="1000" step=".01" required value="${last?.kg||''}"></label>
+    <label>Repeticiones<input class="inp" name="reps" type="number" min="1" max="50" required value="${last?.reps||1}"></label>
+    <label>Esfuerzo<select class="inp" name="borg" required><option value="">Elegí el esfuerzo de hoy</option>${Object.entries(TCB_BORG).map(([k,v])=>'<option value="'+esc(k)+'">'+esc(v)+'</option>').join('')}</select></label>
+    <button class="btn">Guardar marca</button><button type="button" class="linkb">Cancelar</button></form>`;
+  const f=dialog.querySelector('form');
+  f.onsubmit=e=>{e.preventDefault();e.stopPropagation();const actual=me();if(!actual||actual.dni!==s.dni)return dialog.close();
+    const fecha=new Date();actual.prog=actual.prog||{};(actual.prog[key]=actual.prog[key]||[]).push({id:fecha.getTime().toString(36),fecha:iso(fecha),kg:Number(f.elements.kg.value),reps:Number(f.elements.reps.value),series:null,borg:f.elements.borg.value,hora:fecha.toISOString()});
+    saveDB();dialog.close();render(true);toast('Marca guardada')};
+  dialog.querySelector('.linkb').onclick=()=>dialog.close();dialog.onclose=()=>dialog.remove();document.body.append(dialog);dialog.showModal();
+},true);
 function screenRutina(){
   const s=me(); const R=s.rutina;
   if(!R||!R.length) return `${timerCard()}
@@ -3858,7 +3906,7 @@ function screenRutina(){
   <div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k); const RN=runOf(e); if(RN) return runCard(RN,k,on);
     return `<div class="ex ${on?'done':''}">
       <div class="anim" data-anim="${esc(animKey(e[0]))}" aria-label="Animación: ${esc(e[0])}"><svg viewBox="0 0 100 100" role="img"></svg></div>
-      <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${exMeta(e)}</span>${serHtml(e,k,on)}
+      <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${exMeta(e)}</span>${serHtml(e,k,on)}${marcaEnEjercicio(s,e[0])}
         ${e[3]?`<button class="restbtn" data-rest="${restSecs(e[3])}">⏱ Descanso ${esc(e[3])}</button>`:''}</div>
       <button class="chk" data-ex="${k}" aria-pressed="${on}" aria-label="Marcar ${esc(e[0])} como hecho">✓</button></div>`}).join('')}</div>
   ${n&&d===n?`<div class="rdfin ${rdNuevo.has(S.day)?'rdnew':''}"><span class="rdfico" aria-hidden="true">🏁</span><div><b>¡${esc(r.d)} completo!</b><small>Queda en verde toda la semana. El lunes se reinicia para volver a marcarlo.</small></div></div>`:''}`;
@@ -4481,7 +4529,8 @@ const runAvg=a=>a.length?a.reduce((n,x)=>n+x,0)/a.length:null;
 const runSum=d=>d.tipo==='pasadas'?`prom ${tFmt(d.prom)} · ${(d.ts||[]).filter(x=>x!=null).length}/${d.n} pasadas`:`${tFmt(d.t)} · ${tFmt(d.ritmo)} /km`;
 function runAvgTxt(ts,R){const a=runAvg(ts); return a?`Promedio <b>${tFmt(a)}</b> por pasada · ritmo <b>${tFmt(a/(R.m/1000))}</b> /km${ts.length>1?` · mejor <b>${tFmt(Math.min(...ts))}</b>`:''}`:'Anotá el tiempo de cada pasada (ej: 1:35).'}
 function runFondoTxt(T,R,p){return T?`${nDec(R.km)} km en <b>${tFmt(T)}</b> · ritmo <b>${tFmt(p||T/R.km)}</b> /km · <b>${nDec(Math.round(R.km/(T/3600)*10)/10)}</b> km/h`:'Poné tu tiempo y el ritmo se calcula solo (lo podés corregir).'}
-function runCard(R,k,on){ const s=me(), P=R.run==='pasadas', hoyK=iso(TODAY), L=runHist(s,R.id), hoy=(L.find(([f])=>f===hoyK)||[])[1], prev=L.find(([f])=>f!==hoyK);
+function runCard(R,k,on){ const s=me(), P=R.run==='pasadas', hoyK=iso(TODAY), L=runHist(s,R.id), hoy=(L.find(([f])=>f===hoyK)||[])[1], prev=Object.values(s.runs||{}).flatMap(reg=>Object.entries(reg)).filter(([fecha,v])=>
+    fecha<hoyK && v.tipo===R.run && (P ? +v.m===+R.m && +v.n===+R.n : +v.km===+R.km)).sort((a,b)=>b[0].localeCompare(a[0]))[0];
   const pz=P?runPausa(R.desc):0;
   const form=P?`<div class="runps">${[...Array(R.n)].map((_,i)=>`<label style="--i:${i}"><span>${i+1}</span><input class="inp num" data-rt="v" inputmode="decimal" placeholder="1:30" value="${hoy&&hoy.ts&&hoy.ts[i]!=null?tFmt(hoy.ts[i]):''}" aria-label="Tiempo de la pasada ${i+1}"></label>`).join('')}</div>
       <p class="runavg" aria-live="polite">${runAvgTxt(hoy?(hoy.ts||[]).filter(x=>x):[],R)}</p>`
@@ -4826,12 +4875,21 @@ function renderPagos(){
         <div class="pago-datos"><b>${esc(socio.name)}</b><span>${esc(pago.fecha)} · ${esc(pago.medio)} · ${fmt(pago.monto)}</span></div>
         <button type="button" class="mini" data-pago-ficha="${esc(socio.dni)}">Abrir ficha</button></div>`).join(''):'<p>No hay pagos registrados en este mes.</p>'}</div>
     </section>
+    ${CLOUD?'<details class="panel pago-bloque" id="decisiones-pago"><summary>Últimas solicitudes resueltas</summary><div aria-live="polite"></div></details>':''}
     <section class="panel pago-bloque"><div class="panelhead"><h2>Registrar un pago manual</h2></div>
       <form id="pago-manual" class="pago-controles"><label>Socio<select name="socio" class="inp sm" required>
         <option value="">Elegí un socio</option>${socios.filter(x=>x.plan&&!esFam(x)&&x.aprobado!==false).map(x=>`<option value="${esc(x.dni)}">${esc(x.name)} · ${fmtDNI(x.dni)}</option>`).join('')}</select></label>
         <button class="mini" type="submit">Abrir pagos del socio</button></form>
     </section></div></div>`;
 }
+document.addEventListener('toggle',async e=>{
+  const box=e.target;if(box.id!=='decisiones-pago'||!box.open)return;
+  const salida=box.querySelector('div');salida.textContent='Cargando…';
+  try{const filas=await q(sb.from('pago_decisiones').select('socio_id,periodo,registrado,profesor,resuelto').order('resuelto',{ascending:false}).limit(30));
+    const nombres=Object.fromEntries(Object.values(DB.socios).map(s=>[s.id,s.name]));
+    salida.innerHTML=filas.map(r=>`<p><b>${esc(nombres[r.socio_id]||'Socio')} · ${panelPagoMes(r.periodo)}</b><br>${r.registrado?'Pago registrado':'No llegó'} · ${esc(r.profesor)} · ${esc(new Date(r.resuelto).toLocaleString('es-AR'))}</p>`).join('')||'Todavía no hay decisiones registradas.';
+  }catch(err){salida.textContent=errTxt(err)}
+},true);
 function panelPagoFicha(dni){
   if(!DB.socios[dni])return;
   S.ptabP='socios'; S.ui43View='socios'; S.sel=dni; S.edit=null; S.fd=null;
@@ -4856,12 +4914,8 @@ async function panelPagoResolver(form,rechazar){
   document.querySelectorAll('[data-pago-solicitud] fieldset').forEach(el=>el.disabled=true);
   try{
     if(CLOUD){
-      const actual=await q(sb.from('socios').select('avisos').eq('id',socio.id).single());
-      if(actual.avisos?.[periodo]?.fecha!==aviso.fecha||actual.avisos?.[periodo]?.medio!==aviso.medio){
-        throw Error('La solicitud cambió. Revisá el estado actualizado.');
-      }
-      if(rechazar) await q(sb.rpc('profe_aviso_quitar',{p_socio:socio.id,p_mes:periodo}));
-      else await q(sb.from('pagos').insert({socio_id:socio.id,periodo,...pago}));
+      await q(sb.rpc('resolver_solicitud_pago',{p_socio:socio.id,p_mes:periodo,p_aviso:aviso,
+        p_registrar:!rechazar,p_importe:rechazar?null:monto,p_fecha:rechazar?null:pago.fecha}));
     }else{
       delete socio.avisos[periodo];
       if(!rechazar){
@@ -5108,7 +5162,24 @@ function buildDB(rows){
   return db;
 }
 async function q(p){const {data,error}=await p; if(error) throw error; return data}
-let EDITS=0;
+let EDITS=0, ultimaCargaCompleta=0;
+const partesSocio={progreso:['prog','prog'],running_reg:['runs','runs'],sensaciones:['sens','sens'],asistencias:['asis','att'],medidas:['med','medidas'],pagos:['pagos','pagos']};
+async function refrescarParte(tabla){
+  const socio=me(), base=SNAP, edicion=EDITS, inicio=performance.now();
+  if(!socio?.id||!base||pend)return reload();
+  const [clave,campo]=partesSocio[tabla];
+  try{
+    const filas=await q(sb.from(tabla).select('*').eq('socio_id',socio.id));
+    if(socio!==me()||base!==SNAP||edicion!==EDITS||pend)return reload();
+    const grupos={socios:[{id:socio.id,dni:socio.dni}],pagos:[],asis:[],prog:[],[clave]:filas};
+    const parcial=buildDB(grupos).socios[socio.dni], antes=firma();
+    socio[campo]=parcial[campo];
+    if(clave==='asis')socio.attH=parcial.attH||{};
+    SNAP={...SNAP,[clave]:norm(DB)[clave]};
+    if(firma()!==antes){if(document.activeElement?.matches('input,select,textarea')||document.querySelector('dialog[open]'))atrasado=true;else render(true)}
+    if(window.performance?.measure)try{performance.clearMeasures('tc.sync.'+tabla);performance.measure('tc.sync.'+tabla,{start:inicio,end:performance.now()})}catch(e){}
+  }catch(e){reload()}
+}
 async function loadAll(){ const e0=EDITS; cargarGym(); cargarChat(); cargarNovedades(); const x42pp=x42CargarPub();
   const [so,pa,as,pr,me_,se,ru,pl]=await Promise.all([q(sb.from('socios').select('*')),q(sb.from('pagos').select('*')),q(sb.from('asistencias').select('*')),q(sb.from('progreso').select('*')),q(sb.from('medidas').select('*')),sb.from('sensaciones').select('*').then(r=>r.data||[]),sb.from('running_reg').select('*').then(r=>r.data||[]),sb.from('planes').select('*').order('orden').then(r=>r.error?null:r.data,()=>null)]);
   if(EDITS!==e0||pend){ reload(); return }   /* hubo un cambio mientras se bajaba: no pisarlo */
@@ -5116,7 +5187,7 @@ async function loadAll(){ const e0=EDITS; cargarGym(); cargarChat(); cargarNoved
   if(S.view==='duenio'&&S.pro){const d=await q(sb.from('dispositivos').select('uid,socio_id,aprobado,creado').eq('aprobado',false)); const byId={}; Object.values(DB.socios).forEach(s=>byId[s.id]=s);
     S.c2reg={}; d.forEach(x=>{S.c2reg[x.socio_id]=x.creado}); S.disp=d.map(x=>({uid:x.uid,s:byId[x.socio_id],creado:x.creado})).filter(x=>x.s&&x.s.aprobado!==false); await cargarProfes()}
   if(S.user){const s=DB.socios[S.user.dni]; if(s){S.name=s.name; if(s.photo!==undefined) S.photo=s.photo}}
-  if(x42pp) await x42pp;
+  if(x42pp) await x42pp; ultimaCargaCompleta=Date.now();
 }
 function errTxt(e){const m=String(e&&e.message||e); return /fetch|network|Failed/i.test(m)?'Sin conexión. Revisá internet y probá de nuevo.':m}
 /* guarda solo lo que cambió (lo que la seguridad de la base permite a cada uno) */
@@ -5203,17 +5274,19 @@ async function bootCloud(){
     /* el tiempo real tiene que ir con la sesión del usuario (si no, la base lo trata como anónimo y no le manda nada) */
     {const {data:{session:ss}}=await sb.auth.getSession(); if(ss) sb.realtime.setAuth(ss.access_token)}
     sb.auth.onAuthStateChange((_e,ss)=>{ if(ss) sb.realtime.setAuth(ss.access_token) });
+    let conectado=false;
     const onChange=async(pl)=>{
       if(pl&&pl.table&&S.view==='duenio'&&S.pro) pavEvento(pl);
       if(pl&&pl.table==='novedades') return cargarNovedades(true);
       if(pl&&(pl.table==='mensajes'||pl.table==='sugerencias')) return cargarChat();
       if(S.user&&S.pendiente){await checkDevice(); if(!S.pendiente){await loadAll(); toast('¡Ezequiel aprobó tu celular!'); activarPush()} return render()}
+      if(S.view==='socio'&&S.user&&!S.pendiente&&Object.hasOwnProperty.call(partesSocio,pl?.table))return refrescarParte(pl.table);
       if(S.user&&!S.pendiente||S.pro) reload();
     };
-    sb.channel('tc').on('postgres_changes',{event:'*',schema:'public'},onChange).subscribe();
+    sb.channel('tc').on('postgres_changes',{event:'*',schema:'public'},onChange).subscribe(estado=>{conectado=estado==='SUBSCRIBED'});
     /* respaldo: si el tiempo real se corta, igual se actualiza cada 30 s y al volver a la app */
-    setInterval(()=>{ if(document.visibilityState==='visible') onChange({}) },30000);
-    document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') onChange({}) });
+    setInterval(()=>{ if(document.visibilityState==='visible'&&(S.pendiente||Date.now()-ultimaCargaCompleta>(conectado?120000:25000))) onChange({}) },30000);
+    document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&(S.pendiente||!conectado||Date.now()-ultimaCargaCompleta>15000)) onChange({}) });
     S.ready=true; render(); lanzarAviso(); activarPush();
   }catch(e){
     cerrarIntro(); $('#app').innerHTML=`<div class="phone"><div class="screen"><div class="empty"><b>No se pudo conectar</b><p>${esc(errTxt(e))}</p><button class="btn" onclick="location.reload()">Reintentar</button></div></div></div>`;
@@ -5235,6 +5308,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.58',t:'Celulares y solicitudes de pago',items:[['📱','Los celulares nuevos quedan pendientes de aprobación.'],['✓','Cada decisión de pago guarda quién la tomó y cuándo.']]},
   {v:'1.1.57',t:'Menú lateral a medida',items:[['📐','En el panel el menú de la izquierda entra entero en la pantalla, sin tener que bajar.']]},
   {v:'1.1.56',t:'Más prolijo y más deslizable',items:[['🖱️','En la computadora las barras para bajar son finitas y del color de la app; en el panel solo queda la de la derecha.'],['👆','En el celu podés deslizar con el dedo para pasar de pestaña: Comentarios / Reacciones / Vistas en las historias, Entrenar / Progresos, Cronómetro / Temporizador y las demás.']]},
   {v:'1.1.55',t:'Chat más prolijo',items:[['⌨️','Al abrir el teclado la cajita para escribir queda pegada arriba del teclado, sin espacio de más y sin saltos al abrirlo o cerrarlo.'],['🖼️','En las fotos y videos la hora y los tildes van abajo, en el borde de la burbuja.'],['🙂','Las fotos de perfil del chat siempre se ven redondas.'],['🎨','Volvió el fondo de pantalla de siempre del chat.']]},
@@ -5595,7 +5669,7 @@ const tcbKey=(s,n)=>Object.keys(s.prog||{}).find(x=>x.toLowerCase()===String(n).
 function tcbEjercicios(s){ const out=[], has=n=>out.some(x=>x.toLowerCase()===n.toLowerCase());
   (s.rutina||[]).forEach(d=>(d.ex||[]).forEach(e=>{ if(Array.isArray(e)&&!runOf(e)&&e[0]){ const n=tcbKey(s,e[0])||String(e[0]).trim(); if(!has(n)) out.push(n) } }));
   Object.keys(s.prog||{}).forEach(n=>{ if(!has(n)) out.push(n) }); return out }
-function tcbStats(L){ const l=(L||[]).filter(x=>+x.kg>0).slice().sort((a,b)=>byF(a,b)||String(a.id).localeCompare(String(b.id))); if(!l.length) return null;
+function tcbStats(L){ const l=(L||[]).filter(x=>+x.kg>0).slice().sort((a,b)=>byF(a,b)||String(a.hora||'').localeCompare(String(b.hora||''))||String(a.id).localeCompare(String(b.id))); if(!l.length) return null;
   let pr=null; l.forEach(x=>{const v=tcbRM(x); if(!pr||v>pr.v||(v===pr.v&&(+x.reps||1)>(+pr.x.reps||1))) pr={v,x}}); return {l,pr,first:l[0],firstV:tcbRM(l[0]),est:false} }
 function tcbExSel(){ const s=me(); const i=document.getElementById('tcbotro'), n=(i?i.value:TCB.drafts.tcbotro||'').trim(); return n?(tcbKey(s,n)||n):null }
 function tcbCard(ex,st,cele){
@@ -5989,7 +6063,7 @@ document.addEventListener('keydown',e=>{ if(S.c2cd&&e.key==='Escape'&&document.g
 /* app del socio: cuenta esperando aprobación */
 function c2EsPend(){ return S.view==='socio'&&!!S.user&&(!!S.pendiente||(!CLOUD&&!!me()&&me().aprobado===false)) }
 async function c2PendAntes(dni,name){ let p=!!S.c2pendNext; S.c2pendNext=false;
-  if(!p&&CLOUD){ const u=S.user; try{ S.user={dni,name}; await checkDevice(); p=!!S.pendiente }catch(e){} S.user=u }
+  if(!p&&CLOUD){ const u=S.user; try{ S.user={dni,name}; await checkDevice(); p=!S.user||!!S.pendiente }catch(e){S.user=u;throw e} S.user=u }
   if(!p&&!CLOUD){ const s=DB.socios[dni]; p=!!s&&s.aprobado===false }
   if(!p) return false;
   S.user={dni,name}; S.name=name; S.pendiente=true; S.tab='inicio'; S.lastTab=null; S.lmode=null; S.ldni=null;
@@ -6994,10 +7068,10 @@ const chBurbujas=(L,yo)=>{ let out='', dia=null;
   return out };
 const ICO_SEND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
 async function cargarChat(){ if(!CLOUD||!sb) return;
-  try{ const r=await sb.from('mensajes').select('*').order('id').limit(3000); if(r.error) return;
+  try{ const r=await sb.from('mensajes').select('*').order('id',{ascending:false}).limit(3000); if(r.error) return;
     let sg=SUGS; if(S.pro&&esAdmin()){ const q=await sb.from('sugerencias').select('*').order('id',{ascending:false}).limit(300); if(!q.error) sg=q.data.map(x=>({id:x.id,texto:x.texto,creado:x.creado,leida:x.leida})) }
     const viejos=new Set(MSGS.map(m=>m.id)), antes=JSON.stringify([MSGS,SUGS]);
-    MSGS=r.data.map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,media:m.media||null,creado:m.creado,leido:m.leido,editado:m.editado||null,borrado:m.borrado||null,nuevo:viejos.size&&!viejos.has(m.id)}));
+    MSGS=r.data.reverse().map(m=>({id:m.id,k:m.socio_id,de:m.de,autor:m.autor,texto:m.texto,media:m.media||null,creado:m.creado,leido:m.leido,editado:m.editado||null,borrado:m.borrado||null,nuevo:viejos.size&&!viejos.has(m.id)}));
     SUGS=sg; if(antes!==JSON.stringify([MSGS,SUGS])) chRefrescar(true) }catch(e){} }
 function chRefrescar(dePush){
   const yoSocio=S.view==='socio'&&S.user, enChat=yoSocio&&(S.tab==='chat'||(S.tab==='inicio'&&S.chSheet)), enPanel=S.view==='duenio'&&S.pro&&S.ptabP==='mensajes';
