@@ -1792,7 +1792,7 @@ html[data-theme="light"] .forge-signature[width="96"]{content:url(data:image/web
 .hsig .hsbox{aspect-ratio:9/16;height:auto;width:min(100vw,calc(100vh*9/16));width:min(100vw,calc(100dvh*9/16))}
 @media (min-width:700px){.hsig .hsbox{height:auto;width:min(100vw,calc((100vh - 32px)*9/16),495px);width:min(100vw,calc((100dvh - 32px)*9/16),495px)}}
 .hsig .hsmedia img{object-fit:cover}
-.hspie{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:30px 12px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.hspie{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:30px 12px calc(12px + env(safe-area-inset-bottom,0px));background:none}
 .hsreac{display:grid;gap:8px}
 .hsemos{display:flex;justify-content:space-between;gap:2px}
 .hsemos button{flex:1;min-width:0;height:42px;border:0;border-radius:999px;background:rgba(255,255,255,.12);font-size:21px;line-height:1;cursor:pointer;transition:background .2s,transform .15s}
@@ -1823,7 +1823,7 @@ html[data-theme="light"] .forge-signature[width="96"]{content:url(data:image/web
 .fczoom{display:flex;align-items:center;gap:10px;width:100%;color:var(--muted);font-weight:800;font-size:18px}
 .fczoom input{flex:1;accent-color:var(--teal)}
 .fcac{display:flex;gap:10px;width:100%}.fcac .btn{flex:1}
-.hshoja{position:absolute;left:0;right:0;bottom:0;top:28%;z-index:4;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent,rgba(0,0,0,.35))}
+.hshoja{position:absolute;left:0;right:0;bottom:var(--hskb,0px);top:28%;z-index:4;display:flex;flex-direction:column;justify-content:flex-end;background:none}
 .hshoja[hidden]{display:none}
 .hshojab{background:#161616;color:#fff;border-radius:18px 18px 0 0;max-height:100%;display:flex;flex-direction:column;animation:hssube .25s ease}
 .hsig .hshojab header{position:static;top:auto;z-index:auto;opacity:1;display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid #ffffff1a}
@@ -1848,6 +1848,13 @@ html[data-theme="light"] .forge-signature[width="96"]{content:url(data:image/web
 .hsmio .hscic{height:auto;background:rgba(0,0,0,.45);border-radius:999px;padding:0 14px}
 .hshoja[data-modo="com"]{top:16%}
 .hscoms{height:100%}
+.hstabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:10px 16px 2px;padding:4px;border-radius:14px;background:#ffffff14;flex:none}
+.hstabs.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hsig .hstabs button{position:static;display:flex;align-items:center;justify-content:center;gap:5px;width:auto;height:34px;padding:0 4px;border:0;border-radius:10px;background:none;color:#ffffffa6;font-family:inherit;font-weight:600;font-size:13.5px;line-height:1;white-space:nowrap;cursor:pointer;transition:background .2s,color .2s}
+.hsig .hstabs button b{font-weight:800;font-size:12px;opacity:.75}
+.hsig .hstabs button[aria-selected="true"]{background:#fff;color:#111}
+.hsig .hstabs button[aria-selected="true"] b{opacity:.6}
+.hshoja[data-tab="v"] .hscl li:not([data-g="v"]),.hshoja[data-tab="r"] .hscl li:not([data-g="r"]),.hshoja[data-tab="c"] .hscl li:not([data-g="c"]){display:none}
 .hsig .hshojab .hscl{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 16px 10px}
 .hsig .hshojab .hscl li{align-items:flex-start;gap:12px;padding:10px 0}
 .hsig .hshojab .hscl li .hsmini{width:34px;height:34px;font-size:13px;flex:none}
@@ -1879,8 +1886,10 @@ html:has(dialog.hsig[open]){overflow:hidden}
 .hsemos .hscic svg{width:23px;height:23px}
 .hsccnt{margin-left:6px}
 .hsbox.inl .hspie{visibility:hidden}
-.hsinl{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:26px 12px calc(12px + env(safe-area-inset-bottom,0px));background:none;animation:hssube .2s ease}
+.hsinl{position:absolute;left:0;right:0;bottom:var(--hskb,0px);z-index:4;padding:26px 12px calc(12px + env(safe-area-inset-bottom,0px));background:none;animation:hssube .2s ease}
 .hsinl[hidden]{display:none}
+.hsbox.teclado .hsinl{padding-bottom:10px}
+.hsbox.teclado .hsfeed{display:none}
 .hsinl .hsqe{padding:0 2px 10px}
 .hsinr{display:flex;align-items:center;gap:10px}
 .hsinr input{flex:1;min-width:0;height:44px;border:1px solid rgba(255,255,255,.75);border-radius:999px;background:rgba(18,18,18,.34);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;padding:0 18px;font:inherit;font-size:16px;outline:none}
@@ -1905,7 +1914,7 @@ html:has(dialog.hsig[open]){overflow:hidden}
 .hscflash{position:absolute;top:0;left:0;right:0;bottom:0;background:#fff;opacity:0;pointer-events:none;z-index:3}
 .hscbox header{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 24px;background:linear-gradient(rgba(0,0,0,.55),transparent);font-weight:800;font-size:14px}
 .hscbox header .hscesp{width:40px}
-.hscx{width:40px;height:40px;border:0;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+.hscbox .hscx{width:40px;height:40px;border:0;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;font-size:26px;line-height:1;cursor:pointer}
 .hscbox footer{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;justify-content:space-around;padding:30px 18px calc(26px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.55))}
 .hscgal,.hscflip{width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;cursor:pointer}
 .hscgal svg,.hscflip svg{width:24px;height:24px}
@@ -3220,7 +3229,7 @@ function hsVer(k,origen){
       return;
     }
     if(b.dataset.hscom==='inl'){abrirInl();return}
-    if(b.hasAttribute('data-hscom')||b.hasAttribute('data-hslista')){confAbierto=true;pausar(true);feedLimpiar();hoja.dataset.modo='com';hoja.dataset.mio=mio?'1':'';hoja.innerHTML=hsComHtml(h,mio);hoja.hidden=false;
+    if(b.hasAttribute('data-hscom')||b.hasAttribute('data-hslista')){confAbierto=true;pausar(true);feedLimpiar();hoja.dataset.modo='com';hoja.dataset.mio=mio?'1':'';hoja.dataset.tab=b.hasAttribute('data-hscom')?'c':mio?'v':((h.info&&h.info.reac||[]).length?'r':'c');hoja.innerHTML=hsComHtml(h,mio);hsTabMarcar(hoja);hoja.hidden=false;
       hoja.querySelector('[data-hscerrarhoja]')?.focus({preventScroll:true});
       const t=turno;hsInfo(h,true).then(()=>{if(t===turno&&!hoja.hidden&&d.open&&hoja.dataset.modo==='com'){hsComLista(hoja,h);pieEl.innerHTML=hsPieHtml(h,mio)}});return}
     if(b.hasAttribute('data-hslista')){confAbierto=true;pausar(true);hoja.dataset.modo='act';hoja.innerHTML=hsHojaHtml(h,mio);hoja.hidden=false;hoja.querySelector('[data-hscerrarhoja]')?.focus();
@@ -3244,8 +3253,8 @@ function hsVer(k,origen){
     h.info=h.info||{reac:[],vistas:[],com:[]};h.info.com=h.info.com||[];
     const yo=hsYoMini(),c={id:'t'+Date.now(),quien:hsQuien(),nombre:'Vos',foto:yo.foto,texto,cuando:new Date().toISOString(),borra:true,env:true};
     h.infoRevision=(h.infoRevision||0)+1;h.info.com=[c,...h.info.com];i.value='';i.dispatchEvent(new Event('input',{bubbles:true}));
-    hsComLista(hoja,h);const ul=hoja.querySelector('.hscl');if(ul)ul.scrollTop=0;
-    const li=ul&&ul.firstElementChild;if(li&&!quieto)li.animate([{opacity:0,transform:'translateY(-8px)'},{opacity:.55,transform:'none'}],{duration:220,easing:'ease-out'});
+    hoja.dataset.tab='c';hsTabMarcar(hoja);hsComLista(hoja,h);const ul=hoja.querySelector('.hscl');if(ul)ul.scrollTop=0;
+    const li=ul&&ul.querySelector('li[data-g="c"]');if(li&&!quieto)li.animate([{opacity:0,transform:'translateY(-8px)'},{opacity:.55,transform:'none'}],{duration:220,easing:'ease-out'});
     try{if(CLOUD&&sb){const r=await q(sb.rpc('historia_comentar',{p_ruta:h.ruta,p_texto:texto}));if(r!=null)c.id=r}c.env=false}
     catch(err){h.info.com=h.info.com.filter(x=>x!==c);if(i&&!i.value){i.value=texto;i.dispatchEvent(new Event('input',{bubbles:true}))}toast(errTxt(err))}
     finally{h.infoT=0;if(d.open&&!hoja.hidden&&hoja.dataset.modo==='com'){hsComLista(hoja,h)}if(d.open)pieEl.innerHTML=hsPieHtml(h,mio)}});
@@ -5035,6 +5044,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.52',t:'Actividad de la historia más ordenada',items:[['👀','Al ver quién vio tu historia, ahora hay pestañas: Vistas, Reacciones y Comentarios.'],['🌫️','Se sacó la sombra oscura de abajo de la historia.'],['⌨️','Al comentar una historia, el teclado ya no tapa lo que escribís.'],['🎙️','Arreglo: tus propios audios del chat se vuelven a escuchar fuerte (en iPhone salían por el auricular).']]},
   {v:'1.1.51',t:'Campanita de actividad, temporizador y pagos más fáciles',items:[['🔔','Nueva campanita arriba: ves quién reaccionó o comentó tus historias, con lo nuevo marcado, y te llega un aviso.'],['⏳','En el cronómetro, «Descanso» ahora se llama «Temporizador».'],['💸','En Pagos del panel: cuando un socio avisa que pagó, tocás «Llegó» (se registra el pago) o «No llegó» (el mes vuelve a deuda y se le avisa).'],['💬','Los comentarios en la historia aparecen de a uno, sin sombra, para que se vea la foto.'],['🎵','Sonido propio de Training Club para los avisos.']]},
   {v:'1.1.50',t:'Series, foto a tu gusto y avisos en el panel',items:[['✅','En la rutina cada ejercicio muestra sus series: tocá cada una cuando la terminás. Con todas marcadas, el ejercicio queda hecho.'],['🖼️','Al cambiar la foto de perfil la podés mover y acercar para que quede como quieras.'],['💬','En las historias, al lado de los emojis está el globito: tocalo y escribí. Los comentarios y las reacciones van saliendo intercalados, como en Instagram.'],['🔔','El panel avisa de mensajes, avisos de pago y socios nuevos para aprobar, en el celu y en la PC.'],['📱','Arreglado: en el panel del celu ahora se abre bien cada chat (con «‹» volvés a la lista).']]},
   {v:'1.1.49',t:'Comentarios en las historias',items:[['💬','Ahora se puede comentar en las historias, como en Instagram: tocá «Agregá un comentario…» o el globito.'],['🗑️','Podés borrar tus comentarios, y el dueño de la historia o un profe también pueden.']]},
@@ -6147,7 +6157,9 @@ function chAudPintar(a){ const el=a.closest('.bmed.aud'); if(!el) return; const 
 document.addEventListener('click',e=>{ const b=e.target.closest('.bap'); if(b){ e.preventDefault(); e.stopPropagation(); const el=b.closest('.bmed.aud'), a=el&&el.querySelector('audio'); if(!a) return;
     if(!a.getAttribute('src')){ toast('Cargando el audio…'); return }
     document.querySelectorAll('.bmed.aud audio').forEach(x=>{ if(x!==a&&!x.paused) x.pause() });
-    if(a.paused){ a.play().catch(()=>toast('No se pudo reproducir el audio')) } else a.pause(); return }
+    if(a.paused){ try{ if(navigator.audioSession&&!CHREC) navigator.audioSession.type='playback' }catch(x){} a.muted=false; a.volume=1;
+      a.play().catch(()=>{ const m=MSGS.find(x=>x.media&&x.media.p&&x.media.p===el.dataset.mpath), blob=m&&m.pre&&m.pre.blob;
+        if(blob){ a.src=URL.createObjectURL(blob); a.play().catch(()=>toast('No se pudo reproducir el audio')) } else toast('No se pudo reproducir el audio') }) } else a.pause(); return }
   const w=e.target.closest('.bmed.aud .bawave'); if(w){ e.stopPropagation(); const a=w.parentNode.querySelector('audio'); const dd=a&&(isFinite(a.duration)&&a.duration>0?a.duration:(+(w.parentNode.querySelector('.bat').dataset.d)||0)); if(a&&dd){ const r=w.getBoundingClientRect(); a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*dd; chAudPintar(a) } } },true);
 ['play','pause','ended','timeupdate'].forEach(ev=>document.addEventListener(ev,e=>{ const a=e.target; if(!a||a.tagName!=='AUDIO') return; const el=a.closest('.bmed.aud'); if(!el) return;
   if(ev==='play'){ el.classList.add('sonando'); el.querySelector('.bap').innerHTML=ICO_PAUSA; el.querySelector('.bap').setAttribute('aria-label','Pausar audio') }
@@ -6164,6 +6176,7 @@ async function chRecEmpezar(form){ if(CHREC||!form) return;
   let rec; try{ rec=new MediaRecorder(st,mt?{mimeType:mt}:undefined) }catch(e){ st.getTracks().forEach(t=>t.stop()); toast('No se pudo empezar a grabar'); return }
   const partes=[]; rec.ondataavailable=ev=>{ if(ev.data&&ev.data.size) partes.push(ev.data) };
   CHREC={rec,st,partes,t0:Date.now(),form:form.id,k,yo:form.id==='chatf'?'socio':'profe',mt:rec.mimeType||mt};
+  try{ if(navigator.audioSession) navigator.audioSession.type='play-and-record' }catch(x){}
   rec.start(250); chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); try{ prEstado('audio') }catch(x){} try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
 function chRecPintar(){ if(!CHREC) return; const f=document.getElementById(CHREC.form); if(!f) return chRecParar(false);
   let o=document.getElementById('chrec');
@@ -6173,7 +6186,7 @@ function chRecPintar(){ if(!CHREC) return; const f=document.getElementById(CHREC
 function chRecParar(enviar){ const c=CHREC; if(!c) return; CHREC=null; clearInterval(c.iv); try{ prEstado(null) }catch(x){}
   const o=document.getElementById('chrec'); if(o){ o.classList.add('fuera'); setTimeout(()=>o.remove(),200) }
   const secs=Math.max(1,Math.round((Date.now()-c.t0)/1000));
-  c.rec.onstop=()=>{ c.st.getTracks().forEach(t=>t.stop()); if(!enviar) return;
+  c.rec.onstop=()=>{ c.st.getTracks().forEach(t=>t.stop()); try{ if(navigator.audioSession) navigator.audioSession.type='playback' }catch(x){} if(!enviar) return;
     const type=(c.mt||'audio/webm').split(';')[0], ext=/mp4|aac|m4a/.test(type)?'m4a':/ogg/.test(type)?'ogg':'webm', blob=new Blob(c.partes,{type});
     if(blob.size<600){ toast('El audio quedó vacío. Probá de nuevo.'); return }
     chEnviarMedia(new File([blob],'audio.'+ext,{type}),c.k,c.yo,'',{blob,type,ext,t:'aud',d:secs}) };
@@ -6434,6 +6447,15 @@ function hsHojaHtml(h,mio){const inf=h.info||{reac:[],vistas:[]};
 const HS_QE=['❤️','🙌','🔥','👏','💪','😍','😮','😂'];
 const hsComN=inf=>inf&&inf.com?inf.com.length:null;
 const HS_GLOBO='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 16.2A9 9 0 1 0 17 20l3.9 1.1z"/></svg>';
+/* v61: cuando se abre el teclado del celu, la caja para comentar sube justo arriba (visualViewport) */
+function hsTeclado(){const box=document.querySelector('dialog.hsig[open] .hsbox');if(!box)return;const vv=window.visualViewport,a=document.activeElement;
+  const escribe=a&&a.tagName==='INPUT'&&box.contains(a);let kb=0;
+  if(vv&&escribe){const r=box.getBoundingClientRect();kb=Math.max(0,Math.round(r.bottom-(vv.offsetTop+vv.height)))}
+  box.style.setProperty('--hskb',kb+'px');box.classList.toggle('teclado',kb>0);
+  if(escribe&&kb>0)requestAnimationFrame(()=>{try{a.scrollIntoView({block:'nearest'})}catch(e){}})}
+if(window.visualViewport){visualViewport.addEventListener('resize',hsTeclado);visualViewport.addEventListener('scroll',hsTeclado)}
+document.addEventListener('focusin',e=>{if(e.target.closest&&e.target.closest('dialog.hsig'))[0,120,350].forEach(t=>setTimeout(hsTeclado,t))});
+document.addEventListener('focusout',e=>{if(e.target.closest&&e.target.closest('dialog.hsig'))setTimeout(hsTeclado,60)});
 function hsComIco(inf,escribir){const n=hsComN(inf);
   if(escribir) return `<button type="button" class="hscic" data-hscom="inl" aria-label="Escribir un comentario">${HS_GLOBO}</button>`;
   return `<button type="button" class="hscic" data-hscom aria-label="Ver comentarios${n?' ('+n+')':''}">${HS_GLOBO}${n?`<b class="num">${n}</b>`:''}</button>`}
@@ -6447,16 +6469,27 @@ function hsActRes(inf,mio){if(!inf)return '';const c=(inf.com||[]).length,r=(inf
   return [mio?p(v,'vista','vistas'):'',r?p(r,'reacción','reacciones'):'',c?p(c,'comentario','comentarios'):''].filter(Boolean).join(' · ')}
 function hsInlHtml(){return `<form class="hsinl" hidden autocomplete="off"><div class="hsqe" role="group" aria-label="Emojis rápidos">${HS_QE.map(e=>`<button type="button" data-hsqe="${e}" aria-label="Agregar ${e}">${e}</button>`).join('')}</div><div class="hsinr"><input type="text" maxlength="300" placeholder="Enviá un comentario…" aria-label="Comentario" enterkeyhint="send"><button type="submit" disabled>Publicar</button></div></form>`}
 function hsYoMini(){return S.view==='socio'?{nombre:me()?.name||'Yo',foto:me()?.photo||null}:{nombre:PRO?PRO.nombre:'Yo',foto:PRO&&PRO.foto||null}}
-function hsComItems(h,mio){const L=hsActividad(h,mio);
-  if(!L.length) return `<li class="hscvac"><b>${h.info?'Todavía no hay actividad':'Cargando…'}</b><span>${h.info?(mio?'Cuando alguien vea, reaccione o comente tu historia, aparece acá.':'Reaccioná o dejá el primer comentario.'):''}</span></li>`;
-  return L.map(({t,x:c})=>t!=='c'?`<li class="hsar">${hsMini(c)}<div class="hscx"><div class="hscn"><b>${esc(c.nombre||'Alguien')}</b><small>${hsHace(c.cuando)}</small></div><div class="hsct hsam">${t==='r'?'Reaccionó a la historia':'Vio tu historia'}</div></div>${t==='r'?`<em class="hsae">${c.emoji||''}</em>`:''}</li>`
-    :`<li class="${c.env?'env':''}" data-cid="${esc(String(c.id))}">${hsMini(c)}<div class="hscx"><div class="hscn"><b>${esc(c.nombre||'Alguien')}</b><small>${c.env?'Publicando…':hsHace(c.cuando)}</small></div><div class="hsct">${esc(c.texto)}</div>${c.borra&&!c.env?`<button type="button" class="hscdel" data-hscdel="${esc(String(c.id))}">Eliminar</button>`:''}</div></li>`).join('')}
+/* v61: la hoja se separa en pestañas: vistas (solo el dueño), reacciones y comentarios */
+const hsTabs=mio=>mio?[['v','Vistas'],['r','Reacciones'],['c','Comentarios']]:[['r','Reacciones'],['c','Comentarios']];
+function hsTabN(h,g){const i=h.info||{};return ((g==='v'?i.vistas:g==='r'?i.reac:i.com)||[]).length}
+function hsComItems(h,mio){const inf=h.info||{},T=x=>Date.parse(x.cuando)||0,R=inf.reac||[],nv=x=>x.sort((a,b)=>b.w-a.w);
+  const G={c:nv((inf.com||[]).map(x=>({t:'c',x,w:x.env?Date.now():T(x)}))),r:nv(R.map(x=>({t:'r',x,w:T(x)}))),
+    v:mio?nv((inf.vistas||[]).map(x=>({t:'v',x:Object.assign({},x,{emoji:(R.find(r=>r.quien===x.quien)||{}).emoji||''}),w:T(x)}))):[]};
+  const vac={v:['Todavía nadie la vio','Cuando alguien vea tu historia, aparece acá.'],r:['Todavía no hay reacciones',mio?'Cuando alguien reaccione, aparece acá.':'Tocá un emoji para reaccionar.'],c:['Todavía no hay comentarios','Escribí el primero.']};
+  return hsTabs(mio).map(([g])=>G[g].length?G[g].map(a=>hsComItem(a,g)).join(''):`<li class="hscvac" data-g="${g}"><b>${h.info?vac[g][0]:'Cargando…'}</b><span>${h.info?vac[g][1]:''}</span></li>`).join('')}
+function hsComItem({t,x:c},g){return t!=='c'?`<li class="hsar" data-g="${g}">${hsMini(c)}<div class="hscx"><div class="hscn"><b>${esc(c.nombre||'Alguien')}</b><small>${hsHace(c.cuando)}</small></div><div class="hsct hsam">${t==='r'?'Reaccionó a la historia':c.emoji?'Vio y reaccionó':'Vio tu historia'}</div></div>${c.emoji?`<em class="hsae">${c.emoji}</em>`:''}</li>`
+    :`<li class="${c.env?'env':''}" data-g="c" data-cid="${esc(String(c.id))}">${hsMini(c)}<div class="hscx"><div class="hscn"><b>${esc(c.nombre||'Alguien')}</b><small>${c.env?'Publicando…':hsHace(c.cuando)}</small></div><div class="hsct">${esc(c.texto)}</div>${c.borra&&!c.env?`<button type="button" class="hscdel" data-hscdel="${esc(String(c.id))}">Eliminar</button>`:''}</div></li>`}
 function hsComHtml(h,mio){
   return `<div class="hshojab hscoms"><header><b>Actividad</b><span class="hscnum">${hsActRes(h.info,mio)}</span><button data-hscerrarhoja aria-label="Cerrar">×</button></header>
+    <div class="hstabs n${hsTabs(mio).length}" role="tablist" aria-label="Actividad">${hsTabs(mio).map(([g,l])=>`<button type="button" role="tab" data-hstab="${g}">${l} <b class="num" data-hstn="${g}">${h.info?hsTabN(h,g):''}</b></button>`).join('')}</div>
     <ul class="hscl">${hsComItems(h,mio)}</ul>
     <form class="hscf" autocomplete="off"><div class="hsqe" role="group" aria-label="Emojis rápidos">${HS_QE.map(e=>`<button type="button" data-hsqe="${e}" aria-label="Agregar ${e}">${e}</button>`).join('')}</div>
     <div class="hscfr">${hsMini(hsYoMini())}<input type="text" maxlength="300" placeholder="Agregá un comentario…" aria-label="Comentario" enterkeyhint="send"><button type="submit" disabled>Publicar</button></div></form></div>`}
-function hsComLista(hoja,h){const ul=hoja.querySelector('.hscl'),mio=hoja.dataset.mio==='1';if(!ul)return;ul.innerHTML=hsComItems(h,mio);const n=hoja.querySelector('.hscnum');if(n)n.textContent=hsActRes(h.info,mio)}
+function hsTabMarcar(hoja){const t=hoja.dataset.tab;hoja.querySelectorAll('[data-hstab]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.hstab===t)))}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-hstab]');if(!b)return;const hj=b.closest('.hshoja');if(!hj||hj.dataset.tab===b.dataset.hstab)return;
+  hj.dataset.tab=b.dataset.hstab;hsTabMarcar(hj);const ul=hj.querySelector('.hscl');if(ul){ul.scrollTop=0;if(!reduceMotion)ul.animate([{opacity:.3,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:200,easing:'ease-out'})}});
+document.addEventListener('focusin',e=>{const i=e.target.closest&&e.target.closest('.hshoja .hscf input');if(!i)return;const hj=i.closest('.hshoja');if(hj.dataset.tab!=='c'){hj.dataset.tab='c';hsTabMarcar(hj)}});
+function hsComLista(hoja,h){const ul=hoja.querySelector('.hscl'),mio=hoja.dataset.mio==='1';if(!ul)return;ul.innerHTML=hsComItems(h,mio);hoja.querySelectorAll('[data-hstn]').forEach(n=>n.textContent=hsTabN(h,n.dataset.hstn));const n=hoja.querySelector('.hscnum');if(n)n.textContent=hsActRes(h.info,mio)}
 function hsVuela(emoji,boton,box,indice=0){
   if(hsQuieto())return;
   const base=box.getBoundingClientRect(),r=boton?.getBoundingClientRect();
