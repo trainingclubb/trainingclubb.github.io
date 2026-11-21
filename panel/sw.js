@@ -1,4 +1,4 @@
-const C='tcp-v14';const F=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','supabase.js'];
+const C='tcp-v15';const F=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','supabase.js'];
 const VIB={motivacion:[60,40,60,40,160],rutina:[120,60,120],cuota:[200,100,200],pago:[80,50,80,50,80]};
 self.addEventListener('push',e=>{let d={};try{d=e.data.json()}catch(x){d={body:e.data?e.data.text():''}}
 const tag=d.tag||'tc';

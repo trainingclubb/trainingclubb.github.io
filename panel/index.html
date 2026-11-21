@@ -1495,6 +1495,8 @@ tr.c2flash>td{animation:c2Flash 1.8s ease both}
 .panel-pagos .pago-fecha{width:70px}
 .panel-pagos .pago-bloque{display:grid;gap:10px}
 .panel-pagos .pago-lista{display:grid;gap:5px}
+.panel-pagos .pago-ayuda{font-size:13px;line-height:1.45}
+.panel-pagos .pago-si{min-width:96px}
 @media(max-width:850px){.panel-pagos .pago-fila{grid-template-columns:1fr}}
 
 
@@ -1877,18 +1879,18 @@ html:has(dialog.hsig[open]){overflow:hidden}
 .hsemos .hscic svg{width:23px;height:23px}
 .hsccnt{margin-left:6px}
 .hsbox.inl .hspie{visibility:hidden}
-.hsinl{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:26px 12px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.82) 36%);animation:hssube .2s ease}
+.hsinl{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:26px 12px calc(12px + env(safe-area-inset-bottom,0px));background:none;animation:hssube .2s ease}
 .hsinl[hidden]{display:none}
 .hsinl .hsqe{padding:0 2px 10px}
 .hsinr{display:flex;align-items:center;gap:10px}
-.hsinr input{flex:1;min-width:0;height:44px;border:1px solid rgba(255,255,255,.75);border-radius:999px;background:rgba(0,0,0,.25);color:#fff;padding:0 18px;font:inherit;font-size:16px;outline:none}
+.hsinr input{flex:1;min-width:0;height:44px;border:1px solid rgba(255,255,255,.75);border-radius:999px;background:rgba(18,18,18,.34);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;padding:0 18px;font:inherit;font-size:16px;outline:none}
 .hsinr input::placeholder{color:rgba(255,255,255,.75)}
 .hsinr [type=submit]{border:0;background:none;color:#fff;font:inherit;font-weight:700;font-size:15px;cursor:pointer;padding:6px 4px;flex:none}
 .hsinr [type=submit]:disabled{opacity:.45;cursor:default}
-.hsfeed{position:absolute;left:12px;right:24%;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:8px;pointer-events:none}
-.hsfc{display:flex;align-items:flex-start;gap:8px;max-width:100%;color:#fff;font-size:14px;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,.65)}
+.hsfeed{position:absolute;left:12px;right:22%;z-index:3;height:0;pointer-events:none}
+.hsfc{position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:8px;max-width:100%;color:#fff;font-size:14px;line-height:1.3;padding:5px 13px 5px 5px;border-radius:20px;background:rgba(18,18,18,.34);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2)}
 .hsig .hsfc .hsmini{width:30px;height:30px;margin:0;border:0;font-size:12px}
-.hsfc span{min-width:0;padding-top:5px;overflow:hidden;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.hsfc span{min-width:0;padding-top:0;overflow:hidden;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
 .hsfc b{font-weight:700}
 .hshojab li.hsar .hsam{opacity:.6;font-size:13px}
 .hsig .hshojab li .hsae{font-style:normal;font-size:24px;align-self:center}
@@ -2042,6 +2044,32 @@ html:has(dialog.hsig[open]){overflow:hidden}
 @media (max-width:760px){.chgrid{grid-template-columns:1fr}}
 .chconv{display:flex;flex-direction:column;gap:4px;max-height:560px;overflow:auto}
 .chatras{display:none}
+.actbtn{position:relative;flex:none;width:36px;height:36px;border:0;background:none;color:var(--ink);display:grid;place-items:center;cursor:pointer;border-radius:50%;padding:0;transition:transform .2s var(--spring)}
+.actbtn:active{transform:scale(.88)}
+.actbtn svg{width:24px;height:24px}
+.actbtn.actsuena svg{animation:actring .9s ease;transform-origin:50% 8%}
+@keyframes actring{0%,100%{transform:rotate(0)}15%{transform:rotate(16deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+.actdot{position:absolute;top:0;right:-2px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:#ff3b5c;color:#fff;font-size:10.5px;font-weight:800;font-style:normal;display:grid;place-items:center;box-shadow:0 0 0 2px var(--surface);pointer-events:none}
+.actdot[hidden]{display:none}
+.actw{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9990;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.5);animation:fcin .2s ease;transition:opacity .18s}
+.actw.sale{opacity:0}
+.acts{width:min(100%,480px);max-height:min(80vh,660px);display:flex;flex-direction:column;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.35);padding-bottom:env(safe-area-inset-bottom,0px);animation:actsube .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes actsube{from{transform:translateY(48px);opacity:0}}
+@media (min-width:761px){.actw{align-items:center}.acts{border-radius:22px;border-bottom:1px solid var(--line)}}
+.acts header{display:flex;align-items:center;padding:16px 16px 8px 20px}
+.acts header b{flex:1;font-size:19px}
+.acts header button{width:34px;height:34px;border-radius:50%;border:0;background:var(--sunk);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+.actl{overflow-y:auto;overscroll-behavior:contain;padding:0 8px 16px}
+.actsec{font-size:13px;font-weight:800;color:var(--muted);padding:12px 12px 6px}
+.acti{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;color:inherit;font:inherit;text-align:left;padding:9px 12px;border-radius:14px;cursor:pointer}
+.acti:active{background:var(--sunk)}
+.acti .hsmini{width:42px;height:42px;margin:0;border:0;font-size:15px}
+.actx{flex:1;min-width:0;font-size:14px;line-height:1.38;overflow-wrap:anywhere}
+.actx q{quotes:"«" "»"}
+.actx small{color:var(--muted);white-space:nowrap}
+.acti em{font-style:normal;font-size:24px;flex:none}
+.acti.nv .actx b:first-child::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--teal);margin-right:6px;vertical-align:2px}
+.actvac{margin:0;padding:30px 24px 40px;text-align:center;color:var(--muted);line-height:1.5}
 .pavnav svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .pavban{display:flex;align-items:center;gap:12px;margin:0 0 16px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
 .pavban>div{flex:1;min-width:0;display:grid;gap:2px}.pavban small{color:var(--muted);font-size:12.5px;line-height:1.35}
@@ -2801,6 +2829,7 @@ async function desactivarPushProfe(){ S.pavPush=false;
   try{ if(!pushOK()||!sb) return; const reg=await navigator.serviceWorker.ready; const sub=await reg.pushManager.getSubscription(); if(sub) await sb.rpc('borrar_push_profe',{p_endpoint:sub.endpoint}) }catch(e){} }
 function pavMostrar(t,b,tag,ir){
   if(!pavOn()) return;
+  campana('tc');
   if(document.visibilityState==='visible'&&document.hasFocus()) return toast(t);
   if(S.pavPush||!notifOK()||Notification.permission!=='granted') return;   /* con push, el aviso ya lo manda el servidor */
   const o={body:b||'',icon:'icon-192.png',badge:'icon-192.png',tag:tag||'tc-panel',renotify:true};
@@ -2837,6 +2866,47 @@ document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closes
     try{localStorage.setItem(PAV_K,'1')}catch(x){}
     activarPushProfe().then(ok=>{toast(ok?'Listo: te avisamos aunque tengas el panel cerrado':'Listo: te avisamos mientras el panel esté abierto'); render(true)}) });
 },true);
+/* v60: campanita de actividad. Reacciones y comentarios a tus historias (en el panel: a las del gym), con lo nuevo marcado */
+var ACT={lista:[],t:0,cargando:false,silencio:0,n:0};
+const ACT_ICO='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>';
+const actKey=()=>'tc-actv-'+(S.view==='socio'?((S.user&&S.user.dni)||''):('p'+((PRO&&PRO.dni)||'')));
+const actVisto=()=>{try{return +localStorage.getItem(actKey())||0}catch(e){return 0}};
+const actNuevas=()=>{const v=actVisto();return ACT.lista.filter(x=>Date.parse(x.cuando)>v).length};
+const actHace=c=>{const m=Math.max(1,Math.round((Date.now()-Date.parse(c))/60000));return m<60?m+' min':m<1440?Math.floor(m/60)+' h':Math.floor(m/1440)+' d'};
+const actTu=()=>S.view==='socio'?'tu historia':'la historia del gym';
+function actBtnHtml(panel){ if(!CLOUD||(panel?!(typeof hsPanel==='function'&&hsPanel()):S.view!=='socio')) return '';
+  setTimeout(()=>actCargar(),0); const n=actNuevas();
+  return `<button type="button" class="${panel?'ui43-iconbtn ':''}actbtn" data-act aria-label="Actividad de ${panel?'las historias':'tus historias'}${n?': '+n+' nuevas':''}">${ACT_ICO}<i class="actdot num" data-actbadge ${n?'':'hidden'}>${n>9?'9+':n||''}</i></button>`}
+function actBadge(){const n=actNuevas(),sube=n>ACT.n;ACT.n=n;
+  document.querySelectorAll('[data-actbadge]').forEach(b=>{b.hidden=!n;b.textContent=n>9?'9+':n||'';
+    const btn=b.closest('.actbtn');if(btn&&sube&&!reduceMotion){btn.classList.remove('actsuena');void btn.offsetWidth;btn.classList.add('actsuena')}})}
+async function actCargar(force){ if(!CLOUD||!sb||ACT.cargando) return; if(!force&&Date.now()-ACT.t<25000) return; ACT.cargando=true;
+  try{ const r=await sb.rpc('mi_actividad'); if(r&&!r.error&&Array.isArray(r.data)){
+      const ya=new Set(ACT.lista.map(x=>x.tipo+x.ruta+x.quien+x.cuando)),primera=!ACT.t;ACT.lista=r.data;ACT.t=Date.now();
+      const nuevo=primera?null:r.data.find(x=>!ya.has(x.tipo+x.ruta+x.quien+x.cuando)&&Date.parse(x.cuando)>actVisto());
+      if(nuevo&&Date.now()-ACT.silencio>8000){const t=(nuevo.nombre||'Alguien')+(nuevo.tipo==='comentario'?' comentó '+actTu():' reaccionó a '+actTu()+' '+(nuevo.emoji||''));
+        if(S.view==='duenio') pavMostrar(t,nuevo.texto||'','hs'); else { campana('tc'); if(document.visibilityState==='visible') toast(t) } }
+      actBadge(); const w=document.querySelector('.actw'); if(w) actLista(w) } }
+  catch(e){} finally{ ACT.cargando=false } }
+function actLista(w){const L=ACT.lista,v=+w.dataset.visto||0,box=w.querySelector('.actl'),tu=actTu();
+  if(!L.length){box.innerHTML=`<p class="actvac">${ACT.t?'Todavía no hay actividad.<br>Cuando alguien reaccione o comente '+(S.view==='socio'?'tus historias':'las historias del gym')+', aparece acá.':'Cargando…'}</p>`;return}
+  const it=x=>`<button type="button" class="acti ${Date.parse(x.cuando)>v?'nv':''}" data-actruta="${esc(x.ruta)}">${hsMini(x)}<span class="actx"><b>${esc(x.nombre||'Alguien')}</b> ${x.tipo==='comentario'?'comentó '+tu+': <q>'+esc(x.texto||'')+'</q>':'reaccionó a '+tu+'.'} <small>${actHace(x.cuando)}</small></span><em aria-hidden="true">${x.tipo==='comentario'?'💬':esc(x.emoji||'❤️')}</em></button>`;
+  const N=L.filter(x=>Date.parse(x.cuando)>v),A=L.filter(x=>Date.parse(x.cuando)<=v);
+  box.innerHTML=(N.length?'<div class="actsec">Nuevas</div>'+N.map(it).join(''):'')+(A.length?'<div class="actsec">'+(N.length?'Antes':'Últimos días')+'</div>'+A.map(it).join(''):'')}
+function actAbrir(){ document.querySelector('.actw')?.remove();
+  const w=document.createElement('div');w.className='actw';w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');w.setAttribute('aria-label','Actividad');
+  w.dataset.visto=actVisto();w.innerHTML='<div class="acts"><header><b>Actividad</b><button type="button" data-actx aria-label="Cerrar">×</button></header><div class="actl"></div></div>';
+  document.body.append(w);actLista(w);try{localStorage.setItem(actKey(),String(Date.now()))}catch(e){}actBadge();actCargar(true);
+  const tec=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();fin()}};
+  const fin=()=>{document.removeEventListener('keydown',tec,true);w.classList.add('sale');setTimeout(()=>w.remove(),180)};
+  document.addEventListener('keydown',tec,true);
+  w.addEventListener('click',e=>{e.stopPropagation();if(e.target===w||e.target.closest('[data-actx]'))return fin();
+    const it=e.target.closest('[data-actruta]');if(!it)return;const x=ACT.lista.find(a=>a.ruta===it.dataset.actruta);
+    if(!x||!x.viva||!historias.lista.some(h=>h.ruta===x.ruta))return toast('Esa historia ya no está disponible (duran 24 h)');
+    fin();setTimeout(()=>hsVer(x.ruta.split('/')[0]),200)});
+  setTimeout(()=>{try{w.querySelector('[data-actx]').focus({preventScroll:true})}catch(x){}},50) }
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-act]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();actAbrir()},true);
+setInterval(()=>{if(!document.hidden&&document.querySelector('[data-act]'))actCargar()},30000);
 /* sonido de Training Club: campanitas con Web Audio. motivación = arpegio que sube; cuota/pagos = dos notas suaves; rutina = acorde brillante */
 let ACX=null;
 const acx=()=>{try{ACX=ACX||new (window.AudioContext||window.webkitAudioContext)(); if(ACX.state==='suspended') ACX.resume()}catch(e){} return ACX};
@@ -2844,15 +2914,17 @@ const acx=()=>{try{ACX=ACX||new (window.AudioContext||window.webkitAudioContext)
    que no usa sonidos, no se crea: si algún día suena algo ahí, se crea recién en ese momento */
 const acxToque=()=>{ if(ACX||S.view==='duenio') return; acx() };
 ['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev,acxToque,{passive:true}));
+/* v60: el sonido de Training Club (avisos, mensajes, actividad): cuatro notas que suben, suaves, como un «ding» de cristal */
+const TC_SON=[[1046.5,0],[1318.5,.1],[1568,.2],[2093,.34]];
 function campana(tipo){const c=acx(); if(!c) return; const t0=c.currentTime+.02;
-  const N={motivacion:[[659.25,0],[830.61,.11],[987.77,.22],[1318.5,.36]], rutina:[[783.99,0],[987.77,0],[1174.7,.12]], cuota:[[880,0],[659.25,.16]], descanso:[[1046.5,0],[1318.5,.14],[1046.5,.28]]}[tipo]||[[880,0],[1318.5,.13]];
+  const N={motivacion:[[659.25,0],[830.61,.11],[987.77,.22],[1318.5,.36]], rutina:[[783.99,0],[987.77,0],[1174.7,.12]], cuota:[[880,0],[659.25,.16]], descanso:[[1046.5,0],[1318.5,.14],[1046.5,.28]],tc:TC_SON}[tipo]||TC_SON;
   const out=c.createGain(); out.gain.value=.22; out.connect(c.destination);
   N.forEach(([f,d])=>{ for(const [m,g] of [[1,1],[2.01,.28],[3.02,.1]]){   /* parciales tipo campana */
     const o=c.createOscillator(), e=c.createGain(); o.type='sine'; o.frequency.value=f*m;
     e.gain.setValueAtTime(0,t0+d); e.gain.linearRampToValueAtTime(g,t0+d+.012); e.gain.exponentialRampToValueAtTime(.0001,t0+d+(m===1?1.1:.5));
     o.connect(e); e.connect(out); o.start(t0+d); o.stop(t0+d+1.2) } });
   try{navigator.vibrate&&navigator.vibrate(tipo==='motivacion'?[60,40,60,40,140]:[90,60,90])}catch(e){}}
-if(navigator.serviceWorker) navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{}; if(d.tc!=='push') return; campana(d.tag); if(document.visibilityState==='visible'&&d.title) toast(d.title)});
+if(navigator.serviceWorker) navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{}; if(d.tc!=='push') return; campana(d.tag); if(/^hs/.test(d.tag||'')){ACT.silencio=Date.now();actCargar(true)} if(document.visibilityState==='visible'&&d.title) toast(d.title)});
 function lanzarAviso(){
   const s=me(); const a=aviso(s); if(!a||!notifOK()||Notification.permission!=='granted') return;
   const key='tc-avn-'+a.k; try{if(localStorage.getItem(key))return;localStorage.setItem(key,'1')}catch(e){}
@@ -3061,15 +3133,16 @@ function hsVer(k,origen){
   function feedLimpiar(){feedT.forEach(clearTimeout);feedT=[];box.querySelectorAll('.hsfeed').forEach(x=>x.remove())}
   function feedCaja(){let f=box.querySelector('.hsfeed');if(!f){f=document.createElement('div');f.className='hsfeed';f.setAttribute('aria-hidden','true');box.append(f)}
     f.style.bottom=((inlOn?inl:pieEl).offsetHeight+6)+'px';return f}
-  function burbuja(c){if(quieto||!d.open)return;const f=feedCaja(),b=document.createElement('div');b.className='hsfc';
-    b.innerHTML=hsMini(c)+'<span><b>'+esc(c.nombre||'Alguien')+'</b> '+esc(c.texto)+'</span>';f.append(b);
-    while(f.children.length>3)f.firstElementChild.remove();
-    b.animate([{opacity:0,transform:'translateY(14px) scale(.96)'},{opacity:1,transform:'none'}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)'});
-    feedT.push(setTimeout(()=>{b.animate([{opacity:1},{opacity:0,transform:'translateY(-8px)'}],{duration:420,fill:'forwards'}).finished.then(()=>b.remove(),()=>b.remove())},3800))}
+  /* de a uno: el anterior sube y se apaga, y el nuevo aparece en el mismo lugar (así no tapa la historia) */
+  const salir=o=>{if(o.dataset.sale)return;o.dataset.sale='1';o.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(-14px) scale(.97)'}],{duration:300,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'}).finished.then(()=>o.remove(),()=>o.remove())};
+  function burbuja(c){if(quieto||!d.open)return;const f=feedCaja(),habia=[...f.children].some(o=>!o.dataset.sale);[...f.children].forEach(salir);
+    const b=document.createElement('div');b.className='hsfc';b.innerHTML=hsMini(c)+'<span><b>'+esc(c.nombre||'Alguien')+'</b> '+esc(c.texto)+'</span>';f.append(b);
+    b.animate([{opacity:0,transform:'translateY(12px) scale(.97)'},{opacity:1,transform:'none'}],{duration:380,delay:habia?150:0,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'});
+    feedT.push(setTimeout(()=>{if(b.isConnected)salir(b)},2600))}
   /* como Instagram: van saliendo una reacción, un comentario, una reacción… */
   function feed(h){const yo=hsQuien(),R=(h.info?.reac||[]).filter(x=>x.quien!==yo&&HS_REAC.includes(x.emoji)).slice(0,4),C=(h.info?.com||[]).filter(x=>!x.env).slice(0,4).reverse(),L=[];
     for(let i=0;i<Math.max(R.length,C.length);i++){if(R[i])L.push(['r',R[i]]);if(C[i])L.push(['c',C[i]])}
-    const t=turno;L.forEach(([k,x],i)=>feedT.push(setTimeout(()=>{if(t!==turno||!d.open||cerrando||!hoja.hidden)return;k==='r'?hsVuela(x.emoji,null,box,i%4):burbuja(x)},i*550)))}
+    const t=turno;let ms=150;L.forEach(([k,x],i)=>{feedT.push(setTimeout(()=>{if(t!==turno||!d.open||cerrando||!hoja.hidden)return;k==='r'?hsVuela(x.emoji,null,box,i%4):burbuja(x)},ms));ms+=k==='c'?1400:400})}
   function abrirInl(){inlOn=true;confAbierto=true;pausar(true);inl.hidden=false;box.classList.add('inl');const i=inl.querySelector('input');i.value='';inl.querySelector('[type=submit]').disabled=true;try{i.focus({preventScroll:true})}catch(x){i.focus()}}
   function cerrarInl(){if(!inlOn)return;inlOn=false;inl.hidden=true;box.classList.remove('inl');const i=inl.querySelector('input');if(document.activeElement===i)i.blur();if(hoja.hidden&&conf.hidden){confAbierto=false;pausar(false)}}
   inl.addEventListener('input',()=>{inl.querySelector('[type=submit]').disabled=!inl.querySelector('input').value.trim()});
@@ -3549,12 +3622,12 @@ function timerCard(){
   const r=restNow(), fr=S.rest.total?r/S.rest.total:0;
   const rs=`<div class="rface"><svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="rg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FCE024"/><stop offset=".5" stop-color="#DDDC34"/><stop offset="1" stop-color="#24C9A7"/></linearGradient></defs>
       <circle cx="60" cy="60" r="52" class="rtrack"/><circle cx="60" cy="60" r="52" class="rprog" id="restring" pathLength="1" style="stroke-dashoffset:${(1-fr).toFixed(4)}"/></svg>
-      <div class="rcenter"><div class="tbig num roll" id="resttime" data-dir="down" data-v="${fmtR(r)}">${rollHTML(fmtR(r))}</div><div class="tsub">${S.rest.run?'<span class="live"></span>Descansando':S.rest.fin?'<span class="tcb-fin">¡Terminó!</span>':'Descanso'}</div></div></div>
-    <div class="presets" role="group" aria-label="Tiempo de descanso">${[30,60,90,120,180].map(x=>`<button data-preset="${x}" aria-pressed="${S.rest.total===x*1000}">${x<60?x+' s':x%60?'1:30':x/60+' min'}</button>`).join('')}</div>
+      <div class="rcenter"><div class="tbig num roll" id="resttime" data-dir="down" data-v="${fmtR(r)}">${rollHTML(fmtR(r))}</div><div class="tsub">${S.rest.run?'<span class="live"></span>En marcha':S.rest.fin?'<span class="tcb-fin">¡Terminó!</span>':'Temporizador'}</div></div></div>
+    <div class="presets" role="group" aria-label="Tiempo del temporizador">${[30,60,90,120,180].map(x=>`<button data-preset="${x}" aria-pressed="${S.rest.total===x*1000}">${x<60?x+' s':x%60?'1:30':x/60+' min'}</button>`).join('')}</div>
     <div class="tbtns"><button class="tb main ${S.rest.run?'running':''}" id="restgo">${S.rest.run?'Pausar':(r<S.rest.total&&r>0?'Seguir':'Iniciar')}</button>
     <button class="tb" id="restplus">+15 s</button><button class="tb" id="restreset">Reiniciar</button></div>`;
   return `<section class="timer ${S.sw.run&&c||S.rest.run&&!c?'run':''}" id="timer">
-    <div class="tmodes" role="group" aria-label="Modo" style="--m:${prevM}" data-to="${c?0:1}"><button data-tmode="crono" aria-pressed="${c}">Cronómetro</button><button data-tmode="rest" aria-pressed="${!c}">Descanso</button></div>
+    <div class="tmodes" role="group" aria-label="Modo" style="--m:${prevM}" data-to="${c?0:1}"><button data-tmode="crono" aria-pressed="${c}">Cronómetro</button><button data-tmode="rest" aria-pressed="${!c}">Temporizador</button></div>
     <div class="tbody ${prevM!==(c?0:1)?(c?'froml':'fromr'):''}">${c?sw:rs}</div></section>`;
 }
 
@@ -3879,7 +3952,7 @@ function renderSocio(){
   const sube=t=>t==='perfil'||t==='chat', dir=same?'':sube(S.tab)?'navsube':sube(S.lastTab)?'navbaja':ti>pi?'fromr':ti<pi?'froml':'';
   $('#app').innerHTML=`<div class="phone"><div class="sbar" aria-hidden="true"><span class="num">9:41</span><span class="sicons"><i></i><i></i><i></i><b></b></span></div>
   <header class="apphead"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>${historiasHead()}
-    <button class="hpill num" id="hpill" data-tab="rutina" hidden></button>
+    <button class="hpill num" id="hpill" data-tab="rutina" hidden></button>${actBtnHtml(false)}
     <button class="avbtn" data-tab="perfil" aria-label="Mi perfil">${avatar()}</button></header>
   <div class="screen ${same?'':'enter '+dir}" id="scr-${S.tab}">${body}</div>
   <nav class="nav" aria-label="Secciones"><span class="ind" style="--x:${S.indFrom!=null?S.indFrom:(pi<0?ti:pi)};${ti<0?'opacity:0':''}"></span>${TABS.map(([k,l])=>`<button data-tab="${k}" ${S.tab===k||(k==='gimnasio'&&S.tab==='chat')?'aria-current="page"':''}>${ICONS[k]}<span>${l}</span>${k==='gimnasio'?`<i class="nbadge" data-chbadge ${chNoLeidosSocio()?'':'hidden'}>${chNoLeidosSocio()||''}</i>`:''}</button>`).join('')}</nav>${chFabHtml()}</div>`;
@@ -4094,10 +4167,10 @@ setInterval(()=>{
   if(reduceMotion){setRoll(document.getElementById('swtime'),fmtSW(swNow())); if(S.rest.run) setRoll(document.getElementById('resttime'),fmtR(restNow()))}
   if(S.rest.run){const r=restNow();
     if(r<=0&&tcbFinTarde()){}else if(r<=0){S.rest.run=false;S.rest.left=S.rest.total;S.rest.fin=S.rest.end;tcbGuardar(true);try{navigator.vibrate&&navigator.vibrate([180,90,180])}catch(e){}
-      toast('¡Terminó el descanso! A la próxima serie');campana('descanso');if(S.view==='socio')render()}}
+      toast('¡Terminó el temporizador! A la próxima serie');campana('descanso');if(S.view==='socio')render()}}
   const hp=document.getElementById('hpill');
   if(hp){const on=S.sw.run||S.rest.run; hp.hidden=!on||S.tab==='rutina';
-    if(on) hp.textContent=S.rest.run?'Descanso '+fmtR(restNow()):'⏱ '+fmtSW(swNow()).slice(0,5)}
+    if(on) hp.textContent=S.rest.run?'⏳ '+fmtR(restNow()):'⏱ '+fmtSW(swNow()).slice(0,5)}
 },100);
 
 /* ---------- Panel del dueño / profe ---------- */
@@ -4498,14 +4571,15 @@ function renderPagos(){
   const pagos=historial.filter(x=>x.periodo===periodo);
   $('#app').innerHTML=`<div class="owner">${proBar()}<div class="panel-pagos">
     <section class="panel pago-bloque">
-      <div class="panelhead"><h2>Solicitudes de pago</h2><span class="pill warn">${solicitudes.length} pendientes</span></div>
+      <div class="panelhead"><h2>Avisos de pago</h2><span class="pill warn">${solicitudes.length} para confirmar</span></div>
+      <p class="pago-ayuda">Cuando un socio avisa desde la app que pagó, aparece acá. Si te llegó, tocá <b>Llegó</b> y se le registra el pago de ese mes. Si no, tocá <b>No llegó</b>: el mes le vuelve a quedar en deuda y le avisamos.</p>
       ${solicitudes.length?solicitudes.map(({socio,periodo,aviso})=>`<form class="pago-fila" data-pago-solicitud="${periodo}" data-socio="${esc(socio.dni)}">
-        <div class="pago-datos"><b>${esc(socio.name)}</b><span>${panelPagoMes(periodo)} · ${esc(aviso.medio||'Sin medio informado')}</span></div>
+        <div class="pago-datos"><b>${esc(socio.name)}</b><span>${panelPagoMes(periodo)} · ${esc(aviso.medio||'Sin medio informado')}${aviso.fecha&&!isNaN(Date.parse(aviso.fecha))?' · avisó hace '+actHace(aviso.fecha):''}</span></div>
         <fieldset class="pago-controles" style="margin:0;padding:0;border:0;min-width:0" ${panelPagoEnCurso?'disabled':''}>
           <label>Importe ($)<input class="inp sm pago-monto" name="monto" type="number" min="1" max="2147483647" required value="${Number(socio.precio)||''}"></label>
           <label>Fecha (dd/mm)<input class="inp sm pago-fecha" name="fecha" maxlength="5" required value="${ddmm(iso(TODAY))}"></label>
-          <button class="btn sm" type="submit" value="registrar">Registrar pago</button>
-          <button class="mini danger" type="submit" value="rechazar" formnovalidate>No se registró</button>
+          <button class="btn sm pago-si" type="submit" value="registrar">✓ Llegó</button>
+          <button class="mini danger pago-no" type="submit" value="rechazar" formnovalidate>✕ No llegó</button>
         </fieldset></form>`).join(''):'<p>No hay solicitudes para revisar.</p>'}
     </section>
     <section class="panel pago-bloque">
@@ -4560,7 +4634,7 @@ async function panelPagoResolver(form,rechazar){
       saveDB();
       if(S.ptabP==='pagos')render(true);
     }
-    toast(rechazar?'Pago no registrado. El mes vuelve a figurar sin pagar.':'Pago registrado.');
+    toast(rechazar?'Listo: el mes le vuelve a quedar en deuda y le avisamos.':'Pago registrado ✓');
   }catch(error){
     toast(error.code==='23505'?'Ese mes ya figura pagado.':errTxt(error));
   }finally{
@@ -4924,6 +4998,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.51',t:'Campanita de actividad, temporizador y pagos más fáciles',items:[['🔔','Nueva campanita arriba: ves quién reaccionó o comentó tus historias, con lo nuevo marcado, y te llega un aviso.'],['⏳','En el cronómetro, «Descanso» ahora se llama «Temporizador».'],['💸','En Pagos del panel: cuando un socio avisa que pagó, tocás «Llegó» (se registra el pago) o «No llegó» (el mes vuelve a deuda y se le avisa).'],['💬','Los comentarios en la historia aparecen de a uno, sin sombra, para que se vea la foto.'],['🎵','Sonido propio de Training Club para los avisos.']]},
   {v:'1.1.50',t:'Series, foto a tu gusto y avisos en el panel',items:[['✅','En la rutina cada ejercicio muestra sus series: tocá cada una cuando la terminás. Con todas marcadas, el ejercicio queda hecho.'],['🖼️','Al cambiar la foto de perfil la podés mover y acercar para que quede como quieras.'],['💬','En las historias, al lado de los emojis está el globito: tocalo y escribí. Los comentarios y las reacciones van saliendo intercalados, como en Instagram.'],['🔔','El panel avisa de mensajes, avisos de pago y socios nuevos para aprobar, en el celu y en la PC.'],['📱','Arreglado: en el panel del celu ahora se abre bien cada chat (con «‹» volvés a la lista).']]},
   {v:'1.1.49',t:'Comentarios en las historias',items:[['💬','Ahora se puede comentar en las historias, como en Instagram: tocá «Agregá un comentario…» o el globito.'],['🗑️','Podés borrar tus comentarios, y el dueño de la historia o un profe también pueden.']]},
   {v:'1.1.48',t:'Cuotas vencidas bien sumadas',items:[['💸','«Cuotas vencidas» ahora suma bien la plata por cobrar: ya no aparece $0 cuando hay cuotas vencidas.'],['📅','Si un socio debe meses anteriores, cuenta como vencido aunque la cuota de este mes todavía no venza.']]},
@@ -5169,10 +5244,11 @@ const PNAV_ICO={socios:PNI('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 
   cuotas:PNI('<rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M6.5 15h4"/>'),
   novedades:PNI('<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>'),
   profes:PNI('<path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 9.8V15c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3V9.8"/>')};
+const pagosPend=()=>Object.values(DB.socios).reduce((n,s)=>n+Object.entries(s.avisos||{}).filter(([k,a])=>a&&/^\d{4}-(?:[0-9]|1[01])$/.test(k)&&!(s.pagos||{})[k]).length,0);
 function proTabs(n,nm){ return [
   {k:'socios',l:'Socios',extra:c2Badge()},
   {k:'mensajes',l:'Mensajes',ok:puedeP('chat'),extra:`<span class="cnt" data-chbadge ${nm?'':'hidden'}>${nm||''}</span>`},
-  {k:'pagos',l:'Pagos',ok:!c1xPlataOff()},
+  {k:'pagos',l:'Pagos',ok:!c1xPlataOff(),extra:(()=>{const n=pagosPend();return n?` <span class="cnt">${n}</span>`:''})()},
   {k:'cuotas',l:'Cuotas',ok:!c1xPlataOff()},
   {k:'novedades',l:'Novedades',ok:puedeP('novedades')},
   {k:'profes',l:esAdmin()?'Profes':'Mi perfil',extra:n&&esAdmin()?` <span class="cnt">${n}</span>`:''}
@@ -5254,11 +5330,11 @@ function tcbGuardar(force){ const dni=S.user&&S.user.dni; if(!dni||TCB.dni!==dni
 /* el descanso terminó mientras la pantalla estaba bloqueada (o hace rato): se marca terminado y se avisa una sola vez, sin sonido */
 function tcbFinTarde(alVolver=false){ const late=Date.now()-S.rest.end; if(!alVolver&&late<4000&&!document.hidden) return false;
   S.rest.run=false; S.rest.left=S.rest.total; S.rest.fin=S.rest.end; tcbGuardar(true);
-  if(document.hidden) TCB.avisar=S.rest.end; else toast('Tu descanso terminó '+tcbHace(S.rest.end));
+  if(document.hidden) TCB.avisar=S.rest.end; else toast('Tu temporizador terminó '+tcbHace(S.rest.end));
   if(S.view==='socio') render(true); return true }
 function tcbVolver(){ if(document.hidden||S.view!=='socio'||!S.user) return;
   if(S.rest.run&&restNow()<=0) tcbFinTarde(true);
-  if(TCB.avisar){ const t=TCB.avisar; TCB.avisar=0; toast('Tu descanso terminó '+tcbHace(t)) }
+  if(TCB.avisar){ const t=TCB.avisar; TCB.avisar=0; toast('Tu temporizador terminó '+tcbHace(t)) }
   setRoll(document.getElementById('swtime'),fmtSW(swNow())); if(S.rest.run) setRoll(document.getElementById('resttime'),fmtR(restNow()));
   const st=document.getElementById('tcbsest'); if(st&&TCB.sesT0) st.textContent=tcbDur(Date.now()-TCB.sesT0) }
 document.addEventListener('visibilitychange',()=>{
@@ -5342,7 +5418,7 @@ renderSocio=function(){ if(S.user) tcbCargar(); tcbRenderSocio.apply(this,argume
   if(scr){ scr.querySelectorAll('input').forEach(i=>{ const k=tcbDraftKey(i); if(k&&TCB.drafts[k]!=null&&!i.value){ i.value=TCB.drafts[k]; i.dispatchEvent(new Event('input',{bubbles:true})) } });
     if(TCB.scrollPend){ TCB.scrollPend=false; const y=TCB.scroll; scr.scrollTop=y; requestAnimationFrame(()=>{ scr.scrollTop=y }) }
     if(S.tcbCele){ S.tcbCele=null; setTimeout(()=>{ const r=document.querySelector('.tcb-ribbon'); if(r) r.classList.add('tcb-out') },3200) } }
-  if(TCB.avisar&&!document.hidden){ const t=TCB.avisar; TCB.avisar=0; setTimeout(()=>toast('Tu descanso terminó '+tcbHace(t)),500) }
+  if(TCB.avisar&&!document.hidden){ const t=TCB.avisar; TCB.avisar=0; setTimeout(()=>toast('Tu temporizador terminó '+tcbHace(t)),500) }
   tcbGuardar() };
 
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('button'); if(!b||S.view!=='socio'||!S.user) return;
@@ -6886,7 +6962,7 @@ document.addEventListener('click',e=>{
   if(b.id==='restplus'){const r=S.rest; if(r.run) r.end+=15000; else r.left+=15000; r.total=Math.max(r.total,restNow()); return render()}
   if(b.id==='restreset'){S.rest.run=false;S.rest.left=S.rest.total;return render()}
   if(b.dataset.rest){const ms=+b.dataset.rest*1000;S.rest={run:true,end:Date.now()+ms,left:ms,total:ms};S.tmode='rest';
-    S.forceTop=true;toast('Descanso de '+fmtR(ms)+' en marcha');return render()}
+    S.forceTop=true;toast('Temporizador de '+fmtR(ms)+' en marcha');return render()}
   if(b.id==='fin'){return render()}
   if(b.dataset.m){S.selMonth=+b.dataset.m;return render()}
   if(b.dataset.mrk!=null){ S.asView='rank'; S.rkP=S.mrkCara||'mes'; S.rkSig=null; S.tab='asist'; S.forceTop=true; return render() }
@@ -7267,6 +7343,7 @@ function ui43Mount(){
   [...who.children].forEach(x=>{if(x.id==='c1xojo'||x.id==='temab'){
     x.classList.add('ui43-iconbtn');x.innerHTML=ui43Icon(x.id==='temab'?'sun':'eye');controls.append(x);
   }});
+  controls.insertAdjacentHTML('beforeend',actBtnHtml(true));
   if(puedeP('chat')){const msg=document.createElement('button');msg.type='button';msg.className='ui43-iconbtn';msg.dataset.ui43go='mensajes';msg.setAttribute('aria-label',`Mensajes: ${chNoLeidosProfe()} sin leer`);msg.innerHTML=ui43Icon('bell')+`<i class="ui43-dot" data-chbadge ${chNoLeidosProfe()?'':'hidden'}>${chNoLeidosProfe()||''}</i>`;controls.append(msg)}
   work.append(header);
   const heading=document.createElement('div');heading.className='ui43-heading';
