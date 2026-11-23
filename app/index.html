@@ -3733,7 +3733,7 @@ function screenInicio(){
   ${historiasInicio()}
   ${st}
   ${d44SocioHtml(s)}
-  ${gnInicioHtml()}
+  ${gnInicioHtml()}${S.gnTodas?gnListaHtml():''}
   ${r?`<section class="card">
     <div class="ttl"><b>Hoy: ${esc(r.t||r.d)}</b><span>${esc(r.d)} · ${r.ex.length} ejercicio${r.ex.length===1?'':'s'}</span></div>
     <div>${r.ex.slice(0,3).map(x=>`<div class="mini-ex"><span>${esc(exNm(x))}</span><span class="num">${exMeta(x)}</span></div>`).join('')}</div>
@@ -5815,12 +5815,12 @@ function gnItemHtml(n,modo,vis,k){ const nueva=!vis.includes(String(n.id)), falt
       <b class="gntit">${esc(n.titulo)}</b>${n.texto?`<p class="gntxt">${chLink(n.texto)}</p>`:''}${modo==='slide'?'<span class="gnmas">Ver completa ›</span>':''}</div></div></article>` }
 /* socio · Inicio: carrusel con las próximas y la última */
 function gnInicioHtml(){ const L=gnDestacadas(); if(!L.length) return ''; const vis=gnVistos(), nn=GNOV.filter(n=>!vis.includes(String(n.id))).length;
-  return `<section class="gnhome" aria-label="Novedades del gimnasio"><div class="gnhead"><b>${GN_ICO}Novedades</b>${nn?`<span class="gnnew">${nn} nueva${nn===1?'':'s'}</span>`:''}<button type="button" class="linkb" data-gnvertodas>Ver todas ›</button></div>
+  return `<section class="gnhome" aria-label="Novedades del gimnasio"><div class="gnhead"><b>${GN_ICO}Novedades</b>${nn?`<span class="gnnew">${nn} nueva${nn===1?'':'s'}</span>`:''}<button type="button" class="linkb" data-gnvertodas aria-expanded="${!!S.gnTodas}">${S.gnTodas?'Ocultar':'Ver todas ›'}</button></div>
     <div class="gncar hscroll ${L.length>1?'varias':''}">${L.map((n,i)=>gnItemHtml(n,'slide',vis,i)).join('')}</div>
     ${L.length>1?`<div class="gndots" aria-hidden="true">${L.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}</section>` }
 /* socio · Gimnasio: la lista completa (las marca como vistas un rato después de mostrarlas) */
 function gnListaHtml(){ if(!GNOV.length) return ''; const L=[...gnOrden(GNOV.filter(n=>!gnPasada(n))),...gnOrden(GNOV.filter(gnPasada))], vis=gnVistos();
-  if(L.some(n=>!vis.includes(String(n.id)))){ clearTimeout(gnListaHtml._t); gnListaHtml._t=setTimeout(()=>{ if(S.view==='socio'&&S.tab==='gimnasio') gnMarcarVistas(L) },1800) }
+  if(L.some(n=>!vis.includes(String(n.id)))){ clearTimeout(gnListaHtml._t); gnListaHtml._t=setTimeout(()=>{ if(S.view==='socio'&&S.tab==='inicio'&&S.gnTodas) gnMarcarVistas(L) },1800) }
   return `<section class="card gnlista" id="gnlista"><div class="ttl"><b>Novedades</b><span class="muted">${L.length} publicada${L.length===1?'':'s'}</span></div>${L.map((n,i)=>gnItemHtml(n,'fila',vis,Math.min(i,8))).join('')}</section>` }
 function gnZoom(src){ const v=document.getElementById('gnlb'); if(v) v.remove();
   const w=document.createElement('div'); w.id='gnlb'; w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-label','Imagen de la novedad');
@@ -5832,7 +5832,7 @@ function gnZoom(src){ const v=document.getElementById('gnlb'); if(v) v.remove();
 document.addEventListener('click',e=>{ if(!e.target.closest) return;
   const z=e.target.closest('[data-gnzoom]'); if(z){ e.stopPropagation(); const n=GNOV.find(x=>String(x.id)===z.dataset.gnzoom); if(n&&n.imagen){ gnMarcarVistas([n]); gnZoom(n.imagen) } return }
   const g=e.target.closest('[data-gnver]'); if(g&&!e.target.closest('a')){ e.stopPropagation(); gn45Abrir(g.dataset.gnver); return }
-  const v=e.target.closest('[data-gnvertodas]'); if(v){ e.stopPropagation(); goTab('gimnasio'); setTimeout(()=>{ const l=document.getElementById('gnlista'); if(l) l.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'}) },reduceMotion?30:420) } },true);
+  const v=e.target.closest('[data-gnvertodas]'); if(v){e.stopPropagation();S.gnTodas=!S.gnTodas;render(true);const destino=document.getElementById('gnlista')||document.querySelector('[data-gnvertodas]');destino?.scrollIntoView({block:'nearest'})} },true);
 document.addEventListener('scroll',e=>{ const c=e.target; if(!c.classList||!c.classList.contains('gncar')) return; const d=c.parentNode.querySelector('.gndots'); if(!d) return;
   const it=c.children[0], w=it?it.getBoundingClientRect().width+10:1, i=Math.round(c.scrollLeft/w); [...d.children].forEach((x,k)=>x.classList.toggle('on',k===i)) },true);
 /* nube: se baja con el resto (loadAll). Para no bajar las imágenes cada 30 s, primero se mira si algo cambió */
@@ -7601,14 +7601,12 @@ function screenGimnasio(){
   const lk=(cl,h,ico,t,sub)=>`<a class="gbtn ${cl}" href="${esc(h)}" ${cl==='tel'?'':'target="_blank" rel="noopener"'}><span class="gi">${ico}</span><span class="gtx"><b>${t}</b><small>${sub}</small></span><span class="garr" aria-hidden="true">›</span></a>`;
   const cont=[wa&&lk('wa',wa,GICO.wa,'WhatsApp','Escribile a '+P1), tel&&lk('tel',tel,GICO.tel,'Llamar',esc(gTxt(g.telefono))), ig&&lk('ig',ig,GICO.ig,'Instagram','@'+esc(igUser(g.instagram)))].filter(Boolean);
   const monto=s&&s.plan?(e.c==='bad'?montoMes(s,M):s.precio):0;
-  return `<h2>Gimnasio</h2>${gnListaHtml()}
+  return `<h2>Gimnasio</h2>
   <div class="gymscr" style="display:contents">
   ${d||maps?`<section class="card gubic"><span class="gico">${GICO.pin}</span><span class="gtx"><small>Ubicación</small><b>${d?esc(d):'Training Club'}</b></span>${maps?`<a class="btn sm" href="${esc(maps)}" target="_blank" rel="noopener">Cómo llegar</a>`:''}</section>`:''}
   ${cont.length?`<section class="card"><div class="ttl"><b>Contacto</b></div><div class="glinks">${cont.join('')}</div></section>`:''}
-  ${(p=>`<section class="card gprofe">${avatar('md',p.foto,p.nombre)}<span class="gtx"><small>Tu profe</small><b>${esc(p.nombre)}</b>`)(profeGym(s))}<p>${esc(gTxt(g.profe_bio)||PROFE_BIO)}</p></span></section>
-  ${svHtml()}
-  ${horariosHtml()}${proximosCierres()}
-  ${esFam(s)?`<section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Plan familiar</b><p>No pagás cuota. ${famChiste()}</p></section>`:`<section class="card">${comoPagarHtml(monto)}</section>`}
+  ${horariosHtml()}${proximosCierres()||'<section class="card"><h3>Próximos cierres</h3><p>No hay cierres programados.</p></section>'}
+  ${esFam(s)?`<section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Cómo pagar</b><p>No pagás cuota. ${famChiste()}</p></section>`:`<section class="card">${comoPagarHtml(monto)}</section>`}
   ${sugCard()}</div>`}
 /* nube: se baja junto con el resto (loadAll) y si cambió se refresca la pantalla sin saltos */
 async function cargarGym(){ if(!CLOUD||!sb) return;
