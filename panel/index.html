@@ -5450,8 +5450,21 @@ async function refrescarParte(tabla){
     if(window.performance?.measure)try{performance.clearMeasures('tc.sync.'+tabla);performance.measure('tc.sync.'+tabla,{start:inicio,end:performance.now()})}catch(e){}
   }catch(e){reload()}
 }
+const camposTesoreria=['plan','precio','vence','desde','desde_dia','debe'];
+async function fichasVisibles(){
+ const r=await sb.rpc('tc_fichas_visibles');
+ if(!r.error)return r.data;
+ if(r.error.code!=='PGRST202')throw r.error;
+ return q(sb.from('socios').select(S.view==='duenio'?'id,dni,nombre,alta,rutina,foto,nacimiento,motivacion,aprobado,funcional,rutina_profe':'*'));
+}
+async function cargarPermisoTesoreria(){
+ if(!PRO)return;
+ const r=await sb.rpc('tc_mi_tesoreria');
+ PRO.tesoreria=!r.error&&r.data===true;
+ try{c1xPref=localStorage.getItem('tc-plata-off:'+PRO.dni)==='1'}catch(e){c1xPref=false}
+}
 async function loadAll(){ const e0=EDITS; cargarGym(); cargarChat(); cargarNovedades(); const x42pp=x42CargarPub();
-  const [so,pa,as,pr,me_,se,ru,pl]=await Promise.all([q(sb.from('socios').select('*')),q(sb.from('pagos').select('*')),q(sb.from('asistencias').select('*')),q(sb.from('progreso').select('*')),q(sb.from('medidas').select('*')),sb.from('sensaciones').select('*').then(r=>r.data||[]),sb.from('running_reg').select('*').then(r=>r.data||[]),sb.from('planes').select('*').order('orden').then(r=>r.error?null:r.data,()=>null)]);
+  const [so,pa,as,pr,me_,se,ru,pl]=await Promise.all([fichasVisibles(),S.pro&&!puedeP('dinero')?Promise.resolve([]):q(sb.from('pagos').select('*')),q(sb.from('asistencias').select('*')),q(sb.from('progreso').select('*')),q(sb.from('medidas').select('*')),sb.from('sensaciones').select('*').then(r=>r.data||[]),sb.from('running_reg').select('*').then(r=>r.data||[]),S.pro&&!puedeP('dinero')?Promise.resolve(null):sb.from('planes').select('*').order('orden').then(r=>r.error?null:r.data,()=>null)]);
   if(EDITS!==e0||pend){ reload(); return }   /* hubo un cambio mientras se bajaba: no pisarlo */
   DB=buildDB({socios:so,pagos:pa,asis:as,prog:pr,med:me_,sens:se,runs:ru}); S.planesNube=!!pl; if(pl) setPlanes(pl); SNAP=norm(DB);
   if(S.view==='duenio'&&S.pro){const d=await q(sb.from('dispositivos').select('uid,socio_id,aprobado,creado').eq('aprobado',false)); const byId={}; Object.values(DB.socios).forEach(s=>byId[s.id]=s);
@@ -5488,7 +5501,14 @@ async function push(){
     return;
   }
   if(X.planes.up.length) await q(sb.from('planes').upsert(X.planes.up));
-  if(X.socios.up.length) await q(sb.from('socios').upsert(X.socios.up));
+  if(X.socios.up.length){
+    const compartidas=X.socios.up.map(fila=>Object.fromEntries(Object.entries(fila).filter(([k])=>!camposTesoreria.includes(k))));
+    await q(sb.from('socios').upsert(compartidas));
+    if(puedeP('dinero'))for(const fila of X.socios.up){
+      const antes=old.socios?.[fila.id]||{}, cambios=Object.fromEntries(camposTesoreria.filter(k=>JSON.stringify(fila[k])!==JSON.stringify(antes[k])).map(k=>[k,fila[k]]));
+      if(Object.keys(cambios).length)await q(sb.rpc('tc_guardar_cuota',{p_id:fila.id,p_datos:cambios}));
+    }
+  }
   await Promise.all(['pagos','asis','prog','med','sens','runs'].flatMap(t=>X[t].del.map(r=>q(delOf[t](r)))));
   await Promise.all(['pagos','asis','prog','med','sens','runs'].filter(t=>X[t].up.length).map(t=>q(sb.from(T[t]).upsert(X[t].up))));
   await Promise.all(X.socios.del.map(r=>q(sb.from('socios').delete().eq('id',r.id))));
@@ -5527,12 +5547,20 @@ function tcLock(name,t,fn){
      .catch(()=>{ if(corrio) return; corrio=true; clearTimeout(tm); correr() });
   });
 }
+async function cerrarSesionPanel(b){
+ b.disabled=true;
+ try{await q(sb.rpc('profe_salir'));await sb.auth.signOut({scope:'local'});location.reload()}
+ catch(e){b.disabled=false;toast('No se pudo cerrar la sesión: '+errTxt(e))}
+}
 async function bootCloud(){
   try{
-    sb=window.supabase.createClient(TC_CFG.url,TC_CFG.key,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'tc-auth',lock:tcLock}});
+    const esPanel=S.view==='duenio';
+    const auth={persistSession:true,autoRefreshToken:true,storageKey:esPanel?'tc-panel-auth':'tc-auth',lock:tcLock};
+    if(esPanel&&!window.tcDesktop)auth.storage=sessionStorage;
+    sb=window.supabase.createClient(TC_CFG.url,TC_CFG.key,{auth});
     let {data:{session}}=await sb.auth.getSession();
     if(!session){const r=await sb.auth.signInAnonymously(); if(r.error) throw r.error}
-    if(S.view==='duenio'){ S.hayProfe=await q(sb.rpc('hay_profe')); const p=await q(sb.rpc('profe_yo')); PRO=p; S.pro=!!p }
+    if(S.view==='duenio'){ S.hayProfe=await q(sb.rpc('hay_profe')); const p=await q(sb.rpc('profe_yo')); PRO=p; S.pro=!!p; if(p)await cargarPermisoTesoreria() }
     else if(S.user){
       if(await q(sb.rpc('adforge_legal_vigente'))) await checkDevice();
       else {
@@ -5555,7 +5583,7 @@ async function bootCloud(){
     };
     sb.channel('tc').on('postgres_changes',{event:'*',schema:'public'},onChange).subscribe(estado=>{conectado=estado==='SUBSCRIBED'});
     /* respaldo: si el tiempo real se corta, igual se actualiza cada 30 s y al volver a la app */
-    setInterval(()=>{ if(document.visibilityState==='visible'&&(S.pendiente||Date.now()-ultimaCargaCompleta>(conectado?120000:25000))) onChange({}) },30000);
+    setInterval(()=>{ if(document.visibilityState==='visible'&&(S.pendiente||Date.now()-ultimaCargaCompleta>(conectado&&S.view!=='duenio'?120000:25000))) onChange({}) },30000);
     document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&(S.pendiente||!conectado||Date.now()-ultimaCargaCompleta>15000)) onChange({}) });
     S.ready=true; render(); lanzarAviso(); activarPush();
   }catch(e){
@@ -5578,6 +5606,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.65',t:'Sesiones privadas y tesorería',items:[['🔐','El panel tiene su propia sesión. Los pagos y las deudas están reservados a Ezequiel.']]},
   {v:'1.1.64',t:'Teclado, chat y cámara',items:[['⌨️','El chat conserva la posición y la selección al actualizarse.'],['📷','La cámara y el micrófono se liberan al salir de la captura.']]},
   {v:'1.1.63',t:'Planificación de rutinas y Running',items:[['📅','Programá rutinas y revisalas antes de publicarlas.'],['🏃','Configurá objetivos de ritmo y compará sesiones de Running.']]},
   {v:'1.1.62',t:'Rutinas y series',items:[['🏋️','Configurá ejercicios alternativos y superseries. Los socios pueden anotar cargas por serie y consultar desde la rutina.']]},
@@ -5716,7 +5745,7 @@ document.addEventListener('click',e=>{ if(e.target.closest('#psx')){ e.preventDe
 /* ---------- permisos del profe (lote 38) ----------
    esAdmin(): el dueño/administrador (o la demo sin nube). puedeP(k): admin o tiene el permiso k.
    Claves de permiso: rutinas, asignar, chat, dinero, novedades, aprobar, gyminfo */
-const PERMISOS=[['rutinas','Crear y editar rutinas'],['asignar','Asignar rutinas a sus alumnos'],['chat','Chatear con sus alumnos'],['dinero','Ver pagos, ingresos y deudas'],['novedades','Publicar novedades'],['aprobar','Aprobar socios nuevos'],['gyminfo','Editar la info del gimnasio']];
+const PERMISOS=[['rutinas','Crear y editar rutinas'],['asignar','Asignar rutinas a sus alumnos'],['chat','Chatear con sus alumnos'],['novedades','Publicar novedades'],['aprobar','Aprobar socios nuevos'],['gyminfo','Editar la info del gimnasio']];
 const esAdmin=()=>!PRO||PRO.admin!==false;
 /* desarrollador: puede todo, incluso con los dueños. En la demo local el primer profe hace de desarrollador. */
 const esDev=()=>!PRO||!!PRO.dev||(!CLOUD&&PRO.admin!==false&&!PRO.dueno);
@@ -5724,7 +5753,7 @@ const rolDe=p=>p&&p.dev?'dev':(CLOUD?!!(p&&p.admin):!!p&&p.admin!==false)?'dueno
 const ROL_TXT={dev:'Desarrollador',dueno:'Dueño',profe:'Profesor'};
 /* ¿el que está logueado puede administrar a este profe? (la base lo controla igual) */
 const puedeTocar=p=>!p.yo&&(esDev()||(esAdmin()&&rolDe(p)==='profe'));
-const puedeP=k=>esAdmin()||!!((PRO&&PRO.permisos)||{})[k];
+const puedeP=k=>k==='dinero'&&CLOUD?PRO?.tesoreria===true:esAdmin()||!!((PRO&&PRO.permisos)||{})[k];
 /* ---------- Novedades del gimnasio (lote 38 · A). Distinto del popup NOVEDADES de versiones del panel ---------- */
 let GNOV=[];
 try{ if(!window.TC_CFG) GNOV=JSON.parse(localStorage.getItem('tc-novedades')||'[]')||[] }catch(e){ GNOV=[] }
@@ -6072,11 +6101,11 @@ function c1xFabPrev(n){ if(!n||S.chSheet) return ''; const k=chK(me()), m=MSGS.f
 document.addEventListener('click',e=>{ if(S.view==='socio'&&e.target.closest&&e.target.closest('#c1xfabp')){ e.stopPropagation(); chAbrirHoja() } },true);
 
 /* ---------- plata: oculta con el ojito (se recuerda) o siempre si el profe no tiene permiso «dinero» ---------- */
-let c1xPref=false; try{c1xPref=localStorage.getItem('tc-plata-off')==='1'}catch(e){}
+let c1xPref=false;
 const c1xPlataOff=()=>!puedeP('dinero')||c1xPref;
-const C1X_FPLATA=['vencidos','por','al','sincuota'];
+const C1X_FPLATA=['avisaron','vencidos','por','al','sincuota','pausa','baja'];
 function c1xOjo(){ if(!puedeP('dinero')||S.view!=='duenio'||!S.pro) return; const r=document.documentElement;
-  c1xPref=!c1xPref; try{localStorage.setItem('tc-plata-off',c1xPref?'1':'0')}catch(e){}
+  c1xPref=!c1xPref; try{localStorage.setItem('tc-plata-off:'+PRO?.dni,c1xPref?'1':'0')}catch(e){}
   const fin=()=>{ r.classList.remove('c1xsale'); r.classList.toggle('tcplata-off',c1xPref);
     if(!reduceMotion){ r.classList.add('c1xvuelve'); clearTimeout(c1xOjo._t); c1xOjo._t=setTimeout(()=>r.classList.remove('c1xvuelve'),700) }
     if(!gsDirty()) render(true); else { const b=document.getElementById('c1xojo'); if(b){ b.classList.toggle('off',c1xPref); b.setAttribute('aria-pressed',c1xPref) } }
@@ -6135,7 +6164,7 @@ function c1xRutina(app){ const d=app.querySelector('#dirty'), sec=d&&d.closest('
 
 /* ---------- pestaña Profes: el admin crea perfiles por DNI y elige permisos con interruptores ---------- */
 const c1xSw=(k,l,chk,attr,dis,vis)=>`<label class="c1xsw ${(vis==null?chk:vis)?'on':''} ${dis?'dis':''}"><input type="checkbox" ${attr} ${chk?'checked':''} ${dis?'disabled':''}><i aria-hidden="true"></i><span>${C1X_ICO[k]||''} ${esc(l)}</span></label>`;
-function c1xChips(p){ if(p.dev) return '<span class="c1xchip adm c1xdevc">⚡ Desarrollador · acceso total</span>';
+function c1xChips(p){ if(p.dev) return '<span class="c1xchip adm c1xdevc">⚡ Desarrollador</span>';
   if(c1xAdm(p)) return '<span class="c1xchip adm">★ Dueño · puede todo en el gimnasio</span>';
   const on=PERMISOS.filter(([k])=>(p.permisos||{})[k]);
   return on.length?on.map(([k,l],i)=>`<span class="c1xchip" style="--i:${i}">${C1X_ICO[k]} ${esc(l)}</span>`).join(''):'<span class="c1xchip off">Sin permisos todavía</span>' }
@@ -7698,7 +7727,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.f){S.filter=b.dataset.f;return render()}
   if(b.dataset.open){S.sel=b.dataset.open;S.edit=null;S.fc={y:Y,m:M};return render()}
   if(b.id==='fback') return gsLeave(()=>{S.sel=null;S.edit=null;S.fd=null;render()});
-  if(b.id==='delsocio'){const s=DB.socios[S.sel];if(!confirm('¿Dar de baja a '+s.name+'? Se borran sus cuotas, rutina y progreso.'))return;delete DB.socios[S.sel];saveDB();S.sel=null;S.edit=null;S.dirty=false;S.msel=null;toast('Socio dado de baja');return render()}
+  if(b.id==='delsocio'){if(CLOUD&&!puedeP('dinero'))return toast('Solo Ezequiel puede dar de baja una ficha con su historial de pagos');const s=DB.socios[S.sel];if(!confirm('¿Dar de baja a '+s.name+'? Se borran sus cuotas, rutina y progreso.'))return;delete DB.socios[S.sel];saveDB();S.sel=null;S.edit=null;S.dirty=false;S.msel=null;toast('Socio dado de baja');return render()}
   if(b.dataset.eday){S.eday=+b.dataset.eday;return render()}
   if(b.id==='addday'){const ED=S.edit.days;ED.push({d:'Día '+String.fromCharCode(65+ED.length),t:'',ex:[['','','','','']]});S.eday=ED.length-1;S.dirty=true;return render()}
   if(b.id==='tpl'){S.edit.days=rutEd(PLANTILLA);S.eday=0;S.dirty=true;return render()}
@@ -7741,7 +7770,7 @@ document.addEventListener('click',e=>{
   if(b.dataset.pquitar){const n=b.dataset.pn||'este profe'; if(!confirm('¿Quitar a '+n+' de los profes? No va a poder entrar más al panel.'))return; profeAccion('quitar',b.dataset.pquitar);return}
   if(b.id==='prtoggle'){const hay=CLOUD?S.hayProfe:profesLS().some(p=>p.aprobado); const reg=S.preg!=null?S.preg:!hay; S.preg=!reg; S.pmsg=null; return render()}
   if(b.id==='lcambiar'){S.lmode='dni';S.legalRegistro=false;return render()}
-  if(b.id==='prologout'){ if(gsDirty()) return gsLeave(()=>{const x=$('#prologout'); if(x) x.click()});try{sessionStorage.removeItem('tc-pro');sessionStorage.removeItem('tc-pro-dni')}catch(x){} if(CLOUD){sb.rpc('profe_salir');DB={socios:{}}} PRO=null;S.pro=false;S.sel=null;S.ptabP='socios';S.profes=[];return render()}
+  if(b.id==='prologout'){ if(gsDirty()) return gsLeave(()=>{const x=$('#prologout'); if(x) x.click()});try{sessionStorage.removeItem('tc-pro');sessionStorage.removeItem('tc-pro-dni')}catch(x){} if(CLOUD){return cerrarSesionPanel(b)} PRO=null;S.pro=false;S.sel=null;S.ptabP='socios';S.profes=[];return render()}
   if(b.id==='avisox'){const a=aviso(me()); try{localStorage.setItem('tc-avx-'+a.k,'1')}catch(x){} return render()}
   if(b.id==='avisos'){ if(!notifOK()) return toast('Instalá la app en tu pantalla de inicio para recibir avisos');
     Notification.requestPermission().then(p=>{ if(p==='granted'){toast(CLOUD?'Listo: te avisamos aunque tengas la app cerrada':'Listo: te avisamos el día 5 y el 10 si no pagaste');
@@ -7833,7 +7862,7 @@ document.addEventListener('submit',e=>{
     const bt=f.querySelector('button[type=submit]'); bt.disabled=true;
     if(CLOUD){ sb.rpc('profe_registrar',{p_dni:dni,p_nombre:nom,p_apellido:ape,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
         if(error) return bad(errTxt(error)); if(data&&data.pendiente) return pend();
-        PRO=data; try{PRO=(await q(sb.rpc('profe_yo')))||data}catch(x){} S.pro=true; S.hayProfe=true; S.preg=null; S.pmsg=null; await loadAll(); render(); bnvProfe() }); return }
+        PRO=data; try{PRO=(await q(sb.rpc('profe_yo')))||data}catch(x){} await cargarPermisoTesoreria(); S.pro=true; S.hayProfe=true; S.preg=null; S.pmsg=null; await loadAll(); render(); bnvProfe() }); return }
     const L=profesLS(), V=L.find(p=>p.dni===dni);
     if(V&&V.hash){bt.disabled=false;return bad('Ya hay un profe con ese DNI. Iniciá sesión.')}
     if(V){ hashPw(dni,pw).then(hh=>{ V.hash=hh; saveProfesLS(L); bt.disabled=false; if(!V.aprobado) return pend();
@@ -7848,7 +7877,7 @@ document.addEventListener('submit',e=>{
     const bt=f.querySelector('button[type=submit]'); bt.disabled=true;
     if(CLOUD){ sb.rpc('profe_login',{p_dni:dni,p_pw:pw}).then(async({data,error})=>{ bt.disabled=false;
         if(error){err.textContent=errTxt(error);err.hidden=false;return} if(!data) return mal(); if(data.sinclave) return sinclave(); if(data.pendiente) return espera();
-        PRO=data; try{PRO=(await q(sb.rpc('profe_yo')))||data}catch(x){} S.pro=true; S.pmsg=null; await loadAll(); render(); bnvProfe() }); return }
+        PRO=data; try{PRO=(await q(sb.rpc('profe_yo')))||data}catch(x){} await cargarPermisoTesoreria(); S.pro=true; S.pmsg=null; await loadAll(); render(); bnvProfe() }); return }
     const P=profesLS().find(p=>p.dni===dni);
     hashPw(dni,pw).then(hh=>{ bt.disabled=false; if(P&&!P.hash) return sinclave(); if(!P||hh!==P.hash) return mal(); if(!P.aprobado) return espera();
       PRO=P; try{sessionStorage.setItem('tc-pro','1');sessionStorage.setItem('tc-pro-dni',dni)}catch(x){} S.pro=true; S.pmsg=null; render(); bnvProfe()}); return}
