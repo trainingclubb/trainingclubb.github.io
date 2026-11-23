@@ -2037,10 +2037,25 @@ html:has(dialog.hsig[open]){overflow:hidden}
 @media (prefers-reduced-motion:reduce){.dash.dashed .dwt,.dashbar.in,.dashpop,.ui43-enter .dash>.dw{animation:none}}
 .marca-dialog{margin:auto;width:min(90vw,340px);border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);padding:20px}.marca-dialog::backdrop{background:#0007}.marca-dialog form,.marca-dialog label{display:grid;gap:8px}.marca-dialog form{gap:12px}
 .legal-fila{display:grid;grid-template-columns:1fr auto;align-items:start;border-bottom:1px solid var(--line)}.legal-fila label,.legal-fila summary{padding:12px 5px;cursor:pointer}.legal-fila:has(details[open]){grid-template-columns:1fr}.legal-fila input{width:18px;height:18px;vertical-align:middle}
-.reloj-franja{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:6px 10px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.reloj-franja>span{flex:1}.reloj-franja .roll{display:inline-flex;font-variant-numeric:tabular-nums}
+.reloj-franja {
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;
+  min-height:64px;width:100%;padding:8px 10px;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;
+}
+.reloj-lectura{display:grid;gap:2px;min-width:0}
+.reloj-lectura .reloj-nombre{justify-self:start;font-size:11px;font-weight:700;color:var(--muted);padding:0;line-height:1.2}
+.reloj-digitos{font-family:var(--display);font-size:clamp(20px,6vw,27px);font-weight:900;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+.reloj-acciones{display:grid;grid-template-columns:repeat(2,minmax(58px,1fr));gap:5px;align-items:stretch}
+.reloj-acciones button{padding:6px;min-height:32px;font-size:11px;white-space:nowrap}
+.reloj-acciones .linkb{border:1px solid transparent;border-radius:8px}
+.timer .tbig.roll{font-size:clamp(32px,12vw,58px);align-items:flex-end;line-height:1.2}
+.timer .rcenter .tbig.roll{font-size:clamp(30px,10vw,46px)}
+.timer .roll .dg,.timer .roll .dg[data-fast]{height:1.22em;line-height:1.2}
+.timer .roll .dg[data-fast]{width:.6em;margin-bottom:.04em}
+
 .pasadas-vivo{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border-block:1px solid var(--line)}.pasadas-vivo>button,.pasadas-vivo>p,.pasadas-vivo>label{grid-column:1/-1}.pasadas-vivo [data-reloj-pasada]{font-variant-numeric:tabular-nums;font-size:24px}.run-km,.pasadas-vivo label{display:grid;gap:5px}
 .ex .sers{display:grid;width:100%}.serie-fila{display:grid;grid-template-columns:32px minmax(0,1fr) 64px;gap:4px;align-items:center}.serie-fila .mini{padding:5px 2px;font-size:11px}.serie-fila .serie-carga{min-width:0}.serie-elegir,.ed-opciones-serie label{display:grid;gap:4px;font-size:12px}.ed-opciones-serie{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr;gap:8px}.serie-fila .serie-repetir:disabled{opacity:.4}
-.nota-editor{grid-column:1/-1}.nota-ej{overflow-wrap:anywhere}.reloj-franja>button{min-width:63px}.reloj-franja>span{white-space:nowrap}.cal-check{display:flex!important}.perfil-csv{justify-self:start}
+.nota-editor{grid-column:1/-1}.nota-ej{overflow-wrap:anywhere}.cal-check{display:flex!important}.perfil-csv{justify-self:start}
 .rut-opciones{display:flex;align-items:end;flex-wrap:wrap;gap:10px}.rut-opciones label{display:grid;gap:4px}.marca-dialog{max-height:85vh;max-height:85dvh;overflow:auto}
 html.kbon dialog.marca-dialog{position:fixed;top:calc(var(--vvt,0px) + 8px);bottom:auto;margin-block:0;max-height:calc(var(--vvh,100vh) - 16px);max-height:calc(var(--vvh,100dvh) - 16px);overscroll-behavior:contain}
 @media(max-width:600px){.marca-dialog input,.marca-dialog textarea,.marca-dialog select{font-size:16px}}
@@ -3865,7 +3880,13 @@ const fmtSW=ms=>`${p2(Math.floor(ms/60000))}:${p2(Math.floor(ms/1000)%60)}.${p2(
 /* dígitos que ruedan: cada número sube (o baja, en la cuenta regresiva) cuando cambia */
 function rollHTML(t,fast=0){return [...t].map((c,i)=>/\d/.test(c)?`<span class="dg"${i>=t.length-fast?' data-fast':''}><i>${c}</i></span>`:`<span class="sep">${c}</span>`).join('')}
 function setRoll(el,t){
-  if(!el||el.dataset.v===t) return; const old=el.dataset.v||''; el.dataset.v=t;
+  if(!el)return;
+  if(el.hasAttribute('data-reloj-compacto')){
+    const valor=t.split('.')[0];
+    if(el.textContent!==valor)el.textContent=valor;
+    return;
+  }
+  if(el.dataset.v===t)return; const old=el.dataset.v||''; el.dataset.v=t;
   if(el.children.length!==t.length||old.length!==t.length){el.innerHTML=rollHTML(t,+el.dataset.fast||0);return}
   const dn=el.dataset.dir==='down';
   for(let i=0;i<t.length;i++){ if(t[i]===old[i]) continue; const box=el.children[i];
@@ -3879,8 +3900,16 @@ const restSecs=txt=>{const n=parseFloat(txt);return /min/.test(txt)?n*60:n};
 
 function timerCard(){
   if(!S.relojGrande){
-    const descanso=S.tmode==='rest', tiempo=descanso?fmtR(restNow()):fmtSW(swNow()), corriendo=descanso?S.rest.run:S.sw.run;
-    return `<section class="reloj-franja" id="timer"><span>${descanso&&corriendo?'<button class="linkb" id="restgo" aria-label="Pausar descanso">Descanso</button>':descanso?'Descanso':'Cronómetro'} <b class="num roll" id="${descanso?'resttime':'swtime'}" data-v="${tiempo}">${rollHTML(tiempo,descanso?0:2)}</b></span> ${descanso&&corriendo?'<button class="mini" id="restplus">+15 s</button><button class="mini" data-terminar-descanso>Terminar</button>':`<button class="mini" id="${descanso?'restgo':'swgo'}">${corriendo?'Pausar':'Iniciar'}</button><button class="linkb" data-reloj-mas aria-label="Opciones del reloj">Opciones</button>`}</section>`;
+    const descanso=S.tmode==='rest', corriendo=descanso?S.rest.run:S.sw.run;
+    const tiempo=descanso?fmtR(restNow()):fmtSW(swNow()).split('.')[0];
+    const nombre=descanso&&corriendo?'<button class="linkb reloj-nombre" id="restgo" aria-label="Pausar descanso">Descanso</button>':'<span class="reloj-nombre">'+(descanso?'Descanso':'Cronómetro')+'</span>';
+    const acciones=descanso&&corriendo
+      ?'<button class="mini" id="restplus">+15 s</button><button class="mini" data-terminar-descanso>Terminar</button>'
+      :`<button class="mini" id="${descanso?'restgo':'swgo'}">${corriendo?'Pausar':(descanso?restNow()<S.rest.total&&restNow()>0:swNow()>0)?'Seguir':'Iniciar'}</button><button class="linkb" data-reloj-mas aria-label="Opciones del reloj">Opciones</button>`;
+    return `<section class="reloj-franja" id="timer" aria-label="Reloj de rutina">
+      <div class="reloj-lectura">${nombre}<b class="reloj-digitos" id="${descanso?'resttime':'swtime'}" data-reloj-compacto>${tiempo}</b></div>
+      <div class="reloj-acciones">${acciones}</div>
+    </section>`;
   }
   const c=S.tmode==='crono'; const prevM=S.tmPrev==null?(c?0:1):S.tmPrev; S.tmPrev=c?0:1;
   const sw=`<div class="tface"><div class="tbig num roll" id="swtime" data-fast="2" data-v="${fmtSW(swNow())}">${rollHTML(fmtSW(swNow()),2)}</div>
