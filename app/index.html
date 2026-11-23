@@ -2042,6 +2042,8 @@ html:has(dialog.hsig[open]){overflow:hidden}
 .ex .sers{display:grid;width:100%}.serie-fila{display:grid;grid-template-columns:32px minmax(0,1fr) 64px;gap:4px;align-items:center}.serie-fila .mini{padding:5px 2px;font-size:11px}.serie-fila .serie-carga{min-width:0}.serie-elegir,.ed-opciones-serie label{display:grid;gap:4px;font-size:12px}.ed-opciones-serie{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr;gap:8px}.serie-fila .serie-repetir:disabled{opacity:.4}
 .nota-editor{grid-column:1/-1}.nota-ej{overflow-wrap:anywhere}.reloj-franja>button{min-width:63px}.reloj-franja>span{white-space:nowrap}.cal-check{display:flex!important}.perfil-csv{justify-self:start}
 .rut-opciones{display:flex;align-items:end;flex-wrap:wrap;gap:10px}.rut-opciones label{display:grid;gap:4px}.marca-dialog{max-height:85vh;max-height:85dvh;overflow:auto}
+html.kbon dialog.marca-dialog{position:fixed;top:calc(var(--vvt,0px) + 8px);bottom:auto;margin-block:0;max-height:calc(var(--vvh,100vh) - 16px);max-height:calc(var(--vvh,100dvh) - 16px);overscroll-behavior:contain}
+@media(max-width:600px){.marca-dialog input,.marca-dialog textarea,.marca-dialog select{font-size:16px}}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -4909,7 +4911,7 @@ function renderMensajes(){ const byK={}, c1v=c1xChatFn(); Object.values(DB.socio
   const lista=Object.entries(conv).filter(([k])=>byK[k]).map(([k,L])=>({k,s:byK[k],L,u:L[L.length-1],nl:L.filter(m=>m.de==='socio'&&!m.leido).length})).sort((a,b)=>String(b.u.creado).localeCompare(String(a.u.creado)));
   const chMov=chMovil(); if(S.chSel&&!byK[S.chSel]) S.chSel=null; if(!S.chSel&&lista.length&&!S.chVista&&!chMov) S.chSel=lista[0].k;
   const vista=S.chVista==='sug'&&esAdmin()?'sug':'chat', nsug=esAdmin()?SUGS.filter(x=>!x.leida).length:0, sel=S.chSel, ss=sel&&byK[sel], L=sel?(conv[sel]||[]):[];
-  if(vista==='chat'&&sel) setTimeout(()=>{chAbajo(); chMarcarLeido(sel,'profe')},30);
+  if(vista==='chat'&&sel) setTimeout(()=>{if(chKAct()===sel&&$('#chatlist')?.dataset.abajo!=='0'){chAbajo();chMarcarLeido(sel,'profe')}},30);
   const sinConv=Object.values(DB.socios).filter(s=>!conv[chK(s)]&&byK[chK(s)]).sort((a,b)=>a.name.localeCompare(b.name,'es'));
   const conversaciones=`<div class="chconv">${lista.length?lista.map((x,i)=>`<button class="chc ${x.k===sel&&vista==='chat'?'on':''} ${x.nl?'nl':''}" data-chsel="${esc(x.k)}" style="--k:${i}"><span class="chav">${avatar('sm',x.s.photo||null,x.s.name)}<i class="chon prdot ${PR.socios.has(x.k)?'on':''}" data-prdot="${esc(x.k)}" aria-hidden="true"></i></span><span class="chct"><b>${esc(x.s.name)}</b><small class="prprev" data-prlista="${esc(x.k)}" data-prbase="${esc((x.u.de==='profe'?'Vos: ':'')+chResumen(x.u).slice(0,60))}">${prTexto('lista',x.k)||esc((x.u.de==='profe'?'Vos: ':'')+chResumen(x.u).slice(0,60))}</small></span><span class="chcm"><small>${chHora(x.u.creado)}</small>${x.nl?`<i>${x.nl}</i>`:''}</span></button>`).join(''):'<p class="muted chnada">Todavía no hay mensajes. Cuando un socio te escriba desde la app, aparece acá.</p>'}
     ${sinConv.length?`<label class="chnew"><span>Escribirle a un socio</span><select class="inp" id="chnuevo"><option value="">Elegí un socio…</option>${sinConv.map(s=>`<option value="${esc(chK(s))}">${esc(s.name)}</option>`).join('')}</select></label>`:''}</div>`;
@@ -5531,7 +5533,7 @@ async function push(){
 }
 function cloudSave(){
   clearTimeout(pushT); pend++; EDITS++;
-  pushT=setTimeout(()=>{ PUSHQ=PUSHQ.then(push).catch(e=>{toast('No se pudo guardar: '+errTxt(e)); return reload(true)}).finally(()=>{pend=0}) },250);
+  pushT=setTimeout(()=>{ const guardado=EDITS; PUSHQ=PUSHQ.then(push).catch(e=>{toast('No se pudo guardar: '+errTxt(e));reload(true)}).finally(()=>{if(guardado===EDITS)pend=0}) },250);
 }
 /* firma de lo que se ve: si al refrescar no cambió nada, no se toca la pantalla */
 let FSN=null, FSS='';
@@ -5539,7 +5541,7 @@ const firma=()=>{ if(SNAP!==FSN){FSN=SNAP; FSS=JSON.stringify(SNAP)} return FSS+
 let atrasado=false;
 function reload(force){
   clearTimeout(reloadT);
-  reloadT=setTimeout(async()=>{ if(pend&&!force) return reload();
+  reloadT=setTimeout(async()=>{ if(pend) return reload(force);
     try{ const antes=firma(); await loadAll(); if(!force&&!atrasado&&firma()===antes) return;
       const a=document.activeElement; if(force||!a||!/INPUT|SELECT|TEXTAREA/.test(a.tagName)){atrasado=false; render(true)} else atrasado=true }catch(e){} },350);
 }
@@ -5613,6 +5615,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.64',t:'Teclado, chat y cámara',items:[['⌨️','El chat conserva la posición y la selección al actualizarse.'],['📷','La cámara y el micrófono se liberan al salir de la captura.']]},
   {v:'1.1.63',t:'Planificación de rutinas y Running',items:[['📅','Programá rutinas y revisalas antes de publicarlas.'],['🏃','Configurá objetivos de ritmo y compará sesiones de Running.']]},
   {v:'1.1.62',t:'Rutinas y series',items:[['🏋️','Configurá ejercicios alternativos y superseries. Los socios pueden anotar cargas por serie y consultar desde la rutina.']]},
   {v:'1.1.61',t:'Feriados y cierres',items:[['📅','Accedé a los cierres desde Vista general y agregá un motivo visible en la app.']]},
@@ -6782,18 +6785,22 @@ document.addEventListener('click',e=>{ const b=e.target.closest('.bap'); if(b){ 
   if(ev==='ended'){ a.currentTime=0; el.querySelectorAll('.bawave i').forEach(b=>b.classList.remove('on')); const m=MSGS.find(x=>x.media&&(x.media.p===el.dataset.mpath)); el.querySelector('.bat').textContent=chDur(m&&m.media.d||a.duration); return }
   chAudPintar(a) },true));
 /* grabar */
-let CHREC=null;
-async function chRecEmpezar(form){ if(CHREC||!form) return;
+let CHREC=null, chPermisoAudio=false;
+async function chRecEmpezar(form){ if(CHREC||chPermisoAudio||!form) return;
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){ toast('Este navegador no permite grabar audio'); return }
   const k=form.id==='chatf'?chK(me()):S.chSel; if(!k) return;
-  let st; try{ st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}) }catch(e){ toast('Para grabar, permití el uso del micrófono'); return }
+  let st;chPermisoAudio=true;
+  try{st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}
+  catch(e){if(form.isConnected)toast('Para grabar, permití el uso del micrófono');return}
+  finally{chPermisoAudio=false}
+  if(!form.isConnected||document.hidden||k!==chKAct()){st.getTracks().forEach(t=>t.stop());return}
   const tipos=['audio/webm;codecs=opus','audio/mp4','audio/webm','audio/ogg;codecs=opus'], mt=tipos.find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
   let rec; try{ rec=new MediaRecorder(st,mt?{mimeType:mt}:undefined) }catch(e){ st.getTracks().forEach(t=>t.stop()); toast('No se pudo empezar a grabar'); return }
   const partes=[]; rec.ondataavailable=ev=>{ if(ev.data&&ev.data.size) partes.push(ev.data) };
   CHREC={rec,st,partes,t0:Date.now(),form:form.id,k,yo:form.id==='chatf'?'socio':'profe',mt:rec.mimeType||mt};
   try{ if(navigator.audioSession) navigator.audioSession.type='play-and-record' }catch(x){}
-  rec.start(250); chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); try{ prEstado('audio') }catch(x){} try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
-function chRecPintar(){ if(!CHREC) return; const f=document.getElementById(CHREC.form); if(!f) return chRecParar(false);
+  try{rec.start(250)}catch(e){CHREC=null;st.getTracks().forEach(t=>t.stop());toast('No se pudo empezar a grabar');return} chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); try{ prEstado('audio') }catch(x){} try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
+function chRecPintar(){ if(!CHREC) return; const f=document.getElementById(CHREC.form); if(!f||CHREC.k!==chKAct()) return chRecParar(false);
   let o=document.getElementById('chrec');
   if(!o){ document.body.insertAdjacentHTML('beforeend',`<div class="chrec" id="chrec" role="status" aria-label="Grabando audio"><button type="button" class="chrecx" aria-label="Borrar audio">${ICO_TRASH}</button><span class="chrecdot" aria-hidden="true"></span><span class="chrect num">0:00</span><span class="chrecw" aria-hidden="true">${'<i></i>'.repeat(16)}</span><button type="button" class="chrecok" aria-label="Enviar audio">${ICO_SEND}</button></div>`); o=document.getElementById('chrec') }
   const r=f.getBoundingClientRect(); o.style.left=r.left+'px'; o.style.top=r.top+'px'; o.style.width=r.width+'px'; o.style.height=r.height+'px';
@@ -6811,6 +6818,7 @@ document.addEventListener('click',e=>{ const b=e.target.closest('.chsend.mic'); 
   if(e.target.closest('.chrecok')){ e.stopPropagation(); return chRecParar(true) } },true);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&CHREC){ e.stopImmediatePropagation(); chRecParar(false) } },true);
 addEventListener('resize',()=>{ if(CHREC) chRecPintar() });
+addEventListener('pagehide',()=>chRecParar(false));
 /* lote 45 · novedad completa */
 function gn45Abrir(id){ const n=GNOV.find(x=>String(x.id)===String(id)); if(!n) return; gnMarcarVistas([n]);
   const v=document.getElementById('gnver'); if(v) v.remove(); const back=document.activeElement, falta=gnFaltan(n.fecha);
@@ -7067,12 +7075,13 @@ const HS_COR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.3s-7.6
 const HS_GLOBO='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 16.2A9 9 0 1 0 17 20l3.9 1.1z"/></svg>';
 /* v61: cuando se abre el teclado del celu, la caja para comentar sube justo arriba (visualViewport) */
 function hsTeclado(){const box=document.querySelector('dialog.hsig[open] .hsbox');if(!box)return;const vv=window.visualViewport,a=document.activeElement;
-  const escribe=a&&a.tagName==='INPUT'&&box.contains(a);let kb=0;
+  const escribe=a?.matches('input,textarea')&&box.contains(a)&&vv&&Math.abs(vv.scale-1)<.05;let kb=0;
   if(vv&&escribe){const r=box.getBoundingClientRect();kb=Math.max(0,Math.round(r.bottom-(vv.offsetTop+vv.height)))}
   box.style.setProperty('--hskb',kb+'px');box.classList.toggle('teclado',kb>0);
   if(escribe&&kb>0)requestAnimationFrame(()=>{try{a.scrollIntoView({block:'nearest'})}catch(e){}})}
 if(window.visualViewport){visualViewport.addEventListener('resize',hsTeclado);visualViewport.addEventListener('scroll',hsTeclado)}
-document.addEventListener('focusin',e=>{if(e.target.closest&&e.target.closest('dialog.hsig'))[0,120,350].forEach(t=>setTimeout(hsTeclado,t))});
+document.addEventListener('focusin',e=>{if(e.target.closest?.('dialog.hsig'))[0,120,350].forEach(t=>setTimeout(hsTeclado,t))});
+document.addEventListener('focusout',e=>{if(e.target.closest?.('dialog.hsig'))setTimeout(hsTeclado,0)});
 document.addEventListener('focusout',e=>{if(e.target.closest&&e.target.closest('dialog.hsig'))setTimeout(hsTeclado,60)});
 function hsComIco(inf,escribir){const n=hsComN(inf);
   if(escribir) return `<button type="button" class="hscic" data-hscom="inl" aria-label="Escribir un comentario">${HS_GLOBO}</button>`;
@@ -7130,20 +7139,36 @@ function hsVuela(emoji,boton,box,indice=0){
 
 /* historias: cámara de la app, en 9:16 */
 async function hsCamara(){
+  if(document.querySelector('dialog.hscam[open]'))return;
   if(historias.subiendo)return toast('Esperá a que termine de subirse tu historia.');
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return hsElegir();
   const d=document.createElement('dialog');d.className='hscam';d.tabIndex=-1;d.setAttribute('aria-label','Cámara para tu historia');
   d.innerHTML='<div class="hscbox"><video playsinline muted autoplay></video><div class="hscflash"></div><p class="hscmsg" hidden></p><header><button class="hscx" aria-label="Cerrar">×</button><span>Historia · 9:16</span><span class="hscesp"></span></header><footer><button class="hscgal" aria-label="Elegir una foto o video de la galería"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></button><button class="hscdisp" aria-label="Sacar foto"><i></i></button><button class="hscflip" aria-label="Cambiar de cámara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3l-2-3H9L7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M9 13a3 3 0 0 1 5.2-2"/><path d="M15 13a3 3 0 0 1-5.2 2"/><path d="M14 9.5V11h-1.5M10 16.5V15h1.5"/></svg></button></footer></div>';
   document.body.append(d);d.showModal();d.focus({preventScroll:true});
   const v=d.querySelector('video'),msg=d.querySelector('.hscmsg'),disp=d.querySelector('.hscdisp'),flip=d.querySelector('.hscflip');
-  let facing='environment',stream=null,vivo=true;
-  const parar=()=>{if(stream)stream.getTracks().forEach(t=>t.stop());stream=null};
-  async function abrir(){parar();msg.hidden=true;disp.disabled=true;
-    try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing},width:{ideal:1920},height:{ideal:1080}},audio:false});
-      if(!vivo){parar();return}v.srcObject=stream;v.classList.toggle('espejo',facing==='user');await v.play().catch(()=>{});disp.disabled=false}
-    catch(e){msg.hidden=false;msg.innerHTML='<b>No pudimos abrir la cámara</b>Revisá que el navegador tenga permiso de cámara (en Android: ajustes del navegador → Permisos → Cámara) o elegí una foto de la galería.<button class="hscgal2">Elegir de la galería</button>'}}
-  const cerrar=()=>{vivo=false;parar();if(d.open)d.close()};
-  d.addEventListener('close',()=>{vivo=false;parar();d.remove()},{once:true});
+  let facing='environment',stream=null,vivo=true, intento=0, debeReanudar=false;
+  const parar=()=>{stream?.getTracks().forEach(t=>t.stop());stream=null;v.srcObject=null;disp.disabled=true};
+  async function abrir(){
+    const id=++intento, lado=facing;
+    parar();msg.hidden=true;flip.disabled=true;
+    try{
+      const entrante=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:lado},width:{ideal:1920},height:{ideal:1080}},audio:false});
+      if(!vivo||!d.open||id!==intento||document.hidden){entrante.getTracks().forEach(t=>t.stop());if(vivo&&d.open&&id===intento)debeReanudar=true;return}
+      stream=entrante;v.srcObject=stream;v.classList.toggle('espejo',lado==='user');
+      await v.play();
+      if(id===intento&&vivo&&d.open&&v.videoWidth)disp.disabled=false;
+      else if(id===intento&&vivo&&d.open)v.addEventListener('loadeddata',()=>{if(vivo&&d.open&&id===intento)disp.disabled=false},{once:true});
+    }catch(e){
+      if(!vivo||!d.open||id!==intento)return;
+      parar();msg.hidden=false;msg.innerHTML='<b>No pudimos abrir la cámara</b>Revisá los permisos de cámara o elegí una foto de la galería.<button class="hscgal2">Elegir de la galería</button>';
+    }finally{if(vivo&&d.open&&id===intento)flip.disabled=false}
+  }
+  const detener=()=>{debeReanudar=!!stream||flip.disabled;intento++;parar()};
+  const vis=()=>{if(document.hidden){if(stream)detener()}else if(debeReanudar&&vivo&&d.open){debeReanudar=false;abrir()}};
+  const cerrar=()=>{vivo=false;intento++;parar();if(d.open)d.close()};
+  document.addEventListener('visibilitychange',vis);addEventListener('pagehide',cerrar);
+  d.addEventListener('cancel',e=>{e.preventDefault();cerrar()},{once:true});
+  d.addEventListener('close',()=>{vivo=false;intento++;parar();document.removeEventListener('visibilitychange',vis);removeEventListener('pagehide',cerrar);d.remove()},{once:true});
   d.querySelector('.hscx').onclick=cerrar;
   d.addEventListener('click',e=>{if(e.target.closest('.hscgal,.hscgal2')){cerrar();hsElegir()}});
   flip.onclick=()=>{facing=facing==='user'?'environment':'user';if(!hsQuieto())flip.animate([{transform:'rotate(0)'},{transform:'rotate(180deg)'}],{duration:300});abrir()};
@@ -7152,8 +7177,8 @@ async function hsCamara(){
     const vw=v.videoWidth,vh=v.videoHeight,esc2=Math.max(W/vw,H/vh),sw=W/esc2,sh=H/esc2,sx=(vw-sw)/2,sy=(vh-sh)/2;
     if(facing==='user'){x.translate(W,0);x.scale(-1,1)}x.drawImage(v,sx,sy,sw,sh,0,0,W,H);
     const fl=d.querySelector('.hscflash');if(!hsQuieto())fl.animate([{opacity:.9},{opacity:0}],{duration:320,easing:'ease-out'});
-    c.toBlob(b=>{if(!b){disp.disabled=false;return toast('No se pudo sacar la foto. Probá de nuevo.')}
-      const f=new File([b],'historia.jpg',{type:'image/jpeg'});setTimeout(()=>{cerrar();hsEditor(f)},hsQuieto()?0:180)},'image/jpeg',.92)};
+    const id=intento;c.toBlob(b=>{if(!vivo||!d.open||id!==intento)return;if(!b){disp.disabled=false;return toast('No se pudo sacar la foto. Probá de nuevo.')}
+      const f=new File([b],'historia.jpg',{type:'image/jpeg'});setTimeout(()=>{if(!vivo||!d.open||id!==intento)return;cerrar();hsEditor(f)},hsQuieto()?0:180)},'image/jpeg',.92)};
   abrir();
 }
 
@@ -7303,11 +7328,16 @@ function dashSoltar(){ const d=dashDr; if(!d) return; dashDr=null;
 document.addEventListener('pointerup',dashSoltar); document.addEventListener('pointercancel',dashSoltar);
 
 function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return}
-  const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id, fsel=fa&&fa.selectionStart;
+  const y=scrollY; const fa=document.activeElement, fid=fa&&fa.id;
+  const inicio=fa?.selectionStart, fin=fa?.selectionEnd, direccion=fa?.selectionDirection;
+  const lista=$('#chatlist'), chatPos=lista&&{key:chKAct(),top:lista.scrollTop,abajo:lista.scrollHeight-lista.scrollTop-lista.clientHeight<60};
   S.view==='socio'?renderSocio():renderDuenio();
   ui43Mount();
   if(S.view==='duenio'&&S.pro){ novedadesCheck(); psBuscar() }
-  if(fid==='chatin'||fid==='chatpin'||fid==='psq'){ const t=document.getElementById(fid); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(fsel,fsel)}catch(x){} } }
+  if(fid==='chatin'||fid==='chatpin'||fid==='psq'){ const t=document.getElementById(fid); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(inicio,fin,direccion)}catch(x){} } }
+  if(quieto&&chatPos&&!chatPos.abajo&&chatPos.key===chKAct()){
+    const nueva=$('#chatlist');if(nueva){nueva.scrollTop=chatPos.top;nueva.dataset.abajo='0'}
+  }
   /* cambio que llegó de otro lado (tiempo real): se actualiza en el lugar, sin animaciones de entrada ni saltos */
   if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
@@ -7416,8 +7446,11 @@ function chRefrescar(dePush){
     if(nuevos.length&&!enChat&&!(enPanel&&S.chSel===nuevos[nuevos.length-1].k)) toast(yoSocio?'💬 Te respondió '+(nuevos[nuevos.length-1].autor||'tu profe'):'💬 Mensaje nuevo de '+(nuevos[nuevos.length-1].autor||'un socio')) }
   const lst=document.getElementById('chatlist');
   if((enChat||(enPanel&&S.chSel))&&lst){ const k=enChat?chK(me()):S.chSel, L=MSGS.filter(m=>m.k===k);
-    lst.innerHTML=L.length?chBurbujas(L,enChat?'socio':'profe'):lst.innerHTML; chAbajo(); chMarcarLeido(k,enChat?'socio':'profe');
-    const a=document.activeElement; if(enPanel&&!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))) render(true); else chBadges(); return }
+    const alFinal=lst.scrollHeight-lst.clientHeight-lst.scrollTop<60, posicion=lst.scrollTop;
+    const html=chBurbujas(L,enChat?'socio':'profe');
+    if(L.length&&lst.innerHTML!==html){lst.innerHTML=html;if(alFinal)chAbajo();else lst.scrollTop=posicion}
+    if(alFinal)chMarcarLeido(k,enChat?'socio':'profe');
+    if(enPanel&&alFinal&&!document.activeElement?.matches('input,textarea,select')&&!document.querySelector('dialog[open]'))render(true);else chBadges();return }
   const a=document.activeElement; if(!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))) render(true); else chBadges() }
 function chBadges(){ const n=S.view==='socio'?chNoLeidosSocio():chNoLeidosProfe();
   document.querySelectorAll('[data-chbadge]').forEach(el=>{ el.textContent=n||''; el.hidden=!n }) }
@@ -7484,7 +7517,7 @@ async function sugEnviar(txt){ txt=String(txt||'').trim(); if(txt.length<3){toas
 const CHIPS=[['💪','¿Me podés cambiar la rutina?'],['🤕','Tengo una molestia, ¿qué hago?'],['📅','Hoy no voy a poder ir'],['💳','Tengo una consulta sobre la cuota'],['🥗','¿Me das un consejo de alimentación?']];
 const ICO_CHAT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20.5l1.6-4.4A8.2 8.2 0 0 1 3 11.5 8.6 8.6 0 0 1 12 3a8.6 8.6 0 0 1 9 8.5z"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke-width="2.8"/></svg>';
 function chatSocioUI(modo){ const k=chK(me()), L=MSGS.filter(m=>m.k===k).map(m=>Object.assign({},m,{nuevo:false})), pn=c1xCab(L).n.replace(/^prof\.?\s*/i,'').split(' ')[0], dr=S.chatDraft||'';
-  setTimeout(()=>{chAbajo(); chMarcarLeido(k,'socio')},30);
+  setTimeout(()=>{if(chKAct()===k&&$('#chatlist')?.dataset.abajo!=='0'){chAbajo();chMarcarLeido(k,'socio')}},30);
   return `<div class="chwrap ${modo}">
   <div class="chtop">${modo==='full'?`<button class="back" data-tab="${S.chBack||'inicio'}" aria-label="Volver">‹</button>`:'<span class="chgrab" aria-hidden="true"></span>'}
     <span class="chav">${avatar('md',c1xCab(L).f,c1xCab(L).n)}<i class="chon prdot ${PR.profes>0?'on':''}" data-prdot="profe" aria-hidden="true"></i></span>
@@ -7497,20 +7530,22 @@ function chUpdBar(){ if(S.chEdit&&!document.getElementById(S.chEdit.form)) S.chE
   if(b){ const mic=!v.trim()&&!S.chEdit; b.disabled=false; b.classList.toggle('mic',mic); b.setAttribute('aria-label',mic?'Grabar audio':'Enviar') } if(c) c.hidden=!!v; if(n) n.textContent=v.length>800?(1000-v.length)+'':'' }
 /* teclado del celu */
 (function(){ const vv=window.visualViewport; if(!vv) return; let base=window.innerHeight, raf=0, era=false;
-  const upd=()=>{ raf=0; base=Math.max(base,window.innerHeight); const kb=base-vv.height, a=document.activeElement, campo=a&&/TEXTAREA|INPUT/.test(a.tagName)&&a.type!=='checkbox';
-    const on=kb>130&&campo&&S.view==='socio'; const r=document.documentElement;
+  const upd=()=>{raf=0;const a=document.activeElement, campo=a?.matches('textarea,input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="button"]):not([type="date"])');
+    const escalaNormal=Math.abs(vv.scale-1)<.05;
+    if(escalaNormal&&(!campo||vv.height>=base-100))base=Math.max(window.innerHeight,vv.height);
+    const on=escalaNormal&&base-vv.height>125&&!!campo&&S.view==='socio'; const r=document.documentElement;
     r.style.setProperty('--vvh',Math.round(vv.height)+'px'); r.style.setProperty('--vvt',Math.round(vv.offsetTop)+'px');
     const l=document.getElementById('chatlist'), pegada=l&&(l.dataset.abajo!=='0');
     if(on!==era){ era=on; r.classList.toggle('kbon',on); }
     if(l&&pegada) l.scrollTop=l.scrollHeight;
-    if(on&&(window.scrollY||document.documentElement.scrollTop)) window.scrollTo(0,0) };
+    if(on&&!a.closest('dialog')&&(window.scrollY||document.documentElement.scrollTop))window.scrollTo(0,0) };
   const pide=()=>{ if(!raf) raf=requestAnimationFrame(upd) };
   vv.addEventListener('resize',pide); vv.addEventListener('scroll',pide); addEventListener('focusin',()=>{ pide(); setTimeout(pide,60) }); addEventListener('focusout',()=>{ setTimeout(pide,0); setTimeout(pide,120) });
   /* si el usuario sube a leer mensajes viejos no lo bajamos; si está abajo, la lista queda pegada abajo */
-  document.addEventListener('scroll',e=>{ const l=e.target; if(l&&l.id==='chatlist') l.dataset.abajo=(l.scrollHeight-l.scrollTop-l.clientHeight<60)?'1':'0' },true);
-  addEventListener('orientationchange',()=>{ base=0; setTimeout(()=>{base=window.innerHeight; pide()},400) });
+  document.addEventListener('scroll',e=>{ const l=e.target; if(l?.id==='chatlist'){const abajo=l.scrollHeight-l.scrollTop-l.clientHeight<60,antes=l.dataset.abajo;l.dataset.abajo=abajo?'1':'0';if(abajo&&antes==='0'){const k=chKAct();if(k)chMarcarLeido(k,chYo())}} },true);
+  addEventListener('resize',pide);addEventListener('orientationchange',()=>{base=window.innerHeight;era=false;document.documentElement.classList.remove('kbon');setTimeout(pide,400)});
   /* tocar fuera del cuadro de texto (en la lista) baja el teclado, como en WhatsApp */
-  document.addEventListener('touchstart',e=>{ if(!document.documentElement.classList.contains('kbon')) return; if(e.target.closest('.chlist')&&!e.target.closest('.bub,.bmenu')){ const t=document.activeElement; if(t&&t.blur) t.blur() } },{passive:true});
+  document.addEventListener('click',e=>{if(document.documentElement.classList.contains('kbon')&&e.target.closest('.chlist')&&!e.target.closest('.bub,.bmenu'))document.activeElement?.blur()});
 })();
 /* burbuja flotante del chat en Inicio */
 function chFabHtml(){ if(S.tab!=='inicio') return ''; const n=chNoLeidosSocio(), tip=!S.chTipDone&&!S.chSheet&&!n;
@@ -7602,9 +7637,10 @@ document.addEventListener('submit',async e=>{ const f=e.target; if(f.id!=='chatf
   if(f.id==='sugf'){ const t=$('#sugin'), bt=f.querySelector('button'); bt.disabled=true; bt.textContent='Mandando…'; const ok=await sugEnviar(t.value);
     if(ok){ S.sugOk=true; const c=document.getElementById('sugc'); if(c){ c.outerHTML=sugCard(); } toast('Sugerencia enviada, ¡gracias!') } else { bt.disabled=false; bt.textContent='Mandar anónimo' } return }
   const t=f.querySelector('textarea'), txt=t.value; if(!txt.trim()) return t.focus();
+  if(txt.trim().length>1000){toast('El mensaje es muy largo');return t.focus()}
   if(S.chEdit&&S.chEdit.form===f.id){ await chEditar(S.chEdit.id,txt); chSalirEdit(false); return t.focus() }
   t.value=''; t.style.height=''; if(f.id==='chatf'){ S.chatDraft=''; await chEnviar(txt,chK(me()),'socio') } else { (S.chDraft||{})[S.chSel]=''; await chEnviar(txt,S.chSel,'profe') } t.focus() },true);
-document.addEventListener('keydown',e=>{ const t=e.target; if(e.key==='Enter'&&!e.shiftKey&&t&&(t.id==='chatin'||t.id==='chatpin')){ e.preventDefault(); const f=t.form; if(f) f.requestSubmit() } });
+document.addEventListener('keydown',e=>{ const t=e.target; if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&e.keyCode!==229&&t&&(t.id==='chatin'||t.id==='chatpin')){ e.preventDefault(); const f=t.form; if(f) f.requestSubmit() } });
 document.addEventListener('input',e=>{ const t=e.target; if(t.id==='chatin'||t.id==='chatpin'){ t.style.height='auto'; t.style.height=Math.min(120,t.scrollHeight)+'px'; chUpdBar(); if(t.id==='chatin') S.chatDraft=t.value; else {S.chDraft=S.chDraft||{}; S.chDraft[S.chSel]=t.value} } });
 document.addEventListener('click',e=>{ const b=e.target.closest('#sugotra'); if(b){ S.sugOk=false; const c=document.getElementById('sugc'); if(c) c.outerHTML=sugCard(); const t=$('#sugin'); if(t) t.focus() } });
 document.addEventListener('submit',e=>{ if(e.target.id!=='gymf') return; e.preventDefault(); e.stopImmediatePropagation(); gsSave() },true);
