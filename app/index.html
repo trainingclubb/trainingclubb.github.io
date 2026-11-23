@@ -2044,6 +2044,28 @@ html:has(dialog.hsig[open]){overflow:hidden}
 .rut-opciones{display:flex;align-items:end;flex-wrap:wrap;gap:10px}.rut-opciones label{display:grid;gap:4px}.marca-dialog{max-height:85vh;max-height:85dvh;overflow:auto}
 html.kbon dialog.marca-dialog{position:fixed;top:calc(var(--vvt,0px) + 8px);bottom:auto;margin-block:0;max-height:calc(var(--vvh,100vh) - 16px);max-height:calc(var(--vvh,100dvh) - 16px);overscroll-behavior:contain}
 @media(max-width:600px){.marca-dialog input,.marca-dialog textarea,.marca-dialog select{font-size:16px}}
+/* Verano · app de socios */
+.phone .verano-inicio {
+  background-image: radial-gradient(ellipse at 8% 0%, rgba(252,224,36,.12), transparent 62%),
+                    radial-gradient(ellipse at 98% 100%, rgba(36,201,167,.10), transparent 63%);
+}
+:root[data-theme="light"] .phone #scr-inicio {
+  background-image: linear-gradient(180deg, rgba(252,224,36,.065), transparent 240px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .phone .donerow.nuevo, .phone .rdfin.rdnew { position: relative; }
+  .phone .donerow.nuevo::after, .phone .rdfin.rdnew::after {
+    content: ""; pointer-events: none; position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0; border-radius: inherit;
+    background: linear-gradient(110deg, transparent 30%, rgba(252,224,36,.14) 47%, rgba(36,201,167,.11) 53%, transparent 68%) 100% 0 / 250% 100%;
+    animation: verano-destello .85s ease-out both;
+  }
+}
+@keyframes verano-destello {
+  0% { background-position: 100% 0; opacity: 0; }
+  22% { opacity: 1; }
+  100% { background-position: 0 0; opacity: 0; }
+}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -4377,7 +4399,7 @@ function renderSocio(){
   const ti=TABKEYS.indexOf(S.tab), pi=TABKEYS.indexOf(S.lastTab||S.tab);
   const sube=t=>t==='perfil'||t==='chat', dir=same?'':sube(S.tab)?'navsube':sube(S.lastTab)?'navbaja':ti>pi?'fromr':ti<pi?'froml':'';
   $('#app').innerHTML=`<div class="phone"><div class="sbar" aria-hidden="true"><span class="num">9:41</span><span class="sicons"><i></i><i></i><i></i><b></b></span></div>
-  <header class="apphead"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>${historiasHead()}
+  <header class="apphead${S.tab==='inicio'?' verano-inicio':''}"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>${historiasHead()}
     <button class="hpill num" id="hpill" data-tab="rutina" data-retomar hidden></button>${actBtnHtml(false)}
     <button class="avbtn" data-tab="perfil" aria-label="Mi perfil">${avatar()}</button></header>
   <div class="screen ${same?'':'enter '+dir}" id="scr-${S.tab}">${body}</div>
@@ -7368,7 +7390,7 @@ function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return
     const nueva=$('#chatlist');if(nueva){nueva.scrollTop=chatPos.top;nueva.dataset.abajo='0'}
   }
   /* cambio que llegó de otro lado (tiempo real): se actualiza en el lugar, sin animaciones de entrada ni saltos */
-  if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
+  if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity&&a.animationName!=='verano-destello') a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
   $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio'); gsUpd();
   cerrarIntro();
