@@ -5395,6 +5395,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.61',t:'Feriados y cierres',items:[['📅','Accedé a los cierres desde Vista general y agregá un motivo visible en la app.']]},
   {v:'1.1.60',t:'Resultados de Running',items:[['🏃','Pasadas cronometradas con parciales y recuperación. En Fondo se ve la distancia realizada y la prevista.']]},
   {v:'1.1.59',t:'Feriados y asistencia',items:[['📅','En Info del gimnasio podés cargar feriados y cierres.'],['📱','Aprobá cada celular por separado.']]},
   {v:'1.1.58',t:'Celulares y solicitudes de pago',items:[['📱','Los celulares nuevos quedan pendientes de aprobación.'],['✓','Cada decisión de pago guarda quién la tomó y cuándo.']]},
@@ -6417,23 +6418,24 @@ document.addEventListener('input',e=>{const t=e.target; if(!t||!t.matches||!t.ma
   else{a.classList.remove('z42pop'); void a.offsetWidth; a.classList.add('z42pop')}});
 /* v42y: la info del gimnasio (y sus servicios) se guarda con el «Guardar todo» general del panel */
 function y42GymDirty(){ if(!puedeP('gyminfo')) return false; const g=gymInfo(), d=S.gymDraft||{};if(S.cierresDraft&&JSON.stringify(S.cierresDraft)!==JSON.stringify(g.cierres||[]))return true;
+  if(S.cierresMotivos&&JSON.stringify(S.cierresMotivos)!==JSON.stringify(motivosDeCierre()))return true;
   if(Object.keys(d).some(k=>gTxt(d[k])!==gTxt(g[k]))) return true;
   if(!S.svDraft) return false;
   const nrm=L=>JSON.stringify(L.map(x=>({n:gTxt(x.n).slice(0,60),d:gTxt(x.d).slice(0,200),dias:x.dias.slice().sort((a,b)=>a-b)})).filter(x=>x.n));
   return nrm(S.svDraft)!==nrm(svLista()) }
 async function y42GymSave(){ if(!y42GymDirty()) return true;
   const g=Object.assign({},gymInfo(),S.gymDraft||{}), v={};
-  GYM_CAMPOS.forEach(k=>{v[k]=gTxt(g[k])||null}); v.servicios=svParaGuardar(); if(S.cierresDraft)v.cierres=S.cierresDraft.slice();
+  GYM_CAMPOS.forEach(k=>{v[k]=gTxt(g[k])||null}); v.servicios=svParaGuardar(); if(S.cierresDraft){v.cierres=S.cierresDraft.slice();v.motivos_cierre=S.cierresMotivos||{}}
   const bad=(t,id)=>{ toast(t); const el=document.getElementById(id); if(el){ el.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'}); el.focus({preventScroll:true}) } return false };
   if(v.whatsapp&&!waLink(v.whatsapp)) return bad('Revisá el WhatsApp: poné el número con característica','g_whatsapp');
   if(v.instagram&&!igLink(v.instagram)) return bad('Revisá el Instagram: poné el usuario, por ejemplo @trainingclub','g_instagram');
   if(v.instagram) v.instagram='@'+igUser(v.instagram);
   if(v.maps_url&&!/^https:\/\//i.test(mapsLink({maps_url:v.maps_url}))) return bad('Ese link de Maps no sirve: copialo desde «Compartir» en Google Maps','g_maps_url');
   const r=Object.assign({id:1},v,{updated_at:new Date().toISOString()}), antes={g:S.gymDraft,s:S.svDraft,G:gymInfo()};
-  if(CLOUD){try{let consulta=sb.from('gym_info').update(r).eq('id',1);if(v.cierres)consulta=consulta.eq('cierres','{'+(S.cierresBase||[]).join(',')+'}');const fila=await q(consulta.select('*').maybeSingle());if(!fila){await cargarGym();S.cierresDraft=null;render(true);throw Error('Las fechas cambiaron. Revisá el calendario actualizado.')}GYM=fila}
+  if(CLOUD){try{let consulta=sb.from('gym_info').update(r).eq('id',1);if(v.cierres)consulta=consulta.eq('cierres','{'+(S.cierresBase||[]).join(',')+'}').eq('motivos_cierre',JSON.stringify(S.cierresMotivosBase||{}));const fila=await q(consulta.select('*').maybeSingle());if(!fila){await cargarGym();S.cierresDraft=null;S.cierresMotivos=null;render(true);throw Error('Las fechas cambiaron. Revisá el calendario actualizado.')}GYM=fila}
     catch(e){toast('No se pudo guardar: '+errTxt(e));return false}}
   else {DB.gym=Object.assign({},DB.gym||{},r);saveDB()}
-  S.cierresDraft=null;S.rkC={};S.mrkSig=null;if(CLOUD)reload(true);
+  S.cierresDraft=null;S.cierresMotivos=null;S.rkC={};S.mrkSig=null;if(CLOUD)reload(true);
   const gb=$('#gsbar'), era=!!(gb&&gb.classList.contains('on'));
   S.gymDraft=null; S.svDraft=null; toast('Listo: los socios ya ven la info nueva');
   if(gb&&era&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; gb.classList.add('ok'); document.body.classList.remove('gson');
@@ -7311,7 +7313,7 @@ function screenGimnasio(){
   ${cont.length?`<section class="card"><div class="ttl"><b>Contacto</b></div><div class="glinks">${cont.join('')}</div></section>`:''}
   ${(p=>`<section class="card gprofe">${avatar('md',p.foto,p.nombre)}<span class="gtx"><small>Tu profe</small><b>${esc(p.nombre)}</b>`)(profeGym(s))}<p>${esc(gTxt(g.profe_bio)||PROFE_BIO)}</p></span></section>
   ${svHtml()}
-  ${horariosHtml()}
+  ${horariosHtml()}${proximosCierres()}
   ${esFam(s)?`<section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Plan familiar</b><p>No pagás cuota. ${famChiste()}</p></section>`:`<section class="card">${comoPagarHtml(monto)}</section>`}
   ${sugCard()}</div>`}
 /* nube: se baja junto con el resto (loadAll) y si cambió se refresca la pantalla sin saltos */
@@ -7320,16 +7322,27 @@ async function cargarGym(){ if(!CLOUD||!sb) return;
     const n=data||{}, antes=JSON.stringify(GYM); if(JSON.stringify(n.cierres)!==JSON.stringify(GYM?.cierres)){S.rkC={};S.mrkSig=null} GYM=n;
     if(antes!==JSON.stringify(n)&&S.ready){ const a=document.activeElement; if(!a||!/INPUT|SELECT|TEXTAREA/.test(a.tagName)) render(true) } }catch(e){} }
 /* panel: editor de la info del gimnasio (en la sección Profes) */
+function motivosDeCierre(){return gymInfo().motivos_cierre||{}}
+function proximosCierres(){
+ const fechas=(gymInfo().cierres||[]).filter(f=>f>=iso(TODAY)).sort().slice(0,5);
+ return fechas.length?`<section class="card"><h3>Próximos cierres</h3>${fechas.map(f=>`<p><b>${esc(ddmm(f))}</b> · ${esc(motivosDeCierre()[f]||'Gimnasio cerrado')}</p>`).join('')}</section>`:'';
+}
 function cierresEditor(){
  const fechas=S.cierresDraft||gymInfo().cierres||[];
- return `<fieldset class="field"><legend>Feriados y cierres</legend><small>Las fechas cerradas quedan fuera de las asistencias y del ranking. Si reabrís una fecha, vuelven a contar sus entradas anteriores.</small><label>Fecha de cierre<input type="date" class="inp" id="fecha-cierre"></label><button type="button" class="mini" data-cierre-add>Agregar fecha</button><div>${fechas.map(f=>`<button type="button" class="mini" data-cierre-quitar="${esc(f)}" aria-label="Reabrir ${esc(f)}">${esc(f.split('-').reverse().join('/'))} ×</button>`).join(' ')}</div></fieldset>`;
+ const motivos=S.cierresMotivos||motivosDeCierre();
+ return `<fieldset class="field" id="feriados-cierres"><legend>Feriados y cierres</legend><small>Las fechas cerradas quedan fuera de las asistencias y del ranking. Si reabrís una fecha, vuelven a contar sus entradas anteriores.</small><label>Fecha de cierre<input type="date" class="inp" id="fecha-cierre"></label><label>Motivo visible para socios (opcional)<input class="inp" id="motivo-cierre" maxlength="120" placeholder="Ej. Feriado o mantenimiento"></label><button type="button" class="mini" data-cierre-add>Agregar fecha</button><div>${fechas.map(f=>`<button type="button" class="mini" data-cierre-quitar="${esc(f)}" aria-label="Reabrir ${esc(f)}">${esc(f.split('-').reverse().join('/'))}${motivos[f]?' · '+esc(motivos[f]):''} ×</button>`).join(' ')}</div></fieldset>`;
 }
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-cierre-add],[data-cierre-quitar]');if(!b||!puedeP('gyminfo'))return;
  const fechas=S.cierresDraft||gymInfo().cierres||[], f=b.dataset.cierreQuitar||$('#fecha-cierre').value;
  if(!f)return $('#fecha-cierre').focus();
  if(!b.dataset.cierreQuitar&&[0,6].includes(new Date(f+'T12:00').getDay()))return toast('Los fines de semana ya están cerrados');
- if(!S.cierresDraft)S.cierresBase=(gymInfo().cierres||[]).slice();
+ if(!S.cierresDraft){
+   S.cierresBase=(gymInfo().cierres||[]).slice();S.cierresMotivosBase=motivosDeCierre();
+   S.cierresMotivos={...S.cierresMotivosBase};
+ }
+ const motivo=$('#motivo-cierre').value.trim().slice(0,120);
+ if(b.dataset.cierreQuitar||!motivo)delete S.cierresMotivos[f];else S.cierresMotivos[f]=motivo;
  S.cierresDraft=b.dataset.cierreQuitar?fechas.filter(x=>x!==f):[...new Set([...fechas,f])].sort();
  b.closest('fieldset').outerHTML=cierresEditor();gsUpd();
 });
@@ -7713,7 +7726,7 @@ function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel){ if(!pdSave
   const b=$('#gsbar'); if(b&&b.classList.contains('on')&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; b.classList.add('ok'); document.body.classList.remove('gson');
     clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{b.classList.remove('ok'); gsUpd()},950) } else gsUpd();
   return true }
-function gsDescartar(){ S.cierresDraft=null; S.gymDraft=null; S.svDraft=null; S.pd=null; S.famD=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
+function gsDescartar(){ S.cierresDraft=null;S.cierresMotivos=null; S.gymDraft=null; S.svDraft=null; S.pd=null; S.famD=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
 /* salir con cambios sin guardar: guardar y salir / salir sin guardar / seguir editando */
 function gsLeave(go){ if(!gsDirty()) return go();
   let m=$('#gsm');
@@ -7745,6 +7758,11 @@ const UI43_PATH={home:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x=
 const ui43Icon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${UI43_PATH[k]||UI43_PATH.home}</svg>`;
 const ui43Name=()=>{if(S.sel&&DB.socios[S.sel])return DB.socios[S.sel].name;return ({mensajes:'Mensajes',pagos:'Pagos',cuotas:'Cuotas',novedades:'Novedades',profes:esAdmin()?'Profesores':'Mi perfil'})[S.ptabP]||({socios:'Socios',rutinas:'Rutinas'})[S.ui43View]||'Vista general'};
 function ui43Go(dest){
+  if(dest==='cierres'){
+    if(!PRO||!S.pro||!puedeP('gyminfo'))return;
+    const abrir=()=>{ui43Go('profes');requestAnimationFrame(()=>{const editor=$('#feriados-cierres');if(editor){editor.scrollIntoView({block:'start'});$('#fecha-cierre')?.focus({preventScroll:true})}})};
+    if(gsDirty())return gsLeave(abrir);return abrir();
+  }
   if(!PRO||!S.pro||S.view!=='duenio')return;
   const exists=proTabs(0,0).some(p=>p.k===dest);
   if(!['overview','socios','rutinas'].includes(dest)&&!exists)return;
@@ -7771,6 +7789,7 @@ function ui43Tasks(){
   const devices=(S.disp||[]).filter(d=>d.s&&d.s.aprobado!==false).length;
   const routines=people.filter(s=>s.aprobado!==false&&!(s.rutina&&s.rutina.length)&&!s.funcional).length;
   const unread=chNoLeidosProfe();let list='';
+  if(puedeP('gyminfo'))list+=ui43Task('gym','Feriados y cierres','Organizá los días que el gimnasio no abre','cierres','Gestionar');
   if(puedeP('aprobar'))list+=ui43Task('users',`${pendientes+devices} solicitudes de ingreso`,pendientes?'Socios esperando tu aprobación':'Registros y nuevos dispositivos','approvals','Revisar');
   const avs=c1xPlataOff()?0:panelPagosLista(people).solicitudes.length;
   if(puedeP('dinero')&&avs)list+=ui43Task('bell',`${avs} aviso${avs===1?'':'s'} de pago`,'Socios que dicen que ya pagaron: confirmalo y registralo','avisos','Revisar');
