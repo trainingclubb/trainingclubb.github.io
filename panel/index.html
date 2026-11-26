@@ -2678,6 +2678,26 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 
 /* UI43-CSS-END */
 
+/* v77 · equipo del gimnasio */
+.eqcard{display:flex;flex-direction:column;gap:12px}
+.eqpri{display:flex;gap:14px;align-items:flex-start}
+.eqpri .gtx small,.eqi .gtx small{display:block;text-transform:uppercase;letter-spacing:.08em;font-weight:800;font-size:10.5px;color:var(--teal)}
+.eqpri .gtx b{display:block;font-size:17px;margin-top:2px}
+.eqpri .gtx p,.eqi .gtx p{margin:4px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
+.eqlist{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.eqi{display:flex;gap:12px;align-items:flex-start}
+.eqi .gtx b{display:block;font-size:14.5px}
+.eqi .gtx small{margin-top:2px}
+.eqed{display:flex;flex-direction:column;gap:10px;margin:6px 0 14px}
+.eqedi{display:grid;gap:7px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--sunk)}
+.eqedi.eqpri{border-color:rgba(36,201,167,.35)}
+.eqedtop{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:30px}
+.eqtag{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.eqedi.eqpri .eqtag{color:var(--teal)}
+.eqbtns{display:flex;gap:6px}
+.eqdel{color:var(--bad)!important}
+.eqadd{align-self:flex-start}
+
 /* v76 · Rutina: reloj fijo arriba, tarjeta de ejercicio limpia */
 #scr-rutina .timer{position:sticky;top:-22px;z-index:6}
 .ex.ex2{display:flex!important;flex-direction:column;align-items:stretch;gap:12px;padding:12px!important}
@@ -5852,6 +5872,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.68',t:'El equipo del gimnasio',items:[['👨‍🏫','En Gimnasio vuelve la ficha del profe y aparecen los servicios.'],['➕','Desde el panel, en Info del gimnasio, el dueño arma el equipo: él primero y los profes que agregue abajo, cada uno con su rol y sus títulos.']]},
   {v:'1.1.67',t:'Rutina más clara',items:[['⏱️','El cronómetro vuelve a quedar fijo arriba mientras bajás.'],['🏋️','Cada ejercicio muestra el personaje, el nombre, las series, las repeticiones y el RIR bien claros, con los circulitos de las series en fila.'],['🙋','Personajes nuevos, con cuerpo: de mujer o de hombre según tu cuenta (lo podés cambiar en Perfil).'],['🌊','La barra de progreso se llena con una onda.'],['🏁','Podés finalizar la rutina aunque no la hayas terminado.'],['📒','Las cargas se anotan solo en la parte de Cargas.']]},
   {v:'1.1.66',t:'Audios como en WhatsApp',items:[['🎧','La onda de cada audio sale del audio de verdad: los graves y los agudos marcan lo alto de cada barrita.'],['▶️','Al reproducir, la onda se va llenando suave y las barritas laten con el volumen.'],['🎙️','Mientras grabás, las barritas se mueven con tu voz.']]},
   {v:'1.1.65',t:'Sesiones privadas y tesorería',items:[['🔐','El panel tiene su propia sesión. Los pagos y las deudas están reservados a Ezequiel.']]},
@@ -6893,12 +6914,14 @@ document.addEventListener('input',e=>{const t=e.target; if(!t||!t.matches||!t.ma
 function y42GymDirty(){ if(!puedeP('gyminfo')) return false; const g=gymInfo(), d=S.gymDraft||{};if(S.cierresDraft&&JSON.stringify(S.cierresDraft)!==JSON.stringify(g.cierres||[]))return true;
   if(S.cierresMotivos&&JSON.stringify(S.cierresMotivos)!==JSON.stringify(motivosDeCierre()))return true;
   if(Object.keys(d).some(k=>gTxt(d[k])!==gTxt(g[k]))) return true;
+  if(S.eqDraft&&JSON.stringify(eqParaGuardar())!==JSON.stringify(eqLista().map(eqNorm))) return true;
   if(!S.svDraft) return false;
   const nrm=L=>JSON.stringify(L.map(x=>({n:gTxt(x.n).slice(0,60),d:gTxt(x.d).slice(0,200),dias:x.dias.slice().sort((a,b)=>a-b)})).filter(x=>x.n));
   return nrm(S.svDraft)!==nrm(svLista()) }
 async function y42GymSave(){ if(!y42GymDirty()) return true;
   const g=Object.assign({},gymInfo(),S.gymDraft||{}), v={};
-  GYM_CAMPOS.forEach(k=>{v[k]=gTxt(g[k])||null}); v.servicios=svParaGuardar(); if(S.cierresDraft){v.cierres=S.cierresDraft.slice();v.motivos_cierre=S.cierresMotivos||{}}
+  GYM_CAMPOS.forEach(k=>{v[k]=gTxt(g[k])||null}); v.servicios=svParaGuardar();
+  if(S.eqDraft){ v.equipo=eqParaGuardar(); if(!v.equipo.length) return toast('Dejá al menos una persona en el equipo'),false; if(v.equipo.some(x=>!x.n)) return toast('Poné el nombre de cada profe del equipo'),false; v.profe_bio=(v.equipo[0].b||'').slice(0,300)||null } if(S.cierresDraft){v.cierres=S.cierresDraft.slice();v.motivos_cierre=S.cierresMotivos||{}}
   const bad=(t,id)=>{ toast(t); const el=document.getElementById(id); if(el){ el.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'}); el.focus({preventScroll:true}) } return false };
   if(v.whatsapp&&!waLink(v.whatsapp)) return bad('Revisá el WhatsApp: poné el número con característica','g_whatsapp');
   if(v.instagram&&!igLink(v.instagram)) return bad('Revisá el Instagram: poné el usuario, por ejemplo @trainingclub','g_instagram');
@@ -6910,7 +6933,7 @@ async function y42GymSave(){ if(!y42GymDirty()) return true;
   else {DB.gym=Object.assign({},DB.gym||{},r);saveDB()}
   S.cierresDraft=null;S.cierresMotivos=null;S.rkC={};S.mrkSig=null;if(CLOUD)reload(true);
   const gb=$('#gsbar'), era=!!(gb&&gb.classList.contains('on'));
-  S.gymDraft=null; S.svDraft=null; toast('Listo: los socios ya ven la info nueva');
+  S.gymDraft=null; S.svDraft=null; S.eqDraft=null; toast('Listo: los socios ya ven la info nueva');
   if(gb&&era&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; gb.classList.add('ok'); document.body.classList.remove('gson');
     clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{gb.classList.remove('ok'); gsUpd()},950) }
   render(true);
@@ -7877,9 +7900,42 @@ function screenGimnasio(){
   <div class="gymscr" style="display:contents">
   ${d||maps?`<section class="card gubic"><span class="gico">${GICO.pin}</span><span class="gtx"><small>Ubicación</small><b>${d?esc(d):'Training Club'}</b></span>${maps?`<a class="btn sm" href="${esc(maps)}" target="_blank" rel="noopener">Cómo llegar</a>`:''}</section>`:''}
   ${cont.length?`<section class="card"><div class="ttl"><b>Contacto</b></div><div class="glinks">${cont.join('')}</div></section>`:''}
+  ${eqHtml()}
+  ${svHtml()}
   ${horariosHtml()}${proximosCierres()||'<section class="card"><h3>Próximos cierres</h3><p>No hay cierres programados.</p></section>'}
   ${esFam(s)?`<section class="card famcard"><div class="famico" aria-hidden="true">🧹</div><b>Cómo pagar</b><p>No pagás cuota. ${famChiste()}</p></section>`:`<section class="card">${comoPagarHtml(monto)}</section>`}
   ${sugCard()}</div>`}
+
+/* v77 · equipo del gimnasio: el dueño primero y los profes abajo; lo arma el dueño en el panel (Info del gimnasio) */
+function eqNorm(x){ return {n:gTxt(x&&x.n).slice(0,60),r:gTxt(x&&x.r).slice(0,60),b:gTxt(x&&x.b).slice(0,300)} }
+function eqLista(){ const g=gymInfo(); let L=g.equipo; if(typeof L==='string'){ try{ L=JSON.parse(L) }catch(e){ L=null } }
+  if(Array.isArray(L)&&L.length) return L.map(eqNorm);
+  return [{n:PROFE,r:'Dueño y profesor',b:gTxt(g.profe_bio)||PROFE_BIO}] }
+function eqParaGuardar(){ return (S.eqDraft||eqLista()).map(eqNorm).filter(x=>x.n||x.r||x.b) }
+function eqFoto(n){ const k=sinTilde(n); const p=profesPub().find(x=>x&&sinTilde((String(x.nombre||'')+' '+String(x.apellido||'')).trim())===k); return p&&p.foto||null }
+function eqHtml(){ const L=eqLista(); if(!L.length) return ''; const [a,...resto]=L;
+  return `<section class="card eqcard"><div class="ttl"><b>${resto.length?'El equipo':'Tu profe'}</b></div>
+    <div class="eqpri">${avatar('md',eqFoto(a.n),a.n)}<span class="gtx">${a.r?`<small>${esc(a.r)}</small>`:''}<b>${esc(a.n)}</b>${a.b?`<p>${esc(a.b)}</p>`:''}</span></div>
+    ${resto.length?`<div class="eqlist">${resto.map(x=>`<div class="eqi">${avatar('sm',eqFoto(x.n),x.n)}<span class="gtx"><b>${esc(x.n)}</b>${x.r?`<small>${esc(x.r)}</small>`:''}${x.b?`<p>${esc(x.b)}</p>`:''}</span></div>`).join('')}</div>`:''}</section>` }
+function eqEditorHtml(){ if(!puedeP('gyminfo')) return ''; const L=S.eqDraft||eqLista();
+  const nombres=[...new Set(profesPub().map(p=>(String(p.nombre||'')+' '+String(p.apellido||'')).trim()).filter(Boolean))];
+  return `<div class="eqed" id="eqed"><div class="svedh"><b>Equipo del gimnasio</b><small class="hint" style="margin:0;max-width:none">Lo ven los socios en Gimnasio. El primero es el principal (vos); abajo agregá a los demás profes.</small></div>
+    <datalist id="eqnoms">${nombres.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+    ${L.map((x,i)=>`<div class="eqedi ${i?'':'eqpri'}"><div class="eqedtop"><span class="eqtag">${i?'Profe '+i:'Principal'}</span>
+        <span class="eqbtns">${i>1?`<button type="button" class="mini" data-eqsub="${i}" aria-label="Subir a ${esc(x.n||'este profe')}">↑</button>`:''}${i?`<button type="button" class="mini eqdel" data-eqdel="${i}" aria-label="Quitar a ${esc(x.n||'este profe')}">Quitar</button>`:''}</span></div>
+      <input class="inp" data-eqf="${i}:n" maxlength="60" list="eqnoms" value="${esc(x.n)}" placeholder="Nombre y apellido" aria-label="Nombre">
+      <input class="inp" data-eqf="${i}:r" maxlength="60" value="${esc(x.r)}" placeholder="${i?'Ej: Profesor de musculación':'Ej: Dueño y profesor'}" aria-label="Rol">
+      <textarea class="inp" data-eqf="${i}:b" maxlength="300" rows="2" placeholder="${i?'Títulos o una frase sobre el profe (opcional)':esc(PROFE_BIO)}" aria-label="Títulos y descripción">${esc(x.b)}</textarea></div>`).join('')}
+    ${L.length<20?'<button type="button" class="btn sm ghost eqadd" data-eqadd>+ Agregar profe</button>':''}</div>` }
+const eqDraftIni=()=>S.eqDraft||(S.eqDraft=eqLista().map(x=>Object.assign({},x)));
+function eqCambio(){ try{ gsUpd() }catch(x){} }
+document.addEventListener('input',e=>{ const t=e.target, f=t.dataset&&t.dataset.eqf; if(!f) return; const [i,k]=f.split(':'), L=eqDraftIni(); if(!L[+i]) return; L[+i][k]=t.value; eqCambio() });
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-eqadd],[data-eqdel],[data-eqsub]'); if(!b||!puedeP('gyminfo')) return; e.preventDefault(); e.stopImmediatePropagation();
+  const L=eqDraftIni();
+  if(b.hasAttribute('data-eqadd')){ L.push({n:'',r:'Profesor',b:''}); render(true); requestAnimationFrame(()=>{ const x=document.querySelector(`[data-eqf="${L.length-1}:n"]`); if(x){ x.scrollIntoView({block:'center'}); x.focus({preventScroll:true}) } }) }
+  else if(b.dataset.eqdel){ L.splice(+b.dataset.eqdel,1); render(true) }
+  else { const i=+b.dataset.eqsub; if(i>1){ [L[i-1],L[i]]=[L[i],L[i-1]]; render(true) } }
+  eqCambio() },true);
 /* nube: se baja junto con el resto (loadAll) y si cambió se refresca la pantalla sin saltos */
 async function cargarGym(){ if(!CLOUD||!sb) return;
   try{ const {data,error}=await sb.from('gym_info').select('*').eq('id',1).maybeSingle(); if(error) return;
@@ -7916,7 +7972,7 @@ function gymEditorHtml(){ const g=Object.assign({},gymInfo(),S.gymDraft||{}), v=
     ['telefono','Teléfono <span class="opc">opcional</span>','Si querés que también puedan llamar','tel',30]];
   return `<section class="panel" id="gyminfo"><div class="panelhead"><h2>Info del gimnasio</h2><span class="muted">La ven los socios en la sección Gimnasio</span></div>
   <form class="gymf" id="gymf" novalidate><div class="gymgrid">${F.map(([k,l,ph,t,mx])=>`<div class="field"><label for="g_${k}">${l}</label><input class="inp" id="g_${k}" name="${k}" type="${t}" maxlength="${mx}" placeholder="${esc(ph)}" value="${v(k)}" autocomplete="off"></div>`).join('')}</div>
-    <div class="field"><label for="g_profe_bio">Sobre el profe</label><textarea class="inp" id="g_profe_bio" name="profe_bio" maxlength="300" placeholder="${esc(PROFE_BIO)}">${v('profe_bio')}</textarea><small class="hint" style="max-width:none">Si lo dejás vacío se muestra: ${esc(PROFE_BIO)}.</small></div>
+    <input type="hidden" name="profe_bio" value="${v('profe_bio')}">${eqEditorHtml()}
     ${svEditorHtml()}${cierresEditor()}
     <div class="gymacts"><small class="hint" style="margin:0;max-width:none;flex:1;min-width:200px">Lo que dejes vacío no se muestra. Los horarios y los alias de pago ya aparecen solos. Los cambios se guardan con «Guardar todo».</small></div></form></section>`}
 async function guardarGym(){ const f=$('#gymf'); if(!f) return; const v={};
@@ -7929,7 +7985,7 @@ async function guardarGym(){ const f=$('#gymf'); if(!f) return; const v={};
   const bt=f.querySelector('button[type="submit"]'); if(bt){bt.disabled=true; bt.classList.add('cargando')}
   try{ const r=Object.assign({id:1},v,{updated_at:new Date().toISOString()});
     if(CLOUD){ await q(sb.from('gym_info').upsert(r)); GYM=Object.assign({},GYM||{},r) } else { DB.gym=Object.assign({},DB.gym||{},r); saveDB() }
-    S.gymDraft=null; S.svDraft=null; toast('Listo: los socios ya ven la info nueva'); render(true);
+    S.gymDraft=null; S.svDraft=null; S.eqDraft=null; toast('Listo: los socios ya ven la info nueva'); render(true);
     const p=$('#gyminfo'); if(p){p.classList.add('flash'); setTimeout(()=>p.classList.remove('flash'),900)}
   }catch(e){ toast('No se pudo guardar: '+errTxt(e)); if(bt){bt.disabled=false; bt.classList.remove('cargando')} } }
 document.addEventListener('submit',async e=>{ const f=e.target; if(f.id!=='chatf'&&f.id!=='chatpf'&&f.id!=='sugf') return; e.preventDefault(); e.stopImmediatePropagation();
@@ -8300,7 +8356,7 @@ function gsSave(){ if(S.view==='duenio'&&S.ptabP==='cuotas'&&!S.sel){ if(!pdSave
   const b=$('#gsbar'); if(b&&b.classList.contains('on')&&!reduceMotion){ $('#gstxt').innerHTML='✓ Cambios guardados'; b.classList.add('ok'); document.body.classList.remove('gson');
     clearTimeout(gsSave._t); gsSave._t=setTimeout(()=>{b.classList.remove('ok'); gsUpd()},950) } else gsUpd();
   return true }
-function gsDescartar(){ S.cierresDraft=null;S.cierresMotivos=null; S.gymDraft=null; S.svDraft=null; S.pd=null; S.famD=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
+function gsDescartar(){ S.cierresDraft=null;S.cierresMotivos=null; S.gymDraft=null; S.svDraft=null; S.eqDraft=null; S.pd=null; S.famD=null; S.fd=null; S.dirty=false; S.edit=null; if(S.msel) S.msel.edit=null }
 /* salir con cambios sin guardar: guardar y salir / salir sin guardar / seguir editando */
 function gsLeave(go){ if(!gsDirty()) return go();
   let m=$('#gsm');
