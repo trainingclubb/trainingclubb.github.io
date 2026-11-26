@@ -2678,6 +2678,63 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 
 /* UI43-CSS-END */
 
+/* v76 · Rutina: reloj fijo arriba, tarjeta de ejercicio limpia */
+#scr-rutina .timer{position:sticky;top:-22px;z-index:6}
+.ex.ex2{display:flex!important;flex-direction:column;align-items:stretch;gap:12px;padding:12px!important}
+.ex2top{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:12px;align-items:center}
+.ex2 .anim{width:96px;height:96px;border-radius:18px}
+.ex2 .nm{font-size:24px;overflow-wrap:anywhere}
+.ex2meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-top:7px}
+.ex2sr{display:inline-flex;align-items:baseline;gap:3px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.ex2sr b{font-family:var(--display);font-size:22px;font-weight:900;line-height:1;color:var(--ink)}
+.ex2x{font-weight:900;color:var(--muted)}
+.ex2rir{align-self:center;margin-left:2px;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--teal);font-size:12px;font-weight:800}
+.ex2sup{color:var(--muted);font-weight:700;margin-top:4px}
+.ex2 .chk{width:38px;height:38px;border-radius:12px}
+.ex2 .nota-ej{color:var(--muted);font-size:12.5px;line-height:1.4}
+.ex2acc{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ex2acc .restbtn{margin:0}
+.sers2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sers2 .ser{width:38px;height:38px;font-size:14px;border-width:2px}
+.sers2 .ser.on{background:var(--grad);border-color:transparent;color:#06110e;box-shadow:0 5px 14px -6px rgba(36,201,167,.75)}
+.sers2cnt{margin-left:auto;font-size:13px;font-weight:800;color:var(--muted)}
+/* barra de progreso con onda */
+.prog2{display:flex;align-items:center;gap:10px;margin:4px 0 2px}
+.prog.ola{flex:1;height:14px;border-radius:999px;background:var(--sunk);border:1px solid var(--line);overflow:hidden;position:relative}
+.prog.ola i{position:relative;display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#24C9A7,#8ad66a 55%,#FCE024);box-shadow:0 0 14px rgba(36,201,167,.45);overflow:hidden;transition:width 1s cubic-bezier(.25,1.3,.4,1)!important}
+.prog.ola i::before,.prog.ola i::after{content:'';position:absolute;top:0;bottom:0;left:-28px;right:-28px;background-repeat:repeat-x;background-size:28px 100%}
+.prog.ola i::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14' viewBox='0 0 28 14'%3E%3Cpath d='M0 6 Q7 0 14 6 T28 6 V14 H0Z' fill='%23ffffff' fill-opacity='.32'/%3E%3C/svg%3E");animation:olaMov 1.1s linear infinite}
+.prog.ola i::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14' viewBox='0 0 28 14'%3E%3Cpath d='M0 9 Q7 4 14 9 T28 9 V14 H0Z' fill='%23ffffff' fill-opacity='.18'/%3E%3C/svg%3E");animation:olaMov 1.8s linear infinite reverse}
+@keyframes olaMov{from{transform:translateX(0)}to{transform:translateX(28px)}}
+.rfin{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 13px;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.rfin:active{transform:scale(.95)}
+.rfindlg form{text-align:center;justify-items:center}
+.rfindlg .rfinico{font-size:30px}
+.rfindlg h3{margin:0}
+.rfindlg p{margin:0;color:var(--muted);line-height:1.45}
+.rfindlg .btn{width:100%}
+.rfinb{border-color:rgba(252,224,36,.35)!important}
+.fzseg{grid-template-columns:1fr 1fr!important}
+/* personaje con cuerpo */
+.anim svg{filter:drop-shadow(0 1px 1.2px rgba(0,0,0,.35))!important}
+.fz-piel{stroke:#e8b58f;stroke-linecap:round;fill:none}
+.fz-pielf,.fz-pielz{fill:#e8b58f;stroke:#e8b58f;stroke-linejoin:round}
+.fz-oreja{fill:#d9a17a}
+.fz-top-m{fill:#24c9a7;stroke:#24c9a7;stroke-linejoin:round;stroke-linecap:round}
+.fz-top-f{fill:#ff6fa3;stroke:#ff6fa3;stroke-linejoin:round;stroke-linecap:round}
+.fz-bot-m{fill:#3d4650;stroke:#3d4650;stroke-linejoin:round;stroke-linecap:round}
+.fz-bot-f{fill:#6a55a8;stroke:#6a55a8;stroke-linejoin:round;stroke-linecap:round}
+.fz-pelo{fill:#3b2417;stroke:#3b2417;stroke-linecap:round;stroke-linejoin:round}
+.fz-moño{fill:#ff6fa3}
+.fz-zapa{stroke:#f2f4f5;stroke-linecap:round}
+.fz-zapaf{fill:#f2f4f5}
+.fz-ojo{fill:#24160e}
+.fz-boca{stroke:#a8604a;stroke-linecap:round}
+.fz-atras{opacity:.55}
+.fz-sombra{fill:rgba(0,0,0,.28)}
+[data-theme="light"] .fz-zapa{stroke:#3d4650}[data-theme="light"] .fz-zapaf{fill:#3d4650}[data-theme="light"] .fz-sombra{fill:rgba(0,0,0,.12)}
+@media (prefers-reduced-motion:reduce){.prog.ola i::before,.prog.ola i::after{animation:none}}
+
 /* v75 · audios: la capa de arriba (lo ya escuchado) se recorta con el avance, así se llena suave como en WhatsApp */
 .bawave{position:relative}
 .bawave>i{transform-origin:50% 50%;transition:transform .09s linear,height .35s ease}
@@ -3778,7 +3835,7 @@ function screenPerfil(){
   </div>
   <div class="field"><label for="nombre">Nombre y apellido</label><input class="inp" id="nombre" value="${esc(S.name)}" autocomplete="name"></div>
   <div class="pfopc">
-    ${temaSeg()}
+    ${temaSeg()}${fzSeg()}
     <label class="motsw"><span><b>Mensajes de motivación</b><small>2 por día, a cualquier hora entre las 7 y las 20 💪</small></span><input type="checkbox" id="pmotiv" role="switch" ${s.motiv!==false?'checked':''}><i aria-hidden="true"></i></label>
     <div class="field"><label for="pnac">Fecha de nacimiento <span class="opc">opcional</span></label><input class="inp" type="date" id="pnac" value="${s.nac||''}" min="1920-01-02" max="${iso(TODAY)}"><small class="hint" id="pedad">${edadDe(s.nac)!=null?'Tenés '+edadDe(s.nac)+' años':'Así tu profe sabe tu edad.'}</small></div>
     <form class="field" id="pesof" novalidate><label for="ppeso">Peso <span class="opc">opcional</span></label><div class="pesorow"><input class="inp num" id="ppeso" inputmode="decimal" placeholder="${pesoActual(s)?fmtKg(pesoActual(s).peso):'Ej: 72,5'}"><span>kg</span><button class="btn sm" type="submit">Guardar</button></div><small class="hint">${pesoActual(s)?'Último: '+fmtKg(pesoActual(s).peso)+' kg el '+ddmm(pesoActual(s).fecha):'Se suma a tu progreso y lo ve tu profe.'}</small></form>
@@ -3876,7 +3933,7 @@ const fmtR=ms=>{const s=Math.ceil(ms/1000);return `${Math.floor(s/60)}:${p2(s%60
 const restSecs=txt=>{const n=parseFloat(txt);return /min/.test(txt)?n*60:n};
 
 function timerCard(){
-  if(!S.relojGrande){
+  if(false){
     const descanso=S.tmode==='rest', corriendo=descanso?S.rest.run:S.sw.run;
     const tiempo=descanso?fmtR(restNow()):fmtSW(swNow()).split('.')[0];
     const nombre=descanso&&corriendo?'<button class="linkb reloj-nombre" id="restgo" aria-label="Pausar descanso">Descanso</button>':'<span class="reloj-nombre">'+(descanso?'Descanso':'Cronómetro')+'</span>';
@@ -3902,7 +3959,7 @@ function timerCard(){
     <div class="presets" role="group" aria-label="Tiempo del temporizador">${[30,60,90,120,180].map(x=>`<button data-preset="${x}" aria-pressed="${S.rest.total===x*1000}">${x<60?x+' s':x%60?'1:30':x/60+' min'}</button>`).join('')}</div>
     <div class="tbtns"><button class="tb main ${S.rest.run?'running':''}" id="restgo">${S.rest.run?'Pausar':(r<S.rest.total&&r>0?'Seguir':'Iniciar')}</button>
     <button class="tb" id="restplus">+15 s</button><button class="tb" id="restreset">Reiniciar</button></div>`;
-  return `<section class="timer ${S.sw.run&&c||S.rest.run&&!c?'run':''}" id="timer"><button class="linkb" data-reloj-mas>Compactar reloj</button>
+  return `<section class="timer ${S.sw.run&&c||S.rest.run&&!c?'run':''}" id="timer">
     <div class="tmodes" role="group" aria-label="Modo" style="--m:${prevM}" data-to="${c?0:1}"><button data-tmode="crono" aria-pressed="${c}">Cronómetro</button><button data-tmode="rest" aria-pressed="${!c}">Temporizador</button></div>
     <div class="tbody ${prevM!==(c?0:1)?(c?'froml':'fromr'):''}">${c?sw:rs}</div></section>`;
 }
@@ -4081,22 +4138,29 @@ function screenRutina(){
   if(S.day>=R.length) S.day=0;
   const r=R[S.day]; const n=r.ex.length; const d=[...S.done].filter(k=>k.startsWith(S.day+'-')).length;
   const hechos=new Set(R.map((x,i)=>rdHecho(R,i)?i:-1).filter(i=>i>=0)), rdNuevo=new Set(S.rdVisto?[...hechos].filter(i=>!S.rdVisto.has(i)):[]); S.rdVisto=hechos;
-  return `<div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${esc(profeNom(s))}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
+  const W=n?Math.round(d/n*100):0, W0=S.progW&&S.progW[S.day]!=null?S.progW[S.day]:W; S.progW=Object.assign(S.progW||{},{[S.day]:W});
+  const fin=rfinHoy(), puedeFin=d>=1&&d<n&&!fin;
+  if(W0!==W) requestAnimationFrame(()=>requestAnimationFrame(()=>{ const i=document.querySelector('#scr-rutina .prog.ola i'); if(i) i.style.width=W+'%' }));
+  return `${timerCard()}<div class="rhead"><div><h2>Tu rutina</h2><p class="h2sub2">Armada por ${esc(profeNom(s))}</p></div><span class="num rcount"><span data-count="${d}" data-ck="rc${S.day}">${d}</span>/${n}</span></div>
   ${R.length>1?`<div class="days hscroll" role="group" aria-label="Día">${R.map((x,i)=>`<button data-day="${i}" aria-pressed="${i===S.day}" class="${rdHecho(R,i)?'rdok':''} ${rdNuevo.has(i)?'rdnew':''}">${rdHecho(R,i)?'<b class="rdtic" aria-label="completo">✓</b>':''}${esc(x.d)}<small>${esc(x.t||'')}</small></button>`).join('')}</div>`:''}
-  <div class="prog"><i style="width:${n?d/n*100:0}%"></i></div>
-  ${timerCard()}<div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k); const RN=runOf(e); if(RN) return runCard(RN,k,on);
+  <div class="prog2"><div class="prog ola" role="progressbar" aria-label="Ejercicios hechos" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${d}"><i style="width:${W0}%"></i></div>
+    <button type="button" class="rfin" data-rfin ${puedeFin?'':'tabindex="-1" aria-hidden="true" style="visibility:hidden"'}>Finalizar</button></div>
+  <div class="exlist">${r.ex.map((e,i)=>{const k=S.day+'-'+i;const on=S.done.has(k); const RN=runOf(e); if(RN) return runCard(RN,k,on);
     const base=e[0], nombre=alternativaElegida(k,e), grupo=e[5];
     e=[nombre,...e.slice(1)];
-    return `<div class="ex ${on?'done':''}">
-      <div class="anim" data-anim="${esc(animKey(e[0]))}" aria-label="Animación: ${esc(e[0])}"><svg viewBox="0 0 100 100" role="img"></svg></div>
-      <div class="exinfo"><span class="nm">${esc(e[0])}</span><span class="meta num">${exMeta(e)}</span>
-        ${grupo?`<small>Superserie ${esc(grupo)}</small>`:''}
-        ${e[6]?`<small class="nota-ej">${esc(e[6])}</small>`:''}${e[4]?`<label class="serie-elegir">Ejercicio <select class="inp" data-alternativa="${k}" ${on||S.ser?.[k]?.some(Boolean)||Array.from({length:serN(e)},(_,j)=>datosSerie(s,nombre,k,j).actual).some(Boolean)?'disabled':''}><option value="">${esc(base)}</option><option value="${esc(e[4])}" ${nombre===e[4]?'selected':''}>${esc(e[4])} (alternativa)</option></select></label>`:''}
-        ${serN(e)?serHtml(e,k,on)+`<button type="button" class="linkb" data-historial-ej="${esc(nombre)}">Historial del ejercicio</button>`:marcaEnEjercicio(s,e[0])}
-        <button type="button" class="linkb" data-consulta-ej="${esc(nombre)}">Consultar al profe</button>
-        ${e[3]?`<button class="restbtn" data-rest="${restSecs(e[3])}">⏱ Descanso ${esc(e[3])}</button>`:''}</div>
-      <button class="chk" data-ex="${k}" aria-pressed="${on}" aria-label="Marcar ${esc(e[0])} como hecho">✓</button></div>`}).join('')}</div>
-  ${n&&d===n?`<div class="rdfin ${rdNuevo.has(S.day)?'rdnew':''}"><span class="rdfico" aria-hidden="true">🏁</span><div><b>¡${esc(r.d)} completo!</b><small>Queda en verde toda la semana. El lunes se reinicia para volver a marcarlo.</small><button type="button" class="linkb" data-consulta-ej="">Consultar al profe</button></div></div>`:''}`;
+    const bloq=on||S.ser?.[k]?.some(Boolean);
+    return `<div class="ex ex2 ${on?'done':''}">
+      <div class="ex2top">
+        <div class="anim" data-anim="${esc(animKey(e[0]))}" aria-label="Animación: ${esc(e[0])}"><svg viewBox="0 0 100 100" role="img"></svg></div>
+        <div class="exinfo"><span class="nm">${esc(e[0])}</span>${ex2Meta(e)}${grupo?`<small class="ex2sup">Superserie ${esc(grupo)}</small>`:''}</div>
+        <button class="chk" data-ex="${k}" aria-pressed="${on}" aria-label="Marcar ${esc(e[0])} como hecho">✓</button></div>
+      ${e[6]?`<small class="nota-ej">${esc(e[6])}</small>`:''}
+      ${e[4]?`<label class="serie-elegir">Ejercicio <select class="inp" data-alternativa="${k}" ${bloq?'disabled':''}><option value="">${esc(base)}</option><option value="${esc(e[4])}" ${nombre===e[4]?'selected':''}>${esc(e[4])} (alternativa)</option></select></label>`:''}
+      ${ser2Html(e,k,on)}
+      <div class="ex2acc">${e[3]?`<button class="restbtn" data-rest="${restSecs(e[3])}">⏱ Descanso ${esc(e[3])}</button>`:'<span></span>'}<button type="button" class="linkb" data-consulta-ej="${esc(nombre)}">Consultar al profe</button></div>
+    </div>`}).join('')}</div>
+  ${n&&d===n?`<div class="rdfin ${rdNuevo.has(S.day)?'rdnew':''}"><span class="rdfico" aria-hidden="true">🏁</span><div><b>¡${esc(r.d)} completo!</b><small>Queda en verde toda la semana. El lunes se reinicia para volver a marcarlo.</small><button type="button" class="linkb" data-consulta-ej="">Consultar al profe</button></div></div>`:''}
+  ${fin&&d<n?`<div class="rdfin rfinb"><span class="rdfico" aria-hidden="true">🏁</span><div><b>Rutina finalizada</b><small>Hiciste ${fin.h} de ${fin.n} ejercicios. ¡La próxima la completás!</small><button type="button" class="linkb" data-rfin-seguir>Seguir entrenando</button></div></div>`:''}`;
 }
 document.addEventListener('change',e=>{
  const select=e.target;if(!select.matches('[data-alternativa]'))return;
@@ -4620,6 +4684,123 @@ function drawSkel(a,t){
   }
   return g;
 }
+
+/* v76 · tarjeta de ejercicio: series × reps y RIR bien claros, y circulitos de series en horizontal */
+function ex2Meta(e){ const t=String(e[1]||'').trim(), r=rirDe(e[2]), m=/^\s*(\d{1,2})\s*(?:[x×*]|series?\b)\s*(.*)$/i.exec(t);
+  const rir=r?`<span class="ex2rir" title="Repeticiones en reserva">RIR ${esc(r)}</span>`:'';
+  if(!m) return t||rir?`<div class="ex2meta">${t?`<span class="ex2sr">${esc(t)}</span>`:''}${rir}</div>`:'';
+  const reps=m[2].replace(/\b(reps?|repeticiones?)\b/ig,'').trim();
+  return `<div class="ex2meta"><span class="ex2sr"><b class="num">${m[1]}</b>series</span>${reps?`<span class="ex2x" aria-hidden="true">×</span><span class="ex2sr"><b class="num">${esc(reps)}</b>reps</span>`:''}${rir}</div>` }
+function ser2Html(e,k,on){ const n=serN(e); if(!n) return ''; const a=on?Array(n).fill(true):((S.ser||{})[k]||[]), h=Array.from({length:n},(_,j)=>!!a[j]).filter(Boolean).length;
+  return `<div class="sers2" role="group" aria-label="Series de ${esc(e[0])}: ${h} de ${n}">${Array.from({length:n},(_,j)=>{ const x=!!a[j];
+    return `<button type="button" class="ser ${x?'on':''} ${S.serJust===k+':'+j?'sjust':''}" data-ser="${k}" data-sj="${j}" data-sn="${n}" aria-pressed="${x}" aria-label="Serie ${j+1}">${x?'✓':j+1}</button>` }).join('')}<span class="sers2cnt num">${h}/${n}</span></div>` }
+
+/* v76 · finalizar la rutina aunque esté incompleta (con confirmación) */
+function rfinHoy(){ const s=me(); if(!s) return null; try{ const o=JSON.parse(localStorage.getItem('tc-rfin-'+s.dni)||'null'); return o&&o.fecha===iso(TODAY)&&o.day===S.day?o:null }catch(e){ return null } }
+function rfinConfirmar(){ const s=me(); if(!s) return; const R=rutinaVigente(s), r=R&&R[S.day]; if(!r) return;
+  const n=r.ex.length, d=[...S.done].filter(k=>k.startsWith(S.day+'-')).length;
+  const dl=document.createElement('dialog'); dl.className='marca-dialog rfindlg';
+  dl.innerHTML=`<form method="dialog"><span class="rfinico" aria-hidden="true">⚠️</span><h3>¿Seguro que querés finalizar?</h3><p>Tu rutina está incompleta: hiciste <b>${d} de ${n}</b> ejercicios.</p>
+    <button type="button" class="btn" data-rfin-ok>Sí, finalizar</button><button type="button" class="linkb" data-rfin-no>Seguir entrenando</button></form>`;
+  const cerrar=()=>{ try{dl.close()}catch(x){} };
+  dl.querySelector('[data-rfin-no]').onclick=cerrar;
+  dl.querySelector('[data-rfin-ok]').onclick=()=>{ const ms=TCB.sesT0?Date.now()-TCB.sesT0:0; TCB.sesT0=0; if(ms>0) try{ rsAgregar(ms) }catch(x){}
+    try{ localStorage.setItem('tc-rfin-'+s.dni,JSON.stringify({fecha:iso(TODAY),day:S.day,h:d,n})) }catch(x){}
+    try{ tcbGuardar(true) }catch(x){} cerrar(); render(true); toast(ms>60000?'Rutina finalizada · entrenaste '+tcbDur(ms):'Rutina finalizada: '+d+' de '+n+' ejercicios') };
+  dl.onclose=()=>dl.remove(); document.body.append(dl); dl.showModal() }
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-rfin]')){ e.preventDefault(); e.stopImmediatePropagation(); return rfinConfirmar() }
+  if(e.target.closest('[data-rfin-seguir]')){ e.preventDefault(); e.stopImmediatePropagation(); const s=me(); if(s) try{ localStorage.removeItem('tc-rfin-'+s.dni) }catch(x){} render(true) }
+  const fz=e.target.closest('[data-fz-op]'); if(fz){ e.preventDefault(); e.stopImmediatePropagation(); const s=me(); if(!s) return;
+    try{ localStorage.setItem('tc-personaje-'+s.dni,fz.dataset.fzOp) }catch(x){} FZC=null; render(true); toast(fz.dataset.fzOp==='m'?'Listo: tu personaje es una mujer':'Listo: tu personaje es un hombre') } },true);
+
+/* v76 · personaje: mujer u hombre según la cuenta (se adivina por el nombre y se puede cambiar en Perfil) */
+const FZ_F=new Set('carmen belen raquel isabel ines abril luz sol mercedes dolores pilar rocio jazmin lourdes beatriz ruth ester esther noemi miriam maribel marisol mabel nicole michelle denise solange janet yanet karen ailen aylen ayelen maite zoe abigail guadalupe anahi jael rachel evelyn jennifer lilian gisel giselle ivon ivonne milagros rosario consuelo socorro marilyn ingrid astrid edith judith iris nair sharon allison ashley kimberly emily rubi ruby flor mar cielo nahir yasmin jasmin elizabeth carol caroline noel noelle chantal muriel raquel liz lujan'.split(' '));
+const FZ_M=new Set('luca bautista batista joshua nicola elias jonas garcia saba josema'.split(' '));
+function fzAdivina(nombre){ const n=sinTilde(String(nombre||'').trim().split(/\s+/)[0]||''); if(!n) return 'h'; if(FZ_M.has(n)) return 'h'; if(FZ_F.has(n)) return 'm'; return /a$/.test(n)?'m':'h' }
+let FZC=null;
+function fzSexo(){ const s=S.view==='socio'&&S.user?me():null; if(!s) return 'h'; if(FZC&&FZC.dni===s.dni) return FZC.v;
+  let v=null; try{ v=localStorage.getItem('tc-personaje-'+s.dni) }catch(e){} if(v!=='m'&&v!=='h') v=fzAdivina(s.name); FZC={dni:s.dni,v}; return v }
+function fzSeg(){ if(!me()) return ''; const v=fzSexo(); return `<div class="field"><label>Tu personaje en las rutinas</label><div class="temaseg fzseg" role="group" aria-label="Personaje de las animaciones">${[['h','🙋‍♂️','Hombre'],['m','🙋‍♀️','Mujer']].map(([k,i,l])=>`<button type="button" data-fz-op="${k}" aria-pressed="${v===k}"><span aria-hidden="true">${i}</span>${l}</button>`).join('')}</div></div>` }
+
+/* v76 · el personaje con cuerpo: piel, remera y short (hombre) o top y calzas con colita (mujer); los mismos movimientos de siempre */
+const fzMix=(a,b,f)=>[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f];
+const fzRot=(v,g)=>{ const c=Math.cos(g),s=Math.sin(g); return [v[0]*c-v[1]*s,v[0]*s+v[1]*c] };
+const fzAdd=(p,...vs)=>vs.reduce((a,[v,k])=>[a[0]+v[0]*k,a[1]+v[1]*k],p);
+const fzPt=p=>p[0].toFixed(1)+' '+p[1].toFixed(1);
+drawSkel=function(a,t){
+  const P=a.F?a.F(t):{}; if(!a.F) for(const k in a.A){const A=a.A[k],B=a.B[k]||A;P[k]=[A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t]}
+  const M=fzSexo()==='m', FR=a.eq.some(q=>q[0]==='front'), TOP=M?'fz-top-f':'fz-top-m', BOT=M?'fz-bot-f':'fz-bot-m';
+  let g=ln([4,94],[96,94],'floor')+`<ellipse cx="${P.p[0].toFixed(1)}" cy="94.6" rx="17" ry="2.5" class="fz-sombra"/>`;
+  for(const q of a.eq){
+    if(q[0]==='bench') g+=ln([q[1],q[3]],[q[2],q[3]],'gear-s',5)+ln([q[1]+3,q[3]],[q[1]+3,94],'gear-s',2.5)+ln([q[2]-3,q[3]],[q[2]-3,94],'gear-s',2.5);
+    if(q[0]==='seat') g+=`<polyline points="${q[1].map(p=>p.join(',')).join(' ')}" class="gear-s" stroke-width="5"/>`;
+    if(q[0]==='hbar') g+=ln([q[1],q[3]],[q[2],q[3]],'gear',3.5);
+    if(q[0]==='cable') g+=ci([q[1],q[2]+3],3,'gear')+ln([q[1],q[2]+3],P.w,'cable');
+    if(q[0]==='cablex') g+=ci([q[1],q[2]],3,'gear')+ci([q[3],q[4]],3,'gear')+ln([q[1],q[2]],P.w,'cable')+ln([q[3],q[4]],P.w2,'cable');
+    if(q[0]==='legs') for(const L of q[1]) g+=ln(L,[L[0],94],'gear-s',2.5);
+    if(q[0]==='bg') g+=q[1](P,t);
+  }
+  /* medidas del cuerpo (en un lienzo de 100) */
+  const W=M?{mu:7.4,pi:5.3,br:4.7,an:3.9,ma:2.2,cu:3.7}:{mu:7.2,pi:5.6,br:5.6,an:4.5,ma:2.5,cu:4.4};
+  const pierna=(cad,rod,pie,pun)=>{ let h='';
+    if(M){ h+=ln(cad,rod,BOT,W.mu+.4)+ln(rod,fzMix(rod,pie,.86),BOT,W.pi+.3)+ln(fzMix(rod,pie,.8),pie,'fz-piel',W.pi-1.6) }
+    else { h+=ln(cad,rod,'fz-piel',W.mu)+ln(rod,pie,'fz-piel',W.pi)+ln(cad,fzMix(cad,rod,.5),BOT,W.mu+1.2) }
+    h+=pun?ln(pie,pun,'fz-zapa',3.6)+ci(pie,2,'fz-zapaf'):ci(pie,2.4,'fz-zapaf'); return h };
+  const brazo=(hom,cod,mun)=>ln(hom,cod,'fz-piel',W.br)+ln(cod,mun,'fz-piel',W.an)+(M?'':ln(hom,fzMix(hom,cod,.36),TOP,W.br+1.6))+ci(mun,W.ma,'fz-pielf');
+  /* lo de atrás, un poco más oscuro */
+  let atras='';
+  if(P.k2&&!FR) atras+=pierna(P.p,P.k2,P.f2,null);
+  if(P.e2&&!FR) atras+=brazo(P.s2||P.s,P.e2,P.w2);
+  if(atras) g+=`<g class="fz-atras">${atras}</g>`;
+  if(FR&&P.k2) g+=pierna(P.p,P.k2,P.f2,null);
+  g+=pierna(P.p,P.k,P.f,P.t);
+  /* torso: de los hombros a la cadera, con cintura; la mujer con top corto y calzas */
+  const n=P.n,p=P.p,dx=p[0]-n[0],dy=p[1]-n[1],Ls=Math.hypot(dx,dy)||1,u=[dx/Ls,dy/Ls],w=[-u[1],u[0]];
+  const hv=[P.h[0]-n[0],P.h[1]-n[1]],hl=Math.hypot(hv[0],hv[1])||1,up=[hv[0]/hl,hv[1]/hl],fc=[-up[1],up[0]];
+  const lado=(w[0]*fc[0]+w[1]*fc[1])>=0?1:-1;
+  const perfil=M?[[0,4.2,4.2],[.24,5.2,4.6],[.6,4.1,4],[.98,5.1,5.1]]:[[0,4.6,4.6],[.28,5.9,5.3],[.62,5,4.8],[.98,5.3,5.3]];
+  const zona=(f0,f1,c,ex)=>{ const cs=[f0,...perfil.map(x=>x[0]).filter(f=>f>f0&&f<f1),f1], wd=f=>{ let i=perfil.findIndex(x=>x[0]>=f); if(i<0){ const z=perfil[perfil.length-1]; return [f,z[1],z[2]] } if(i===0) return [f,perfil[0][1],perfil[0][2]]; const a=perfil[i-1],b=perfil[i],k=(f-a[0])/(b[0]-a[0]); return [f,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k] };
+    const pts=cs.map(wd), A=pts.map(([f,a,b])=>fzAdd(n,[u,Ls*f],[w,((FR?(a+b)/2:a)+(ex||0))*lado])), B=pts.map(([f,a,b])=>fzAdd(n,[u,Ls*f],[w,-((FR?(a+b)/2:b)+(ex||0))*lado]));
+    return `<path d="M${A.map(fzPt).join(' L')} L${B.reverse().map(fzPt).join(' L')}Z" class="${c}" stroke-width="1.6"/>` };
+  if(M){ g+=zona(.5,.8,'fz-pielz')+zona(0,.56,TOP)+zona(.78,1,BOT,.3) }
+  else { g+=zona(0,.9,TOP)+zona(.84,1,BOT,.35) }
+  /* cuello y cabeza */
+  g+=ln(n,fzMix(n,P.h,.6),'fz-piel',W.cu);
+  const h=P.h, R=5.2, ang=Math.atan2(fc[1],fc[0]), at=(gr,r)=>[h[0]+Math.cos(ang+gr)*(r||R+.5),h[1]+Math.sin(ang+gr)*(r||R+.5)];
+  const D=Math.PI/180;
+  if(M&&!FR){ const b=at(-205*D,R*.9), tip=fzAdd(b,[fc,-3.2],[up,-6.5]), sw=Math.sin(t*Math.PI)*1.2;
+    g+=`<path d="M${fzPt(b)} Q${fzPt(fzAdd(b,[fc,-4.5+sw],[up,-1]))} ${fzPt(fzAdd(tip,[fc,sw]))}" class="fz-pelo" stroke-width="3.6" fill="none"/>`+ci(b,1.5,'fz-moño') }
+  if(M&&FR) for(const sg of [1,-1]){ const a0=fzAdd(h,[fc,4.6*sg],[up,.5]); g+=ln(a0,fzAdd(a0,[fc,.8*sg],[up,-7]),'fz-pelo',3.2) }
+  g+=ci(h,R,'fz-pielf');
+  /* pelo: corto en el hombre, con raya y más volumen en la mujer */
+  const capA=FR?-165*D:(M?-15*D:-28*D), capB=FR?-15*D:(M?-215*D:-208*D);
+  const p1=at(capA), p2=at(capB), ctl=fzAdd(h,[up,M?1.4:2.2]);
+  g+=`<path d="M${fzPt(p1)} A${(R+.6).toFixed(1)} ${(R+.6).toFixed(1)} 0 ${FR?0:1} ${FR?1:0} ${fzPt(p2)} Q${fzPt(ctl)} ${fzPt(p1)}Z" class="fz-pelo"/>`;
+  /* cara */
+  if(FR){ for(const sg of [1,-1]) g+=ci(fzAdd(h,[fc,1.9*sg],[up,.4]),.75,'fz-ojo'); g+=ln(fzAdd(h,[fc,-1.2],[up,-2.4]),fzAdd(h,[fc,1.2],[up,-2.4]),'fz-boca',.8) }
+  else { g+=ci(fzAdd(h,[fc,2.9],[up,.5]),.8,'fz-ojo')+ln(fzAdd(h,[fc,2.4],[up,-2.4]),fzAdd(h,[fc,3.8],[up,-2.1]),'fz-boca',.8)+ci(fzAdd(h,[fc,-.6],[up,0]),1.1,'fz-oreja') }
+  /* brazos de adelante */
+  if(FR&&P.e2) g+=brazo(P.s2||P.s,P.e2,P.w2);
+  g+=brazo(P.s,P.e,P.w);
+  for(const q of a.eq){
+    if(q[0]==='plate') g+=ln([P.w[0]-1,P.w[1]],[P.w[0]+1,P.w[1]],'gear',3)+ci(P.w,7,'plate');
+    const manos=FR&&P.w2?[P.w,P.w2]:[P.w];
+    if(q[0]==='hold'&&P.w2) g+=ln([P.w2[0]-5,P.w2[1]],[P.w2[0]+5,P.w2[1]],'gear dim',2);
+    if(q[0]==='db') for(const Wm of manos) g+=ln([Wm[0]-5,Wm[1]],[Wm[0]+5,Wm[1]],'gear',2)+ci([Wm[0]-5,Wm[1]],2.6,'gearf')+ci([Wm[0]+5,Wm[1]],2.6,'gearf');
+    if(q[0]==='dbv') g+=ln([P.w[0],P.w[1]-5],[P.w[0],P.w[1]+5],'gear',2)+ci([P.w[0],P.w[1]-5],2.6,'gearf')+ci([P.w[0],P.w[1]+5],2.6,'gearf')+(P.w2?ln([P.w2[0],P.w2[1]-5],[P.w2[0],P.w2[1]+5],'gear dim',2):'');
+    if(q[0]==='bar') g+=ln([P.w[0]-1,P.w[1]],[P.w[0]+1,P.w[1]],'gear',3)+ci(P.w,4.5,'plate');
+    if(q[0]==='rope') g+=ln(P.w,[P.w[0]-2,P.w[1]+5],'gear',2.4)+ln(P.w,[P.w[0]+2,P.w[1]+5],'gear',2.4);
+    if(q[0]==='vbar') g+=`<polyline points="${P.w[0]-4},${P.w[1]+2} ${P.w[0]},${P.w[1]-2} ${P.w[0]+4},${P.w[1]+2}" class="gear" stroke-width="2.4"/>`;
+    if(q[0]==='grip') g+=ci(P.w,2.6,'gearf');
+    if(q[0]==='fn') g+=q[1](P,t);
+    if(q[0]==='pads') for(const [E,Wm] of [[P.e,P.w],[P.e2,P.w2]]) if(E&&Wm) g+=ln(E,Wm,'gear',4.5);
+    if(q[0]==='handle') g+=ln([P.w[0]-9,P.w[1]],[P.w[0]+9,P.w[1]],'gear',3);
+    if(q[0]==='wheel') g+=ci([P.w[0],P.w[1]+4],5,'plate')+ci([P.w[0],P.w[1]+4],1.2,'gearf');
+    if(q[0]==='sled'){const vx=P.f[0]-P.k[0],vy=P.f[1]-P.k[1],m=Math.hypot(vx,vy)||1;const px=-vy/m*10,py=vx/m*10;
+      g+=ln([P.f[0]+px+vx/m*3,P.f[1]+py+vy/m*3],[P.f[0]-px+vx/m*3,P.f[1]-py+vy/m*3],'gear',5)}
+  }
+  return g };
 /* tempo real: sube, sostiene arriba, baja más lento, pausa abajo */
 const ez=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
 const tempo=ph=>ph<.38?ez(ph/.38):ph<.5?1:ph<.92?1-ez((ph-.5)/.42):0;
@@ -5671,6 +5852,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.67',t:'Rutina más clara',items:[['⏱️','El cronómetro vuelve a quedar fijo arriba mientras bajás.'],['🏋️','Cada ejercicio muestra el personaje, el nombre, las series, las repeticiones y el RIR bien claros, con los circulitos de las series en fila.'],['🙋','Personajes nuevos, con cuerpo: de mujer o de hombre según tu cuenta (lo podés cambiar en Perfil).'],['🌊','La barra de progreso se llena con una onda.'],['🏁','Podés finalizar la rutina aunque no la hayas terminado.'],['📒','Las cargas se anotan solo en la parte de Cargas.']]},
   {v:'1.1.66',t:'Audios como en WhatsApp',items:[['🎧','La onda de cada audio sale del audio de verdad: los graves y los agudos marcan lo alto de cada barrita.'],['▶️','Al reproducir, la onda se va llenando suave y las barritas laten con el volumen.'],['🎙️','Mientras grabás, las barritas se mueven con tu voz.']]},
   {v:'1.1.65',t:'Sesiones privadas y tesorería',items:[['🔐','El panel tiene su propia sesión. Los pagos y las deudas están reservados a Ezequiel.']]},
   {v:'1.1.64',t:'Teclado, chat y cámara',items:[['⌨️','El chat conserva la posición y la selección al actualizarse.'],['📷','La cámara y el micrófono se liberan al salir de la captura.']]},
