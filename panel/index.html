@@ -2679,7 +2679,7 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 /* UI43-CSS-END */
 
 /* v79 · solicitudes, editor plegado y orden de pagos */
-.sol-aviso{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.sol-aviso{display:block;line-height:2}.sol-aviso .mini{margin-left:8px}
 .sol-vacio .cobok{padding:26px 10px}
 .ed-mas{grid-column:1/-1;min-width:0}
 .ed-mas>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);padding:2px 4px;border-radius:6px;user-select:none}
@@ -8441,7 +8441,7 @@ addEventListener('storage',e=>{if(!CLOUD&&e.key===DBK){try{DB=JSON.parse(e.newVa
    controles y manejadores originales; no se reemplaza la capa de datos. */
 const UI43_PATH={home:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M17 14a5 5 0 0 1 4 4v2"/>',gym:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',chat:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5A8.5 8.5 0 0 1 21 11.5Z"/><path d="M7 9h9M7 13h6"/>',eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M19 5l-1 1M6 18l-1 1"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',plus:'<path d="M12 5v14M5 12h14"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',logout:'<path d="M10 4H4v16h6M10 12h11m-4-4 4 4-4 4"/>',wallet:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 9h18M16 13h5"/>',bell:'<path d="M5 17h14l-2-3V9a5 5 0 0 0-10 0v5l-2 3ZM10 21h4"/>'};
 const ui43Icon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${UI43_PATH[k]||UI43_PATH.home}</svg>`;
-const ui43Name=()=>{if(S.sel&&DB.socios[S.sel])return DB.socios[S.sel].name;return ({mensajes:'Mensajes',pagos:'Pagos',cuotas:'Cuotas',novedades:'Novedades',profes:esAdmin()?'Profesores':'Mi perfil'})[S.ptabP]||({socios:'Socios',rutinas:'Rutinas'})[S.ui43View]||'Vista general'};
+const ui43Name=()=>{if(S.sel&&DB.socios[S.sel])return DB.socios[S.sel].name;return ({solicitudes:'Solicitudes',mensajes:'Mensajes',pagos:'Pagos',cuotas:'Cuotas',novedades:'Novedades',profes:esAdmin()?'Profesores':'Mi perfil'})[S.ptabP]||({socios:'Socios',rutinas:'Rutinas'})[S.ui43View]||'Vista general'};
 function ui43Go(dest){
   if(dest==='cierres'){
     if(!PRO||!S.pro||!puedeP('gyminfo'))return;
@@ -8531,7 +8531,7 @@ function ui43Mount(){
   const heading=document.createElement('div');heading.className='ui43-heading';
   const date=DIAS[TODAY.getDay()]+' '+D+' de '+MES[M].toLowerCase();
   const title=isList&&view==='overview'?'Todo listo para un gran día.':name;
-  const subtitle=S.sel?'Rutina, asistencias, datos y seguimiento del socio.':isList&&view==='rutinas'?'Asigná, copiá y organizá las rutinas de tus alumnos.':isList&&view==='socios'?'Buscá, filtrá y administrá a tus socios.':isList?'Tu gimnasio, de un vistazo. Vamos a moverlo.':'Todas tus herramientas en un mismo lugar.';
+  const subtitle=S.sel?'Rutina, asistencias, datos y seguimiento del socio.':isList&&view==='rutinas'?'Asigná, copiá y organizá las rutinas de tus alumnos.':isList&&view==='socios'?'Buscá, filtrá y administrá a tus socios.':isList?'Tu gimnasio, de un vistazo. Vamos a moverlo.':S.ptabP==='solicitudes'?'Socios nuevos, celulares y avisos de pago para revisar.':'Todas tus herramientas en un mismo lugar.';
   heading.innerHTML=`<div><p>${esc(date)}</p><h1>${esc(title)}</h1><small>${esc(subtitle)}</small></div><div class="ui43-headingactions"></div>`;
   const actions=heading.querySelector('.ui43-headingactions');
   if(isList){if(puedeP('novedades'))actions.innerHTML='<button type="button" class="mini" data-ui43go="novedades">Publicar novedad</button>';actions.insertAdjacentHTML('beforeend',`<button type="button" class="btn sm" data-ui43add>${ui43Icon('plus')}<span>Agregar socio</span></button>`)}
