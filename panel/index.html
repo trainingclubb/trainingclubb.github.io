@@ -2699,16 +2699,16 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 .eqadd{align-self:flex-start}
 
 /* v76 · Rutina: reloj fijo arriba, tarjeta de ejercicio limpia */
-#scr-rutina .timer{position:sticky;top:-22px;z-index:6}
+#scr-rutina .timer{position:relative;top:auto;z-index:1}
 .ex.ex2{display:flex!important;flex-direction:column;align-items:stretch;gap:12px;padding:12px!important}
 .ex2top{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:12px;align-items:center}
 .ex2 .anim{width:96px;height:96px;border-radius:18px}
-.ex2 .nm{font-size:24px;overflow-wrap:anywhere}
-.ex2meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-top:7px}
-.ex2sr{display:inline-flex;align-items:baseline;gap:3px;font-size:12.5px;font-weight:700;color:var(--muted)}
-.ex2sr b{font-family:var(--display);font-size:22px;font-weight:900;line-height:1;color:var(--ink)}
+.ex2 .nm{overflow-wrap:anywhere}
+.ex2meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin-top:5px}
+.ex2sr{display:inline-flex;align-items:baseline;gap:3px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.ex2sr b{font-family:var(--display);font-size:17px;font-weight:900;line-height:1;color:var(--ink)}
 .ex2x{font-weight:900;color:var(--muted)}
-.ex2rir{align-self:center;margin-left:2px;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--teal);font-size:12px;font-weight:800}
+.ex2rir{align-self:center;margin-left:2px;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--teal);font-size:11px;font-weight:800}
 .ex2sup{color:var(--muted);font-weight:700;margin-top:4px}
 .ex2 .chk{width:38px;height:38px;border-radius:12px}
 .ex2 .nota-ej{color:var(--muted);font-size:12.5px;line-height:1.4}
@@ -5872,6 +5872,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.69',t:'Rutina más prolija',items:[['🔤','El nombre del ejercicio vuelve al tamaño de antes y las series y repeticiones se ven un poco más chicas.'],['⏱','El cronómetro queda arriba, quieto: cuando bajás por la rutina ya no te sigue.']]},
   {v:'1.1.68',t:'El equipo del gimnasio',items:[['👨‍🏫','En Gimnasio vuelve la ficha del profe y aparecen los servicios.'],['➕','Desde el panel, en Info del gimnasio, el dueño arma el equipo: él primero y los profes que agregue abajo, cada uno con su rol y sus títulos.']]},
   {v:'1.1.67',t:'Rutina más clara',items:[['⏱️','El cronómetro vuelve a quedar fijo arriba mientras bajás.'],['🏋️','Cada ejercicio muestra el personaje, el nombre, las series, las repeticiones y el RIR bien claros, con los circulitos de las series en fila.'],['🙋','Personajes nuevos, con cuerpo: de mujer o de hombre según tu cuenta (lo podés cambiar en Perfil).'],['🌊','La barra de progreso se llena con una onda.'],['🏁','Podés finalizar la rutina aunque no la hayas terminado.'],['📒','Las cargas se anotan solo en la parte de Cargas.']]},
   {v:'1.1.66',t:'Audios como en WhatsApp',items:[['🎧','La onda de cada audio sale del audio de verdad: los graves y los agudos marcan lo alto de cada barrita.'],['▶️','Al reproducir, la onda se va llenando suave y las barritas laten con el volumen.'],['🎙️','Mientras grabás, las barritas se mueven con tu voz.']]},
