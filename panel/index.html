@@ -4511,7 +4511,7 @@ function screenLogin(logo){
   const body=m==='dni'?`<div class="field"><label for="dni">DNI</label><input class="inp num" id="dni" inputmode="numeric" autocomplete="username" placeholder="Ej: 38.456.789" maxlength="10" value="${d?fmtDNI(d):''}"></div>`
     :`${dniBox}<div class="field"><label for="lname">Nombre y apellido</label><input class="inp" id="lname" autocomplete="name" autocapitalize="words" placeholder="Ej: Juan Pérez"></div>`;
   const btn={dni:'Entrar',crear:'Crear cuenta'}[m];
-  const pie=m==='dni'?'Si es tu primer ingreso desde este celular, el gimnasio va a revisar la solicitud.':'';
+  const pie=m==='dni'?'Si el gimnasio ya te cargó, entrás directo. Si no, el gimnasio va a revisar tu solicitud.':'';
   return `<div class="login">
     <img class="lmark" src="${logo}" alt="Training Club">
     <div class="wm big"><b>Training</b><span>CLUB</span></div>
