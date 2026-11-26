@@ -2037,13 +2037,50 @@ html:has(dialog.hsig[open]){overflow:hidden}
 @media (prefers-reduced-motion:reduce){.dash.dashed .dwt,.dashbar.in,.dashpop,.ui43-enter .dash>.dw{animation:none}}
 .marca-dialog{margin:auto;width:min(90vw,340px);border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);padding:20px}.marca-dialog::backdrop{background:#0007}.marca-dialog form,.marca-dialog label{display:grid;gap:8px}.marca-dialog form{gap:12px}
 .legal-fila{display:grid;grid-template-columns:1fr auto;align-items:start;border-bottom:1px solid var(--line)}.legal-fila label,.legal-fila summary{padding:12px 5px;cursor:pointer}.legal-fila:has(details[open]){grid-template-columns:1fr}.legal-fila input{width:18px;height:18px;vertical-align:middle}
-.reloj-franja{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:6px 10px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.reloj-franja>span{flex:1}.reloj-franja .roll{display:inline-flex;font-variant-numeric:tabular-nums}
+.reloj-franja {
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;
+  min-height:64px;width:100%;padding:8px 10px;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;
+}
+.reloj-lectura{display:grid;gap:2px;min-width:0}
+.reloj-lectura .reloj-nombre{justify-self:start;font-size:11px;font-weight:700;color:var(--muted);padding:0;line-height:1.2}
+.reloj-digitos{font-family:var(--display);font-size:clamp(20px,6vw,27px);font-weight:900;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+.reloj-acciones{display:grid;grid-template-columns:repeat(2,minmax(58px,1fr));gap:5px;align-items:stretch}
+.reloj-acciones button{padding:6px;min-height:32px;font-size:11px;white-space:nowrap}
+.reloj-acciones .linkb{border:1px solid transparent;border-radius:8px}
+.timer .tbig.roll{font-size:clamp(32px,12vw,58px);align-items:flex-end;line-height:1.2}
+.timer .rcenter .tbig.roll{font-size:clamp(30px,10vw,46px)}
+.timer .roll .dg,.timer .roll .dg[data-fast]{height:1.22em;line-height:1.2}
+.timer .roll .dg[data-fast]{width:.6em;margin-bottom:.04em}
+
 .pasadas-vivo{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border-block:1px solid var(--line)}.pasadas-vivo>button,.pasadas-vivo>p,.pasadas-vivo>label{grid-column:1/-1}.pasadas-vivo [data-reloj-pasada]{font-variant-numeric:tabular-nums;font-size:24px}.run-km,.pasadas-vivo label{display:grid;gap:5px}
 .ex .sers{display:grid;width:100%}.serie-fila{display:grid;grid-template-columns:32px minmax(0,1fr) 64px;gap:4px;align-items:center}.serie-fila .mini{padding:5px 2px;font-size:11px}.serie-fila .serie-carga{min-width:0}.serie-elegir,.ed-opciones-serie label{display:grid;gap:4px;font-size:12px}.ed-opciones-serie{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr;gap:8px}.serie-fila .serie-repetir:disabled{opacity:.4}
-.nota-editor{grid-column:1/-1}.nota-ej{overflow-wrap:anywhere}.reloj-franja>button{min-width:63px}.reloj-franja>span{white-space:nowrap}.cal-check{display:flex!important}.perfil-csv{justify-self:start}
+.nota-editor{grid-column:1/-1}.nota-ej{overflow-wrap:anywhere}.cal-check{display:flex!important}.perfil-csv{justify-self:start}
 .rut-opciones{display:flex;align-items:end;flex-wrap:wrap;gap:10px}.rut-opciones label{display:grid;gap:4px}.marca-dialog{max-height:85vh;max-height:85dvh;overflow:auto}
 html.kbon dialog.marca-dialog{position:fixed;top:calc(var(--vvt,0px) + 8px);bottom:auto;margin-block:0;max-height:calc(var(--vvh,100vh) - 16px);max-height:calc(var(--vvh,100dvh) - 16px);overscroll-behavior:contain}
 @media(max-width:600px){.marca-dialog input,.marca-dialog textarea,.marca-dialog select{font-size:16px}}
+/* Verano · app de socios */
+.phone .verano-inicio {
+  background-image: radial-gradient(ellipse at 8% 0%, rgba(252,224,36,.12), transparent 62%),
+                    radial-gradient(ellipse at 98% 100%, rgba(36,201,167,.10), transparent 63%);
+}
+:root[data-theme="light"] .phone #scr-inicio {
+  background-image: linear-gradient(180deg, rgba(252,224,36,.065), transparent 240px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .phone .donerow.nuevo, .phone .rdfin.rdnew { position: relative; }
+  .phone .donerow.nuevo::after, .phone .rdfin.rdnew::after {
+    content: ""; pointer-events: none; position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0; border-radius: inherit;
+    background: linear-gradient(110deg, transparent 30%, rgba(252,224,36,.14) 47%, rgba(36,201,167,.11) 53%, transparent 68%) 100% 0 / 250% 100%;
+    animation: verano-destello .85s ease-out both;
+  }
+}
+@keyframes verano-destello {
+  0% { background-position: 100% 0; opacity: 0; }
+  22% { opacity: 1; }
+  100% { background-position: 0 0; opacity: 0; }
+}
 /* novedades del panel */
 #tcnov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .3s ease both}
 #tcnov.fuera{animation:fadeOut .25s ease both}
@@ -2640,6 +2677,20 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 @media(max-width:760px){html.ui43-panel .ui43-content .ui43-sociostable tr.rowlink>td{border:0;border-radius:0;box-shadow:none}}
 
 /* UI43-CSS-END */
+
+/* v75 · audios: la capa de arriba (lo ya escuchado) se recorta con el avance, así se llena suave como en WhatsApp */
+.bawave{position:relative}
+.bawave>i{transform-origin:50% 50%;transition:transform .09s linear,height .35s ease}
+.bafill{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;gap:inherit;pointer-events:none;clip-path:inset(0 calc(100% - var(--ap,0)*100%) 0 0);-webkit-clip-path:inset(0 calc(100% - var(--ap,0)*100%) 0 0)}
+.bafill>i{flex:1;min-width:2px;border-radius:2px;background:currentColor;transform-origin:50% 50%;transition:transform .09s linear,height .35s ease}
+#app .chwrap .bawave>i,#app .chthread .bawave>i{opacity:.5}
+#app .chwrap .bafill>i,#app .chthread .bafill>i{min-width:2px;background:var(--wa-tick);opacity:1}
+#app .chwrap .bub.mio .bafill>i,#app .chthread .bub.mio .bafill>i{background:var(--wa-tx)}
+#app .chwrap .badot,#app .chthread .badot{z-index:1;transition:transform .15s}
+.bmed.aud.sonando .badot{transform:scale(1.08)}
+/* grabando: barritas que salen del micrófono, de derecha a izquierda */
+.chrecw{gap:2px;justify-content:flex-end}
+.chrecw i{animation:none!important;height:10%;max-width:4px;transition:height .07s linear}
 
 /* v66 · menú lateral del panel: todo entra en el alto de la ventana (los tamaños siguen al alto) */
 html.ui43-panel .ui43-sidebar{overflow-y:hidden!important;padding-top:clamp(10px,2.6vh,28px);padding-bottom:clamp(8px,1.6vh,18px)}
@@ -3806,7 +3857,13 @@ const fmtSW=ms=>`${p2(Math.floor(ms/60000))}:${p2(Math.floor(ms/1000)%60)}.${p2(
 /* dígitos que ruedan: cada número sube (o baja, en la cuenta regresiva) cuando cambia */
 function rollHTML(t,fast=0){return [...t].map((c,i)=>/\d/.test(c)?`<span class="dg"${i>=t.length-fast?' data-fast':''}><i>${c}</i></span>`:`<span class="sep">${c}</span>`).join('')}
 function setRoll(el,t){
-  if(!el||el.dataset.v===t) return; const old=el.dataset.v||''; el.dataset.v=t;
+  if(!el)return;
+  if(el.hasAttribute('data-reloj-compacto')){
+    const valor=t.split('.')[0];
+    if(el.textContent!==valor)el.textContent=valor;
+    return;
+  }
+  if(el.dataset.v===t)return; const old=el.dataset.v||''; el.dataset.v=t;
   if(el.children.length!==t.length||old.length!==t.length){el.innerHTML=rollHTML(t,+el.dataset.fast||0);return}
   const dn=el.dataset.dir==='down';
   for(let i=0;i<t.length;i++){ if(t[i]===old[i]) continue; const box=el.children[i];
@@ -3820,8 +3877,16 @@ const restSecs=txt=>{const n=parseFloat(txt);return /min/.test(txt)?n*60:n};
 
 function timerCard(){
   if(!S.relojGrande){
-    const descanso=S.tmode==='rest', tiempo=descanso?fmtR(restNow()):fmtSW(swNow()), corriendo=descanso?S.rest.run:S.sw.run;
-    return `<section class="reloj-franja" id="timer"><span>${descanso&&corriendo?'<button class="linkb" id="restgo" aria-label="Pausar descanso">Descanso</button>':descanso?'Descanso':'Cronómetro'} <b class="num roll" id="${descanso?'resttime':'swtime'}" data-v="${tiempo}">${rollHTML(tiempo,descanso?0:2)}</b></span> ${descanso&&corriendo?'<button class="mini" id="restplus">+15 s</button><button class="mini" data-terminar-descanso>Terminar</button>':`<button class="mini" id="${descanso?'restgo':'swgo'}">${corriendo?'Pausar':'Iniciar'}</button><button class="linkb" data-reloj-mas aria-label="Opciones del reloj">Opciones</button>`}</section>`;
+    const descanso=S.tmode==='rest', corriendo=descanso?S.rest.run:S.sw.run;
+    const tiempo=descanso?fmtR(restNow()):fmtSW(swNow()).split('.')[0];
+    const nombre=descanso&&corriendo?'<button class="linkb reloj-nombre" id="restgo" aria-label="Pausar descanso">Descanso</button>':'<span class="reloj-nombre">'+(descanso?'Descanso':'Cronómetro')+'</span>';
+    const acciones=descanso&&corriendo
+      ?'<button class="mini" id="restplus">+15 s</button><button class="mini" data-terminar-descanso>Terminar</button>'
+      :`<button class="mini" id="${descanso?'restgo':'swgo'}">${corriendo?'Pausar':(descanso?restNow()<S.rest.total&&restNow()>0:swNow()>0)?'Seguir':'Iniciar'}</button><button class="linkb" data-reloj-mas aria-label="Opciones del reloj">Opciones</button>`;
+    return `<section class="reloj-franja" id="timer" aria-label="Reloj de rutina">
+      <div class="reloj-lectura">${nombre}<b class="reloj-digitos" id="${descanso?'resttime':'swtime'}" data-reloj-compacto>${tiempo}</b></div>
+      <div class="reloj-acciones">${acciones}</div>
+    </section>`;
   }
   const c=S.tmode==='crono'; const prevM=S.tmPrev==null?(c?0:1):S.tmPrev; S.tmPrev=c?0:1;
   const sw=`<div class="tface"><div class="tbig num roll" id="swtime" data-fast="2" data-v="${fmtSW(swNow())}">${rollHTML(fmtSW(swNow()),2)}</div>
@@ -4340,7 +4405,7 @@ function renderSocio(){
   const ti=TABKEYS.indexOf(S.tab), pi=TABKEYS.indexOf(S.lastTab||S.tab);
   const sube=t=>t==='perfil'||t==='chat', dir=same?'':sube(S.tab)?'navsube':sube(S.lastTab)?'navbaja':ti>pi?'fromr':ti<pi?'froml':'';
   $('#app').innerHTML=`<div class="phone"><div class="sbar" aria-hidden="true"><span class="num">9:41</span><span class="sicons"><i></i><i></i><i></i><b></b></span></div>
-  <header class="apphead"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>${historiasHead()}
+  <header class="apphead${S.tab==='inicio'?' verano-inicio':''}"><img src="${logo}" alt=""><div class="wm"><b>Training</b><span>CLUB</span></div>${historiasHead()}
     <button class="hpill num" id="hpill" data-tab="rutina" data-retomar hidden></button>${actBtnHtml(false)}
     <button class="avbtn" data-tab="perfil" aria-label="Mi perfil">${avatar()}</button></header>
   <div class="screen ${same?'':'enter '+dir}" id="scr-${S.tab}">${body}</div>
@@ -5606,6 +5671,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.66',t:'Audios como en WhatsApp',items:[['🎧','La onda de cada audio sale del audio de verdad: los graves y los agudos marcan lo alto de cada barrita.'],['▶️','Al reproducir, la onda se va llenando suave y las barritas laten con el volumen.'],['🎙️','Mientras grabás, las barritas se mueven con tu voz.']]},
   {v:'1.1.65',t:'Sesiones privadas y tesorería',items:[['🔐','El panel tiene su propia sesión. Los pagos y las deudas están reservados a Ezequiel.']]},
   {v:'1.1.64',t:'Teclado, chat y cámara',items:[['⌨️','El chat conserva la posición y la selección al actualizarse.'],['📷','La cámara y el micrófono se liberan al salir de la captura.']]},
   {v:'1.1.63',t:'Planificación de rutinas y Running',items:[['📅','Programá rutinas y revisalas antes de publicarlas.'],['🏃','Configurá objetivos de ritmo y compará sesiones de Running.']]},
@@ -6713,17 +6779,18 @@ async function chEnviarMedia(file,k,yo,txt,pre){ txt=String(txt||'').trim().slic
   let pr; try{ pr=esAud?pre:esVid?await chVidProcesar(file):await chImgProcesar(file) }catch(e){ toast('No se pudo leer el archivo'); return false }
   const autor=yo==='socio'?(me()||{}).name:c1xYoAutor(); MSGS.forEach(x=>x.nuevo=false);
   const media=esAud?{t:'aud',d:pr.d}:{t:esVid?'vid':'img',w:pr.w,h:pr.h};
-  const m={id:'t'+Date.now(),k,de:yo,autor,texto:txt,media:Object.assign({u:URL.createObjectURL(pr.blob)},media),file,pre,creado:new Date().toISOString(),leido:false,env:true,nuevo:true}; MSGS.push(m);
+  const audEnv=esAud&&pr&&pr.env?pr.env:null, audW=audEnv&&chAudBarras(audEnv), audU=pr&&pr.blob?URL.createObjectURL(pr.blob):'';
+  const m={id:'t'+Date.now(),k,de:yo,autor,texto:txt,media:Object.assign({u:audU},media),file,pre,creado:new Date().toISOString(),leido:false,env:true,nuevo:true}; MSGS.push(m); if(audW){ AUDW[audU]=audW; AUDENV[audU]=audEnv }
   const pintar=()=>{ const lst=document.getElementById('chatlist'); if(lst&&chKAct()===k){ lst.innerHTML=chBurbujas(MSGS.filter(x=>x.k===k),yo); chAbajo(true) } };
   pintar();
   if(!CLOUD){ if(esVid&&file.size>8*1048576){ m.env=false; m.err=true; pintar(); toast('En la demo los videos tienen que pesar menos de 8 MB'); return false }
-    try{ m.media.u=await chALeer(pr.blob) }catch(e){} m.id=Date.now(); m.env=false; delete m.file; pintar(); chGuardarLocal(); return true }
+    try{ m.media.u=await chALeer(pr.blob); if(audW){ chAudWGuardar(m.media.u,audW); AUDENV[m.media.u]=audEnv } }catch(e){} m.id=Date.now(); m.env=false; delete m.file; pintar(); chGuardarLocal(); return true }
   try{ const id=(crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g,()=>(Math.random()*16|0).toString(16)));
     const path=k+'/'+id+'.'+pr.ext;
     const up=await sb.storage.from('chat').upload(path,pr.blob,{contentType:pr.type,upsert:false}); if(up.error) throw up.error;
     const meta=Object.assign({p:path},media);
     const r=yo==='socio'?await sb.rpc('chat_enviar_media',{p_texto:txt,p_media:meta}):await sb.rpc('chat_responder_media',{p_socio:k,p_texto:txt,p_autor:autor,p_media:meta});
-    if(r.error) throw r.error; CHURL[path]={u:m.media.u,exp:Date.now()+3600e3}; m.id=r.data; m.media=Object.assign({u:m.media.u},meta); m.env=false; delete m.file }
+    if(r.error) throw r.error; CHURL[path]={u:m.media.u,exp:Date.now()+3600e3}; if(audW){ chAudWGuardar(path,audW); AUDENV[path]=audEnv } m.id=r.data; m.media=Object.assign({u:m.media.u},meta); m.env=false; delete m.file }
   catch(e){ m.env=false; m.err=true; toast(errTxt(e)||'No se pudo enviar. Probá de nuevo.') }
   m.nuevo=false; pintar(); return true }
 document.addEventListener('click',e=>{ const a=e.target.closest('[data-chadj],[data-chcam]'); if(!a) return; e.preventDefault(); e.stopPropagation(); const fm=a.closest('form'), f=fm&&fm.querySelector('.chfile'); if(f){ f.value=''; if(a.hasAttribute('data-chcam')) f.setAttribute('capture','environment'); else f.removeAttribute('capture'); f.click() } },true);
@@ -6759,11 +6826,13 @@ const ICO_PAUSA='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="5"
 const ICO_TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
 const chDur=x=>{ x=Math.max(0,Math.round(+x||0)); return Math.floor(x/60)+':'+String(x%60).padStart(2,'0') };
 function chAudHtml(m,u){ const d=m.media, seed=String(d.p||m.id); let h=7; for(const c of seed) h=(h*31+c.charCodeAt(0))>>>0;
-  const bars=Array.from({length:28},()=>{ h=(Math.imul(h,1103515245)+12345)>>>0; return 22+((h>>>16)%78) }).map(v=>`<i style="height:${v}%"></i>`).join('');
-  return `<div class="bmed aud ${u?'lista':''} ${m.env?'subiendo':''}" data-mt="aud" ${d.p?`data-mpath="${esc(d.p)}"`:''}><span class="baav">${avatar('xs',chFotoDe(m),chNomDe(m))}<i class="bamic" aria-hidden="true"></i></span><button type="button" class="bap" aria-label="Reproducir audio">${ICO_PLAY}</button><span class="bamid"><span class="bawave">${bars}<b class="badot" aria-hidden="true"></b></span><span class="bat num" data-d="${+d.d||0}">${chDur(d.d)}</span></span><audio preload="metadata" ${u?`src="${esc(u)}"`:''}></audio>${m.env?'<span class="bmup"><i></i></span>':''}</div>` }
+  const ak=d.p||d.u||'', guard=chAudW(ak);
+  const alt=guard?guard.map(v=>14+v*.86):Array.from({length:CHAUD_N},()=>{ h=(Math.imul(h,1103515245)+12345)>>>0; return 14+((h>>>16)%30) });
+  const bars0=alt.map(v=>`<i style="height:${v.toFixed(1)}%"></i>`).join(''), bars=bars0+`<span class="bafill" aria-hidden="true">${bars0}</span>`;
+  return `<div class="bmed aud ${u?'lista':''} ${m.env?'subiendo':''} ${guard?'conda':''}" data-mt="aud" data-ak="${esc(ak)}" ${d.p?`data-mpath="${esc(d.p)}"`:''}><span class="baav">${avatar('xs',chFotoDe(m),chNomDe(m))}<i class="bamic" aria-hidden="true"></i></span><button type="button" class="bap" aria-label="Reproducir audio">${ICO_PLAY}</button><span class="bamid"><span class="bawave">${bars}<b class="badot" aria-hidden="true"></b></span><span class="bat num" data-d="${+d.d||0}">${chDur(d.d)}</span></span><audio preload="metadata" ${u?`src="${esc(u)}"`:''}></audio>${m.env?'<span class="bmup"><i></i></span>':''}</div>` }
 function chAudPintar(a){ const el=a.closest('.bmed.aud'); if(!el) return; const dur=isFinite(a.duration)&&a.duration>0?a.duration:(+(el.querySelector('.bat').dataset.d)||0);
-  const p=dur?Math.min(1,a.currentTime/dur):0, bars=el.querySelectorAll('.bawave i'), n=Math.round(p*bars.length);
-  bars.forEach((b,i)=>b.classList.toggle('on',i<n)); el.style.setProperty('--ap',p.toFixed(4)); const t=el.querySelector('.bat'); if(!a.paused||a.currentTime>0) t.textContent=chDur(a.currentTime); }
+  const p=dur?Math.min(1,a.currentTime/dur):0; el.style.setProperty('--ap',p.toFixed(4)); const t=el.querySelector('.bat'); if(!a.paused||a.currentTime>0){ const tx=chDur(a.currentTime); if(t.textContent!==tx) t.textContent=tx }
+  chAudLatir(el,a,p) }
 document.addEventListener('click',e=>{ const b=e.target.closest('.bap'); if(b){ e.preventDefault(); e.stopPropagation(); const el=b.closest('.bmed.aud'), a=el&&el.querySelector('audio'); if(!a) return;
     if(!a.getAttribute('src')){ toast('Cargando el audio…'); return }
     document.querySelectorAll('.bmed.aud audio').forEach(x=>{ if(x!==a&&!x.paused) x.pause() });
@@ -6774,8 +6843,66 @@ document.addEventListener('click',e=>{ const b=e.target.closest('.bap'); if(b){ 
 ['play','pause','ended','timeupdate'].forEach(ev=>document.addEventListener(ev,e=>{ const a=e.target; if(!a||a.tagName!=='AUDIO') return; const el=a.closest('.bmed.aud'); if(!el) return;
   if(ev==='play'){ el.classList.add('sonando'); el.querySelector('.bap').innerHTML=ICO_PAUSA; el.querySelector('.bap').setAttribute('aria-label','Pausar audio') }
   if(ev==='pause'||ev==='ended'){ el.classList.remove('sonando'); el.querySelector('.bap').innerHTML=ICO_PLAY; el.querySelector('.bap').setAttribute('aria-label','Reproducir audio') }
-  if(ev==='ended'){ a.currentTime=0; el.querySelectorAll('.bawave i').forEach(b=>b.classList.remove('on')); const m=MSGS.find(x=>x.media&&(x.media.p===el.dataset.mpath)); el.querySelector('.bat').textContent=chDur(m&&m.media.d||a.duration); return }
+  if(ev==='play') chAudLoop(a);
+  if(ev==='ended'){ a.currentTime=0; el.style.setProperty('--ap',0); chAudLatir(el,a,0,true); const m=MSGS.find(x=>x.media&&(x.media.p===el.dataset.mpath)); el.querySelector('.bat').textContent=chDur(m&&m.media.d||a.duration); return }
   chAudPintar(a) },true));
+
+/* v75 · audios como WhatsApp: onda real (graves + agudos según los decibeles), avance fluido y barritas que laten con el volumen */
+const CHAUD_N=30, CHAUD_FPS=50, AUDW={}, AUDENV={}, AUDPEND=new Set();
+function chAudW(k){ if(!k) return null; if(AUDW[k]) return AUDW[k]; if(k.startsWith('blob:')||k.startsWith('data:')) return null;
+  try{ const o=JSON.parse(localStorage.getItem('tcAudW')||'{}'); if(o[k]&&o[k].length===CHAUD_N){ AUDW[k]=o[k]; return o[k] } }catch(x){} return null }
+function chAudWGuardar(k,w){ if(!k) return; AUDW[k]=w; if(k.startsWith('blob:')||k.startsWith('data:')) return;
+  try{ const o=JSON.parse(localStorage.getItem('tcAudW')||'{}'); o[k]=w; const ks=Object.keys(o); if(ks.length>300) ks.slice(0,ks.length-300).forEach(x=>delete o[x]); localStorage.setItem('tcAudW',JSON.stringify(o)) }catch(x){} }
+/* de una lista de niveles (0..1, 50 por segundo) saca las 30 barritas: mezcla el pico y el promedio de cada tramo */
+function chAudBarras(env){ const n=env&&env.length, w=[]; if(!n) return null;
+  for(let i=0;i<CHAUD_N;i++){ const a=Math.floor(i*n/CHAUD_N), b=Math.max(a+1,Math.floor((i+1)*n/CHAUD_N)); let mx=0,sm=0,c=0; for(let j=a;j<b&&j<n;j++){ mx=Math.max(mx,env[j]); sm+=env[j]; c++ } w.push(.62*mx+.38*sm/Math.max(1,c)) }
+  const top=Math.max(...w)||1; return w.map(v=>Math.round(Math.min(100,Math.max(0,v/top*100)))) }
+/* lee el audio: separa graves (< ~250 Hz) y agudos (> ~2 kHz), mide cada 20 ms y lo pasa a decibeles */
+async function chAudAnalizar(src){ const r=await fetch(src); if(!r.ok) throw 0; const ab=await r.arrayBuffer();
+  const OAC=window.OfflineAudioContext||window.webkitOfflineAudioContext; if(!OAC) throw 0; const ctx=new OAC(1,2,44100);
+  const buf=await new Promise((ok,no)=>{ const pr=ctx.decodeAudioData(ab,ok,no); if(pr&&pr.then) pr.then(ok,no) });
+  const sr=buf.sampleRate, L=buf.length, d0=buf.getChannelData(0), d1=buf.numberOfChannels>1?buf.getChannelData(1):null;
+  const aG=1-Math.exp(-2*Math.PI*250/sr), aA=1-Math.exp(-2*Math.PI*2000/sr), paso=Math.max(1,Math.round(sr/CHAUD_FPS)), env=[];
+  let lg=0,lm=0,sg=0,sa=0,sm=0,c=0;
+  for(let i=0;i<L;i++){ const x=d1?(d0[i]+d1[i])*.5:d0[i]; lg+=aG*(x-lg); lm+=aA*(x-lm); const ag=x-lm;
+    sg+=lg*lg; sa+=ag*ag; sm+=x*x; c++;
+    if(c===paso||i===L-1){ const e=Math.sqrt(sm/c)*.55+Math.sqrt(sg/c)*.7+Math.sqrt(sa/c)*1.9; env.push(20*Math.log10(e+1e-7)); sg=sa=sm=0; c=0 } }
+  let mx=-200; for(const v of env) if(v>mx) mx=v; const piso=mx-42;
+  return env.map(v=>Math.max(0,Math.min(1,(v-piso)/42))) }
+function chAudPonerOnda(el,w){ const L1=el.querySelectorAll('.bawave>i'), L2=el.querySelectorAll('.bafill>i');
+  w.forEach((v,i)=>{ const h=(14+v*.86).toFixed(1)+'%'; if(L1[i]) L1[i].style.height=h; if(L2[i]) L2[i].style.height=h }); el.classList.add('conda') }
+async function chAudOnda(el){ const a=el.querySelector('audio'), src=a&&(a.currentSrc||a.getAttribute('src')); let k=el.dataset.ak||src; if(!src||!k) return;
+  el.dataset.onda='1'; if(!el.dataset.ak) el.dataset.ak=k;
+  if(AUDENV[k]){ if(AUDW[k]) chAudPonerOnda(el,AUDW[k]); return } if(AUDPEND.has(k)) return; AUDPEND.add(k);
+  try{ const env=await chAudAnalizar(src); AUDENV[k]=env; const w=chAudBarras(env); if(w){ chAudWGuardar(k,w); document.querySelectorAll('.bmed.aud').forEach(x=>{ if((x.dataset.ak||'')===k) chAudPonerOnda(x,w) }) } }
+  catch(e){} finally{ AUDPEND.delete(k) } }
+/* busca audios nuevos en pantalla para leerles la onda (de a dos por vez) */
+setInterval(()=>{ if(document.hidden||AUDPEND.size>1) return; const el=[...document.querySelectorAll('.bmed.aud.lista:not([data-onda])')].find(x=>x.offsetParent!==null); if(el) chAudOnda(el) },600);
+/* mientras suena: las barritas cerca del punto laten según lo fuerte que está sonando en ese momento */
+function chAudLatir(el,a,p,reset){ const L1=el.querySelectorAll('.bawave>i'), L2=el.querySelectorAll('.bafill>i'), n=L1.length; if(!n) return;
+  const env=AUDENV[el.dataset.ak||''], suena=!reset&&!a.paused&&!!env; let lv=0;
+  if(suena){ const j=Math.floor(a.currentTime*CHAUD_FPS); lv=Math.max(env[j]||0,(env[j+1]||0)*.8) }
+  const ant=el._lv||0; el._lv=ant+(lv-ant)*(lv>ant?.55:.18); const c=p*n;
+  for(let i=0;i<n;i++){ const dist=Math.abs(i+.5-c), sc=suena&&dist<3?1+el._lv*.6*(1-dist/3):1, tf=sc===1?'':'scaleY('+sc.toFixed(3)+')';
+    if(L1[i].style.transform!==tf){ L1[i].style.transform=tf; if(L2[i]) L2[i].style.transform=tf } } }
+let AUDRAF=0;
+function chAudLoop(a){ cancelAnimationFrame(AUDRAF); const el=a.closest('.bmed.aud'); if(el&&!el.dataset.onda) chAudOnda(el);
+  const f=()=>{ chAudPintar(a); if(!a.paused&&!a.ended&&a.isConnected) AUDRAF=requestAnimationFrame(f) }; AUDRAF=requestAnimationFrame(f) }
+/* al grabar: la onda en vivo sale del micrófono (graves y agudos) y queda guardada para la burbuja que se manda */
+function chRecOndaEmpezar(c){ try{ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; const ac=new AC(), src=ac.createMediaStreamSource(c.st), an=ac.createAnalyser();
+    an.fftSize=1024; an.smoothingTimeConstant=.35; src.connect(an); c.ac=ac; c.lv=[]; c.vis=[]; c.td=new Float32Array(an.fftSize); c.fq=new Uint8Array(an.frequencyBinCount); c.ult=0;
+    const hz=ac.sampleRate/an.fftSize, bG=Math.max(1,Math.round(250/hz)), bA=Math.round(2000/hz), bF=Math.min(c.fq.length,Math.round(8000/hz));
+    const f=t=>{ if(CHREC!==c) return; an.getFloatTimeDomainData(c.td); an.getByteFrequencyData(c.fq);
+      let s=0; for(const x of c.td) s+=x*x; const db=20*Math.log10(Math.sqrt(s/c.td.length)+1e-7), base=Math.max(0,Math.min(1,(db+58)/46));
+      let g=0,a=0; for(let i=1;i<=bG;i++) g+=c.fq[i]; for(let i=bA;i<bF;i++) a+=c.fq[i]; g=g/bG/255; a=a/Math.max(1,bF-bA)/255;
+      const lv=Math.max(0,Math.min(1,base*.7+g*.25+a*.55));
+      if(!c.ult||t-c.ult>=20){ c.ult=t; c.lv.push(lv) }
+      const o=document.getElementById('chrec'), w=o&&o.querySelector('.chrecw');
+      if(w){ c.vmax=Math.max(c.vmax||0,lv);
+        if(!c.tv||t-c.tv>=70){ c.tv=t; c.vis.push(c.vmax); c.vmax=0; const N=w.children.length; while(c.vis.length>N) c.vis.shift();
+          const off=N-c.vis.length; for(let i=0;i<N;i++){ const v=i<off?0:c.vis[i-off]; w.children[i].style.height=(10+v*90).toFixed(1)+'%' } } }
+      c.raf=requestAnimationFrame(f) }; c.raf=requestAnimationFrame(f) }catch(e){} }
+function chRecOndaParar(c){ try{ cancelAnimationFrame(c.raf) }catch(x){} try{ c.ac&&c.ac.close() }catch(x){} }
 /* grabar */
 let CHREC=null, chPermisoAudio=false;
 async function chRecEmpezar(form){ if(CHREC||chPermisoAudio||!form) return;
@@ -6791,19 +6918,19 @@ async function chRecEmpezar(form){ if(CHREC||chPermisoAudio||!form) return;
   const partes=[]; rec.ondataavailable=ev=>{ if(ev.data&&ev.data.size) partes.push(ev.data) };
   CHREC={rec,st,partes,t0:Date.now(),form:form.id,k,yo:form.id==='chatf'?'socio':'profe',mt:rec.mimeType||mt};
   try{ if(navigator.audioSession) navigator.audioSession.type='play-and-record' }catch(x){}
-  try{rec.start(250)}catch(e){CHREC=null;st.getTracks().forEach(t=>t.stop());toast('No se pudo empezar a grabar');return} chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); try{ prEstado('audio') }catch(x){} try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
+  try{rec.start(250)}catch(e){CHREC=null;st.getTracks().forEach(t=>t.stop());toast('No se pudo empezar a grabar');return} chRecPintar(); CHREC.iv=setInterval(chRecPintar,200); chRecOndaEmpezar(CHREC); try{ prEstado('audio') }catch(x){} try{navigator.vibrate&&navigator.vibrate(15)}catch(x){} }
 function chRecPintar(){ if(!CHREC) return; const f=document.getElementById(CHREC.form); if(!f||CHREC.k!==chKAct()) return chRecParar(false);
   let o=document.getElementById('chrec');
-  if(!o){ document.body.insertAdjacentHTML('beforeend',`<div class="chrec" id="chrec" role="status" aria-label="Grabando audio"><button type="button" class="chrecx" aria-label="Borrar audio">${ICO_TRASH}</button><span class="chrecdot" aria-hidden="true"></span><span class="chrect num">0:00</span><span class="chrecw" aria-hidden="true">${'<i></i>'.repeat(16)}</span><button type="button" class="chrecok" aria-label="Enviar audio">${ICO_SEND}</button></div>`); o=document.getElementById('chrec') }
+  if(!o){ document.body.insertAdjacentHTML('beforeend',`<div class="chrec" id="chrec" role="status" aria-label="Grabando audio"><button type="button" class="chrecx" aria-label="Borrar audio">${ICO_TRASH}</button><span class="chrecdot" aria-hidden="true"></span><span class="chrect num">0:00</span><span class="chrecw" aria-hidden="true">${'<i></i>'.repeat(34)}</span><button type="button" class="chrecok" aria-label="Enviar audio">${ICO_SEND}</button></div>`); o=document.getElementById('chrec') }
   const r=f.getBoundingClientRect(); o.style.left=r.left+'px'; o.style.top=r.top+'px'; o.style.width=r.width+'px'; o.style.height=r.height+'px';
   const sg=Math.floor((Date.now()-CHREC.t0)/1000); o.querySelector('.chrect').textContent=chDur(sg); if(sg>=300){ toast('Llegaste a 5 minutos: se manda el audio'); chRecParar(true) } }
-function chRecParar(enviar){ const c=CHREC; if(!c) return; CHREC=null; clearInterval(c.iv); try{ prEstado(null) }catch(x){}
+function chRecParar(enviar){ const c=CHREC; if(!c) return; CHREC=null; clearInterval(c.iv); chRecOndaParar(c); try{ prEstado(null) }catch(x){}
   const o=document.getElementById('chrec'); if(o){ o.classList.add('fuera'); setTimeout(()=>o.remove(),200) }
   const secs=Math.max(1,Math.round((Date.now()-c.t0)/1000));
   c.rec.onstop=()=>{ c.st.getTracks().forEach(t=>t.stop()); try{ if(navigator.audioSession) navigator.audioSession.type='playback' }catch(x){} if(!enviar) return;
     const type=(c.mt||'audio/webm').split(';')[0], ext=/mp4|aac|m4a/.test(type)?'m4a':/ogg/.test(type)?'ogg':'webm', blob=new Blob(c.partes,{type});
     if(blob.size<600){ toast('El audio quedó vacío. Probá de nuevo.'); return }
-    chEnviarMedia(new File([blob],'audio.'+ext,{type}),c.k,c.yo,'',{blob,type,ext,t:'aud',d:secs}) };
+    chEnviarMedia(new File([blob],'audio.'+ext,{type}),c.k,c.yo,'',{blob,type,ext,t:'aud',d:secs,env:c.lv&&c.lv.length>4?c.lv.slice():null}) };
   try{ c.rec.state!=='inactive'?c.rec.stop():c.rec.onstop() }catch(e){ c.st.getTracks().forEach(t=>t.stop()) } }
 document.addEventListener('click',e=>{ const b=e.target.closest('.chsend.mic'); if(b){ e.preventDefault(); e.stopPropagation(); chRecEmpezar(b.form); return }
   if(e.target.closest('.chrecx')){ e.stopPropagation(); return chRecParar(false) }
@@ -7331,7 +7458,7 @@ function render(quieto){ if(CLOUD&&!S.ready){$('#app').innerHTML=splash();return
     const nueva=$('#chatlist');if(nueva){nueva.scrollTop=chatPos.top;nueva.dataset.abajo='0'}
   }
   /* cambio que llegó de otro lado (tiempo real): se actualiza en el lugar, sin animaciones de entrada ni saltos */
-  if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity) a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
+  if(quieto===true){ try{ $('#app').getAnimations({subtree:true}).forEach(a=>{const t=a.effect&&a.effect.getComputedTiming?a.effect.getComputedTiming():null; if(t&&t.iterations!==Infinity&&a.animationName!=='verano-destello') a.finish()}) }catch(e){} if(scrollY!==y) scrollTo(0,y) }
   const pn=document.querySelector('#app .pnav'); if(pn&&pn.style.getPropertyValue('--m')!==pn.dataset.to){void pn.offsetWidth; pn.style.setProperty('--m',pn.dataset.to)}
   $('#v-socio').setAttribute('aria-pressed',S.view==='socio');$('#v-duenio').setAttribute('aria-pressed',S.view==='duenio'); gsUpd();
   cerrarIntro();
