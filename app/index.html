@@ -2702,6 +2702,24 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 .phone .chwrap .chday span{padding:3px 9px;font-size:10.5px;font-weight:600;border-radius:6px}
 /* CHAT44-END */
 
+/* v79 · solicitudes, editor plegado y orden de pagos */
+.sol-aviso{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.sol-vacio .cobok{padding:26px 10px}
+.ed-mas{grid-column:1/-1;min-width:0}
+.ed-mas>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);padding:2px 4px;border-radius:6px;user-select:none}
+.ed-mas>summary::-webkit-details-marker{display:none}
+.ed-mas>summary::before{content:'+';display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;border:1.5px solid currentColor;font-size:12px;line-height:1;transition:transform .2s}
+.ed-mas[open]>summary::before{content:'−'}
+.ed-mas>summary:hover{color:var(--ink)}
+.ed-mas-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.ed-mas[open]>.ed-opciones-serie{margin-top:6px}
+.panel-pagos .pago-orden{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.pago-refrescar{display:inline-flex;align-items:center;gap:6px;height:34px}
+.pago-refrescar svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.pago-refrescar.girando svg{animation:solGira .8s linear infinite}
+@keyframes solGira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.pago-refrescar.girando svg{animation:none}}
+
 /* v77 · equipo del gimnasio */
 .eqcard{display:flex;flex-direction:column;gap:12px}
 .eqpri{display:flex;gap:14px;align-items:flex-start}
@@ -3171,10 +3189,10 @@ function pavEvento(pl){ try{
     return pavMostrar(nom(s)+' te escribió 💬',String(n.texto||'').slice(0,140)||(n.media&&n.media.t==='vid'?'🎥 Te mandó un video':'📷 Te mandó una foto'),'chat-'+s.id,
       ()=>{S.ptabP='mensajes';S.sel=null;S.chSel=chK(s);S.chVista='chat';render(true)}) }
   if(T==='sugerencias'&&ev==='INSERT'&&esAdmin()) return pavMostrar('Nueva sugerencia anónima 🕶️',String(n.texto||'').slice(0,140),'sug',()=>{S.ptabP='mensajes';S.sel=null;S.chVista='sug';render(true)});
-  if(T==='socios'&&ev==='INSERT'&&n.aprobado===false&&puedeP('aprobar')) return pavMostrar('Socio nuevo para aprobar 👋',(n.nombre||'Alguien')+' se registró en la app. Entrá a aprobarlo.','aprobar-'+n.id);
+  if(T==='socios'&&ev==='INSERT'&&n.aprobado===false&&puedeP('aprobar')) return pavMostrar('Socio nuevo para aprobar 👋',(n.nombre||'Alguien')+' se registró en la app. Entrá a aprobarlo.','aprobar-'+n.id,()=>ui43Go('solicitudes'));
   if(T==='socios'&&ev==='UPDATE'&&puedeP('dinero')&&n.avisos&&typeof n.avisos==='object'){const s=byId(n.id),viejo=(s&&s.avisos)||{},k=Object.keys(n.avisos).find(x=>!viejo[x]);
-    if(s&&k){const m=+k.split('-')[1],a=n.avisos[k]||{}; return pavMostrar(nom(s)+' avisó que pagó 💸','Cuota de '+(MES[m]||'este mes').toLowerCase()+' por '+String(a.medio||'transferencia').toLowerCase()+'. Confirmala en el panel.','pagoaviso-'+n.id+'-'+k)}}
-  if(T==='dispositivos'&&n.aprobado===false&&(ev==='INSERT'||ev==='UPDATE')&&puedeP('aprobar')){const s=byId(n.socio_id); if(s&&s.aprobado!==false&&!(S.disp||[]).some(x=>x.uid===n.uid)) return pavMostrar(nom(s)+' quiere entrar 📱','Pidió entrar desde un celular nuevo. Aprobalo en el panel.','disp-'+n.socio_id)}
+    if(s&&k){const m=+k.split('-')[1],a=n.avisos[k]||{}; return pavMostrar(nom(s)+' avisó que pagó 💸','Cuota de '+(MES[m]||'este mes').toLowerCase()+' por '+String(a.medio||'transferencia').toLowerCase()+'. Confirmala en Solicitudes.','pagoaviso-'+n.id+'-'+k,()=>ui43Go('solicitudes'))}}
+  if(T==='dispositivos'&&n.aprobado===false&&(ev==='INSERT'||ev==='UPDATE')&&puedeP('aprobar')){const s=byId(n.socio_id); if(s&&s.aprobado!==false&&!(S.disp||[]).some(x=>x.uid===n.uid)) return pavMostrar(nom(s)+' quiere entrar 📱','Pidió entrar desde un celular nuevo. Aprobalo en Solicitudes.','disp-'+n.socio_id,()=>ui43Go('solicitudes'))}
   if(T==='profes'&&ev==='INSERT'&&n.aprobado===false&&esAdmin()) return pavMostrar('Profe nuevo para aprobar',((n.nombre||'')+' '+(n.apellido||'')).trim()+' pidió entrar al panel.','profe-'+n.dni,()=>{S.ptabP='profes';S.sel=null;render(true)});
 }catch(e){} }
 const pavTxt=()=>!notifOK()?'Notificaciones no disponibles':Notification.permission==='denied'?'Notificaciones bloqueadas':Notification.permission==='granted'&&pavOn()?'Notificaciones activadas':'Activar notificaciones';
@@ -4628,6 +4646,7 @@ const ANIM={
  'Rueda abdominal':{A:{h:[43,45],n:[47,50],s:[50,54],e:[47,68],w:[45,82],p:[62,68],k:[66,89],f:[84,90],t:[86,92]},B:{h:[27,73],n:[31,76],s:[35,78],e:[25,82],w:[16,84],p:[54,80]},eq:[['wheel']]}
 };
 ANIM['Gemelos'].B=up(ANIM['Gemelos'].A,6);
+ANIM['Plancha'].cara=-1; ANIM['Rueda abdominal'].cara=-1;   /* boca abajo: la cara y el pecho miran al piso */
 
 /* poses armadas por ángulos (0° = hacia abajo, 90° = hacia adelante, 180° = arriba), así las proporciones quedan bien */
 const DR=a=>[Math.sin(a*Math.PI/180),Math.cos(a*Math.PI/180)];
@@ -4814,7 +4833,7 @@ drawSkel=function(a,t){
   g+=pierna(P.p,P.k,P.f,P.t);
   /* torso: de los hombros a la cadera, con cintura; la mujer con top corto y calzas */
   const n=P.n,p=P.p,dx=p[0]-n[0],dy=p[1]-n[1],Ls=Math.hypot(dx,dy)||1,u=[dx/Ls,dy/Ls],w=[-u[1],u[0]];
-  const hv=[P.h[0]-n[0],P.h[1]-n[1]],hl=Math.hypot(hv[0],hv[1])||1,up=[hv[0]/hl,hv[1]/hl],fc=[-up[1],up[0]];
+  const hv=[P.h[0]-n[0],P.h[1]-n[1]],hl=Math.hypot(hv[0],hv[1])||1,up=[hv[0]/hl,hv[1]/hl],MI=a.cara===-1?-1:1,fc=[-up[1]*MI,up[0]*MI];
   const lado=(w[0]*fc[0]+w[1]*fc[1])>=0?1:-1;
   const perfil=M?[[0,4.2,4.2],[.24,5.2,4.6],[.6,4.1,4],[.98,5.1,5.1]]:[[0,4.6,4.6],[.28,5.9,5.3],[.62,5,4.8],[.98,5.3,5.3]];
   const zona=(f0,f1,c,ex)=>{ const cs=[f0,...perfil.map(x=>x[0]).filter(f=>f>f0&&f<f1),f1], wd=f=>{ let i=perfil.findIndex(x=>x[0]>=f); if(i<0){ const z=perfil[perfil.length-1]; return [f,z[1],z[2]] } if(i===0) return [f,perfil[0][1],perfil[0][2]]; const a=perfil[i-1],b=perfil[i],k=(f-a[0])/(b[0]-a[0]); return [f,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k] };
@@ -4824,7 +4843,7 @@ drawSkel=function(a,t){
   else { g+=zona(0,.9,TOP)+zona(.84,1,BOT,.35) }
   /* cuello y cabeza */
   g+=ln(n,fzMix(n,P.h,.6),'fz-piel',W.cu);
-  const h=P.h, R=5.2, ang=Math.atan2(fc[1],fc[0]), at=(gr,r)=>[h[0]+Math.cos(ang+gr)*(r||R+.5),h[1]+Math.sin(ang+gr)*(r||R+.5)];
+  const h=P.h, R=5.2, ang=Math.atan2(fc[1],fc[0]), at=(gr,r)=>[h[0]+Math.cos(ang+gr*MI)*(r||R+.5),h[1]+Math.sin(ang+gr*MI)*(r||R+.5)];
   const D=Math.PI/180;
   if(M&&!FR){ const b=at(-205*D,R*.9), tip=fzAdd(b,[fc,-3.2],[up,-6.5]), sw=Math.sin(t*Math.PI)*1.2;
     g+=`<path d="M${fzPt(b)} Q${fzPt(fzAdd(b,[fc,-4.5+sw],[up,-1]))} ${fzPt(fzAdd(tip,[fc,sw]))}" class="fz-pelo" stroke-width="3.6" fill="none"/>`+ci(b,1.5,'fz-moño') }
@@ -4833,7 +4852,7 @@ drawSkel=function(a,t){
   /* pelo: corto en el hombre, con raya y más volumen en la mujer */
   const capA=FR?-165*D:(M?-15*D:-28*D), capB=FR?-15*D:(M?-215*D:-208*D);
   const p1=at(capA), p2=at(capB), ctl=fzAdd(h,[up,M?1.4:2.2]);
-  g+=`<path d="M${fzPt(p1)} A${(R+.6).toFixed(1)} ${(R+.6).toFixed(1)} 0 ${FR?0:1} ${FR?1:0} ${fzPt(p2)} Q${fzPt(ctl)} ${fzPt(p1)}Z" class="fz-pelo"/>`;
+  g+=`<path d="M${fzPt(p1)} A${(R+.6).toFixed(1)} ${(R+.6).toFixed(1)} 0 ${FR?0:1} ${FR?1:(MI<0?1:0)} ${fzPt(p2)} Q${fzPt(ctl)} ${fzPt(p1)}Z" class="fz-pelo"/>`;
   /* cara */
   if(FR){ for(const sg of [1,-1]) g+=ci(fzAdd(h,[fc,1.9*sg],[up,.4]),.75,'fz-ojo'); g+=ln(fzAdd(h,[fc,-1.2],[up,-2.4]),fzAdd(h,[fc,1.2],[up,-2.4]),'fz-boca',.8) }
   else { g+=ci(fzAdd(h,[fc,2.9],[up,.5]),.8,'fz-ojo')+ln(fzAdd(h,[fc,2.4],[up,-2.4]),fzAdd(h,[fc,3.8],[up,-2.1]),'fz-boca',.8)+ci(fzAdd(h,[fc,-.6],[up,0]),1.1,'fz-oreja') }
@@ -5406,15 +5425,9 @@ function panelPagoMes(periodo){
   const [anio,mes]=periodo.split('-');
   return MES[Number(mes)]+' '+anio;
 }
-let panelPagoEnCurso=false;
-function renderPagos(){
-  const socios=Object.values(DB.socios).sort((a,b)=>a.name.localeCompare(b.name,'es'));
-  const {solicitudes,historial}=panelPagosLista(socios);
-  const periodos=[...new Set([mk(Y,M),...historial.map(x=>x.periodo)])].sort((a,b)=>y47Num(b)-y47Num(a));
-  const periodo=periodos.includes(S.periodoPagos)?S.periodoPagos:mk(Y,M);
-  const pagos=historial.filter(x=>x.periodo===periodo);
-  $('#app').innerHTML=`<div class="owner">${proBar()}<div class="panel-pagos">
-    <section class="panel pago-bloque">
+function solCelHtml(){ return `  ${puedeP('aprobar')&&S.disp&&S.disp.length?`<section class="panel pendp"><h2>Celulares esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Alguien se registró con un DNI que ya tenía celular. Aprobalo solo si es esa persona (por ejemplo, cambió de teléfono).</p>
+    <div class="duelist">${S.disp.map(x=>`<div><span><strong>${esc(x.s.name)}</strong> <span class="muted num">DNI ${fmtDNI(x.s.dni)} · ${esc(new Date(x.creado).toLocaleString('es-AR'))}</span></span><span><button class="mini pay" data-dok="${x.uid}">Aprobar</button> <button class="mini danger" data-dno="${x.uid}">Rechazar</button></span></div>`).join('')}</div></section>`:''}` }
+function solAvisosHtml(solicitudes){ return `    <section class="panel pago-bloque">
       <div class="panelhead"><h2>Avisos de pago</h2><span class="pill warn">${solicitudes.length} para confirmar</span></div>
       ${S.ultimaDecision?`<p role="status" class="pago-fila">${esc(S.ultimaDecision.socio)} · ${panelPagoMes(S.ultimaDecision.periodo)} · ${S.ultimaDecision.registrado?'Pago registrado':'Transferencia no recibida'} · ${esc(S.ultimaDecision.autor)} · ${esc(S.ultimaDecision.hora)}</p>`:''}<p class="pago-ayuda">Cuando un socio avisa desde la app que pagó, aparece acá. Si te llegó, tocá <b>Confirmar pago</b> y se le registra el pago de ese mes. Si no, tocá <b>Transferencia no recibida</b>: el mes le vuelve a quedar en deuda y le avisamos.</p>
       ${solicitudes.length?solicitudes.map(({socio,periodo,aviso})=>`<form class="pago-fila" data-pago-solicitud="${periodo}" data-socio="${esc(socio.dni)}">
@@ -5426,14 +5439,41 @@ function renderPagos(){
           <button class="mini danger pago-no" type="submit" value="rechazar" formnovalidate>✕ Transferencia no recibida</button>
         </fieldset></form>`).join(''):'<p>No hay solicitudes para revisar.</p>'}
     </section>
+    ${CLOUD?'<details class="panel pago-bloque" id="decisiones-pago"><summary>Últimas solicitudes resueltas</summary><div aria-live="polite"></div></details>':''}` }
+
+/* v79 · Solicitudes: socios nuevos, celulares y avisos de pago en un solo lugar, con contador */
+const solPagoOk=()=>puedeP('dinero')&&!c1xPlataOff();
+function solCount(){ let n=0; if(puedeP('aprobar')) n+=c2Pend().length+(S.disp||[]).filter(d=>d.s&&d.s.aprobado!==false).length; if(solPagoOk()) n+=pagosPend(); return n }
+function solBadge(){ const n=solCount(); try{ if(navigator.setAppBadge) (n?navigator.setAppBadge(n):navigator.clearAppBadge()).catch(()=>{}) }catch(e){}
+  return `<span class="cnt solcnt" ${n?'':'hidden'} title="${n} solicitud${n===1?'':'es'} pendiente${n===1?'':'s'}">${n||''}</span>` }
+function renderSolicitudes(){
+  const pagoOk=solPagoOk(), solicitudes=pagoOk?panelPagosLista(Object.values(DB.socios)).solicitudes:[], n=solCount();
+  $('#app').innerHTML=`<div class="owner">${proBar()}<div class="panel-pagos sol-wrap">
+    ${n?'':`<section class="panel sol-vacio"><div class="cobok"><span class="cobic" aria-hidden="true">✓</span><b>No hay solicitudes pendientes</b><span>Cuando un socio se registre solo, pida entrar desde un celular o avise que pagó, aparece acá y te llega una notificación.</span></div></section>`}
+    ${puedeP('aprobar')?c2PendHtml()+solCelHtml():''}
+    ${pagoOk&&(solicitudes.length||S.ultimaDecision)?solAvisosHtml(solicitudes):pagoOk&&CLOUD?'<details class="panel pago-bloque" id="decisiones-pago"><summary>Últimas solicitudes de pago resueltas</summary><div aria-live="polite"></div></details>':''}
+  </div></div>`;
+}
+let panelPagoEnCurso=false;
+function renderPagos(){
+  const socios=Object.values(DB.socios).sort((a,b)=>a.name.localeCompare(b.name,'es'));
+  const {solicitudes,historial}=panelPagosLista(socios);
+  const periodos=[...new Set([mk(Y,M),...historial.map(x=>x.periodo)])].sort((a,b)=>y47Num(b)-y47Num(a));
+  const periodo=periodos.includes(S.periodoPagos)?S.periodoPagos:mk(Y,M);
+  const orden=S.ordenPagos||'recientes', fechaPago=x=>{ const [a,m]=x.periodo.split('-').map(Number), f=String(x.pago.fecha||'').split('/').map(Number); if(!f[0]||!f[1]) return 0;
+    let y=a; const d=f[1]-1-m; if(d>6) y--; else if(d<-6) y++; return new Date(y,f[1]-1,f[0]).getTime() };
+  const pagos=historial.filter(x=>x.periodo===periodo).sort(orden==='nombre'?(a,b)=>a.socio.name.localeCompare(b.socio.name,'es'):orden==='importe'?(a,b)=>(Number(b.pago.monto)||0)-(Number(a.pago.monto)||0):orden==='antiguos'?(a,b)=>fechaPago(a)-fechaPago(b)||a.socio.name.localeCompare(b.socio.name,'es'):(a,b)=>fechaPago(b)-fechaPago(a)||a.socio.name.localeCompare(b.socio.name,'es'));
+  $('#app').innerHTML=`<div class="owner">${proBar()}<div class="panel-pagos">
+    ${solicitudes.length?`<p class="pago-ayuda sol-aviso">Tenés <b>${solicitudes.length} aviso${solicitudes.length===1?'':'s'} de pago</b> para confirmar. <button type="button" class="mini" data-ui43go="solicitudes">Ir a Solicitudes</button></p>`:''}
     <section class="panel pago-bloque">
       <div class="panelhead"><h2>Pagos registrados</h2><strong>${fmt(pagos.reduce((n,x)=>n+(Number(x.pago.monto)||0),0))}</strong></div>
-      <label>Mes<select class="inp sm" id="pago-periodo">${periodos.map(k=>`<option value="${k}" ${k===periodo?'selected':''}>${panelPagoMes(k)}</option>`).join('')}</select></label>
+      <div class="pago-orden"><label>Mes<select class="inp sm" id="pago-periodo">${periodos.map(k=>`<option value="${k}" ${k===periodo?'selected':''}>${panelPagoMes(k)}</option>`).join('')}</select></label>
+        <label>Ordenar<select class="inp sm" id="pago-orden">${[['recientes','Más recientes primero'],['antiguos','Más antiguos primero'],['nombre','Por nombre (A-Z)'],['importe','Mayor importe primero']].map(([k,l])=>`<option value="${k}" ${k===orden?'selected':''}>${l}</option>`).join('')}</select></label>
+        <button type="button" class="mini pago-refrescar" id="pago-refrescar" title="Traer los pagos más nuevos" aria-label="Refrescar pagos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg><span>Refrescar</span></button></div>
       <div class="pago-lista">${pagos.length?pagos.map(({socio,pago})=>`<div class="pago-fila">
         <div class="pago-datos"><b>${esc(socio.name)}</b><span>${esc(pago.fecha)} · ${esc(pago.medio)} · ${fmt(pago.monto)}</span></div>
         <button type="button" class="mini" data-pago-ficha="${esc(socio.dni)}">Abrir ficha</button></div>`).join(''):'<p>No hay pagos registrados en este mes.</p>'}</div>
     </section>
-    ${CLOUD?'<details class="panel pago-bloque" id="decisiones-pago"><summary>Últimas solicitudes resueltas</summary><div aria-live="polite"></div></details>':''}
     <section class="panel pago-bloque"><div class="panelhead"><h2>Registrar un pago manual</h2></div>
       <form id="pago-manual" class="pago-controles"><label>Socio<select name="socio" class="inp sm" required>
         <option value="">Elegí un socio</option>${socios.filter(x=>x.plan&&!esFam(x)&&x.aprobado!==false).map(x=>`<option value="${esc(x.dni)}">${esc(x.name)} · ${fmtDNI(x.dni)}</option>`).join('')}</select></label>
@@ -5448,6 +5488,17 @@ document.addEventListener('toggle',async e=>{
     salida.innerHTML=filas.map(r=>`<p><b>${esc(nombres[r.socio_id]||'Socio')} · ${panelPagoMes(r.periodo)}</b><br>${r.registrado?'Pago registrado':'No llegó'} · ${esc(r.profesor)} · ${esc(new Date(r.resuelto).toLocaleString('es-AR'))}</p>`).join('')||'Todavía no hay decisiones registradas.';
   }catch(err){salida.textContent=errTxt(err)}
 },true);
+
+/* v79 · refrescar pagos y recordar qué opciones del editor quedaron abiertas */
+document.addEventListener('click',async e=>{
+  const b=e.target.closest&&e.target.closest('#pago-refrescar'); if(!b||S.view!=='duenio'||!S.pro) return;
+  e.preventDefault(); e.stopImmediatePropagation(); if(b.classList.contains('girando')) return;
+  b.classList.add('girando'); b.disabled=true;
+  try{ if(CLOUD){ await loadAll(); render(true) } else render(true); toast('Pagos actualizados') }
+  catch(err){ toast(errTxt(err)) }
+  finally{ const x=document.getElementById('pago-refrescar'); if(x){ x.classList.remove('girando'); x.disabled=false } }
+},true);
+document.addEventListener('toggle',e=>{ const d=e.target; if(!d.matches||!d.matches('.ed-mas')) return; S.edMas=S.edMas||{}; S.edMas[d.dataset.edmas]=d.open },true);
 function panelPagoFicha(dni){
   if(!DB.socios[dni])return;
   S.ptabP='socios'; S.ui43View='socios'; S.sel=dni; S.edit=null; S.fd=null;
@@ -5481,12 +5532,12 @@ async function panelPagoResolver(form,rechazar){
         socio.pausas=(socio.pausas||[]).filter(k=>k!==periodo);
       }
       saveDB();
-      if(S.ptabP==='pagos')render(true);
+      if(S.ptabP==='pagos'||S.ptabP==='solicitudes')render(true);
     }
     S.ultimaDecision={socio:socio.name,periodo,registrado:!rechazar,autor:[PRO?.nombre,PRO?.apellido].filter(Boolean).join(' ')||'Profesor',hora:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})};
     if(CLOUD){const {data}=await sb.from('pago_decisiones').select('profesor,resuelto').eq('socio_id',socio.id).eq('periodo',periodo).order('id',{ascending:false}).limit(1);
       if(data?.length){S.ultimaDecision.autor=data[0].profesor;S.ultimaDecision.hora=new Date(data[0].resuelto).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}}
-    if(S.ptabP==='pagos')render(true);
+    if(S.ptabP==='pagos'||S.ptabP==='solicitudes')render(true);
     toast(rechazar?'Listo: el mes le vuelve a quedar en deuda y le avisamos.':'Pago registrado ✓');
   }catch(error){
     toast(error.code==='23505'?'Ese mes ya figura pagado.':errTxt(error));
@@ -5497,6 +5548,7 @@ async function panelPagoResolver(form,rechazar){
   }
 }
 document.addEventListener('change',e=>{
+  if(e.target.id==='pago-orden'&&S.ptabP==='pagos'&&!c1xPlataOff()){ S.ordenPagos=e.target.value; render(true); document.getElementById('pago-orden')?.focus(); return }
   if(e.target.id==='pago-periodo'&&S.ptabP==='pagos'&&!c1xPlataOff()){
     S.periodoPagos=e.target.value; render(true); document.getElementById('pago-periodo')?.focus();
   }
@@ -5511,7 +5563,7 @@ document.addEventListener('submit',e=>{
   const form=e.target;
   if(!form.matches('#pago-manual,[data-pago-solicitud]'))return;
   e.preventDefault(); e.stopImmediatePropagation();
-  if(S.view!=='duenio'||!S.pro||S.ptabP!=='pagos'||c1xPlataOff()||panelPagoEnCurso)return;
+  if(S.view!=='duenio'||!S.pro||!['pagos','solicitudes'].includes(S.ptabP)||c1xPlataOff()||panelPagoEnCurso)return;
   if(form.id==='pago-manual') return panelPagoFicha(form.elements.socio.value);
   panelPagoResolver(form,e.submitter?.value==='rechazar');
 },true);
@@ -5532,6 +5584,7 @@ function renderDuenio(){
   if(S.ptabP==='profes') return renderProfes();
   if(S.ptabP==='cuotas') return renderCuotas();
   if(S.ptabP==='pagos'&&!c1xPlataOff()) return renderPagos();
+  if(S.ptabP==='solicitudes'&&(puedeP('aprobar')||solPagoOk())) return renderSolicitudes();
   if(S.ptabP==='mensajes') return renderMensajes();
   if(S.ptabP==='novedades'&&puedeP('novedades')) return renderGN();
   if(S.sel&&DB.socios[S.sel]) return renderFicha(DB.socios[S.sel]);
@@ -5553,7 +5606,7 @@ function renderDuenio(){
   const F=[['todos','Todos'],['avisaron','Avisaron pago'],['vencidos','Vencidos'],['por','Por vencer'],['al','Al día'],['pausa','En pausa'],['baja','De baja'],['sincuota','Sin cuota'],['sinrut','Sin rutina'],['funcional','Funcional'],['revisar','Para revisar']];
   const list=est.filter(({s,e})=>S.filter==='todos'||(S.filter==='avisaron'&&y46Avisos(s).length>0)||(S.filter==='pausa'&&e.c==='pause')||(S.filter==='baja'&&e.c==='baja')||(S.filter==='vencidos'&&e.c==='bad')||(S.filter==='por'&&e.c==='warn'&&e.days<=7)||(S.filter==='al'&&e.c==='ok')||(S.filter==='sincuota'&&e.c==='none')||(S.filter==='sinrut'&&!s.rutina&&!s.funcional)||(S.filter==='funcional'&&!!s.funcional)||(S.filter==='revisar'&&socioParaRevisar(s)));
   const addForm=`<form class="addsocio" id="addsocio"><input class="inp num" id="ndni" inputmode="numeric" placeholder="DNI" aria-label="DNI" maxlength="10"><input class="inp" id="nname" placeholder="Nombre y apellido" aria-label="Nombre y apellido"><button class="btn sm" type="submit">Agregar socio</button></form>`;
-  $('#app').innerHTML=`<div class="owner enter">${proBar()}${c2PendHtml()}
+  $('#app').innerHTML=`<div class="owner enter">${proBar()}
   <div class="kpis">
     <div class="kpi"><div class="k">Socios</div><div class="v num">${all.length}</div><div class="s">${all.length?'registrados':'todavía nadie'}</div></div>
     <div class="kpi"><div class="k">Cobrado en ${MES[M].toLowerCase()}</div><div class="v num">${fmt(cobrado)}</div><div class="s">Mercado Pago, efectivo y transferencia</div></div>
@@ -5576,8 +5629,6 @@ function renderDuenio(){
       ${cob.length?`<div class="cobw"><table class="cobt"><tbody>${cob.map((x,k)=>`<tr data-open="${x.s.dni}" class="${x.e.c}" style="--k:${k}"><td><b>${esc(x.s.name)}</b><small>${x.t}</small></td><td class="num">${fmt(x.n)}</td></tr>`).join('')}</tbody></table></div>`
       :`<div class="cobok"><span class="cobic" aria-hidden="true">✓</span><b>Todo al día</b><span>Nadie debe ni vence esta semana.</span></div>`}</section>
   </div>${hrsHtml()}`:''}
-  ${puedeP('aprobar')&&S.disp&&S.disp.length?`<section class="panel pendp"><h2>Celulares esperando aprobación</h2><p class="muted" style="margin:0;font-size:13px">Alguien se registró con un DNI que ya tenía celular. Aprobalo solo si es esa persona (por ejemplo, cambió de teléfono).</p>
-    <div class="duelist">${S.disp.map(x=>`<div><span><strong>${esc(x.s.name)}</strong> <span class="muted num">DNI ${fmtDNI(x.s.dni)} · ${esc(new Date(x.creado).toLocaleString('es-AR'))}</span></span><span><button class="mini pay" data-dok="${x.uid}">Aprobar</button> <button class="mini danger" data-dno="${x.uid}">Rechazar</button></span></div>`).join('')}</div></section>`:''}
   <section class="panel">
     <div class="panelhead"><h2>Socios</h2>${all.length?`<label class="psearch ${S.q?'con':''}" title="Buscar socio (Ctrl+F)"><span class="pslupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg></span><input id="psq" type="search" autocomplete="off" spellcheck="false" placeholder="Buscar por nombre o DNI" aria-label="Buscar socio por nombre o DNI" value="${esc(S.q||'')}"><kbd aria-hidden="true">Ctrl F</kbd><button type="button" class="psx" id="psx" aria-label="Borrar búsqueda">×</button></label><span class="pscnt muted" id="pscnt" aria-live="polite"></span>`:''}${all.length?`<div class="chips" role="group" aria-label="Filtrar">${F.map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}</div>`:''}</div>
     ${addForm}
@@ -5610,7 +5661,7 @@ function renderFicha(s){
         <input class="inp num" data-ri="${j}" data-rc="2" value="${esc(x[2])}" placeholder="10" aria-label="Repeticiones">
         <input class="inp num" data-ri="${j}" data-rc="3" value="${esc(x[3])}" placeholder="2" inputmode="numeric" maxlength="5" aria-label="RIR (repeticiones en reserva)">
         <input class="inp num" data-ri="${j}" data-rc="4" value="${esc(x[4])}" placeholder="90 s" aria-label="Descanso">
-        <button class="del" data-rdel="${j}" aria-label="Quitar ejercicio">×</button><div class="ed-opciones-serie"><label>Alternativa<input class="inp" list="exl" data-ri="${j}" data-rc="5" value="${esc(x[5])}" maxlength="100" placeholder="Ejercicio opcional"></label><label>Superserie<input class="inp" data-ri="${j}" data-rc="6" value="${esc(x[6])}" maxlength="12" placeholder="Ej. A"></label><label class="nota-editor">Nota breve<input class="inp" data-ri="${j}" data-rc="7" value="${esc(x[7])}" maxlength="140" placeholder="Ej. Pausa de un segundo abajo"></label></div></div>`).join('')}
+        <button class="del" data-rdel="${j}" aria-label="Quitar ejercicio">×</button>${(()=>{const k=s.dni+'-'+S.eday+'-'+j,st=(S.edMas||{})[k],op=st!=null?st:!!(x[5]||x[6]||x[7]);return `<details class="ed-mas" data-edmas="${esc(k)}" ${op?'open':''}><summary tabindex="-1">Alternativa, superserie y nota${x[5]||x[6]||x[7]?' <i class="ed-mas-dot" aria-label="tiene datos"></i>':''}</summary>`})()}<div class="ed-opciones-serie"><label>Alternativa<input class="inp" list="exl" data-ri="${j}" data-rc="5" value="${esc(x[5])}" maxlength="100" placeholder="Ejercicio opcional"></label><label>Superserie<input class="inp" data-ri="${j}" data-rc="6" value="${esc(x[6])}" maxlength="12" placeholder="Ej. A"></label><label class="nota-editor">Nota breve<input class="inp" data-ri="${j}" data-rc="7" value="${esc(x[7])}" maxlength="140" placeholder="Ej. Pausa de un segundo abajo"></label></div></details></div>`).join('')}
       <datalist id="exl">${Object.keys(ANIM).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
       <div class="exadd"><button class="mini" id="addrow">＋ Ejercicio</button><button class="mini runadd" id="addrun">${RUNSVG}＋ Running</button></div></div>
     <div class="rut-opciones"><label>Activar rutina el día (opcional)<input class="inp" type="date" data-fecha-rut min="${iso(TODAY)}" value="${esc(S.edit.fechaRut||'')}"></label><button type="button" class="mini" data-previsualizar-rut>Vista previa como socio</button></div><div class="factions"><p class="rnote">Para unir dos ejercicios, escribí la misma letra en Superserie y dales igual cantidad de series. Los cambios se envían con «Guardar todo».</p>${s.rutina?'<button class="mini danger" id="delrut">Quitar rutina</button>':''}</div>`
@@ -5909,6 +5960,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.70',t:'Solicitudes y pagos ordenados',items:[['📥','Nueva sección Solicitudes en el panel: socios nuevos, celulares y avisos de pago, con contador y notificación.'],['🔓','Los socios que carga el gimnasio entran directo; los que se registran solos esperan la aprobación.'],['🧍','En la plancha y la rueda el personaje mira al piso.'],['🗂','Alternativa, superserie y nota vienen plegadas en el editor.'],['↕️','Pagos registrados: más recientes arriba, para ordenar y con botón de refrescar.']]},
   {v:'1.1.69',t:'Rutina más prolija',items:[['🔤','El nombre del ejercicio vuelve al tamaño de antes y las series y repeticiones se ven un poco más chicas.'],['⏱','El cronómetro queda arriba, quieto: cuando bajás por la rutina ya no te sigue.']]},
   {v:'1.1.68',t:'El equipo del gimnasio',items:[['👨‍🏫','En Gimnasio vuelve la ficha del profe y aparecen los servicios.'],['➕','Desde el panel, en Info del gimnasio, el dueño arma el equipo: él primero y los profes que agregue abajo, cada uno con su rol y sus títulos.']]},
   {v:'1.1.67',t:'Rutina más clara',items:[['⏱️','El cronómetro vuelve a quedar fijo arriba mientras bajás.'],['🏋️','Cada ejercicio muestra el personaje, el nombre, las series, las repeticiones y el RIR bien claros, con los circulitos de las series en fila.'],['🙋','Personajes nuevos, con cuerpo: de mujer o de hombre según tu cuenta (lo podés cambiar en Perfil).'],['🌊','La barra de progreso se llena con una onda.'],['🏁','Podés finalizar la rutina aunque no la hayas terminado.'],['📒','Las cargas se anotan solo en la parte de Cargas.']]},
@@ -6166,8 +6218,9 @@ document.addEventListener('submit',async e=>{ if(e.target.id!=='gnform') return;
     S.gnD=gnDraft(); toast(msg); render(true) }
   catch(x){ toast('No se pudo guardar: '+errTxt(x)); if(bt){ bt.disabled=false; bt.classList.remove('cargando') } } },true);
 /* pestañas del panel: lista que se puede filtrar (ok:false la oculta) */
+const PNI_SOL='<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>';
 const PNI=p=>'<svg class="gnpi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
-const PNAV_ICO={socios:PNI('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>'),
+const PNAV_ICO={solicitudes:PNI(PNI_SOL),socios:PNI('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>'),
   mensajes:PNI('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/>'),
   pagos:PNI('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8m-8 4h8m-8 4h4"/>'),
   cuotas:PNI('<rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M6.5 15h4"/>'),
@@ -6175,9 +6228,10 @@ const PNAV_ICO={socios:PNI('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 
   profes:PNI('<path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 9.8V15c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3V9.8"/>')};
 const pagosPend=()=>Object.values(DB.socios).reduce((n,s)=>n+Object.entries(s.avisos||{}).filter(([k,a])=>a&&/^\d{4}-(?:[0-9]|1[01])$/.test(k)&&!(s.pagos||{})[k]).length,0);
 function proTabs(n,nm){ return [
-  {k:'socios',l:'Socios',extra:c2Badge()},
+  {k:'socios',l:'Socios'},
+  {k:'solicitudes',l:'Solicitudes',ok:puedeP('aprobar')||solPagoOk(),extra:solBadge()},
   {k:'mensajes',l:'Mensajes',ok:puedeP('chat'),extra:`<span class="cnt" data-chbadge ${nm?'':'hidden'}>${nm||''}</span>`},
-  {k:'pagos',l:'Pagos',ok:!c1xPlataOff(),extra:(()=>{const n=pagosPend();return n?` <span class="cnt">${n}</span>`:''})()},
+  {k:'pagos',l:'Pagos',ok:!c1xPlataOff()},
   {k:'cuotas',l:'Cuotas',ok:!c1xPlataOff()},
   {k:'novedades',l:'Novedades',ok:puedeP('novedades')},
   {k:'profes',l:esAdmin()?'Profes':'Mi perfil',extra:n&&esAdmin()?` <span class="cnt">${n}</span>`:''}
@@ -8458,9 +8512,9 @@ function ui43Tasks(){
   const routines=people.filter(s=>s.aprobado!==false&&!(s.rutina&&s.rutina.length)&&!s.funcional).length;
   const unread=chNoLeidosProfe();let list='';
   if(puedeP('gyminfo'))list+=ui43Task('gym','Feriados y cierres','Organizá los días que el gimnasio no abre','cierres','Gestionar');
-  if(puedeP('aprobar'))list+=ui43Task('users',`${pendientes+devices} solicitudes de ingreso`,pendientes?'Socios esperando tu aprobación':'Registros y nuevos dispositivos','approvals','Revisar');
+  if(puedeP('aprobar'))list+=ui43Task('users',`${pendientes+devices} solicitudes de ingreso`,pendientes?'Socios esperando tu aprobación':'Registros y nuevos dispositivos','solicitudes','Revisar');
   const avs=c1xPlataOff()?0:panelPagosLista(people).solicitudes.length;
-  if(puedeP('dinero')&&avs)list+=ui43Task('bell',`${avs} aviso${avs===1?'':'s'} de pago`,'Socios que dicen que ya pagaron: confirmalo y registralo','avisos','Revisar');
+  if(puedeP('dinero')&&avs)list+=ui43Task('bell',`${avs} aviso${avs===1?'':'s'} de pago`,'Socios que dicen que ya pagaron: confirmalo y registralo','solicitudes','Revisar');
   if(puedeP('chat'))list+=ui43Task('chat',`${unread} mensajes sin leer`,'Tus conversaciones con los alumnos','mensajes','Abrir');
   if(puedeP('rutinas')||puedeP('asignar'))list+=ui43Task('gym',`${routines} socios sin rutina`,'Musculación pendiente de asignación','rutinas','Ver socios');
   return `<section class="panel ui43-tasks"><div class="panelhead"><h2>Para tener en cuenta</h2></div>${list||'<p class="muted">Usá el menú para acceder a tus funciones.</p>'}</section>`;
@@ -8548,9 +8602,6 @@ document.addEventListener('click',e=>{
   }
   if(b.hasAttribute('data-ui43add')){
     const details=document.querySelector('.ui43-adddetails');if(details){details.open=true;S.ui43Add=true;details.scrollIntoView({block:'center',behavior:reduceMotion?'auto':'smooth'});setTimeout(()=>{const input=document.getElementById('ndni');if(input)input.focus({preventScroll:true})},100)}return;
-  }
-  if(b.dataset.ui43task==='approvals'){
-    ui43Go('socios');requestAnimationFrame(()=>{const target=document.querySelector('.c2pend,.pendp,.ui43-members');if(target)target.scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'})});return;
   }
   ui43Go(b.dataset.ui43go||b.dataset.ui43task);
 },true);
