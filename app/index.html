@@ -2702,6 +2702,56 @@ html.ui43-panel .ui43-sidebar button:focus-visible{outline:2px solid var(--teal)
 .phone .chwrap .chday span{padding:3px 9px;font-size:10.5px;font-weight:600;border-radius:6px}
 /* CHAT44-END */
 
+/* v82 · Gastos */
+:root{--g-ing:#1BA98B;--g-egr:#DC7031}
+:root[data-theme="light"]{--g-ing:#13866F;--g-egr:#C2561C}
+.gwrap{display:grid;gap:16px}
+.gtop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.gmesnav{display:flex;align-items:center;gap:10px}.gmesnav b{min-width:150px;text-align:center;font-size:16px}
+.gmesnav button[disabled]{opacity:.35;cursor:default}
+.gerr{color:var(--bad);margin:0}
+.gkpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.gkpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:6px;min-width:0}
+.gkpi .gk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);font-weight:600}
+.gkpi b{font-size:26px;font-weight:800;letter-spacing:-.01em;overflow-wrap:anywhere}
+.gkpi small{color:var(--muted);font-size:12px}
+.gres.gpos b{color:var(--ok)}.gres.gneg b{color:var(--bad)}
+.gsw{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none}
+.gsw-ing{background:var(--g-ing)}.gsw-egr{background:var(--g-egr)}
+.gleg{display:flex;gap:14px;font-size:12.5px;color:var(--muted)}.gleg span{display:inline-flex;align-items:center;gap:6px}
+.gplot{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;align-items:end;height:250px;padding-top:8px;border-bottom:1px solid var(--line)}
+.gcol{position:relative;display:grid;grid-template-rows:1fr auto auto;height:100%;gap:4px;border:0;background:none;padding:6px 2px 8px;border-radius:12px;color:var(--ink)}
+.gcol:hover,.gcol:focus-visible,.gcol.on{background:rgba(127,127,127,.08)}
+.gcol.on .gml{color:var(--ink);font-weight:800}
+.gbars{display:flex;align-items:flex-end;justify-content:center;gap:2px;min-height:0;height:100%}
+.gbar{display:block;width:min(22px,38%);min-height:2px;border-radius:4px 4px 0 0;transition:height .45s var(--ease)}
+.gbar-ing{background:var(--g-ing)}.gbar-egr{background:var(--g-egr)}
+.gml{font-size:12px;color:var(--muted);text-transform:capitalize}
+.gmr{font-size:11.5px;color:var(--muted);font-weight:700}
+.gmr.gpos{color:var(--ok)}.gmr.gneg{color:var(--bad)}
+.gtip{position:absolute;bottom:calc(100% - 30px);left:50%;transform:translate(-50%,6px);opacity:0;pointer-events:none;z-index:5;background:var(--sunk);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:4px;min-width:170px;text-align:left;font-size:12.5px;box-shadow:0 12px 30px rgba(0,0,0,.35);transition:opacity .15s,transform .15s}
+.gtip span{display:flex;align-items:center;gap:6px;color:var(--muted)}.gtip em{margin-left:auto;font-style:normal;color:var(--ink);font-weight:700}
+.gcol:hover .gtip,.gcol:focus-visible .gtip{opacity:1;transform:translate(-50%,0)}
+.gtabla{margin-top:10px;font-size:13px}.gtabla summary{cursor:pointer;color:var(--muted);font-weight:600}
+.gtabla table{width:100%;border-collapse:collapse;margin-top:8px}.gtabla th,.gtabla td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}.gtabla th:first-child,.gtabla td:first-child{text-align:left}
+.gcols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.gform{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+.gform label{display:grid;gap:4px;font-size:12px;color:var(--muted)}
+.gform .inp{width:100%}.gform .gnota{grid-column:1/-1}.gform button{grid-column:1/-1}
+.gcats{display:grid;gap:10px}
+.gcat{display:grid;grid-template-columns:130px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px}
+.gcn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gctrack{height:10px;border-radius:999px;background:var(--line);overflow:hidden}.gctrack i{display:block;height:100%;border-radius:999px;background:var(--g-egr)}
+.gcv{font-weight:700}.gcv small{color:var(--muted);font-weight:600;margin-left:4px}
+.glista{display:grid}
+.gfila{display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.gfila:last-child{border-bottom:0}
+.gico{width:34px;height:34px;border-radius:10px;background:var(--sunk);display:grid;place-items:center;font-size:17px}
+.gdat{display:grid;gap:2px;min-width:0}.gdat small{color:var(--muted);overflow-wrap:anywhere}
+@media (max-width:900px){.gkpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gcols{grid-template-columns:1fr}}
+@media (max-width:520px){.gkpi b{font-size:21px}.gplot{height:200px;gap:3px}.gcat{grid-template-columns:96px minmax(0,1fr) auto}.gfila{grid-template-columns:30px minmax(0,1fr) auto}.gfila .mini{grid-column:2/-1;justify-self:start}}
+@media (prefers-reduced-motion:reduce){.gbar,.gtip{transition:none}}
+
 /* v80 · logos oficiales y descanso como dato */
 .cplogo{width:auto;height:32px;padding:0;background:none!important;border-radius:0;box-shadow:none}
 .cplogo .lg-claro{display:none}
@@ -5450,6 +5500,100 @@ const solPagoOk=()=>puedeP('dinero')&&!c1xPlataOff();
 function solCount(){ let n=0; if(puedeP('aprobar')) n+=c2Pend().length+(S.disp||[]).filter(d=>d.s&&d.s.aprobado!==false).length; if(solPagoOk()) n+=pagosPend(); return n }
 function solBadge(){ const n=solCount(); try{ if(navigator.setAppBadge) (n?navigator.setAppBadge(n):navigator.clearAppBadge()).catch(()=>{}) }catch(e){}
   return `<span class="cnt solcnt" ${n?'':'hidden'} title="${n} solicitud${n===1?'':'es'} pendiente${n===1?'':'s'}">${n||''}</span>` }
+
+/* v82 · Gastos: egresos del gimnasio comparados con lo cobrado de cuotas (solo tesorería) */
+const GASTO_CATS=[['Alquiler','🏢'],['Luz','💡'],['Agua','💧'],['Gas','🔥'],['Internet','🌐'],['Sueldos','👥'],['Equipamiento','🏋️'],['Mantenimiento','🛠️'],['Limpieza','🧽'],['Impuestos','🧾'],['Publicidad','📣'],['Otros','📦']];
+const gIco=c=>(GASTO_CATS.find(x=>x[0]===c)||[0,'📦'])[1];
+let gastosCargando=false;
+async function cargarGastos(force){
+  if(gastosCargando||(S.gastos&&!force)) return; gastosCargando=true;
+  try{
+    if(CLOUD) S.gastos=(await q(sb.from('gastos').select('id,fecha,categoria,monto,nota,profesor,creado').order('fecha',{ascending:false}).limit(5000)))||[];
+    else { try{ S.gastos=JSON.parse(localStorage.getItem('tc-gastos')||'[]') }catch(e){ S.gastos=[] } }
+    S.gastosErr=null;
+  }catch(e){ S.gastosErr=errTxt(e); S.gastos=S.gastos||null }
+  finally{ gastosCargando=false }
+  if(S.view==='duenio'&&S.ptabP==='gastos') render(true);
+}
+const gMesDe=f=>{ const d=String(f||'').split('-'); return mk(+d[0],+d[1]-1) };
+const gIngreso=(y,m)=>Object.values(DB.socios).reduce((n,s)=>n+(Number(((s.pagos||{})[mk(y,m)]||{}).monto)||0),0);
+const gEgreso=(y,m)=>(S.gastos||[]).filter(g=>gMesDe(g.fecha)===mk(y,m)).reduce((n,g)=>n+(Number(g.monto)||0),0);
+const gCorto=n=>{ const a=Math.abs(n); return (n<0?'-':'')+(a>=1e6?'$'+(a/1e6).toFixed(a>=1e7?0:1).replace('.',',')+' M':a>=1e3?'$'+Math.round(a/1e3)+' mil':'$'+a) };
+function renderGastos(){
+  if(!S.gastos&&!S.gastosErr) cargarGastos();
+  const sel=S.gSel||{y:Y,m:M}, y=sel.y, m=sel.m, esHoy=y===Y&&m===M;
+  const ing=gIngreso(y,m), egr=gEgreso(y,m), res=ing-egr;
+  const pm=new Date(y,m-1,1), resAnt=gIngreso(pm.getFullYear(),pm.getMonth())-gEgreso(pm.getFullYear(),pm.getMonth()), dif=res-resAnt;
+  const meses=[...Array(6)].map((_,k)=>{ const d=new Date(y,m-5+k,1), yy=d.getFullYear(), mm=d.getMonth(); return {y:yy,m:mm,ing:gIngreso(yy,mm),egr:gEgreso(yy,mm)} });
+  const max=Math.max(1,...meses.flatMap(x=>[x.ing,x.egr]));
+  const delMes=(S.gastos||[]).filter(g=>gMesDe(g.fecha)===mk(y,m)).sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha))||(b.id||0)-(a.id||0));
+  const porCat={}; delMes.forEach(g=>{ porCat[g.categoria]=(porCat[g.categoria]||0)+(Number(g.monto)||0) });
+  const cats=Object.entries(porCat).sort((a,b)=>b[1]-a[1]), cmax=Math.max(1,...cats.map(c=>c[1]));
+  const fechaDef=esHoy?iso(TODAY):iso(new Date(y,m,1)), cargando=!S.gastos&&!S.gastosErr;
+  const mesTxt=MES[m]+' '+y, signo=res>0?'gpos':res<0?'gneg':'';
+  $('#app').innerHTML=`<div class="owner">${proBar()}<div class="gwrap">
+    <div class="gtop"><div class="gmesnav" role="group" aria-label="Mes"><button type="button" class="ui43-iconbtn" data-gmov="-1" aria-label="Mes anterior">‹</button><b>${esc(mesTxt)}</b><button type="button" class="ui43-iconbtn" data-gmov="1" aria-label="Mes siguiente" ${esHoy?'disabled':''}>›</button></div>
+      <button type="button" class="mini pago-refrescar" id="gastos-refrescar" aria-label="Refrescar gastos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg><span>Refrescar</span></button></div>
+    ${S.gastosErr?`<p class="gerr" role="alert">No pudimos traer los gastos: ${esc(S.gastosErr)}</p>`:''}
+    <div class="gkpis">
+      <div class="gkpi"><span class="gk"><i class="gsw gsw-ing" aria-hidden="true"></i>Cobrado en cuotas</span><b class="num">${fmt(ing)}</b><small>Pagos registrados de ${esc(MES[m].toLowerCase())}</small></div>
+      <div class="gkpi"><span class="gk"><i class="gsw gsw-egr" aria-hidden="true"></i>Gastos</span><b class="num">${cargando?'…':fmt(egr)}</b><small>${delMes.length} gasto${delMes.length===1?'':'s'} cargado${delMes.length===1?'':'s'}</small></div>
+      <div class="gkpi gres ${signo}"><span class="gk">${res>=0?'Ganancia':'Pérdida'}</span><b class="num"><span aria-hidden="true">${res>0?'▲ ':res<0?'▼ ':''}</span>${fmt(Math.abs(res))}</b><small>${ing?'Queda el '+Math.round(res/ing*100)+'% de lo cobrado':'Todavía no hay cobros este mes'}</small></div>
+      <div class="gkpi"><span class="gk">Contra ${esc(MES[pm.getMonth()].toLowerCase())}</span><b class="num">${dif>0?'+':dif<0?'−':''}${fmt(Math.abs(dif))}</b><small>${dif>0?'Mejor que el mes anterior':dif<0?'Peor que el mes anterior':'Igual que el mes anterior'}</small></div>
+    </div>
+    <section class="panel gchart"><div class="panelhead"><h2>Ingresos y gastos</h2><div class="gleg"><span><i class="gsw gsw-ing"></i>Cobrado</span><span><i class="gsw gsw-egr"></i>Gastos</span></div></div>
+      <div class="gplot" role="list" aria-label="Últimos 6 meses">${meses.map(x=>{ const r=x.ing-x.egr, on=x.y===y&&x.m===m;
+        return `<button type="button" class="gcol ${on?'on':''}" role="listitem" data-gir="${x.y}-${x.m}" aria-label="${MES[x.m]} ${x.y}: cobrado ${fmt(x.ing)}, gastos ${fmt(x.egr)}, ${r>=0?'ganancia':'pérdida'} ${fmt(Math.abs(r))}">
+          <span class="gbars"><i class="gbar gbar-ing" style="height:${(x.ing/max*100).toFixed(1)}%"></i><i class="gbar gbar-egr" style="height:${(x.egr/max*100).toFixed(1)}%"></i></span>
+          <span class="gml">${MES[x.m].slice(0,3)}</span><span class="gmr num ${r>0?'gpos':r<0?'gneg':''}">${x.ing||x.egr?gCorto(r):'—'}</span>
+          <span class="gtip" aria-hidden="true"><b>${MES[x.m]} ${x.y}</b><span><i class="gsw gsw-ing"></i>Cobrado <em class="num">${fmt(x.ing)}</em></span><span><i class="gsw gsw-egr"></i>Gastos <em class="num">${fmt(x.egr)}</em></span><span>${r>=0?'Ganancia':'Pérdida'} <em class="num">${fmt(Math.abs(r))}</em></span></span></button>` }).join('')}</div>
+      <details class="gtabla"><summary>Ver como tabla</summary><table><thead><tr><th>Mes</th><th>Cobrado</th><th>Gastos</th><th>Resultado</th></tr></thead><tbody>${meses.map(x=>`<tr><td>${MES[x.m]} ${x.y}</td><td class="num">${fmt(x.ing)}</td><td class="num">${fmt(x.egr)}</td><td class="num">${fmt(x.ing-x.egr)}</td></tr>`).join('')}</tbody></table></details>
+    </section>
+    <div class="gcols">
+      <section class="panel"><div class="panelhead"><h2>Agregar un gasto</h2></div>
+        <form id="gasto-form" class="gform" autocomplete="off">
+          <label>Tipo<select name="cat" class="inp sm">${GASTO_CATS.map(([c,i])=>`<option value="${c}" ${c===(S.gUltCat||'Alquiler')?'selected':''}>${i} ${c}</option>`).join('')}</select></label>
+          <label>Importe ($)<input name="monto" class="inp sm" type="number" min="1" max="2000000000" step="1" inputmode="numeric" required placeholder="Ej. 150000"></label>
+          <label>Fecha<input name="fecha" class="inp sm" type="date" required value="${fechaDef}" max="${iso(TODAY)}"></label>
+          <label class="gnota">Detalle (opcional)<input name="nota" class="inp sm" maxlength="140" placeholder="Ej. Factura de octubre"></label>
+          <button class="btn sm" type="submit">＋ Agregar gasto</button>
+        </form></section>
+      <section class="panel"><div class="panelhead"><h2>En qué se fue la plata</h2>${egr?`<span class="muted num">${fmt(egr)}</span>`:''}</div>
+        ${cats.length?`<div class="gcats">${cats.map(([c,v])=>`<div class="gcat"><span class="gcn">${gIco(c)} ${esc(c)}</span><span class="gctrack"><i style="width:${(v/cmax*100).toFixed(1)}%"></i></span><span class="gcv num">${fmt(v)} <small>${Math.round(v/egr*100)}%</small></span></div>`).join('')}</div>`
+        :`<p class="muted">${cargando?'Cargando…':'Todavía no cargaste gastos en '+esc(MES[m].toLowerCase())+'.'}</p>`}</section>
+    </div>
+    <section class="panel"><div class="panelhead"><h2>Gastos de ${esc(MES[m].toLowerCase())}</h2></div>
+      ${delMes.length?`<div class="glista">${delMes.map(g=>`<div class="gfila"><span class="gico" aria-hidden="true">${gIco(g.categoria)}</span><div class="gdat"><b>${esc(g.categoria)}</b><small>${esc(ddmm(g.fecha))}${g.nota?' · '+esc(g.nota):''}${g.profesor?' · '+esc(g.profesor):''}</small></div><b class="num">${fmt(g.monto)}</b><button type="button" class="mini danger" data-gdel="${esc(String(g.id))}" aria-label="Borrar gasto de ${esc(g.categoria)}">Borrar</button></div>`).join('')}</div>`
+      :`<p class="muted">${cargando?'Cargando…':'Sin gastos en este mes.'}</p>`}
+    </section></div></div>`;
+}
+function gGuardarLocal(){ try{ localStorage.setItem('tc-gastos',JSON.stringify(S.gastos||[])) }catch(e){} }
+document.addEventListener('submit',async e=>{
+  const f=e.target; if(f.id!=='gasto-form') return; e.preventDefault(); e.stopImmediatePropagation();
+  if(S.view!=='duenio'||!S.pro||!puedeP('dinero')) return toast('Solo tesorería puede cargar gastos');
+  const monto=parseInt(f.elements.monto.value,10), fecha=f.elements.fecha.value, categoria=f.elements.cat.value, nota=f.elements.nota.value.trim()||null;
+  if(!(monto>0)) { toast('Poné el importe del gasto'); return f.elements.monto.focus() }
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) { toast('Elegí la fecha'); return f.elements.fecha.focus() }
+  const btn=f.querySelector('button[type=submit]'); btn.disabled=true; S.gUltCat=categoria;
+  try{
+    if(CLOUD){ await q(sb.from('gastos').insert({fecha,categoria,monto,nota})); S.gastos=null; await cargarGastos(true) }
+    else { S.gastos=[{id:Date.now(),fecha,categoria,monto,nota,profesor:PRO?[PRO.nombre,PRO.apellido].join(' '):null},...(S.gastos||[])]; gGuardarLocal() }
+    const d=fecha.split('-'); S.gSel={y:+d[0],m:+d[1]-1}; render(true); toast('Gasto agregado: '+categoria+' '+fmt(monto));
+    setTimeout(()=>document.querySelector('#gasto-form [name=monto]')?.focus({preventScroll:true}),60);
+  }catch(err){ toast(errTxt(err)); btn.disabled=false }
+},true);
+document.addEventListener('click',async e=>{
+  const b=e.target.closest&&e.target.closest('[data-gmov],[data-gir],[data-gdel],#gastos-refrescar'); if(!b||S.view!=='duenio'||!S.pro||S.ptabP!=='gastos') return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  const sel=S.gSel||{y:Y,m:M};
+  if(b.dataset.gmov){ const d=new Date(sel.y,sel.m+ +b.dataset.gmov,1); if(d>new Date(Y,M,1)) return; S.gSel={y:d.getFullYear(),m:d.getMonth()}; return render(true) }
+  if(b.dataset.gir){ const [yy,mm]=b.dataset.gir.split('-').map(Number); S.gSel={y:yy,m:mm}; return render(true) }
+  if(b.id==='gastos-refrescar'){ b.classList.add('girando'); b.disabled=true; S.gastosErr=null; try{ await Promise.all([cargarGastos(true),CLOUD?loadAll():null]); render(true); toast('Gastos actualizados') }catch(err){ toast(errTxt(err)) } return }
+  if(b.dataset.gdel){ const g=(S.gastos||[]).find(x=>String(x.id)===b.dataset.gdel); if(!g) return;
+    if(!confirm('¿Borrar el gasto de '+g.categoria+' por '+fmt(g.monto)+' del '+ddmm(g.fecha)+'?')) return;
+    try{ if(CLOUD){ await q(sb.from('gastos').delete().eq('id',g.id)); await cargarGastos(true) } else { S.gastos=S.gastos.filter(x=>x!==g); gGuardarLocal(); render(true) } toast('Gasto borrado') }
+    catch(err){ toast(errTxt(err)) } }
+},true);
 function renderSolicitudes(){
   const pagoOk=solPagoOk(), solicitudes=pagoOk?panelPagosLista(Object.values(DB.socios)).solicitudes:[], n=solCount();
   $('#app').innerHTML=`<div class="owner">${proBar()}<div class="panel-pagos sol-wrap">
@@ -5587,6 +5731,7 @@ function renderDuenio(){
   if(!CLOUD&&!S.profes) cargarProfes();
   if(S.ptabP==='profes') return renderProfes();
   if(S.ptabP==='cuotas') return renderCuotas();
+  if(S.ptabP==='gastos'&&!c1xPlataOff()) return renderGastos();
   if(S.ptabP==='pagos'&&!c1xPlataOff()) return renderPagos();
   if(S.ptabP==='solicitudes'&&(puedeP('aprobar')||solPagoOk())) return renderSolicitudes();
   if(S.ptabP==='mensajes') return renderMensajes();
@@ -5964,6 +6109,7 @@ function screenPendiente(logo){
 /* ---------- Novedades del panel: se muestran una sola vez después de cada actualización ----------
    Al publicar una versión nueva del panel, agregá arriba su entrada con el número que va a tener. */
 const NOVEDADES=[
+  {v:'1.1.73',t:'Gastos del gimnasio',items:[['📊','Nueva sección Gastos en el panel: cargás alquiler, luz, agua, internet y más, y ves cuánto entró, cuánto salió y cuánto quedó cada mes.'],['📈','Gráfico de los últimos 6 meses y en qué se fue la plata.']]},
   {v:'1.1.72',t:'Logos sin fondo',items:[['💳','Los logos de Mercado Pago y Naranja X ahora se ven sin fondo, en blanco con el fondo oscuro y a color con el claro.']]},
   {v:'1.1.71',t:'Inicio más ordenado',items:[['🏠','En Inicio ves primero tu cuota, después tu asistencia y después las novedades.'],['💳','En Cómo pagar aparecen los logos oficiales de Mercado Pago y Naranja X.'],['⏱','En la rutina queda solo el cronómetro.']]},
   {v:'1.1.70',t:'Solicitudes y pagos ordenados',items:[['📥','Nueva sección Solicitudes en el panel: socios nuevos, celulares y avisos de pago, con contador y notificación.'],['🔓','Los socios que carga el gimnasio entran directo; los que se registran solos esperan la aprobación.'],['🧍','En la plancha y la rueda el personaje mira al piso.'],['🗂','Alternativa, superserie y nota vienen plegadas en el editor.'],['↕️','Pagos registrados: más recientes arriba, para ordenar y con botón de refrescar.']]},
@@ -6226,7 +6372,7 @@ document.addEventListener('submit',async e=>{ if(e.target.id!=='gnform') return;
 /* pestañas del panel: lista que se puede filtrar (ok:false la oculta) */
 const PNI_SOL='<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>';
 const PNI=p=>'<svg class="gnpi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
-const PNAV_ICO={solicitudes:PNI(PNI_SOL),socios:PNI('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>'),
+const PNAV_ICO={solicitudes:PNI(PNI_SOL),gastos:PNI('<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/><path d="M16 8h4v4"/>'),socios:PNI('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>'),
   mensajes:PNI('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/>'),
   pagos:PNI('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8m-8 4h8m-8 4h4"/>'),
   cuotas:PNI('<rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/><path d="M6.5 15h4"/>'),
@@ -6239,6 +6385,7 @@ function proTabs(n,nm){ return [
   {k:'mensajes',l:'Mensajes',ok:puedeP('chat'),extra:`<span class="cnt" data-chbadge ${nm?'':'hidden'}>${nm||''}</span>`},
   {k:'pagos',l:'Pagos',ok:!c1xPlataOff()},
   {k:'cuotas',l:'Cuotas',ok:!c1xPlataOff()},
+  {k:'gastos',l:'Gastos',ok:!c1xPlataOff()},
   {k:'novedades',l:'Novedades',ok:puedeP('novedades')},
   {k:'profes',l:esAdmin()?'Profes':'Mi perfil',extra:n&&esAdmin()?` <span class="cnt">${n}</span>`:''}
  ].filter(x=>x.ok!==false) }
@@ -8486,7 +8633,7 @@ addEventListener('storage',e=>{if(!CLOUD&&e.key===DBK){try{DB=JSON.parse(e.newVa
    controles y manejadores originales; no se reemplaza la capa de datos. */
 const UI43_PATH={home:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M17 14a5 5 0 0 1 4 4v2"/>',gym:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',chat:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5A8.5 8.5 0 0 1 21 11.5Z"/><path d="M7 9h9M7 13h6"/>',eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M19 5l-1 1M6 18l-1 1"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',plus:'<path d="M12 5v14M5 12h14"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',logout:'<path d="M10 4H4v16h6M10 12h11m-4-4 4 4-4 4"/>',wallet:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 9h18M16 13h5"/>',bell:'<path d="M5 17h14l-2-3V9a5 5 0 0 0-10 0v5l-2 3ZM10 21h4"/>'};
 const ui43Icon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${UI43_PATH[k]||UI43_PATH.home}</svg>`;
-const ui43Name=()=>{if(S.sel&&DB.socios[S.sel])return DB.socios[S.sel].name;return ({solicitudes:'Solicitudes',mensajes:'Mensajes',pagos:'Pagos',cuotas:'Cuotas',novedades:'Novedades',profes:esAdmin()?'Profesores':'Mi perfil'})[S.ptabP]||({socios:'Socios',rutinas:'Rutinas'})[S.ui43View]||'Vista general'};
+const ui43Name=()=>{if(S.sel&&DB.socios[S.sel])return DB.socios[S.sel].name;return ({gastos:'Gastos',solicitudes:'Solicitudes',mensajes:'Mensajes',pagos:'Pagos',cuotas:'Cuotas',novedades:'Novedades',profes:esAdmin()?'Profesores':'Mi perfil'})[S.ptabP]||({socios:'Socios',rutinas:'Rutinas'})[S.ui43View]||'Vista general'};
 function ui43Go(dest){
   if(dest==='cierres'){
     if(!PRO||!S.pro||!puedeP('gyminfo'))return;
@@ -8576,7 +8723,7 @@ function ui43Mount(){
   const heading=document.createElement('div');heading.className='ui43-heading';
   const date=DIAS[TODAY.getDay()]+' '+D+' de '+MES[M].toLowerCase();
   const title=isList&&view==='overview'?'Todo listo para un gran día.':name;
-  const subtitle=S.sel?'Rutina, asistencias, datos y seguimiento del socio.':isList&&view==='rutinas'?'Asigná, copiá y organizá las rutinas de tus alumnos.':isList&&view==='socios'?'Buscá, filtrá y administrá a tus socios.':isList?'Tu gimnasio, de un vistazo. Vamos a moverlo.':S.ptabP==='solicitudes'?'Socios nuevos, celulares y avisos de pago para revisar.':'Todas tus herramientas en un mismo lugar.';
+  const subtitle=S.sel?'Rutina, asistencias, datos y seguimiento del socio.':isList&&view==='rutinas'?'Asigná, copiá y organizá las rutinas de tus alumnos.':isList&&view==='socios'?'Buscá, filtrá y administrá a tus socios.':isList?'Tu gimnasio, de un vistazo. Vamos a moverlo.':S.ptabP==='solicitudes'?'Socios nuevos, celulares y avisos de pago para revisar.':S.ptabP==='gastos'?'Lo que entra, lo que sale y lo que queda cada mes.':'Todas tus herramientas en un mismo lugar.';
   heading.innerHTML=`<div><p>${esc(date)}</p><h1>${esc(title)}</h1><small>${esc(subtitle)}</small></div><div class="ui43-headingactions"></div>`;
   const actions=heading.querySelector('.ui43-headingactions');
   if(isList){if(puedeP('novedades'))actions.innerHTML='<button type="button" class="mini" data-ui43go="novedades">Publicar novedad</button>';actions.insertAdjacentHTML('beforeend',`<button type="button" class="btn sm" data-ui43add>${ui43Icon('plus')}<span>Agregar socio</span></button>`)}
