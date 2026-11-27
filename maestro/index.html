@@ -94,7 +94,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 <script>
 /* Lista de gimnasios de la plataforma. Cada gym tiene su propia base de datos; acá solo están sus direcciones. */
 const GYMS=[
-  {id:'training-club',nombre:'Training Club',lugar:'Gimnasio · primer cliente',logo:'../logo-mark.png',panel:'../panel/',app:'../app/'}
+  {"id": "training-club", "nombre": "Training Club", "lugar": "Gimnasio · primer cliente", "logo": "../logo-mark.png", "panel": "../panel/", "app": "../app/"},
+  {"id": "demo", "nombre": "Gimnasio Demo", "lugar": "Demo para mostrar · sin base de datos", "logo": "../demo/logo.png", "panel": "../demo/panel/", "app": "../demo/app/"}
 ];
 const $=s=>document.querySelector(s);
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
